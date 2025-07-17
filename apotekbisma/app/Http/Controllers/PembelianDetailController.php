@@ -15,6 +15,12 @@ class PembelianDetailController extends Controller
     public function index()
     {
         $id_pembelian = session('id_pembelian');
+        
+        // If no session data, redirect to pembelian page
+        if (!$id_pembelian) {
+            return redirect()->route('pembelian.index')->with('error', 'Silakan pilih supplier terlebih dahulu untuk memulai pembelian.');
+        }
+        
         $produk = Produk::orderBy('nama_produk')->get();
         $supplier = Supplier::find(session('id_supplier'));
         $diskon = Pembelian::find($id_pembelian)->diskon ?? 0;

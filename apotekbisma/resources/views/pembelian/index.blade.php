@@ -49,9 +49,14 @@
             processing: true,
             serverSide: true,
             autoWidth: false,
-	    searchable: true,
+            searchable: true,
             ajax: {
                 url: '{{ route('pembelian.data') }}',
+                error: function(xhr, error, code) {
+                    console.log('DataTables Error:', error);
+                    console.log('Status:', xhr.status);
+                    console.log('Response:', xhr.responseText);
+                }
             },
             columns: [
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
@@ -71,7 +76,7 @@
             processing: true,
             bSort: false,
             dom: 'fplrt',
-	    searchable: true,
+            searchable: true,
             columns: [
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
                 {data: 'kode_produk'},
