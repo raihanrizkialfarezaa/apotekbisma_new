@@ -63,6 +63,8 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/pembelian/data', [PembelianController::class, 'data'])->name('pembelian.data');
         Route::get('/pembelian/{id}/create', [PembelianController::class, 'create'])->name('pembelian.create');
+        Route::post('/pembelian/cleanup', [PembelianController::class, 'cleanupIncompleteTransactions'])->name('pembelian.cleanup');
+        Route::delete('/pembelian/{id}/empty', [PembelianController::class, 'destroyEmpty'])->name('pembelian.destroyEmpty');
         Route::resource('/pembelian', PembelianController::class)
             ->except('create');
 

@@ -37,6 +37,22 @@
 @endsection
 
 @section('content')
+@if(session('error'))
+    <div class="alert alert-danger alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <h4><i class="icon fa fa-ban"></i> Error!</h4>
+        {{ session('error') }}
+    </div>
+@endif
+
+@if(session('success'))
+    <div class="alert alert-success alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <h4><i class="icon fa fa-check"></i> Success!</h4>
+        {{ session('success') }}
+    </div>
+@endif
+
 <div class="row">
     <div class="col-lg-12">
         <div class="box">
@@ -115,10 +131,10 @@
                                     <input type="date" name="waktu" id="totalrp" class="form-control waktu">
                                 </div>
                             </div>
-			    <div class="form-group row">
-                                <label for="totalrp" class="col-lg-2 control-label">Nomor Faktur</label>
+                            <div class="form-group row">
+                                <label for="nomor_faktur" class="col-lg-2 control-label">Nomor Faktur</label>
                                 <div class="col-lg-8">
-                                    <input type="text" name="nomor_faktur" id="totalrp" class="form-control">
+                                    <input type="text" name="nomor_faktur" id="nomor_faktur" class="form-control" required>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -339,9 +355,103 @@
         });
 
         $('.btn-simpan').on('click', function () {
+            // Validasi form sebelum submit
+            if (!validateForm()) {
+                return false;
+            }
+            // Set flag bahwa form sudah di-submit
+            window.isFormSubmitted = true;
             $('.form-pembelian').submit();
         });
+
+        // Hanya hapus transaksi jika benar-benar kosong dan user keluar
+        window.addEventListener('beforeunload', function (e) {
+            // Jangan hapus jika form sudah di-submit atau user baru saja menambah produk
+            if (!window.isFormSubmitted && isTransactionEmpty()) {
+                deleteIncompleteTransaction();
+            }
+        });
+
+        // Tambahkan event listener untuk navigasi browser
+        window.addEventListener('pagehide', function (e) {
+            if (!window.isFormSubmitted && isTransactionEmpty()) {
+                deleteIncompleteTransaction();
+            }
+        });
     });
+
+    function validateForm() {
+        let isValid = true;
+        let errorMessage = '';
+        
+        // Cek apakah ada produk yang ditambahkan
+        let totalItem = parseInt($('#total_item').val()) || 0;
+        if (totalItem === 0) {
+            errorMessage += '- Minimal harus ada 1 produk yang ditambahkan\n';
+            isValid = false;
+        }
+        
+        // Cek nomor faktur
+        let nomorFaktur = $('input[name="nomor_faktur"]').val().trim();
+        if (!nomorFaktur) {
+            errorMessage += '- Nomor faktur harus diisi\n';
+            isValid = false;
+        }
+        
+        // Cek apakah semua produk memiliki jumlah > 0
+        let hasZeroQuantity = false;
+        $('.quantity').each(function() {
+            if (parseInt($(this).val()) <= 0) {
+                hasZeroQuantity = true;
+                return false;
+            }
+        });
+        
+        if (hasZeroQuantity) {
+            errorMessage += '- Semua produk harus memiliki jumlah lebih dari 0\n';
+            isValid = false;
+        }
+        
+        if (!isValid) {
+            alert('Transaksi tidak dapat disimpan:\n' + errorMessage);
+        }
+        
+        return isValid;
+    }
+
+    function isTransactionComplete() {
+        let totalItem = parseInt($('#total_item').val()) || 0;
+        let nomorFaktur = $('input[name="nomor_faktur"]').val().trim();
+        let totalHarga = parseFloat($('#total').val()) || 0;
+        
+        // Transaksi dianggap lengkap jika semua syarat terpenuhi
+        return totalItem > 0 && nomorFaktur !== '' && totalHarga > 0;
+    }
+
+    function isTransactionEmpty() {
+        let totalItem = parseInt($('#total_item').val()) || 0;
+        let nomorFaktur = $('input[name="nomor_faktur"]').val().trim();
+        let totalHarga = parseFloat($('#total').val()) || 0;
+        
+        // Transaksi dianggap kosong jika tidak ada produk DAN tidak ada nomor faktur
+        return totalItem === 0 && nomorFaktur === '' && totalHarga === 0;
+    }
+
+    function deleteIncompleteTransaction() {
+        let idPembelian = $('#id_pembelian').val();
+        if (idPembelian) {
+            // Gunakan route khusus untuk menghapus transaksi kosong
+            fetch('{{ route("pembelian.destroyEmpty", "") }}/' + idPembelian, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRF-TOKEN': $('[name=csrf-token]').attr('content')
+                }
+            }).catch(function(error) {
+                console.log('Error deleting incomplete transaction:', error);
+            });
+        }
+    }
 
     function tampilProduk() {
         $('#modal-produk').modal('show');

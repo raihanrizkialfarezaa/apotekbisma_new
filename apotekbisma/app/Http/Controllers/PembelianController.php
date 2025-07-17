@@ -9,7 +9,6 @@ use App\Models\Produk;
 use App\Models\RekamanStok;
 use App\Models\Supplier;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
 
 class PembelianController extends Controller
 {
@@ -23,9 +22,6 @@ class PembelianController extends Controller
     public function data()
     {
         $pembelian = Pembelian::with('supplier')->orderBy('id_pembelian', 'desc')->get();
-        
-        // Debug: Check if we have data
-        Log::info('Pembelian data count: ' . $pembelian->count());
         
         return datatables()
             ->of($pembelian)
@@ -84,7 +80,34 @@ class PembelianController extends Controller
 
     public function store(Request $request)
     {
+        // Validasi server-side
+        $request->validate([
+            'nomor_faktur' => 'required|string|max:255',
+            'total_item' => 'required|integer|min:1',
+            'total' => 'required|numeric|min:0',
+            'waktu' => 'required|date'
+        ], [
+            'nomor_faktur.required' => 'Nomor faktur harus diisi',
+            'total_item.required' => 'Minimal harus ada 1 produk',
+            'total_item.min' => 'Minimal harus ada 1 produk',
+            'total.required' => 'Total harga harus diisi',
+            'waktu.required' => 'Tanggal faktur harus diisi'
+        ]);
+
         $pembelian = Pembelian::findOrFail($request->id_pembelian);
+        
+        // Cek apakah ada detail pembelian
+        $detail = PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)->get();
+        if ($detail->isEmpty()) {
+            return redirect()->back()->with('error', 'Tidak dapat menyimpan transaksi tanpa produk');
+        }
+
+        // Cek apakah semua produk memiliki jumlah > 0
+        $hasZeroQuantity = $detail->where('jumlah', '<=', 0)->count() > 0;
+        if ($hasZeroQuantity) {
+            return redirect()->back()->with('error', 'Semua produk harus memiliki jumlah lebih dari 0');
+        }
+
         $pembelian->total_item = $request->total_item;
         $pembelian->total_harga = $request->total;
         $pembelian->diskon = $request->diskon;
@@ -93,11 +116,7 @@ class PembelianController extends Controller
         $pembelian->no_faktur = $request->nomor_faktur;
         $pembelian->update();
         
-        $detail = PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)->get();
         $id_pembelian = $request->id_pembelian;
-        
-        // Log untuk debugging
-        Log::info('Processing purchase with details count: ' . count($detail));
         
         if (count($detail) > 1) {
             foreach ($detail as $item) {
@@ -152,29 +171,52 @@ class PembelianController extends Controller
                 $produk->stok += $sum;
                 $produk->update();
             }
-        } else {
-            // Jika tidak ada detail, log error
-            Log::error('No purchase details found for pembelian ID: ' . $id_pembelian);
         }
         
-        return redirect()->route('pembelian.index');
+        return redirect()->route('pembelian.index')->with('success', 'Transaksi pembelian berhasil disimpan');
     }
     public function update(Request $request, $id)
     {
+        // Validasi server-side
+        $request->validate([
+            'nomor_faktur' => 'required|string|max:255',
+            'total_item' => 'required|integer|min:1',
+            'total' => 'required|numeric|min:0',
+            'waktu' => 'required|date'
+        ], [
+            'nomor_faktur.required' => 'Nomor faktur harus diisi',
+            'total_item.required' => 'Minimal harus ada 1 produk',
+            'total_item.min' => 'Minimal harus ada 1 produk',
+            'total.required' => 'Total harga harus diisi',
+            'waktu.required' => 'Tanggal faktur harus diisi'
+        ]);
+
         $pembelian = Pembelian::findOrFail($request->id_pembelian);
+        
+        // Cek apakah ada detail pembelian
+        $detail = PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)->get();
+        if ($detail->isEmpty()) {
+            return redirect()->back()->with('error', 'Tidak dapat menyimpan transaksi tanpa produk');
+        }
+
+        // Cek apakah semua produk memiliki jumlah > 0
+        $hasZeroQuantity = $detail->where('jumlah', '<=', 0)->count() > 0;
+        if ($hasZeroQuantity) {
+            return redirect()->back()->with('error', 'Semua produk harus memiliki jumlah lebih dari 0');
+        }
+
         $pembelian->total_item = $request->total_item;
         $pembelian->total_harga = $request->total;
         $pembelian->diskon = $request->diskon;
         $pembelian->bayar = $request->bayar;
-	$pembelian->no_faktur = $request->nomor_faktur;
+        $pembelian->no_faktur = $request->nomor_faktur;
         if ($request->waktu != NULL) {
             $pembelian->waktu = $request->waktu;
         }
         
         $pembelian->update();
         
-
-        return redirect()->route('pembelian.index');
+        return redirect()->route('pembelian.index')->with('success', 'Transaksi pembelian berhasil diperbarui');
     }
 
     public function show($id)
@@ -205,33 +247,82 @@ class PembelianController extends Controller
 
     public function destroy($id)
     {
-        $pembelian = Pembelian::find($id);
+        $pembelian = Pembelian::where('id_pembelian', $id)->first();
+        
+        if (!$pembelian) {
+            return response()->json(['error' => 'Pembelian tidak ditemukan'], 404);
+        }
 
-	$pembelian_detail = PembelianDetail::where('id_pembelian', $id)->get();
-	
-	
-
-	if(count($pembelian_detail) == 1 && count($pembelian_detail) != 0 )
-	{
-		$produk = Produk::find($pembelian_detail[0]->id_produk);
-                $stok = $produk->stok;
+        $pembelian_detail = PembelianDetail::where('id_pembelian', $id)->get();
+        
+        // Jika ada detail pembelian, hapus stok dan rekaman stok
+        if (count($pembelian_detail) > 0) {
+            if (count($pembelian_detail) == 1) {
+                $produk = Produk::find($pembelian_detail[0]->id_produk);
                 $rekamstok = RekamanStok::where('id_pembelian', $id)->where('id_produk', $pembelian_detail[0]->id_produk)->first();
-		$produk->stok -= $pembelian_detail[0]->jumlah;
-		$rekamstok->delete();
-                $produk->update();
-	} else {
-		foreach($pembelian_detail as $row) {
-			$produk = Produk::find($row->id_produk);
-                	$stok = $produk->stok;
-                	$rekamstok = RekamanStok::where('id_pembelian', $id)->where('id_produk', $row->id_produk)->first();
-			$produk->stok -= $row->jumlah;
-			$rekamstok->delete();
-                	$produk->update();
-		}
-	}
+                
+                if ($produk && $rekamstok) {
+                    $produk->stok -= $pembelian_detail[0]->jumlah;
+                    $rekamstok->delete();
+                    $produk->update();
+                }
+            } else {
+                foreach ($pembelian_detail as $row) {
+                    $produk = Produk::find($row->id_produk);
+                    $rekamstok = RekamanStok::where('id_pembelian', $id)->where('id_produk', $row->id_produk)->first();
+                    
+                    if ($produk && $rekamstok) {
+                        $produk->stok -= $row->jumlah;
+                        $rekamstok->delete();
+                        $produk->update();
+                    }
+                }
+            }
+        }
+        
         $pembelian->delete();
 
         return response(null, 204);
+    }
+
+    public function cleanupIncompleteTransactions()
+    {
+        // Membersihkan transaksi yang tidak lengkap (tanpa detail atau no_faktur kosong)
+        $incompleteTransactions = Pembelian::where('no_faktur', '=', 'o')
+            ->orWhere('no_faktur', '=', '')
+            ->orWhereNull('no_faktur')
+            ->get();
+
+        foreach ($incompleteTransactions as $transaction) {
+            $details = PembelianDetail::where('id_pembelian', $transaction->id_pembelian)->get();
+            if ($details->isEmpty()) {
+                $transaction->delete();
+            }
+        }
+
+        return response()->json(['message' => 'Cleanup completed']);
+    }
+
+    public function destroyEmpty($id)
+    {
+        $pembelian = Pembelian::where('id_pembelian', $id)->first();
+        
+        if (!$pembelian) {
+            return response()->json(['error' => 'Pembelian tidak ditemukan'], 404);
+        }
+
+        // Hanya hapus jika transaksi benar-benar kosong
+        $pembelian_detail = PembelianDetail::where('id_pembelian', $id)->get();
+        $isEmpty = $pembelian_detail->isEmpty() && 
+                  ($pembelian->no_faktur === 'o' || $pembelian->no_faktur === '' || $pembelian->no_faktur === null) &&
+                  $pembelian->total_harga == 0;
+        
+        if ($isEmpty) {
+            $pembelian->delete();
+            return response()->json(['message' => 'Empty transaction deleted']);
+        }
+
+        return response()->json(['message' => 'Transaction not empty, not deleted']);
     }
 }
 

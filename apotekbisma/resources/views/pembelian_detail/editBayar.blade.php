@@ -37,6 +37,22 @@
 @endsection
 
 @section('content')
+@if(session('error'))
+    <div class="alert alert-danger alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <h4><i class="icon fa fa-ban"></i> Error!</h4>
+        {{ session('error') }}
+    </div>
+@endif
+
+@if(session('success'))
+    <div class="alert alert-success alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <h4><i class="icon fa fa-check"></i> Success!</h4>
+        {{ session('success') }}
+    </div>
+@endif
+
 <div class="row">
     <div class="col-lg-12">
         <div class="box">
@@ -120,13 +136,14 @@
                                     @endif
                                 </div>
                             </div>
-			    <div class="form-group row">
-                                <label for="totalrp" class="col-lg-2 control-label">Nomor Faktur</label>
+                            <div class="form-group row">
+                                <label for="nomor_faktur" class="col-lg-2 control-label">Nomor Faktur</label>
                                 <div class="col-lg-8">
                                     @if($pembelian->no_faktur != NULL)
-					<input type="text" name="nomor_faktur" id="totalrp" value="" class="form-control">
-				    @else
-					<input type="text" name="nomor_faktur" id="totalrp" value="{{ $pembelian->no_faktur }}" class="form-control">
+                                        <input type="text" name="nomor_faktur" id="nomor_faktur" value="{{ $pembelian->no_faktur }}" class="form-control" required>
+                                    @else
+                                        <input type="text" name="nomor_faktur" id="nomor_faktur" value="" class="form-control" required>
+                                    @endif
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -337,9 +354,52 @@
         });
 
         $('.btn-simpan').on('click', function () {
+            // Validasi form sebelum submit
+            if (!validateForm()) {
+                return false;
+            }
             $('.form-pembelian').submit();
         });
     });
+
+    function validateForm() {
+        let isValid = true;
+        let errorMessage = '';
+        
+        // Cek apakah ada produk yang ditambahkan
+        let totalItem = parseInt($('#total_item').val()) || 0;
+        if (totalItem === 0) {
+            errorMessage += '- Minimal harus ada 1 produk yang ditambahkan\n';
+            isValid = false;
+        }
+        
+        // Cek nomor faktur
+        let nomorFaktur = $('input[name="nomor_faktur"]').val().trim();
+        if (!nomorFaktur) {
+            errorMessage += '- Nomor faktur harus diisi\n';
+            isValid = false;
+        }
+        
+        // Cek apakah semua produk memiliki jumlah > 0
+        let hasZeroQuantity = false;
+        $('.quantity').each(function() {
+            if (parseInt($(this).val()) <= 0) {
+                hasZeroQuantity = true;
+                return false;
+            }
+        });
+        
+        if (hasZeroQuantity) {
+            errorMessage += '- Semua produk harus memiliki jumlah lebih dari 0\n';
+            isValid = false;
+        }
+        
+        if (!isValid) {
+            alert('Transaksi tidak dapat disimpan:\n' + errorMessage);
+        }
+        
+        return isValid;
+    }
 
     function tampilProduk() {
         $('#modal-produk').modal('show');
@@ -399,7 +459,7 @@
             .fail(errors => {
                 alert('Tidak dapat menampilkan data');
                 return;
-            })
+            });
     }
 </script>
 @endpush

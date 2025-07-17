@@ -35,7 +35,7 @@ class PembelianDetailController extends Controller
     public function editBayar($id)
     {
         $id_pembelian = $id;
-	$pembelian = Pembelian::where('id', $id)->first();
+        $pembelian = Pembelian::where('id_pembelian', $id)->first();
         $produk = Produk::orderBy('nama_produk')->get();
         $produk_supplier = Pembelian::where('id_pembelian', $id)->first();
         $detail_pembelian = PembelianDetail::where('id_pembelian', $id)->get();
