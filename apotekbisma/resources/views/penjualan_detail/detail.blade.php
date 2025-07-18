@@ -206,10 +206,15 @@
             paginate: false
         })
         .on('draw.dt', function () {
-            loadForm($('#diskon').val());
-            setTimeout(() => {
-                $('#diterima').trigger('input');
-            }, 300);
+            loadForm($('#diskon').val(), 0, function() {
+                // Callback setelah loadForm selesai - update diterima langsung
+                setTimeout(() => {
+                    if ($('#diterima').val() == 0 || $('#diterima').val() == '') {
+                        $('#diterima').val($('#bayar').val());
+                        $('#diterima').trigger('input');
+                    }
+                }, 50); // Reduce delay from 300ms to 50ms
+            });
         });
         table2 = $('.table-produk').DataTable();
 
@@ -236,12 +241,11 @@
                 .done(response => {
                     $(this).on('mouseout', function () {
                         table.ajax.reload(() => {
-                            loadForm($('#diskon').val());
-                            // Update diterima with new total after quantity change
-                            setTimeout(() => {
+                            loadForm($('#diskon').val(), 0, function() {
+                                // Update diterima immediately after quantity change
                                 $('#diterima').val($('#bayar').val());
                                 $('#diterima').trigger('input');
-                            }, 100);
+                            });
                         });
                     });
                 })
@@ -253,12 +257,11 @@
                     }
                     $(this).on('mouseout', function () {
                         table.ajax.reload(() => {
-                            loadForm($('#diskon').val());
-                            // Update diterima with new total after quantity change
-                            setTimeout(() => {
+                            loadForm($('#diskon').val(), 0, function() {
+                                // Update diterima immediately after quantity change
                                 $('#diterima').val($('#bayar').val());
                                 $('#diterima').trigger('input');
-                            }, 100);
+                            });
                         });
                     })
                     return;
@@ -270,12 +273,11 @@
                 $(this).val(0).select();
             }
 
-            loadForm($(this).val());
-            // Update diterima with new total after discount change
-            setTimeout(() => {
+            loadForm($(this).val(), 0, function() {
+                // Update diterima immediately after discount change
                 $('#diterima').val($('#bayar').val());
                 $('#diterima').trigger('input');
-            }, 100);
+            });
         });
 
         $('#diterima').on('input', function () {
@@ -333,14 +335,11 @@
             .done(response => {
                 $('#kode_produk').focus();
                 table.ajax.reload(() => {
-                    loadForm($('#diskon').val());
-                    // Reset diterima to 0 so it will auto-fill with new total
-                    setTimeout(() => {
-                        if ($('#diterima').val() != 0) {
-                            $('#diterima').val($('#bayar').val());
-                            $('#diterima').trigger('input');
-                        }
-                    }, 100);
+                    loadForm($('#diskon').val(), 0, function() {
+                        // Update diterima immediately after loadForm completes
+                        $('#diterima').val($('#bayar').val());
+                        $('#diterima').trigger('input');
+                    });
                 });
             })
             .fail(errors => {
@@ -357,12 +356,11 @@
         $('#id_member').val(id);
         $('#kode_member').val(kode);
         $('#diskon').val('{{ $diskon }}');
-        loadForm($('#diskon').val());
-        // Update diterima with new total after member selection
-        setTimeout(() => {
+        loadForm($('#diskon').val(), 0, function() {
+            // Update diterima immediately after member selection
             $('#diterima').val($('#bayar').val());
             $('#diterima').focus().select();
-        }, 100);
+        });
         hideMember();
     }
 
@@ -378,12 +376,11 @@
                 })
                 .done((response) => {
                     table.ajax.reload(() => {
-                        loadForm($('#diskon').val());
-                        // Update diterima with new total after deletion
-                        setTimeout(() => {
+                        loadForm($('#diskon').val(), 0, function() {
+                            // Update diterima immediately after deletion
                             $('#diterima').val($('#bayar').val());
                             $('#diterima').trigger('input');
-                        }, 100);
+                        });
                     });
                 })
                 .fail((errors) => {
@@ -393,7 +390,7 @@
         }
     }
 
-    function loadForm(diskon = 0, diterima = 0) {
+    function loadForm(diskon = 0, diterima = 0, callback = null) {
         $('#total').val($('.total').text());
         $('#total_item').val($('.total_item').text());
 
@@ -414,6 +411,11 @@
                 if ($('#diterima').val() != 0) {
                     $('.tampil-bayar').text('Kembali: Rp. '+ response.kembalirp);
                     $('.tampil-terbilang').text(response.kembali_terbilang);
+                }
+
+                // Execute callback if provided
+                if (callback && typeof callback === 'function') {
+                    callback();
                 }
             })
             .fail(errors => {
