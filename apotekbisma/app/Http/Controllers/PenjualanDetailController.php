@@ -156,74 +156,54 @@ class PenjualanDetailController extends Controller
         }
         
         $penjualan = Penjualan::where('id_penjualan', $detail->id_penjualan)->first();
-        $produk_id = Produk::where('id_produk', $detail->id_produk)->first();
+        $produk = Produk::where('id_produk', $detail->id_produk)->first();
         
-        if (!$produk_id) {
+        if (!$produk) {
             return response()->json('Produk tidak ditemukan', 404);
         }
         
+        // Validasi stok
+        $old_jumlah = $detail->jumlah;
+        $new_jumlah = $request->jumlah;
+        $selisih = $new_jumlah - $old_jumlah;
+        
+        // Cek apakah stok mencukupi jika ada penambahan
+        if ($selisih > 0 && $produk->stok < $selisih) {
+            return response()->json('Stok tidak cukup. Stok tersedia: ' . $produk->stok, 500);
+        }
+        
+        // Ambil atau buat rekaman stok
         $rekaman_stok = RekamanStok::where('id_penjualan', $detail->id_penjualan)
                                    ->where('id_produk', $detail->id_produk)
                                    ->first();
         
-        if ($rekaman_stok != NULL) {
-            if ($rekaman_stok->id_produk == $produk_id->id_produk) {
-                $sum = $request->jumlah - $detail->jumlah;
-                
-                if ($produk_id->stok >= $sum) {
-                    if ($sum < 0 && $sum != 0) {
-                        $rekaman_stok->update([
-                            'id_produk' => $produk_id->id_produk,
-                            'waktu' => Carbon::now(),
-                            'stok_keluar' => $rekaman_stok->stok_keluar -= $sum,
-                            'stok_sisa' => $rekaman_stok->stok_sisa -= $sum,
-                        ]);
-                        $produk = Produk::find($detail->id_produk);
-                        $positive = $sum * -1;
-                        $produk->stok += $positive;
-                        $produk->update();
-                        $detail->jumlah = $request->jumlah;
-                        $detail->subtotal = $detail->harga_jual * $request->jumlah - (($detail->diskon * $request->jumlah) / 100 * $detail->harga_jual);
-                        $detail->update();
-                    } elseif($sum >= 1 && $sum != 0) {
-                        $rekaman_stok->update([
-                            'id_produk' => $produk_id->id_produk,
-                            'waktu' => Carbon::now(),
-                            'stok_keluar' => $rekaman_stok->stok_keluar += $sum,
-                            'stok_sisa' => $rekaman_stok->stok_sisa += $sum,
-                        ]);
-                        $produk = Produk::find($detail->id_produk);
-                        $produk->stok -= $sum;
-                        $produk->update();
-                        $detail->jumlah = $request->jumlah;
-                        $detail->subtotal = $detail->harga_jual * $request->jumlah - (($detail->diskon * $request->jumlah) / 100 * $detail->harga_jual);
-                        $detail->update();
-                    }
-                } else {
-                    return response()->json('Stok tidak cukup', 500);
-                }
-            }
+        if ($rekaman_stok) {
+            // Update rekaman stok yang sudah ada
+            $rekaman_stok->update([
+                'waktu' => Carbon::now(),
+                'stok_keluar' => $new_jumlah,
+                'stok_sisa' => $produk->stok - $selisih,
+            ]);
         } else {
-            if ($produk_id->stok >= $request->jumlah) {
-                $produk = Produk::find($detail->id_produk);
-                $sum = $request->jumlah;
-                RekamanStok::create([
-                    'id_produk' => $produk_id->id_produk,
-                    'id_penjualan' => $detail->id_penjualan,
-                    'waktu' => Carbon::now(),
-                    'stok_keluar' => $sum,
-                    'stok_awal' => $produk->stok,
-                    'stok_sisa' => $produk->stok -= $sum,
-                ]);
-                $produk->stok -= $sum;
-                $produk->update();
-                $detail->jumlah = $request->jumlah;
-                $detail->subtotal = $detail->harga_jual * $request->jumlah - (($detail->diskon * $request->jumlah) / 100 * $detail->harga_jual);
-                $detail->update();
-            } else {
-                return response()->json('Stok tidak cukup', 500);
-            }
+            // Buat rekaman stok baru
+            RekamanStok::create([
+                'id_produk' => $produk->id_produk,
+                'id_penjualan' => $detail->id_penjualan,
+                'waktu' => Carbon::now(),
+                'stok_keluar' => $new_jumlah,
+                'stok_awal' => $produk->stok,
+                'stok_sisa' => $produk->stok - $selisih,
+            ]);
         }
+        
+        // Update stok produk
+        $produk->stok -= $selisih;
+        $produk->update();
+        
+        // Update detail transaksi
+        $detail->jumlah = $new_jumlah;
+        $detail->subtotal = $detail->harga_jual * $new_jumlah - (($detail->diskon * $new_jumlah) / 100 * $detail->harga_jual);
+        $detail->update();
         
         return response()->json('Data berhasil diperbarui', 200);
     }

@@ -207,7 +207,7 @@ class PenjualanController extends Controller
         // Validasi bahwa diterima tidak boleh kurang dari total bayar
         $total_bayar = $request->total - ($request->diskon / 100 * $request->total);
         if ($request->diterima < $total_bayar) {
-            return redirect()->back()->with('error', 'Jumlah yang diterima tidak boleh kurang dari total bayar');
+            return redirect()->back()->with('error', 'Jumlah yang diterima (Rp. ' . number_format($request->diterima, 0, ',', '.') . ') tidak boleh kurang dari total bayar (Rp. ' . number_format($total_bayar, 0, ',', '.') . ')');
         }
 
         $penjualan = Penjualan::findOrFail($request->id_penjualan);
@@ -222,69 +222,60 @@ class PenjualanController extends Controller
         $penjualan->update();
 
         $id_penjualan = $penjualan->id_penjualan;
-        if (count($detail) > 1) {
-            foreach ($detail as $item) {
-                $item->diskon = $request->diskon;
-                $item->update();
-    
-                $produk = Produk::find($item->id_produk);
+        
+        // Proses setiap item dalam transaksi
+        foreach ($detail as $item) {
+            $item->diskon = $request->diskon;
+            $item->update();
+
+            $produk = Produk::find($item->id_produk);
+            
+            // Cek apakah sudah ada rekaman stok untuk item ini
+            $existing_rekaman = RekamanStok::where('id_penjualan', $id_penjualan)
+                                          ->where('id_produk', $item->id_produk)
+                                          ->first();
+            
+            if ($existing_rekaman) {
+                // Update rekaman stok yang sudah ada
+                $old_stok_keluar = $existing_rekaman->stok_keluar;
+                $new_stok_keluar = $item->jumlah;
+                $diff = $new_stok_keluar - $old_stok_keluar;
+                
+                // Validasi stok mencukupi
+                if ($diff > 0 && $produk->stok < $diff) {
+                    return redirect()->back()->with('error', 'Stok produk ' . $produk->nama_produk . ' tidak mencukupi');
+                }
+                
+                $existing_rekaman->update([
+                    'waktu' => Carbon::now(),
+                    'stok_keluar' => $new_stok_keluar,
+                    'stok_sisa' => $produk->stok - $diff,
+                ]);
+                
+                // Update stok produk
+                $produk->stok -= $diff;
+                $produk->update();
+            } else {
+                // Buat rekaman stok baru
                 $stok = $produk->stok;
+                
+                // Validasi stok mencukupi
+                if ($produk->stok < $item->jumlah) {
+                    return redirect()->back()->with('error', 'Stok produk ' . $produk->nama_produk . ' tidak mencukupi');
+                }
+                
                 RekamanStok::create([
                     'id_produk' => $item->id_produk,
                     'waktu' => Carbon::now(),
                     'stok_keluar' => $item->jumlah,
                     'id_penjualan' => $id_penjualan,
                     'stok_awal' => $produk->stok,
-                    'stok_sisa' => $stok -= $item->jumlah,
+                    'stok_sisa' => $stok - $item->jumlah,
                 ]);
+                
                 $produk->stok -= $item->jumlah;
                 $produk->update();
-                
             }
-        } elseif(count($detail) == 1) {
-            $details = PenjualanDetail::where('id_penjualan', $penjualan->id_penjualan)->first();
-            $cek = RekamanStok::where('id_penjualan', $id_penjualan)->get();
-            // dd($cek);
-            if (count($cek) <= 0) {
-                $details->diskon = $request->diskon;
-                $details->update();
-
-                $produk = Produk::find($details->id_produk);
-                $stok = $produk->stok;
-                RekamanStok::create([
-                    'id_produk' => $details->id_produk,
-                    'waktu' => Carbon::now(),
-                    'stok_keluar' => $details->jumlah,
-                    'id_penjualan' => $id_penjualan,
-                    'stok_awal' => $produk->stok,
-                    'stok_sisa' => $stok -= $details->jumlah,
-                ]);
-                $produk->stok -= $details->jumlah;
-                $produk->update();
-            } else {
-                
-                $details->diskon = $request->diskon;
-                $details->update();
-    
-                $produk = Produk::find($details->id_produk);
-                $stok = $produk->stok;
-                $sums = $stok - $details->jumlah;
-                $rekaman_stok = RekamanStok::where('id_penjualan', $penjualan->id_penjualan);
-                if ($sums < 0 && $sums != 0) {
-                    $sum = $sums * -1;
-                } else {
-                    $sum = $sums;
-                }
-                $rekaman_stok->update([
-                    'id_produk' => $produk->id_produk,
-                    'waktu' => Carbon::now(),
-                    'stok_keluar' => $rekaman_stok->stok_keluar -= $sum,
-                    'stok_sisa' => $rekaman_stok->stok_sisa -= $sum,
-                ]);
-                $produk->stok -= $sum;
-                $produk->update();
-            }
-            
         }
 
         // Hapus session setelah transaksi selesai
