@@ -118,9 +118,32 @@ class PembelianController extends Controller
         
         $id_pembelian = $request->id_pembelian;
         
-        if (count($detail) > 1) {
-            foreach ($detail as $item) {
-                $produk = Produk::find($item->id_produk);
+        // Proses setiap item dalam pembelian
+        foreach ($detail as $item) {
+            $produk = Produk::find($item->id_produk);
+            
+            // Cek apakah sudah ada rekaman stok untuk item ini
+            $existing_rekaman = RekamanStok::where('id_pembelian', $id_pembelian)
+                                          ->where('id_produk', $item->id_produk)
+                                          ->first();
+            
+            if ($existing_rekaman) {
+                // Update rekaman stok yang sudah ada
+                $old_stok_masuk = $existing_rekaman->stok_masuk;
+                $new_stok_masuk = $item->jumlah;
+                $diff = $new_stok_masuk - $old_stok_masuk;
+                
+                $existing_rekaman->update([
+                    'waktu' => Carbon::now(),
+                    'stok_masuk' => $new_stok_masuk,
+                    'stok_sisa' => $produk->stok + $diff,
+                ]);
+                
+                // Update stok produk
+                $produk->stok += $diff;
+                $produk->update();
+            } else {
+                // Buat rekaman stok baru
                 $stok = $produk->stok;
                 
                 RekamanStok::create([
@@ -131,44 +154,8 @@ class PembelianController extends Controller
                     'stok_awal' => $produk->stok,
                     'stok_sisa' => $stok + $item->jumlah,
                 ]);
-                $produk->stok += $item->jumlah;
-                $produk->update();
-            }
-        } elseif (count($detail) == 1) {
-            $details = PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)->first();
-            $cek = RekamanStok::where('id_pembelian', $id_pembelian)->get();
-            
-            if (count($cek) <= 0) {
-                $produk = Produk::find($details->id_produk);
-                $stok = $produk->stok;
-                RekamanStok::create([
-                    'id_produk' => $details->id_produk,
-                    'waktu' => Carbon::now(),
-                    'stok_masuk' => $details->jumlah,
-                    'id_pembelian' => $id_pembelian,
-                    'stok_awal' => $produk->stok,
-                    'stok_sisa' => $stok + $details->jumlah,
-                ]);
-                $produk->stok += $details->jumlah;
-                $produk->update();
-            } else {
-                $produk = Produk::find($details->id_produk);
-                $stok = $produk->stok;
-                $sums = $details->jumlah - $stok;
-                if ($sums < 0 && $sums != 0) {
-                    $sum = $sums * -1;
-                } else {
-                    $sum = $sums;
-                }
                 
-                $rekaman_stok = RekamanStok::where('id_pembelian', $pembelian->id_pembelian)->first();
-                $rekaman_stok->update([
-                    'id_produk' => $produk->id_produk,
-                    'waktu' => Carbon::now(),
-                    'stok_masuk' => $rekaman_stok->stok_masuk + $sum,
-                    'stok_sisa' => $rekaman_stok->stok_sisa + $sum,
-                ]);
-                $produk->stok += $sum;
+                $produk->stok += $item->jumlah;
                 $produk->update();
             }
         }
@@ -247,42 +234,45 @@ class PembelianController extends Controller
 
     public function destroy($id)
     {
-        $pembelian = Pembelian::where('id_pembelian', $id)->first();
+        $pembelian = Pembelian::find($id);
         
         if (!$pembelian) {
-            return response()->json(['error' => 'Pembelian tidak ditemukan'], 404);
+            return response()->json(['success' => false, 'message' => 'Pembelian tidak ditemukan'], 404);
         }
 
-        $pembelian_detail = PembelianDetail::where('id_pembelian', $id)->get();
+        // Hapus record rekaman stok lama yang terkait dengan pembelian ini
+        RekamanStok::where('id_pembelian', $pembelian->id_pembelian)->delete();
+
+        // Ambil detail pembelian untuk mengembalikan stok
+        $detail = PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)->get();
         
-        // Jika ada detail pembelian, hapus stok dan rekaman stok
-        if (count($pembelian_detail) > 0) {
-            if (count($pembelian_detail) == 1) {
-                $produk = Produk::find($pembelian_detail[0]->id_produk);
-                $rekamstok = RekamanStok::where('id_pembelian', $id)->where('id_produk', $pembelian_detail[0]->id_produk)->first();
+        foreach ($detail as $item) {
+            $produk = Produk::find($item->id_produk);
+            if ($produk) {
+                // Kurangi stok produk sesuai jumlah yang dibeli (karena pembelian dibatalkan)
+                $stok_awal = $produk->stok;
+                $produk->stok -= $item->jumlah;
+                $produk->update();
                 
-                if ($produk && $rekamstok) {
-                    $produk->stok -= $pembelian_detail[0]->jumlah;
-                    $rekamstok->delete();
-                    $produk->update();
-                }
-            } else {
-                foreach ($pembelian_detail as $row) {
-                    $produk = Produk::find($row->id_produk);
-                    $rekamstok = RekamanStok::where('id_pembelian', $id)->where('id_produk', $row->id_produk)->first();
-                    
-                    if ($produk && $rekamstok) {
-                        $produk->stok -= $row->jumlah;
-                        $rekamstok->delete();
-                        $produk->update();
-                    }
-                }
+                // Buat record untuk melacak pengurangan stok
+                RekamanStok::create([
+                    'id_produk' => $item->id_produk,
+                    'waktu' => now(),
+                    'stok_keluar' => $item->jumlah,
+                    'id_pembelian' => $pembelian->id_pembelian,
+                    'stok_awal' => $stok_awal,
+                    'stok_sisa' => $produk->stok,
+                ]);
             }
+            
+            // Hapus detail pembelian
+            $item->delete();
         }
-        
+
+        // Hapus pembelian
         $pembelian->delete();
 
-        return response(null, 204);
+        return response()->json(['success' => true, 'message' => 'Pembelian berhasil dihapus dan stok disesuaikan'], 200);
     }
 
     public function cleanupIncompleteTransactions()

@@ -123,82 +123,62 @@ class PembelianDetailController extends Controller
         $detail->jumlah = $request->jumlah;
         $detail->subtotal = $detail->harga_beli * $request->jumlah;
         $detail->update();
-        dd($detail);
-        if($detail) {
-            $id_produk = $detail->id_produk;
-            $produk = Produk::where('id_produk', $id_produk)->first();
-            $stok = $produk->stok;
-            RekamanStok::create([
-                'id_produk' => $detail->id_produk,
-                'waktu' => Carbon::now(),
-                'stok_masuk' => $request->jumlah,
-                'stok_awal' => $stok,
-                'stok_sisa' => $produk->stok += $request->jumlah,
-            ]);
-        }
+        
+        return response()->json('Data berhasil diperbarui', 200);
     }
 
     public function updateEdit(Request $request, $id)
     {
         $detail = PembelianDetail::where('id_pembelian_detail', $id)->first();
-        // dd($detail->id_produk);
-        // dd($detail->id_pembelian);
-        // dd($request->jumlah);
-        $rekaman_stok = RekamanStok::where('id_pembelian', $detail->id_pembelian)->where('id_produk', $detail->id_produk)->first();
-        $cari = RekamanStok::where('id_pembelian', $detail->id_pembelian)->where('id_produk', $detail->id_produk)->first();
-        if (!empty($rekaman_stok->id_produk) == $detail->id_produk) {
-            $sum = $request->jumlah - $detail->jumlah;
-            // dd($sum);
-            if ($sum < 0 && $sum != 0) {
-                $positive = $sum * -1;
-                $id_produk = $detail->id_produk;
-                $produk = Produk::where('id_produk', $id_produk)->first();
-                $stok = $produk->stok;
-                $rekaman_stok->update([
-                    'id_produk' => $detail->id_produk,
-                    'waktu' => Carbon::now(),
-                    'stok_masuk' => $rekaman_stok->stok_masuk -= $positive,
-                    'stok_awal' => $stok,
-                    'stok_sisa' => $rekaman_stok->stok_sisa -= $positive,
-                ]);
-                $produk = Produk::find($detail->id_produk);
-                $produk->stok -= $positive;
-                $produk->update();
-            } elseif($sum >= 1 && $sum != 0) {
-                $id_produk = $detail->id_produk;
-                $produk = Produk::where('id_produk', $id_produk)->first();
-                $stok = $produk->stok;
-                $rekaman_stok->update([
-                    'id_produk' => $detail->id_produk,
-                    'waktu' => Carbon::now(),
-                    'stok_masuk' => $rekaman_stok->stok_masuk += $sum,
-                    'stok_sisa' => $rekaman_stok->stok_sisa += $sum,
-                    'stok_awal' => $stok,
-                ]);
-                $positive = $sum * -1;
-                $produk = Produk::find($detail->id_produk);
-                $produk->stok += $sum;
-                $produk->update();
-            }
-            
-        } else {
-            $produk = Produk::find($detail->id_produk);
-            $sum = $request->jumlah;
-            $stok = $produk->stok;
-            RekamanStok::create([
-                'id_produk' => $detail->id_produk,
-                'waktu' => Carbon::now(),
-                'stok_masuk' => $sum,
-                'stok_awal' => $produk->stok,
-                'stok_sisa' => $stok += $sum,
-            ]);
-            $produk->stok += $sum;
-            $produk->update();
+        
+        if (!$detail) {
+            return response()->json('Detail pembelian tidak ditemukan', 404);
         }
         
-        $detail->jumlah = $request->jumlah;
-        $detail->subtotal = $detail->harga_beli * $request->jumlah;
+        $produk = Produk::where('id_produk', $detail->id_produk)->first();
+        
+        if (!$produk) {
+            return response()->json('Produk tidak ditemukan', 404);
+        }
+        
+        // Ambil atau buat rekaman stok
+        $rekaman_stok = RekamanStok::where('id_pembelian', $detail->id_pembelian)
+                                   ->where('id_produk', $detail->id_produk)
+                                   ->first();
+        
+        $old_jumlah = $detail->jumlah;
+        $new_jumlah = $request->jumlah;
+        $selisih = $new_jumlah - $old_jumlah;
+        
+        if ($rekaman_stok) {
+            // Update rekaman stok yang sudah ada
+            $rekaman_stok->update([
+                'waktu' => Carbon::now(),
+                'stok_masuk' => $new_jumlah,
+                'stok_sisa' => $produk->stok + $selisih,
+            ]);
+        } else {
+            // Buat rekaman stok baru
+            RekamanStok::create([
+                'id_produk' => $detail->id_produk,
+                'id_pembelian' => $detail->id_pembelian,
+                'waktu' => Carbon::now(),
+                'stok_masuk' => $new_jumlah,
+                'stok_awal' => $produk->stok,
+                'stok_sisa' => $produk->stok + $selisih,
+            ]);
+        }
+        
+        // Update stok produk
+        $produk->stok += $selisih;
+        $produk->update();
+        
+        // Update detail pembelian
+        $detail->jumlah = $new_jumlah;
+        $detail->subtotal = $detail->harga_beli * $new_jumlah;
         $detail->update();
+        
+        return response()->json('Data berhasil diperbarui', 200);
     }
 
     public function destroy($id)
