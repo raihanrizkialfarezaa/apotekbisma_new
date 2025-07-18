@@ -33,12 +33,28 @@
 
 @section('breadcrumb')
     @parent
-    <li class="active">Transaksi Penjaualn</li>
+    <li class="active">Transaksi Penjualan</li>
 @endsection
 
 @section('content')
 <div class="row">
     <div class="col-lg-12">
+        @if (session('error'))
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h4><i class="icon fa fa-ban"></i> Error!</h4>
+                {{ session('error') }}
+            </div>
+        @endif
+        
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h4><i class="icon fa fa-check"></i> Success!</h4>
+                {{ session('success') }}
+            </div>
+        @endif
+        
         <div class="box">
             <div class="box-body">
                     
@@ -48,11 +64,11 @@
                         <label for="kode_produk" class="col-lg-2">Kode Produk</label>
                         <div class="col-lg-5">
                             <div class="input-group">
-                                <input type="hidden" name="id_penjualan" id="id_penjualan" value="{{ $id_penjualan }}">
+                                <input type="hidden" name="id_penjualan" value="{{ $id_penjualan }}">
                                 <input type="hidden" name="id_produk" id="id_produk">
                                 <input type="text" class="form-control" name="kode_produk" id="kode_produk">
                                 <span class="input-group-btn">
-                                    <button onclick="tampilProduk()" class="btn btn-info btn-flat" type="button"><i class="fa fa-arrow-right"></i></button>
+                                    <button onclick="tampilProduk()" class="btn btn-info btn-flat" type="button"><i class="fa fa-arrow-down"></i></button>
                                 </span>
                             </div>
                         </div>
@@ -84,7 +100,7 @@
                             <input type="hidden" name="total" id="total">
                             <input type="hidden" name="total_item" id="total_item">
                             <input type="hidden" name="bayar" id="bayar">
-                            <input type="hidden" name="id_member" id="id_member" value="{{ $memberSelected->id_member }}">
+                            <input type="hidden" name="id_member" id="id_member" value="{{ $memberSelected->id_member ?? '' }}">
 
                             <div class="form-group row">
                                 <label for="totalrp" class="col-lg-2 control-label">Total</label>
@@ -93,16 +109,16 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="totalrp" class="col-lg-2 control-label">Waktu Transaksi</label>
+                                <label for="waktu_transaksi" class="col-lg-2 control-label">Waktu Transaksi</label>
                                 <div class="col-lg-8">
-                                    <input type="date" id="totalrp" class="form-control waktu" name="waktu">
+                                    <input type="date" id="waktu_transaksi" class="form-control waktu" name="waktu" value="{{ isset($penjualan->waktu) && $penjualan->waktu ? \Carbon\Carbon::parse($penjualan->waktu)->format('Y-m-d') : date('Y-m-d') }}">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="kode_member" class="col-lg-2 control-label">Member</label>
                                 <div class="col-lg-8">
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="kode_member" value="{{ $memberSelected->kode_member }}">
+                                        <input type="text" class="form-control" id="kode_member" value="{{ $memberSelected->kode_member ?? '' }}">
                                         <span class="input-group-btn">
                                             <button onclick="tampilMember()" class="btn btn-info btn-flat" type="button"><i class="fa fa-arrow-right"></i></button>
                                         </span>
@@ -153,15 +169,36 @@
 
 @push('scripts')
 <script>
-    const date = new Date();
-    const today = date.toISOString().substring(0, 10);
-    console.log(today);
-    document.querySelector('.waktu').value = today; 
     let table, table2;
 
     $(function () {
         $('body').addClass('sidebar-collapse');
+        
+        // Fungsi untuk memastikan tanggal selalu terisi
+        function ensureDateFilled() {
+            const waktuInput = document.getElementById('waktu_transaksi');
+            if (waktuInput) {
+                console.log('Current date value:', waktuInput.value);
+                if (!waktuInput.value || waktuInput.value === '') {
+                    const today = new Date();
+                    const todayString = today.getFullYear() + '-' + 
+                        String(today.getMonth() + 1).padStart(2, '0') + '-' + 
+                        String(today.getDate()).padStart(2, '0');
+                    waktuInput.value = todayString;
+                    console.log('Date set to:', todayString);
+                } else {
+                    console.log('Date already filled:', waktuInput.value);
+                }
+            }
+        }
+        
+        // Set tanggal saat halaman dimuat
+        ensureDateFilled();
+        
+        // Set tanggal setiap 2 detik untuk memastikan tidak kosong
+        setInterval(ensureDateFilled, 2000);
 
+        @if($id_penjualan)
         table = $('.table-penjualan').DataTable({
             responsive: true,
             processing: true,
@@ -190,7 +227,36 @@
                 $('#diterima').trigger('input');
             }, 300);
         });
+        @else
+        // Inisialisasi tabel kosong untuk transaksi baru
+        table = $('.table-penjualan').DataTable({
+            responsive: true,
+            data: [],
+            columns: [
+                {data: 'DT_RowIndex', searchable: false, sortable: false},
+                {data: 'kode_produk'},
+                {data: 'nama_produk'},
+                {data: 'harga_jual'},
+                {data: 'jumlah'},
+                {data: 'diskon'},
+                {data: 'subtotal'},
+                {data: 'aksi', searchable: false, sortable: false},
+            ],
+            dom: 'Brt',
+            bSort: false,
+            paginate: false
+        });
+        @endif
+
         table2 = $('.table-produk').DataTable();
+
+        // Inisialisasi form berdasarkan kondisi transaksi
+        @if($id_penjualan)
+            loadForm($('#diskon').val());
+        @else
+            $('.btn-simpan').prop('disabled', true).addClass('disabled');
+            $('.btn-simpan').html('<i class="fa fa-plus"></i> Tambahkan Produk Terlebih Dahulu');
+        @endif
 
         $(document).on('input', '.quantity', function () {
             let id = $(this).data('id');
@@ -248,7 +314,48 @@
             $(this).select();
         });
 
-        $('.btn-simpan').on('click', function () {
+        $('.btn-simpan').on('click', function (e) {
+            e.preventDefault();
+            
+            // Jika tombol disabled, jangan lakukan apa-apa
+            if ($(this).prop('disabled')) {
+                return false;
+            }
+            
+            // Pastikan tanggal terisi sebelum submit
+            const waktuInput = document.getElementById('waktu_transaksi');
+            if (waktuInput && (!waktuInput.value || waktuInput.value === '')) {
+                const today = new Date();
+                const todayString = today.getFullYear() + '-' + 
+                    String(today.getMonth() + 1).padStart(2, '0') + '-' + 
+                    String(today.getDate()).padStart(2, '0');
+                waktuInput.value = todayString;
+            }
+            
+            // Validasi apakah ada item di transaksi
+            if ($('.total_item').text() == '' || $('.total_item').text() == '0') {
+                alert('Minimal harus ada 1 produk yang ditambahkan ke transaksi');
+                return false;
+            }
+            
+            // Validasi apakah jumlah diterima sudah diisi
+            if ($('#diterima').val() == '' || $('#diterima').val() == '0') {
+                alert('Jumlah yang diterima harus diisi dan tidak boleh 0');
+                $('#diterima').focus();
+                return false;
+            }
+            
+            // Validasi apakah jumlah diterima cukup
+            let total_bayar = parseInt($('#bayar').val());
+            let diterima = parseInt($('#diterima').val());
+            
+            if (diterima < total_bayar) {
+                alert('Jumlah yang diterima tidak boleh kurang dari total bayar (Rp. ' + $('#bayarrp').val() + ')');
+                $('#diterima').focus();
+                return false;
+            }
+            
+            // Jika semua validasi berhasil, submit form
             $('.form-penjualan').submit();
         });
     });
@@ -269,10 +376,33 @@
     }
 
     function tambahProduk() {
+        // Pastikan tanggal terisi sebelum menambah produk
+        const waktuInput = document.getElementById('waktu_transaksi');
+        if (waktuInput && (!waktuInput.value || waktuInput.value === '')) {
+            const today = new Date();
+            const todayString = today.getFullYear() + '-' + 
+                String(today.getMonth() + 1).padStart(2, '0') + '-' + 
+                String(today.getDate()).padStart(2, '0');
+            waktuInput.value = todayString;
+        }
+        
         $.post('{{ route('transaksi.store') }}', $('.form-produk').serialize())
             .done(response => {
-                $('#kode_produk').focus();
-                table.ajax.reload(() => loadForm($('#diskon').val()));
+                $('#kode_produk').val('').focus();
+                
+                @if(!$id_penjualan)
+                    // Jika ini adalah produk pertama, reload halaman untuk mendapatkan ID transaksi
+                    location.reload();
+                @else
+                    // Jika sudah ada transaksi, reload tabel saja
+                    table.ajax.reload(() => loadForm($('#diskon').val()));
+                    
+                    // Aktifkan tombol simpan jika belum aktif
+                    if ($('.btn-simpan').prop('disabled')) {
+                        $('.btn-simpan').prop('disabled', false).removeClass('disabled');
+                        $('.btn-simpan').html('<i class="fa fa-floppy-o"></i> Simpan Transaksi');
+                    }
+                @endif
             })
             .fail(errors => {
                 alert('Tidak dapat menyimpan data');
@@ -314,10 +444,14 @@
     }
 
     function loadForm(diskon = 0, diterima = 0) {
-        $('#total').val($('.total').text());
-        $('#total_item').val($('.total_item').text());
+        let total = $('.total').text() || 0;
+        let totalItem = $('.total_item').text() || 0;
+        
+        $('#total').val(total);
+        $('#total_item').val(totalItem);
 
-        $.get(`{{ url('/transaksi/loadform') }}/${diskon}/${$('.total').text()}/${diterima}`)
+        @if($id_penjualan)
+        $.get(`{{ url('/transaksi/loadform') }}/${diskon}/${total}/${diterima}`)
             .done(response => {
                 $('#totalrp').val('Rp. '+ response.totalrp);
                 $('#bayarrp').val('Rp. '+ response.bayarrp);
@@ -334,7 +468,16 @@
             .fail(errors => {
                 alert('Tidak dapat menampilkan data');
                 return;
-            })
+            });
+        @else
+        // Untuk transaksi baru yang belum ada ID
+        $('#totalrp').val('Rp. 0');
+        $('#bayarrp').val('Rp. 0');
+        $('#bayar').val(0);
+        $('.tampil-bayar').text('Bayar: Rp. 0');
+        $('.tampil-terbilang').text('Nol Rupiah');
+        $('#kembali').val('Rp. 0');
+        @endif
     }
 </script>
 @endpush

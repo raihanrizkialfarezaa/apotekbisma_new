@@ -78,10 +78,15 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/penjualan/data', [PenjualanController::class, 'data'])->name('penjualan.data');
         Route::get('/penjualan', [PenjualanController::class, 'index'])->name('penjualan.index');
         Route::get('/penjualan/{id}', [PenjualanController::class, 'show'])->name('penjualan.show');
+        Route::get('/penjualan/{id}/lanjutkan', [PenjualanController::class, 'lanjutkanTransaksi'])->name('penjualan.lanjutkan');
+        Route::get('/penjualan/{id}/edit', [PenjualanController::class, 'editTransaksi'])->name('penjualan.edit');
+        Route::get('/penjualan/{id}/print', [PenjualanController::class, 'printReceipt'])->name('penjualan.print');
         Route::delete('/penjualan/{id}', [PenjualanController::class, 'destroy'])->name('penjualan.destroy');
+        Route::delete('/penjualan/empty/cleanup', [PenjualanController::class, 'destroyEmpty'])->name('penjualan.destroyEmpty');
     });
 
     Route::group(['middleware' => 'level:1,2'], function () {
+        Route::get('/transaksi', [PenjualanDetailController::class, 'index'])->name('transaksi.index');
         Route::get('/transaksi/baru', [PenjualanController::class, 'create'])->name('transaksi.baru');
         Route::post('/transaksi/simpan', [PenjualanController::class, 'store'])->name('transaksi.simpan');
         Route::get('/transaksi/selesai', [PenjualanController::class, 'selesai'])->name('transaksi.selesai');

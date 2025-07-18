@@ -22,4 +22,9 @@ class Penjualan extends Model
     {
         return $this->hasOne(User::class, 'id', 'id_user');
     }
+
+    public function detail()
+    {
+        return $this->hasMany(PenjualanDetail::class, 'id_penjualan', 'id_penjualan');
+    }
 }

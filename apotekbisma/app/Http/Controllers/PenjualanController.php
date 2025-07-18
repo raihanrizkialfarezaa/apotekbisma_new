@@ -30,7 +30,39 @@ class PenjualanController extends Controller
                 return format_uang($penjualan->total_item);
             })
             ->addColumn('total_harga', function ($penjualan) {
-                return 'Rp. '. format_uang($penjualan->total_harga);
+                $totalHarga = 'Rp. '. format_uang($penjualan->total_harga);
+                
+                // Transaksi sebelum hari ini dianggap selesai semua
+                $today = date('Y-m-d');
+                $transactionDate = date('Y-m-d', strtotime($penjualan->created_at));
+                
+                if ($transactionDate < $today) {
+                    $totalHarga .= ' <span class="label label-success">Selesai</span>';
+                } else {
+                    // Untuk transaksi hari ini dan seterusnya, cek status sebenarnya
+                    $hasDetail = \App\Models\PenjualanDetail::where('id_penjualan', $penjualan->id_penjualan)->exists();
+                    $hasIncompleteDetail = \App\Models\PenjualanDetail::where('id_penjualan', $penjualan->id_penjualan)
+                                                                      ->where('jumlah', '<=', 0)
+                                                                      ->exists();
+                    
+                    $isIncomplete = (!$hasDetail || 
+                                    $hasIncompleteDetail || 
+                                    $penjualan->total_harga == 0 || 
+                                    $penjualan->diterima == 0);
+                    
+                    $isCompleted = ($hasDetail && 
+                                   !$hasIncompleteDetail && 
+                                   $penjualan->total_harga > 0 && 
+                                   $penjualan->diterima > 0);
+                    
+                    if ($isIncomplete) {
+                        $totalHarga .= ' <span class="label label-warning">Belum Selesai</span>';
+                    } elseif ($isCompleted) {
+                        $totalHarga .= ' <span class="label label-success">Selesai</span>';
+                    }
+                }
+                
+                return $totalHarga;
             })
             ->addColumn('bayar', function ($penjualan) {
                 return 'Rp. '. format_uang($penjualan->bayar);
@@ -54,36 +86,91 @@ class PenjualanController extends Controller
                 return $penjualan->user->name ?? '';
             })
             ->addColumn('aksi', function ($penjualan) {
-                return '
+                // Transaksi sebelum hari ini dianggap selesai semua
+                $today = date('Y-m-d');
+                $transactionDate = date('Y-m-d', strtotime($penjualan->created_at));
+                
+                if ($transactionDate < $today) {
+                    // Transaksi lama - selalu tampilkan tombol edit
+                    $buttons = '
+                    <div class="btn-group">
+                        <button onclick="showDetail(`'. route('penjualan.show', $penjualan->id_penjualan) .'`)" class="btn btn-xs btn-info btn-flat" title="Lihat Detail"><i class="fa fa-eye"></i></button>
+                        <button onclick="editTransaksi('. $penjualan->id_penjualan .')" class="btn btn-xs btn-success btn-flat" title="Edit Transaksi" data-toggle="tooltip"><i class="fa fa-edit"></i></button>
+                        <button onclick="printReceipt('. $penjualan->id_penjualan .')" class="btn btn-xs btn-primary btn-flat" title="Cetak Struk" data-toggle="tooltip"><i class="fa fa-print"></i></button>
+                        <button onclick="deleteData(`'. route('penjualan.destroy', $penjualan->id_penjualan) .'`)" class="btn btn-xs btn-danger btn-flat" title="Hapus Transaksi"><i class="fa fa-trash"></i></button>
+                    </div>';
+                    
+                    return $buttons;
+                }
+                
+                // Untuk transaksi hari ini dan seterusnya, cek status sebenarnya
+                $hasDetail = \App\Models\PenjualanDetail::where('id_penjualan', $penjualan->id_penjualan)->exists();
+                $hasIncompleteDetail = \App\Models\PenjualanDetail::where('id_penjualan', $penjualan->id_penjualan)
+                                                                  ->where('jumlah', '<=', 0)
+                                                                  ->exists();
+                
+                $isIncomplete = (!$hasDetail || 
+                                $hasIncompleteDetail || 
+                                $penjualan->total_harga == 0 || 
+                                $penjualan->diterima == 0);
+                
+                $isCompleted = ($hasDetail && 
+                               !$hasIncompleteDetail && 
+                               $penjualan->total_harga > 0 && 
+                               $penjualan->diterima > 0);
+                
+                $buttons = '
                 <div class="btn-group">
-                    <button onclick="showDetail(`'. route('penjualan.show', $penjualan->id_penjualan) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-eye"></i></button>
-                    <button onclick="deleteData(`'. route('penjualan.destroy', $penjualan->id_penjualan) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
-                </div>
-                ';
+                    <button onclick="showDetail(`'. route('penjualan.show', $penjualan->id_penjualan) .'`)" class="btn btn-xs btn-info btn-flat" title="Lihat Detail"><i class="fa fa-eye"></i></button>';
+                
+                // Tambahkan button berdasarkan status transaksi
+                if ($isIncomplete) {
+                    $buttons .= '
+                    <button onclick="lanjutkanTransaksi('. $penjualan->id_penjualan .')" class="btn btn-xs btn-warning btn-flat" title="Lanjutkan Transaksi" data-toggle="tooltip"><i class="fa fa-play"></i></button>';
+                } elseif ($isCompleted) {
+                    $buttons .= '
+                    <button onclick="editTransaksi('. $penjualan->id_penjualan .')" class="btn btn-xs btn-success btn-flat" title="Edit Transaksi" data-toggle="tooltip"><i class="fa fa-edit"></i></button>';
+                }
+                
+                // Tambahkan tombol print untuk semua transaksi yang memiliki detail
+                if ($hasDetail) {
+                    $buttons .= '
+                    <button onclick="printReceipt('. $penjualan->id_penjualan .')" class="btn btn-xs btn-primary btn-flat" title="Cetak Struk" data-toggle="tooltip"><i class="fa fa-print"></i></button>';
+                }
+                
+                $buttons .= '
+                    <button onclick="deleteData(`'. route('penjualan.destroy', $penjualan->id_penjualan) .'`)" class="btn btn-xs btn-danger btn-flat" title="Hapus Transaksi"><i class="fa fa-trash"></i></button>
+                </div>';
+                
+                return $buttons;
             })
-            ->rawColumns(['aksi', 'kode_member'])
+            ->rawColumns(['aksi', 'kode_member', 'total_harga'])
             ->make(true);
     }
 
     public function create()
     {
-        $penjualan = new Penjualan();
-        $penjualan->id_member = null;
-        $penjualan->total_item = 0;
-        $penjualan->total_harga = 0;
-        $penjualan->diskon = 0;
-        $penjualan->bayar = 0;
-        $penjualan->diterima = 0;
-        $penjualan->id_user = auth()->id();
-        $penjualan->save();
+        // Cek apakah ada transaksi yang sedang berjalan
+        if ($id_penjualan = session('id_penjualan')) {
+            $penjualan = Penjualan::find($id_penjualan);
+            if ($penjualan) {
+                // Jika ada transaksi yang sedang berjalan, lanjutkan transaksi tersebut
+                $produk = Produk::orderBy('nama_produk')->get();
+                $member = Member::orderBy('nama')->get();
+                $diskon = Setting::first()->diskon ?? 0;
+                $memberSelected = $penjualan->member ?? new Member();
 
-        session(['id_penjualan' => $penjualan->id_penjualan]);
+                return view('penjualan_detail.index', compact('produk', 'member', 'diskon', 'id_penjualan', 'penjualan', 'memberSelected'));
+            }
+        }
+
+        // Tampilkan halaman kosong untuk transaksi baru tanpa membuat record di database
         $produk = Produk::orderBy('nama_produk')->get();
         $member = Member::orderBy('nama')->get();
         $diskon = Setting::first()->diskon ?? 0;
-        $id_penjualan = $penjualan->id_penjualan;
-        $penjualan = Penjualan::find($penjualan->id_penjualan);
-        $memberSelected = $penjualan->member ?? new Member();
+        $id_penjualan = null;
+        $penjualan = new Penjualan();
+        $memberSelected = new Member();
 
         return view('penjualan_detail.index', compact('produk', 'member', 'diskon', 'id_penjualan', 'penjualan', 'memberSelected'));
     }
@@ -104,6 +191,25 @@ class PenjualanController extends Controller
 
     public function store(Request $request)
     {
+        // Validasi input
+        $request->validate([
+            'id_penjualan' => 'required',
+            'diterima' => 'required|numeric|min:0',
+            'total' => 'required|numeric|min:0',
+        ]);
+
+        // Cek apakah ada detail penjualan
+        $detail = PenjualanDetail::where('id_penjualan', $request->id_penjualan)->get();
+        if ($detail->isEmpty()) {
+            return redirect()->back()->with('error', 'Minimal harus ada 1 produk yang ditambahkan ke transaksi');
+        }
+
+        // Validasi bahwa diterima tidak boleh kurang dari total bayar
+        $total_bayar = $request->total - ($request->diskon / 100 * $request->total);
+        if ($request->diterima < $total_bayar) {
+            return redirect()->back()->with('error', 'Jumlah yang diterima tidak boleh kurang dari total bayar');
+        }
+
         $penjualan = Penjualan::findOrFail($request->id_penjualan);
         $penjualan->id_member = $request->id_member;
         $penjualan->total_item = $request->total_item;
@@ -111,10 +217,10 @@ class PenjualanController extends Controller
         $penjualan->diskon = $request->diskon;
         $penjualan->bayar = $request->bayar;
         $penjualan->diterima = $request->diterima;
-        $penjualan->waktu = $request->waktu;
+        // Pastikan waktu transaksi adalah tanggal hari ini jika tidak diisi
+        $penjualan->waktu = $request->waktu ?? date('Y-m-d');
         $penjualan->update();
 
-        $detail = PenjualanDetail::where('id_penjualan', $penjualan->id_penjualan)->get();
         $id_penjualan = $penjualan->id_penjualan;
         if (count($detail) > 1) {
             foreach ($detail as $item) {
@@ -180,9 +286,11 @@ class PenjualanController extends Controller
             }
             
         }
-        
 
-        return redirect()->route('transaksi.selesai');
+        // Hapus session setelah transaksi selesai
+        session()->forget('id_penjualan');
+
+        return redirect()->route('penjualan.index')->with('success', 'Transaksi berhasil disimpan!');
     }
 
     public function show($id)
@@ -230,6 +338,53 @@ class PenjualanController extends Controller
         return response(null, 204);
     }
 
+    public function lanjutkanTransaksi($id)
+    {
+        $penjualan = Penjualan::find($id);
+        
+        if (!$penjualan) {
+            return redirect()->back()->with('error', 'Transaksi tidak ditemukan');
+        }
+
+        // Set session untuk melanjutkan transaksi
+        session(['id_penjualan' => $penjualan->id_penjualan]);
+        
+        return redirect()->route('transaksi.baru')->with('success', 'Melanjutkan transaksi #' . $penjualan->id_penjualan);
+    }
+
+    public function editTransaksi($id)
+    {
+        $penjualan = Penjualan::find($id);
+        
+        if (!$penjualan) {
+            return redirect()->back()->with('error', 'Transaksi tidak ditemukan');
+        }
+
+        // Set session untuk mengedit transaksi
+        session(['id_penjualan' => $penjualan->id_penjualan]);
+        
+        return redirect()->route('transaksi.baru')->with('success', 'Mengedit transaksi #' . $penjualan->id_penjualan);
+    }
+
+    public function destroyEmpty()
+    {
+        // Hapus transaksi kosong yang tidak memiliki detail
+        $emptyTransactions = Penjualan::whereDoesntHave('detail')->get();
+        foreach ($emptyTransactions as $transaction) {
+            $transaction->delete();
+        }
+        
+        // Hapus session jika transaksi yang ada di session sudah dihapus
+        if (session('id_penjualan')) {
+            $currentTransaction = Penjualan::find(session('id_penjualan'));
+            if (!$currentTransaction) {
+                session()->forget('id_penjualan');
+            }
+        }
+        
+        return response()->json(['message' => 'Empty transactions cleaned up'], 200);
+    }
+
     public function selesai()
     {
         $setting = Setting::first();
@@ -263,7 +418,30 @@ class PenjualanController extends Controller
             ->get();
 
         $pdf = PDF::loadView('penjualan.nota_besar', compact('setting', 'penjualan', 'detail'));
-        $pdf->setPaper(0,0,609,440, 'potrait');
+        $pdf->setPaper('a4', 'portrait');
         return $pdf->stream('Transaksi-'. date('Y-m-d-his') .'.pdf');
+    }
+
+    public function printReceipt($id)
+    {
+        $setting = Setting::first();
+        $penjualan = Penjualan::find($id);
+        if (! $penjualan) {
+            abort(404);
+        }
+        $detail = PenjualanDetail::with('produk')
+            ->where('id_penjualan', $id)
+            ->get();
+
+        // Cek tipe nota dari setting
+        if ($setting->tipe_nota == 1) {
+            // Nota Kecil
+            return view('penjualan.nota_kecil', compact('setting', 'penjualan', 'detail'));
+        } else {
+            // Nota Besar (PDF)
+            $pdf = PDF::loadView('penjualan.nota_besar', compact('setting', 'penjualan', 'detail'));
+            $pdf->setPaper('a4', 'portrait');
+            return $pdf->stream('Struk-Transaksi-'. $penjualan->id_penjualan .'-'. date('Y-m-d-His') .'.pdf');
+        }
     }
 }

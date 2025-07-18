@@ -87,14 +87,47 @@ class PenjualanDetailController extends Controller
             return response()->json('Data gagal disimpan', 400);
         }
 
-        $detail = new PenjualanDetail();
-        $detail->id_penjualan = $request->id_penjualan;
-        $detail->id_produk = $produk->id_produk;
-        $detail->harga_jual = $produk->harga_jual;
-        $detail->jumlah = 0;
-        $detail->diskon = $produk->diskon;
-        $detail->subtotal = $produk->harga_jual - ($produk->diskon / 100 * $produk->harga_jual);;
-        $detail->save();
+        // Cek apakah ada transaksi yang sedang berjalan
+        $id_penjualan = $request->id_penjualan;
+        
+        if (!$id_penjualan || !session('id_penjualan')) {
+            // Buat transaksi baru hanya ketika produk pertama ditambahkan
+            $penjualan = new Penjualan();
+            $penjualan->id_member = null;
+            $penjualan->total_item = 0;
+            $penjualan->total_harga = 0;
+            $penjualan->diskon = 0;
+            $penjualan->bayar = 0;
+            $penjualan->diterima = 0;
+            $penjualan->waktu = date('Y-m-d'); // Set tanggal hari ini
+            $penjualan->id_user = auth()->id();
+            $penjualan->save();
+
+            session(['id_penjualan' => $penjualan->id_penjualan]);
+            $id_penjualan = $penjualan->id_penjualan;
+        }
+
+        // Cek apakah produk sudah ada di detail transaksi
+        $existingDetail = PenjualanDetail::where('id_penjualan', $id_penjualan)
+                                        ->where('id_produk', $produk->id_produk)
+                                        ->first();
+        
+        if ($existingDetail) {
+            // Jika produk sudah ada, tambahkan jumlahnya
+            $existingDetail->jumlah += 1;
+            $existingDetail->subtotal = $existingDetail->harga_jual * $existingDetail->jumlah - (($existingDetail->diskon * $existingDetail->jumlah) / 100 * $existingDetail->harga_jual);
+            $existingDetail->save();
+        } else {
+            // Jika produk belum ada, buat detail baru
+            $detail = new PenjualanDetail();
+            $detail->id_penjualan = $id_penjualan;
+            $detail->id_produk = $produk->id_produk;
+            $detail->harga_jual = $produk->harga_jual;
+            $detail->jumlah = 1;
+            $detail->diskon = $produk->diskon;
+            $detail->subtotal = $produk->harga_jual - ($produk->diskon / 100 * $produk->harga_jual);
+            $detail->save();
+        }
 
         return response()->json('Data berhasil disimpan', 200);
     }
@@ -116,21 +149,28 @@ class PenjualanDetailController extends Controller
 
     public function updateEdit(Request $request, $id)
     {
-        // $detail = PenjualanDetail::find($id);
         $detail = PenjualanDetail::where('id_penjualan_detail', $id)->first();
+        
+        if (!$detail) {
+            return response()->json('Detail transaksi tidak ditemukan', 404);
+        }
+        
         $penjualan = Penjualan::where('id_penjualan', $detail->id_penjualan)->first();
-        // dd($detail->id_produk);
         $produk_id = Produk::where('id_produk', $detail->id_produk)->first();
-        $rekaman_stok = RekamanStok::where('id_penjualan', $detail->id_penjualan)->where('id_produk', $detail->id_produk)->first();
-        // DB::enableQueryLog();
-        $cari = RekamanStok::where('id_produk', $produk_id->id_produk)->where('id_penjualan', $request->id_penjualan)->first();
-        // dd(DB::getQueryLog());
+        
+        if (!$produk_id) {
+            return response()->json('Produk tidak ditemukan', 404);
+        }
+        
+        $rekaman_stok = RekamanStok::where('id_penjualan', $detail->id_penjualan)
+                                   ->where('id_produk', $detail->id_produk)
+                                   ->first();
+        
         if ($rekaman_stok != NULL) {
             if ($rekaman_stok->id_produk == $produk_id->id_produk) {
                 $sum = $request->jumlah - $detail->jumlah;
-                // dd($sum);
+                
                 if ($produk_id->stok >= $sum) {
-                    // dd($sum);
                     if ($sum < 0 && $sum != 0) {
                         $rekaman_stok->update([
                             'id_produk' => $produk_id->id_produk,
@@ -162,8 +202,6 @@ class PenjualanDetailController extends Controller
                 } else {
                     return response()->json('Stok tidak cukup', 500);
                 }
-                
-                
             }
         } else {
             if ($produk_id->stok >= $request->jumlah) {
@@ -187,10 +225,7 @@ class PenjualanDetailController extends Controller
             }
         }
         
-        
-        // dd($sum);
-        
-        
+        return response()->json('Data berhasil diperbarui', 200);
     }
 
     public function destroy($id)
