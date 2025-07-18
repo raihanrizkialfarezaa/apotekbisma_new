@@ -151,17 +151,25 @@
     }
 
     function deleteData(url) {
-        if (confirm('Yakin ingin menghapus data terpilih?')) {
+        if (confirm('Yakin ingin menghapus transaksi ini?\n\nSTOK PRODUK AKAN DIKEMBALIKAN sesuai jumlah yang dibeli pada transaksi ini.')) {
             $.post(url, {
                     '_token': $('[name=csrf-token]').attr('content'),
                     '_method': 'delete'
                 })
                 .done((response) => {
-                    table.ajax.reload();
+                    if (response.success) {
+                        table.ajax.reload();
+                        alert('Transaksi berhasil dihapus!\n\nStok produk telah dikembalikan ke jumlah semula.');
+                    } else {
+                        alert('Gagal menghapus transaksi: ' + response.message);
+                    }
                 })
-                .fail((errors) => {
-                    alert('Tidak dapat menghapus data');
-                    return;
+                .fail((xhr) => {
+                    let errorMsg = 'Tidak dapat menghapus transaksi';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMsg = xhr.responseJSON.message;
+                    }
+                    alert(errorMsg);
                 });
         }
     }

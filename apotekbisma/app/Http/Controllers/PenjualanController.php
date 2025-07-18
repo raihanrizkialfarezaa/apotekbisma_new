@@ -322,20 +322,44 @@ class PenjualanController extends Controller
     public function destroy($id)
     {
         $penjualan = Penjualan::find($id);
-        $detail    = PenjualanDetail::where('id_penjualan', $penjualan->id_penjualan)->get();
+        
+        if (!$penjualan) {
+            return response()->json(['success' => false, 'message' => 'Transaksi tidak ditemukan'], 404);
+        }
+
+        // Hapus record rekaman stok lama yang terkait dengan transaksi ini
+        \App\Models\RekamanStok::where('id_penjualan', $penjualan->id_penjualan)->delete();
+
+        // Ambil detail transaksi untuk mengembalikan stok
+        $detail = PenjualanDetail::where('id_penjualan', $penjualan->id_penjualan)->get();
+        
         foreach ($detail as $item) {
             $produk = Produk::find($item->id_produk);
             if ($produk) {
-                $produk->stok + $item->jumlah;
+                // Kembalikan stok produk sesuai jumlah yang dibeli
+                $stok_awal = $produk->stok;
+                $produk->stok += $item->jumlah;
                 $produk->update();
+                
+                // Buat record untuk melacak pengembalian stok
+                \App\Models\RekamanStok::create([
+                    'id_produk' => $item->id_produk,
+                    'waktu' => now(),
+                    'stok_masuk' => $item->jumlah,
+                    'id_penjualan' => $penjualan->id_penjualan,
+                    'stok_awal' => $stok_awal,
+                    'stok_sisa' => $produk->stok,
+                ]);
             }
-
+            
+            // Hapus detail transaksi
             $item->delete();
         }
 
+        // Hapus transaksi
         $penjualan->delete();
 
-        return response(null, 204);
+        return response()->json(['success' => true, 'message' => 'Transaksi berhasil dihapus dan stok dikembalikan'], 200);
     }
 
     public function lanjutkanTransaksi($id)
