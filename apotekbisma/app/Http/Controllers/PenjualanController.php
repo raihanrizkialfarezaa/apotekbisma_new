@@ -286,7 +286,12 @@ class PenjualanController extends Controller
 
     public function show($id)
     {
-        $detail = PenjualanDetail::with('produk')->where('id_penjualan', $id)->get();
+        $detail = PenjualanDetail::with('produk')
+            ->where('id_penjualan', $id)
+            ->join('produk', 'penjualan_detail.id_produk', '=', 'produk.id_produk')
+            ->orderBy('produk.nama_produk', 'asc')
+            ->select('penjualan_detail.*')
+            ->get();
 
         return datatables()
             ->of($detail)
@@ -416,6 +421,9 @@ class PenjualanController extends Controller
         }
         $detail = PenjualanDetail::with('produk')
             ->where('id_penjualan', session('id_penjualan'))
+            ->join('produk', 'penjualan_detail.id_produk', '=', 'produk.id_produk')
+            ->orderBy('produk.nama_produk', 'asc')
+            ->select('penjualan_detail.*')
             ->get();
         
         return view('penjualan.nota_kecil', compact('setting', 'penjualan', 'detail'));
@@ -430,6 +438,9 @@ class PenjualanController extends Controller
         }
         $detail = PenjualanDetail::with('produk')
             ->where('id_penjualan', session('id_penjualan'))
+            ->join('produk', 'penjualan_detail.id_produk', '=', 'produk.id_produk')
+            ->orderBy('produk.nama_produk', 'asc')
+            ->select('penjualan_detail.*')
             ->get();
 
         $pdf = PDF::loadView('penjualan.nota_besar', compact('setting', 'penjualan', 'detail'));
@@ -446,6 +457,9 @@ class PenjualanController extends Controller
         }
         $detail = PenjualanDetail::with('produk')
             ->where('id_penjualan', $id)
+            ->join('produk', 'penjualan_detail.id_produk', '=', 'produk.id_produk')
+            ->orderBy('produk.nama_produk', 'asc')
+            ->select('penjualan_detail.*')
             ->get();
 
         // Cek tipe nota dari setting

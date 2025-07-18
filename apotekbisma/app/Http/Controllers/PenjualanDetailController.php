@@ -39,6 +39,9 @@ class PenjualanDetailController extends Controller
     {
         $detail = PenjualanDetail::with('produk')
             ->where('id_penjualan', $id)
+            ->join('produk', 'penjualan_detail.id_produk', '=', 'produk.id_produk')
+            ->orderBy('produk.nama_produk', 'asc')
+            ->select('penjualan_detail.*')
             ->get();
 
         $data = array();

@@ -235,7 +235,14 @@
                 })
                 .done(response => {
                     $(this).on('mouseout', function () {
-                        table.ajax.reload(() => loadForm($('#diskon').val()));
+                        table.ajax.reload(() => {
+                            loadForm($('#diskon').val());
+                            // Update diterima with new total after quantity change
+                            setTimeout(() => {
+                                $('#diterima').val($('#bayar').val());
+                                $('#diterima').trigger('input');
+                            }, 100);
+                        });
                     });
                 })
                 .fail(errors => {
@@ -245,7 +252,14 @@
                         alert('Tidak dapat menyimpan data');
                     }
                     $(this).on('mouseout', function () {
-                        table.ajax.reload(() => loadForm($('#diskon').val()));
+                        table.ajax.reload(() => {
+                            loadForm($('#diskon').val());
+                            // Update diterima with new total after quantity change
+                            setTimeout(() => {
+                                $('#diterima').val($('#bayar').val());
+                                $('#diterima').trigger('input');
+                            }, 100);
+                        });
                     })
                     return;
                 });
@@ -257,6 +271,11 @@
             }
 
             loadForm($(this).val());
+            // Update diterima with new total after discount change
+            setTimeout(() => {
+                $('#diterima').val($('#bayar').val());
+                $('#diterima').trigger('input');
+            }, 100);
         });
 
         $('#diterima').on('input', function () {
@@ -313,7 +332,16 @@
         $.post('{{ route('transaksi.store') }}', $('.form-produk').serialize())
             .done(response => {
                 $('#kode_produk').focus();
-                table.ajax.reload(() => loadForm($('#diskon').val()));
+                table.ajax.reload(() => {
+                    loadForm($('#diskon').val());
+                    // Reset diterima to 0 so it will auto-fill with new total
+                    setTimeout(() => {
+                        if ($('#diterima').val() != 0) {
+                            $('#diterima').val($('#bayar').val());
+                            $('#diterima').trigger('input');
+                        }
+                    }, 100);
+                });
             })
             .fail(errors => {
                 alert('Tidak dapat menyimpan data');
@@ -330,7 +358,11 @@
         $('#kode_member').val(kode);
         $('#diskon').val('{{ $diskon }}');
         loadForm($('#diskon').val());
-        $('#diterima').val(0).focus().select();
+        // Update diterima with new total after member selection
+        setTimeout(() => {
+            $('#diterima').val($('#bayar').val());
+            $('#diterima').focus().select();
+        }, 100);
         hideMember();
     }
 
@@ -345,7 +377,14 @@
                     '_method': 'delete'
                 })
                 .done((response) => {
-                    table.ajax.reload(() => loadForm($('#diskon').val()));
+                    table.ajax.reload(() => {
+                        loadForm($('#diskon').val());
+                        // Update diterima with new total after deletion
+                        setTimeout(() => {
+                            $('#diterima').val($('#bayar').val());
+                            $('#diterima').trigger('input');
+                        }, 100);
+                    });
                 })
                 .fail((errors) => {
                     alert('Tidak dapat menghapus data');
@@ -365,6 +404,11 @@
                 $('#bayar').val(response.bayar);
                 $('.tampil-bayar').text('Bayar: Rp. '+ response.bayarrp);
                 $('.tampil-terbilang').text(response.terbilang);
+
+                // Auto-fill diterima dengan nilai bayar jika diterima masih 0 atau kosong
+                if ($('#diterima').val() == 0 || $('#diterima').val() == '') {
+                    $('#diterima').val(response.bayar);
+                }
 
                 $('#kembali').val('Rp.'+ response.kembalirp);
                 if ($('#diterima').val() != 0) {
