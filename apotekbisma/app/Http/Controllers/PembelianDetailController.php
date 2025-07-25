@@ -21,27 +21,43 @@ class PembelianDetailController extends Controller
             return redirect()->route('pembelian.index')->with('error', 'Silakan pilih supplier terlebih dahulu untuk memulai pembelian.');
         }
         
+        // Cek apakah pembelian ada
+        $pembelian = Pembelian::find($id_pembelian);
+        if (!$pembelian) {
+            session()->forget('id_pembelian');
+            session()->forget('id_supplier');
+            return redirect()->route('pembelian.index')->with('error', 'Transaksi pembelian tidak ditemukan.');
+        }
+        
         $produk = Produk::orderBy('nama_produk')->get();
         $supplier = Supplier::find(session('id_supplier'));
-        $diskon = Pembelian::find($id_pembelian)->diskon ?? 0;
+        $diskon = $pembelian->diskon ?? 0;
 
         if (! $supplier) {
             abort(404);
         }
 
-        return view('pembelian_detail.index', compact('id_pembelian', 'produk', 'supplier', 'diskon'));
+        return view('pembelian_detail.index', compact('id_pembelian', 'produk', 'supplier', 'diskon', 'pembelian'));
     }
     
     public function editBayar($id)
     {
         $id_pembelian = $id;
         $pembelian = Pembelian::where('id_pembelian', $id)->first();
+        
+        if (!$pembelian) {
+            return redirect()->route('pembelian.index')->with('error', 'Transaksi pembelian tidak ditemukan.');
+        }
+        
+        // Set session untuk editing
+        session(['id_pembelian' => $pembelian->id_pembelian]);
+        session(['id_supplier' => $pembelian->id_supplier]);
+        
         $produk = Produk::orderBy('nama_produk')->get();
-        $produk_supplier = Pembelian::where('id_pembelian', $id)->first();
         $detail_pembelian = PembelianDetail::where('id_pembelian', $id)->get();
-        $supplier = Supplier::find($produk_supplier->id_supplier);
-        $diskon = Pembelian::find($id_pembelian)->diskon ?? 0;
-        $tanggal = Pembelian::where('id_pembelian', $id_pembelian)->first();
+        $supplier = Supplier::find($pembelian->id_supplier);
+        $diskon = $pembelian->diskon ?? 0;
+        $tanggal = $pembelian;
 
         if (! $supplier) {
             abort(404);
@@ -54,6 +70,9 @@ class PembelianDetailController extends Controller
     {
         $detail = PembelianDetail::with('produk')
             ->where('id_pembelian', $id)
+            ->join('produk', 'pembelian_detail.id_produk', '=', 'produk.id_produk')
+            ->orderBy('produk.nama_produk', 'asc')
+            ->select('pembelian_detail.*')
             ->get();
         $data = array();
         $total = 0;
@@ -106,12 +125,14 @@ class PembelianDetailController extends Controller
             return response()->json('Data gagal disimpan', 400);
         }
 
+        // Selalu buat entry baru untuk memungkinkan produk yang sama ditambahkan berulang kali
+        // Ini akan memungkinkan pengelompokan berdasarkan nama produk saat ditampilkan
         $detail = new PembelianDetail();
         $detail->id_pembelian = $request->id_pembelian;
         $detail->id_produk = $produk->id_produk;
         $detail->harga_beli = $produk->harga_beli;
-        $detail->jumlah = 0;
-        $detail->subtotal = $produk->harga_beli * 0;
+        $detail->jumlah = 1; // Set default jumlah ke 1
+        $detail->subtotal = $produk->harga_beli * 1;
         $detail->save();
 
         return response()->json('Data berhasil disimpan', 200);
@@ -184,6 +205,28 @@ class PembelianDetailController extends Controller
     public function destroy($id)
     {
         $detail = PembelianDetail::find($id);
+        
+        if (!$detail) {
+            return response()->json(['success' => false, 'message' => 'Detail tidak ditemukan'], 404);
+        }
+        
+        // Jika ada rekaman stok terkait, kembalikan stok produk
+        $rekaman_stok = RekamanStok::where('id_pembelian', $detail->id_pembelian)
+                                   ->where('id_produk', $detail->id_produk)
+                                   ->first();
+        
+        if ($rekaman_stok) {
+            $produk = Produk::find($detail->id_produk);
+            if ($produk) {
+                // Kurangi stok yang sebelumnya ditambahkan
+                $produk->stok -= $rekaman_stok->stok_masuk;
+                $produk->update();
+                
+                // Hapus rekaman stok
+                $rekaman_stok->delete();
+            }
+        }
+        
         $detail->delete();
 
         return response(null, 204);

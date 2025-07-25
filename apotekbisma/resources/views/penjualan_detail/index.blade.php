@@ -384,7 +384,13 @@
         $('#modal-produk').modal('hide');
     }
 
-    function pilihProduk(id, kode) {
+    function pilihProduk(id, kode, stok) {
+        // Validasi stok sebelum menambahkan produk
+        if (stok <= 0) {
+            alert('Produk tidak dapat dijual karena stok habis!');
+            return;
+        }
+        
         $('#id_produk').val(id);
         $('#kode_produk').val(kode);
         hideProduk();
@@ -427,7 +433,16 @@
                 @endif
             })
             .fail(errors => {
-                alert('Tidak dapat menyimpan data');
+                let errorMessage = 'Tidak dapat menyimpan data';
+                
+                if (errors.responseText) {
+                    const responseText = errors.responseText;
+                    if (responseText.includes('Stok habis') || responseText.includes('Stok tidak cukup')) {
+                        errorMessage = responseText;
+                    }
+                }
+                
+                alert(errorMessage);
                 return;
             });
     }

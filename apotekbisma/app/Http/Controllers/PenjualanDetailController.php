@@ -90,9 +90,9 @@ class PenjualanDetailController extends Controller
             return response()->json('Data gagal disimpan', 400);
         }
 
-        // Cek stok apakah mencukupi
-        if ($produk->stok < 1) {
-            return response()->json('Stok tidak cukup. Stok tersedia: ' . $produk->stok, 500);
+        // Cek stok apakah mencukupi - stok harus > 0
+        if ($produk->stok <= 0) {
+            return response()->json('Stok habis atau tidak tersedia. Produk tidak dapat dijual.', 400);
         }
 
         // Cek apakah ada transaksi yang sedang berjalan

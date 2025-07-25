@@ -18,18 +18,36 @@
                     </thead>
                     <tbody>
                         @foreach ($produk as $key => $item)
-                            <tr>
+                            <tr class="{{ $item->stok <= 0 ? 'danger' : ($item->stok == 1 ? 'warning' : '') }}">
                                 <td width="5%">{{ $key+1 }}</td>
                                 <td><span class="label label-success">{{ $item->kode_produk }}</span></td>
-                                <td>{{ $item->nama_produk }}</td>
-                                <td>{{ number_format($item->harga_jual) }}</td>
-                                <td>{{ $item->stok }}</td>
                                 <td>
-                                    <a href="#" class="btn btn-primary btn-xs btn-flat"
-                                        onclick="pilihProduk('{{ $item->id_produk }}', '{{ $item->kode_produk }}')">
-                                        <i class="fa fa-check-circle"></i>
-                                        Pilih
-                                    </a>
+                                    {{ $item->nama_produk }}
+                                    @if($item->stok <= 0)
+                                        <span class="label label-danger">Stok Habis</span>
+                                    @elseif($item->stok == 1)
+                                        <span class="label label-warning">Stok Menipis</span>
+                                    @endif
+                                </td>
+                                <td>{{ number_format($item->harga_jual) }}</td>
+                                <td>
+                                    <span class="{{ $item->stok <= 0 ? 'text-danger' : ($item->stok == 1 ? 'text-warning' : 'text-success') }}">
+                                        {{ $item->stok }}
+                                    </span>
+                                </td>
+                                <td>
+                                    @if($item->stok > 0)
+                                        <a href="#" class="btn btn-primary btn-xs btn-flat"
+                                            onclick="pilihProduk('{{ $item->id_produk }}', '{{ $item->kode_produk }}', {{ $item->stok }})">
+                                            <i class="fa fa-check-circle"></i>
+                                            Pilih
+                                        </a>
+                                    @else
+                                        <button class="btn btn-danger btn-xs btn-flat" disabled title="Stok habis, tidak dapat dijual">
+                                            <i class="fa fa-ban"></i>
+                                            Tidak Tersedia
+                                        </button>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

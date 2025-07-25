@@ -155,6 +155,7 @@
             </div>
 
             <div class="box-footer">
+                <button type="button" class="btn btn-info btn-sm btn-flat pull-left btn-cetak" onclick="printReceipt()" style="display: none;"><i class="fa fa-print"></i> Cetak Bukti</button>
                 <button type="submit" class="btn btn-primary btn-sm btn-flat pull-right btn-simpan"><i class="fa fa-floppy-o"></i> Simpan Transaksi</button>
             </div>
         </div>
@@ -507,11 +508,29 @@
                 $('#bayar').val(response.bayar);
                 $('.tampil-bayar').text('Rp. '+ response.bayarrp);
                 $('.tampil-terbilang').text(response.terbilang);
+                
+                // Tampilkan tombol cetak jika transaksi sudah lengkap
+                if (isTransactionComplete()) {
+                    $('.btn-cetak').show();
+                } else {
+                    $('.btn-cetak').hide();
+                }
             })
             .fail(errors => {
                 alert('Tidak dapat menampilkan data');
                 return;
             })
+    }
+
+    function printReceipt() {
+        let idPembelian = $('#id_pembelian').val();
+        if (idPembelian && isTransactionComplete()) {
+            if (confirm('Cetak bukti pembelian?')) {
+                window.open('{{ route("pembelian.print", "") }}/' + idPembelian, '_blank');
+            }
+        } else {
+            alert('Transaksi belum lengkap. Pastikan ada produk dan nomor faktur sudah diisi.');
+        }
     }
 </script>
 @endpush

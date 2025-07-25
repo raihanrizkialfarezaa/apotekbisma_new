@@ -122,6 +122,9 @@
                     '_method': 'delete'
                 })
                 .done((response) => {
+                    if (response.success) {
+                        alert(response.message);
+                    }
                     table.ajax.reload();
                 })
                 .fail((errors) => {
@@ -130,5 +133,27 @@
                 });
         }
     }
+
+    function lanjutkanTransaksi(id) {
+        window.location.href = '{{ route("pembelian.create", ":id") }}'.replace(':id', id);
+    }
+
+    function editTransaksi(id) {
+        window.location.href = '{{ route("pembelian_detail.editBayar", ":id") }}'.replace(':id', id);
+    }
+
+    function printReceipt(id) {
+        if (confirm('Cetak bukti pembelian?')) {
+            window.open('{{ route("pembelian.print", ":id") }}'.replace(':id', id), '_blank');
+        }
+    }
+
+    // Auto cleanup untuk transaksi yang tidak selesai saat meninggalkan halaman
+    $(window).on('beforeunload', function() {
+        // Cleanup transaksi yang tidak lengkap
+        $.post('{{ route("pembelian.cleanup") }}', {
+            '_token': $('[name=csrf-token]').attr('content')
+        });
+    });
 </script>
 @endpush

@@ -43,6 +43,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/produk/data', [ProdukController::class, 'data'])->name('produk.data');
         Route::post('/produk/delete-selected', [ProdukController::class, 'deleteSelected'])->name('produk.delete_selected');
         Route::post('/produk/cetak-barcode', [ProdukController::class, 'cetakBarcode'])->name('produk.cetak_barcode');
+        Route::post('/produk/beli/{id}', [ProdukController::class, 'beliProduk'])->name('produk.beli');
         Route::resource('/produk', ProdukController::class);
         Route::get('/halaman-import', [ProdukController::class, 'importPage'])->name('importview');
         Route::post('/import-excel', [ProdukController::class, 'importExcel'])->name('importobat');
@@ -63,6 +64,10 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/pembelian/data', [PembelianController::class, 'data'])->name('pembelian.data');
         Route::get('/pembelian/{id}/create', [PembelianController::class, 'create'])->name('pembelian.create');
+        Route::get('/pembelian/create', [PembelianController::class, 'create'])->name('pembelian.create.new');
+        Route::get('/pembelian/nota-kecil', [PembelianController::class, 'notaKecil'])->name('pembelian.nota_kecil');
+        Route::get('/pembelian/nota-besar', [PembelianController::class, 'notaBesar'])->name('pembelian.nota_besar');
+        Route::get('/pembelian/{id}/print', [PembelianController::class, 'printReceipt'])->name('pembelian.print');
         Route::post('/pembelian/cleanup', [PembelianController::class, 'cleanupIncompleteTransactions'])->name('pembelian.cleanup');
         Route::delete('/pembelian/{id}', [PembelianController::class, 'destroy'])->name('pembelian.destroy');
         Route::delete('/pembelian/{id}/empty', [PembelianController::class, 'destroyEmpty'])->name('pembelian.destroyEmpty');
@@ -93,14 +98,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/transaksi/selesai', [PenjualanController::class, 'selesai'])->name('transaksi.selesai');
         Route::get('/transaksi/nota-kecil', [PenjualanController::class, 'notaKecil'])->name('transaksi.nota_kecil');
         Route::get('/transaksi/nota-besar', [PenjualanController::class, 'notaBesar'])->name('transaksi.nota_besar');
-        Route::get('/transaksi/updateTransaksi', [PenjualanController::class, 'notaBesar'])->name('transaksi.update');
+        Route::get('/transaksi/updateTransaksi', [PenjualanController::class, 'notaBesar'])->name('transaksi.updateForm');
         Route::put('/transaksi/updatesTransaksi/{id}', [PenjualanController::class, 'update'])->name('transaksi.updates');
         Route::put('/transaksi/updateEdit/{id}', [PenjualanDetailController::class, 'updateEdit'])->name('transaksi.updateEdit');
 
         Route::get('/transaksi/{id}/data', [PenjualanDetailController::class, 'data'])->name('transaksi.data');
         Route::get('/transaksi/loadform/{diskon}/{total}/{diterima}', [PenjualanDetailController::class, 'loadForm'])->name('transaksi.load_form');
         Route::resource('/transaksi', PenjualanDetailController::class)
-            ->except('create', 'show', 'edit');
+            ->except('create', 'show', 'edit', 'update');
     });
 
     Route::group(['middleware' => 'level:1'], function () {

@@ -87,12 +87,30 @@ class ProdukController extends Controller
         return view('produk.importpage');
     }
 
-    public function data()
+    public function data(Request $request)
     {
-        $produk = Produk::leftJoin('kategori', 'kategori.id_kategori', 'produk.id_kategori')
-            ->select('produk.*', 'nama_kategori')
-            // ->orderBy('kode_produk', 'asc')
-            ->get();
+        $query = Produk::leftJoin('kategori', 'kategori.id_kategori', 'produk.id_kategori')
+            ->select('produk.*', 'nama_kategori');
+
+        // Filter berdasarkan kondisi stok
+        if ($request->filter_stok) {
+            switch ($request->filter_stok) {
+                case 'habis':
+                    $query->where('produk.stok', '<=', 0);
+                    break;
+                case 'menipis':
+                    $query->where('produk.stok', '=', 1);
+                    break;
+                case 'kritis':
+                    $query->where('produk.stok', '<=', 1);
+                    break;
+                case 'normal':
+                    $query->where('produk.stok', '>', 1);
+                    break;
+            }
+        }
+
+        $produk = $query->get();
 
         return datatables()
             ->of($produk)
@@ -112,7 +130,18 @@ class ProdukController extends Controller
                 return format_uang($produk->harga_jual);
             })
             ->addColumn('stok', function ($produk) {
-                return format_uang($produk->stok);
+                $stokDisplay = '<span class="' . ($produk->stok <= 0 ? 'text-danger' : ($produk->stok == 1 ? 'text-warning' : 'text-success')) . '">';
+                $stokDisplay .= '<strong>' . format_uang($produk->stok) . '</strong>';
+                $stokDisplay .= '</span>';
+                
+                // Tambahkan icon peringatan
+                if ($produk->stok <= 0) {
+                    $stokDisplay .= ' <i class="fa fa-ban text-danger" title="Stok habis - tidak dapat dijual"></i>';
+                } elseif ($produk->stok == 1) {
+                    $stokDisplay .= ' <i class="fa fa-warning text-warning" title="Stok menipis - segera lakukan pembelian"></i>';
+                }
+                
+                return $stokDisplay;
             })
             ->addColumn('expired_date', function ($produk) {
                 if ($produk->expired_date == NULL) {
@@ -131,14 +160,21 @@ class ProdukController extends Controller
                 
             })
             ->addColumn('aksi', function ($produk) {
-                return '
-                <div class="btn-group">
-                    <button type="button" onclick="editForm(`'. route('produk.update', $produk->id_produk) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil"></i></button>
-                    <button type="button" onclick="deleteData(`'. route('produk.destroy', $produk->id_produk) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
-                </div>
-                ';
+                $buttons = '<div class="btn-group">';
+                
+                $buttons .= '<button type="button" onclick="editForm(`'. route('produk.update', $produk->id_produk) .'`)" class="btn btn-xs btn-info btn-flat" title="Edit" data-toggle="tooltip"><i class="fa fa-pencil"></i></button>';
+                $buttons .= '<button type="button" onclick="deleteData(`'. route('produk.destroy', $produk->id_produk) .'`)" class="btn btn-xs btn-danger btn-flat" title="Hapus" data-toggle="tooltip"><i class="fa fa-trash"></i></button>';
+                
+                // Tambahkan button "Beli Sekarang" untuk produk dengan stok <= 1
+                if ($produk->stok <= 1) {
+                    $buttons .= '<button type="button" onclick="beliProduk('. $produk->id_produk .')" class="btn btn-xs btn-warning btn-flat" title="Beli Sekarang!" data-toggle="tooltip"><i class="fa fa-shopping-cart"></i></button>';
+                }
+                
+                $buttons .= '</div>';
+                
+                return $buttons;
             })
-            ->rawColumns(['aksi', 'kode_produk', 'select_all'])
+            ->rawColumns(['aksi', 'kode_produk', 'select_all', 'stok'])
             ->make(true);
     }
 
@@ -244,5 +280,37 @@ class ProdukController extends Controller
         $pdf = PDF::loadView('produk.barcode', compact('dataproduk', 'no'));
         $pdf->setPaper('a4', 'potrait');
         return $pdf->stream('produk.pdf');
+    }
+
+    public function beliProduk($id)
+    {
+        $produk = Produk::find($id);
+        
+        if (!$produk) {
+            return response()->json(['error' => 'Produk tidak ditemukan'], 404);
+        }
+
+        // Ambil supplier default atau supplier terakhir yang mensupply produk ini
+        $pembelianDetail = \App\Models\PembelianDetail::with('pembelian.supplier')
+                                                       ->where('id_produk', $id)
+                                                       ->orderBy('id_pembelian_detail', 'desc')
+                                                       ->first();
+        
+        $supplierId = null;
+        if ($pembelianDetail && $pembelianDetail->pembelian && $pembelianDetail->pembelian->supplier) {
+            $supplierId = $pembelianDetail->pembelian->id_supplier;
+        } else {
+            // Jika tidak ada riwayat pembelian, ambil supplier pertama yang tersedia
+            $supplier = \App\Models\Supplier::orderBy('nama')->first();
+            $supplierId = $supplier ? $supplier->id_supplier : null;
+        }
+
+        if (!$supplierId) {
+            return response()->json(['error' => 'Tidak ada supplier yang tersedia'], 400);
+        }
+
+        // Redirect ke halaman pembelian dengan supplier yang sudah dipilih
+        $url = route('pembelian.create', $supplierId);
+        return response()->json(['redirect' => $url]);
     }
 }

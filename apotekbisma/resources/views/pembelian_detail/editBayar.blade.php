@@ -164,6 +164,7 @@
             </div>
 
             <div class="box-footer">
+                <button type="button" class="btn btn-info btn-sm btn-flat pull-left btn-cetak" onclick="printReceipt()"><i class="fa fa-print"></i> Cetak Bukti</button>
                 <button type="submit" class="btn btn-primary btn-sm btn-flat pull-right btn-simpan"><i class="fa fa-floppy-o"></i> Simpan Transaksi</button>
             </div>
         </div>
@@ -460,6 +461,17 @@
                 alert('Tidak dapat menampilkan data');
                 return;
             });
+    }
+
+    function printReceipt() {
+        let idPembelian = $('#id_pembelian').val();
+        if (idPembelian) {
+            if (confirm('Cetak bukti pembelian?')) {
+                window.open('{{ route("pembelian.print", "") }}/' + idPembelian, '_blank');
+            }
+        } else {
+            alert('ID pembelian tidak ditemukan.');
+        }
     }
 </script>
 @endpush

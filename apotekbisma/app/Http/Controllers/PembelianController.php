@@ -8,7 +8,9 @@ use App\Models\PembelianDetail;
 use App\Models\Produk;
 use App\Models\RekamanStok;
 use App\Models\Supplier;
+use App\Models\Setting;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class PembelianController extends Controller
 {
@@ -30,7 +32,45 @@ class PembelianController extends Controller
                 return format_uang($pembelian->total_item ?? 0);
             })
             ->addColumn('total_harga', function ($pembelian) {
-                return 'Rp. '. format_uang($pembelian->total_harga ?? 0);
+                $totalHarga = 'Rp. '. format_uang($pembelian->total_harga ?? 0);
+                
+                // Transaksi sebelum hari ini dianggap selesai semua
+                $today = date('Y-m-d');
+                $transactionDate = date('Y-m-d', strtotime($pembelian->created_at));
+                
+                if ($transactionDate < $today) {
+                    $totalHarga .= ' <span class="label label-success">Selesai</span>';
+                } else {
+                    // Untuk transaksi hari ini dan seterusnya, cek status sebenarnya
+                    $hasDetail = \App\Models\PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)->exists();
+                    $hasIncompleteDetail = \App\Models\PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)
+                                                                      ->where('jumlah', '<=', 0)
+                                                                      ->exists();
+                    
+                    $isIncomplete = (!$hasDetail || 
+                                    $hasIncompleteDetail || 
+                                    $pembelian->total_harga == 0 || 
+                                    $pembelian->bayar == 0 ||
+                                    $pembelian->no_faktur == 'o' ||
+                                    $pembelian->no_faktur == '' ||
+                                    $pembelian->no_faktur == null);
+                    
+                    $isCompleted = ($hasDetail && 
+                                   !$hasIncompleteDetail && 
+                                   $pembelian->total_harga > 0 && 
+                                   $pembelian->bayar > 0 &&
+                                   $pembelian->no_faktur != 'o' &&
+                                   $pembelian->no_faktur != '' &&
+                                   $pembelian->no_faktur != null);
+                    
+                    if ($isIncomplete) {
+                        $totalHarga .= ' <span class="label label-warning">Belum Selesai</span>';
+                    } elseif ($isCompleted) {
+                        $totalHarga .= ' <span class="label label-success">Selesai</span>';
+                    }
+                }
+                
+                return $totalHarga;
             })
             ->addColumn('bayar', function ($pembelian) {
                 return 'Rp. '. format_uang($pembelian->bayar ?? 0);
@@ -48,20 +88,96 @@ class PembelianController extends Controller
                 return ($pembelian->diskon ?? 0) . '%';
             })
             ->addColumn('aksi', function ($pembelian) {
-                return '
+                // Transaksi sebelum hari ini dianggap selesai semua
+                $today = date('Y-m-d');
+                $transactionDate = date('Y-m-d', strtotime($pembelian->created_at));
+                
+                if ($transactionDate < $today) {
+                    // Transaksi lama - selalu tampilkan tombol edit
+                    $buttons = '
+                    <div class="btn-group">
+                        <button onclick="showDetail(`'. route('pembelian.show', $pembelian->id_pembelian) .'`)" class="btn btn-xs btn-info btn-flat" title="Lihat Detail"><i class="fa fa-eye"></i></button>
+                        <button onclick="editTransaksi('. $pembelian->id_pembelian .')" class="btn btn-xs btn-success btn-flat" title="Edit Transaksi" data-toggle="tooltip"><i class="fa fa-edit"></i></button>
+                        <button onclick="printReceipt('. $pembelian->id_pembelian .')" class="btn btn-xs btn-primary btn-flat" title="Cetak Bukti" data-toggle="tooltip"><i class="fa fa-print"></i></button>
+                        <button onclick="deleteData(`'. route('pembelian.destroy', $pembelian->id_pembelian) .'`)" class="btn btn-xs btn-danger btn-flat" title="Hapus Transaksi"><i class="fa fa-trash"></i></button>
+                    </div>';
+                    
+                    return $buttons;
+                }
+                
+                // Untuk transaksi hari ini dan seterusnya, cek status sebenarnya
+                $hasDetail = \App\Models\PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)->exists();
+                $hasIncompleteDetail = \App\Models\PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)
+                                                                  ->where('jumlah', '<=', 0)
+                                                                  ->exists();
+                
+                $isIncomplete = (!$hasDetail || 
+                                $hasIncompleteDetail || 
+                                $pembelian->total_harga == 0 || 
+                                $pembelian->bayar == 0 ||
+                                $pembelian->no_faktur == 'o' ||
+                                $pembelian->no_faktur == '' ||
+                                $pembelian->no_faktur == null);
+                
+                $isCompleted = ($hasDetail && 
+                               !$hasIncompleteDetail && 
+                               $pembelian->total_harga > 0 && 
+                               $pembelian->bayar > 0 &&
+                               $pembelian->no_faktur != 'o' &&
+                               $pembelian->no_faktur != '' &&
+                               $pembelian->no_faktur != null);
+                
+                $buttons = '
                 <div class="btn-group">
-                    <button onclick="showDetail(`'. route('pembelian.show', $pembelian->id_pembelian) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-eye"></i></button>
-                    <a href="'. route('pembelian_detail.editBayar', $pembelian->id_pembelian) .'" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil"></i></a>
-                    <button onclick="deleteData(`'. route('pembelian.destroy', $pembelian->id_pembelian) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
-                </div>
-                ';
+                    <button onclick="showDetail(`'. route('pembelian.show', $pembelian->id_pembelian) .'`)" class="btn btn-xs btn-info btn-flat" title="Lihat Detail"><i class="fa fa-eye"></i></button>';
+                
+                // Tambahkan button berdasarkan status transaksi
+                if ($isIncomplete) {
+                    $buttons .= '
+                    <button onclick="lanjutkanTransaksi('. $pembelian->id_pembelian .')" class="btn btn-xs btn-warning btn-flat" title="Lanjutkan Transaksi" data-toggle="tooltip"><i class="fa fa-play"></i></button>';
+                } elseif ($isCompleted) {
+                    $buttons .= '
+                    <button onclick="editTransaksi('. $pembelian->id_pembelian .')" class="btn btn-xs btn-success btn-flat" title="Edit Transaksi" data-toggle="tooltip"><i class="fa fa-edit"></i></button>';
+                }
+                
+                // Tambahkan tombol print untuk semua transaksi yang memiliki detail dan sudah selesai
+                if ($hasDetail && $isCompleted) {
+                    $buttons .= '
+                    <button onclick="printReceipt('. $pembelian->id_pembelian .')" class="btn btn-xs btn-primary btn-flat" title="Cetak Bukti" data-toggle="tooltip"><i class="fa fa-print"></i></button>';
+                }
+                
+                $buttons .= '
+                    <button onclick="deleteData(`'. route('pembelian.destroy', $pembelian->id_pembelian) .'`)" class="btn btn-xs btn-danger btn-flat" title="Hapus Transaksi"><i class="fa fa-trash"></i></button>
+                </div>';
+                
+                return $buttons;
             })
-            ->rawColumns(['aksi'])
+            ->rawColumns(['aksi', 'total_harga'])
             ->make(true);
     }
 
-    public function create($id)
+    public function create($id = null)
     {
+        // Jika ada ID, berarti ini untuk lanjutkan/edit transaksi
+        if ($id) {
+            $pembelian = Pembelian::find($id);
+            if ($pembelian) {
+                session(['id_pembelian' => $pembelian->id_pembelian]);
+                session(['id_supplier' => $pembelian->id_supplier]);
+                return redirect()->route('pembelian_detail.index');
+            }
+        }
+
+        // Cek apakah ada transaksi yang sedang berjalan
+        if ($id_pembelian = session('id_pembelian')) {
+            $pembelian = Pembelian::find($id_pembelian);
+            if ($pembelian) {
+                // Jika ada transaksi yang sedang berjalan, lanjutkan transaksi tersebut
+                return redirect()->route('pembelian_detail.index');
+            }
+        }
+
+        // Hanya buat record baru jika supplier dipilih
         $pembelian = new Pembelian();
         $pembelian->id_supplier = $id;
         $pembelian->total_item  = 0;
@@ -69,7 +185,7 @@ class PembelianController extends Controller
         $pembelian->diskon      = 0;
         $pembelian->bayar       = 0;
         $pembelian->waktu       = Carbon::now();
-	$pembelian->no_faktur       = 'o';
+        $pembelian->no_faktur   = 'o'; // Temporary value to indicate incomplete transaction
         $pembelian->save();
 
         session(['id_pembelian' => $pembelian->id_pembelian]);
@@ -88,10 +204,13 @@ class PembelianController extends Controller
             'waktu' => 'required|date'
         ], [
             'nomor_faktur.required' => 'Nomor faktur harus diisi',
+            'nomor_faktur.max' => 'Nomor faktur maksimal 255 karakter',
             'total_item.required' => 'Minimal harus ada 1 produk',
             'total_item.min' => 'Minimal harus ada 1 produk',
             'total.required' => 'Total harga harus diisi',
-            'waktu.required' => 'Tanggal faktur harus diisi'
+            'total.min' => 'Total harga tidak boleh negatif',
+            'waktu.required' => 'Tanggal faktur harus diisi',
+            'waktu.date' => 'Format tanggal tidak valid'
         ]);
 
         $pembelian = Pembelian::findOrFail($request->id_pembelian);
@@ -108,9 +227,17 @@ class PembelianController extends Controller
             return redirect()->back()->with('error', 'Semua produk harus memiliki jumlah lebih dari 0');
         }
 
+        // Cek duplikasi nomor faktur
+        $duplicateCheck = Pembelian::where('no_faktur', $request->nomor_faktur)
+                                   ->where('id_pembelian', '!=', $pembelian->id_pembelian)
+                                   ->exists();
+        if ($duplicateCheck) {
+            return redirect()->back()->with('error', 'Nomor faktur sudah digunakan untuk transaksi lain');
+        }
+
         $pembelian->total_item = $request->total_item;
         $pembelian->total_harga = $request->total;
-        $pembelian->diskon = $request->diskon;
+        $pembelian->diskon = $request->diskon ?? 0;
         $pembelian->bayar = $request->bayar;
         $pembelian->waktu = $request->waktu;
         $pembelian->no_faktur = $request->nomor_faktur;
@@ -160,6 +287,10 @@ class PembelianController extends Controller
             }
         }
         
+        // Hapus session setelah transaksi selesai
+        session()->forget('id_pembelian');
+        session()->forget('id_supplier');
+        
         return redirect()->route('pembelian.index')->with('success', 'Transaksi pembelian berhasil disimpan');
     }
     public function update(Request $request, $id)
@@ -172,10 +303,13 @@ class PembelianController extends Controller
             'waktu' => 'required|date'
         ], [
             'nomor_faktur.required' => 'Nomor faktur harus diisi',
+            'nomor_faktur.max' => 'Nomor faktur maksimal 255 karakter',
             'total_item.required' => 'Minimal harus ada 1 produk',
             'total_item.min' => 'Minimal harus ada 1 produk',
             'total.required' => 'Total harga harus diisi',
-            'waktu.required' => 'Tanggal faktur harus diisi'
+            'total.min' => 'Total harga tidak boleh negatif',
+            'waktu.required' => 'Tanggal faktur harus diisi',
+            'waktu.date' => 'Format tanggal tidak valid'
         ]);
 
         $pembelian = Pembelian::findOrFail($request->id_pembelian);
@@ -192,9 +326,17 @@ class PembelianController extends Controller
             return redirect()->back()->with('error', 'Semua produk harus memiliki jumlah lebih dari 0');
         }
 
+        // Cek duplikasi nomor faktur
+        $duplicateCheck = Pembelian::where('no_faktur', $request->nomor_faktur)
+                                   ->where('id_pembelian', '!=', $pembelian->id_pembelian)
+                                   ->exists();
+        if ($duplicateCheck) {
+            return redirect()->back()->with('error', 'Nomor faktur sudah digunakan untuk transaksi lain');
+        }
+
         $pembelian->total_item = $request->total_item;
         $pembelian->total_harga = $request->total;
-        $pembelian->diskon = $request->diskon;
+        $pembelian->diskon = $request->diskon ?? 0;
         $pembelian->bayar = $request->bayar;
         $pembelian->no_faktur = $request->nomor_faktur;
         if ($request->waktu != NULL) {
@@ -203,12 +345,21 @@ class PembelianController extends Controller
         
         $pembelian->update();
         
+        // Hapus session setelah edit selesai
+        session()->forget('id_pembelian');
+        session()->forget('id_supplier');
+        
         return redirect()->route('pembelian.index')->with('success', 'Transaksi pembelian berhasil diperbarui');
     }
 
     public function show($id)
     {
-        $detail = PembelianDetail::with('produk')->where('id_pembelian', $id)->get();
+        $detail = PembelianDetail::with('produk')
+            ->where('id_pembelian', $id)
+            ->join('produk', 'pembelian_detail.id_produk', '=', 'produk.id_produk')
+            ->orderBy('produk.nama_produk', 'asc')
+            ->select('pembelian_detail.*')
+            ->get();
 
         return datatables()
             ->of($detail)
@@ -240,29 +391,26 @@ class PembelianController extends Controller
             return response()->json(['success' => false, 'message' => 'Pembelian tidak ditemukan'], 404);
         }
 
-        // Hapus record rekaman stok lama yang terkait dengan pembelian ini
-        RekamanStok::where('id_pembelian', $pembelian->id_pembelian)->delete();
-
         // Ambil detail pembelian untuk mengembalikan stok
         $detail = PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)->get();
         
+        // Proses pengembalian stok untuk setiap item
         foreach ($detail as $item) {
             $produk = Produk::find($item->id_produk);
             if ($produk) {
-                // Kurangi stok produk sesuai jumlah yang dibeli (karena pembelian dibatalkan)
-                $stok_awal = $produk->stok;
-                $produk->stok -= $item->jumlah;
-                $produk->update();
+                // Cek apakah ada rekaman stok untuk item ini
+                $rekaman_stok = RekamanStok::where('id_pembelian', $pembelian->id_pembelian)
+                                           ->where('id_produk', $item->id_produk)
+                                           ->first();
                 
-                // Buat record untuk melacak pengurangan stok
-                RekamanStok::create([
-                    'id_produk' => $item->id_produk,
-                    'waktu' => now(),
-                    'stok_keluar' => $item->jumlah,
-                    'id_pembelian' => $pembelian->id_pembelian,
-                    'stok_awal' => $stok_awal,
-                    'stok_sisa' => $produk->stok,
-                ]);
+                if ($rekaman_stok) {
+                    // Kurangi stok produk sesuai yang pernah ditambahkan
+                    $produk->stok -= $rekaman_stok->stok_masuk;
+                    $produk->update();
+                    
+                    // Hapus rekaman stok
+                    $rekaman_stok->delete();
+                }
             }
             
             // Hapus detail pembelian
@@ -278,19 +426,36 @@ class PembelianController extends Controller
     public function cleanupIncompleteTransactions()
     {
         // Membersihkan transaksi yang tidak lengkap (tanpa detail atau no_faktur kosong)
-        $incompleteTransactions = Pembelian::where('no_faktur', '=', 'o')
-            ->orWhere('no_faktur', '=', '')
-            ->orWhereNull('no_faktur')
-            ->get();
+        $incompleteTransactions = Pembelian::where(function ($query) {
+            $query->where('no_faktur', '=', 'o')
+                  ->orWhere('no_faktur', '=', '')
+                  ->orWhereNull('no_faktur');
+        })->where('created_at', '<', now()->subMinutes(30)) // Hanya hapus yang sudah 30 menit atau lebih
+        ->get();
 
         foreach ($incompleteTransactions as $transaction) {
             $details = PembelianDetail::where('id_pembelian', $transaction->id_pembelian)->get();
-            if ($details->isEmpty()) {
-                $transaction->delete();
+            
+            // Hapus rekaman stok jika ada
+            foreach ($details as $detail) {
+                $rekaman_stok = RekamanStok::where('id_pembelian', $transaction->id_pembelian)
+                                           ->where('id_produk', $detail->id_produk)
+                                           ->first();
+                if ($rekaman_stok) {
+                    $produk = Produk::find($detail->id_produk);
+                    if ($produk) {
+                        $produk->stok -= $rekaman_stok->stok_masuk;
+                        $produk->update();
+                    }
+                    $rekaman_stok->delete();
+                }
+                $detail->delete();
             }
+            
+            $transaction->delete();
         }
 
-        return response()->json(['message' => 'Cleanup completed']);
+        return response()->json(['message' => 'Cleanup completed', 'deleted' => $incompleteTransactions->count()]);
     }
 
     public function destroyEmpty($id)
@@ -301,18 +466,100 @@ class PembelianController extends Controller
             return response()->json(['error' => 'Pembelian tidak ditemukan'], 404);
         }
 
-        // Hanya hapus jika transaksi benar-benar kosong
+        // Hanya hapus jika transaksi benar-benar kosong atau belum selesai
         $pembelian_detail = PembelianDetail::where('id_pembelian', $id)->get();
-        $isEmpty = $pembelian_detail->isEmpty() && 
-                  ($pembelian->no_faktur === 'o' || $pembelian->no_faktur === '' || $pembelian->no_faktur === null) &&
-                  $pembelian->total_harga == 0;
+        $isEmpty = ($pembelian->no_faktur === 'o' || $pembelian->no_faktur === '' || $pembelian->no_faktur === null) &&
+                   $pembelian->total_harga == 0;
         
         if ($isEmpty) {
+            // Hapus detail dan rekaman stok jika ada
+            foreach ($pembelian_detail as $detail) {
+                $rekaman_stok = RekamanStok::where('id_pembelian', $id)
+                                           ->where('id_produk', $detail->id_produk)
+                                           ->first();
+                if ($rekaman_stok) {
+                    $produk = Produk::find($detail->id_produk);
+                    if ($produk) {
+                        $produk->stok -= $rekaman_stok->stok_masuk;
+                        $produk->update();
+                    }
+                    $rekaman_stok->delete();
+                }
+                $detail->delete();
+            }
+            
             $pembelian->delete();
+            
+            // Hapus session terkait
+            session()->forget('id_pembelian');
+            session()->forget('id_supplier');
+            
             return response()->json(['message' => 'Empty transaction deleted']);
         }
 
         return response()->json(['message' => 'Transaction not empty, not deleted']);
+    }
+
+    public function notaKecil()
+    {
+        $setting = Setting::first();
+        $pembelian = Pembelian::find(session('id_pembelian'));
+        if (! $pembelian) {
+            abort(404);
+        }
+        $detail = PembelianDetail::with('produk')
+            ->where('id_pembelian', session('id_pembelian'))
+            ->join('produk', 'pembelian_detail.id_produk', '=', 'produk.id_produk')
+            ->orderBy('produk.nama_produk', 'asc')
+            ->select('pembelian_detail.*')
+            ->get();
+        
+        return view('pembelian.nota_kecil', compact('setting', 'pembelian', 'detail'));
+    }
+
+    public function notaBesar()
+    {
+        $setting = Setting::first();
+        $pembelian = Pembelian::find(session('id_pembelian'));
+        if (! $pembelian) {
+            abort(404);
+        }
+        $detail = PembelianDetail::with('produk')
+            ->where('id_pembelian', session('id_pembelian'))
+            ->join('produk', 'pembelian_detail.id_produk', '=', 'produk.id_produk')
+            ->orderBy('produk.nama_produk', 'asc')
+            ->select('pembelian_detail.*')
+            ->get();
+
+        $pdf = PDF::loadView('pembelian.nota_besar', compact('setting', 'pembelian', 'detail'));
+        $pdf->setPaper('a4', 'portrait');
+        return $pdf->stream('Bukti-Pembelian-'. date('Y-m-d-his') .'.pdf');
+    }
+
+    public function printReceipt($id)
+    {
+        $setting = Setting::first();
+        $pembelian = Pembelian::with('supplier')->find($id);
+        if (! $pembelian) {
+            abort(404);
+        }
+        $detail = PembelianDetail::with('produk')
+            ->where('id_pembelian', $id)
+            ->join('produk', 'pembelian_detail.id_produk', '=', 'produk.id_produk')
+            ->orderBy('produk.nama_produk', 'asc')
+            ->select('pembelian_detail.*')
+            ->get();
+
+        // Cek tipe nota dari setting
+        if ($setting->tipe_nota == 1) {
+            // Nota Kecil
+            return view('pembelian.nota_kecil', compact('setting', 'pembelian', 'detail'));
+        } else {
+            // Nota Besar (PDF)
+            $pdf = PDF::loadView('pembelian.nota_besar', compact('setting', 'pembelian', 'detail'));
+            $pdf->setPaper('a4', 'portrait');
+            return $pdf->stream('Bukti-Pembelian-'. $pembelian->id_pembelian .'-'. date('Y-m-d-His') .'.pdf');
+        }
     }
 }
 

@@ -4,6 +4,30 @@
     Daftar Produk
 @endsection
 
+@push('css')
+<style>
+    .box-header .label {
+        margin-left: 5px;
+        font-size: 11px;
+    }
+    .table td {
+        vertical-align: middle !important;
+    }
+    .btn-group .btn-xs {
+        padding: 1px 6px;
+        font-size: 10px;
+    }
+    #filter_stok {
+        height: 26px;
+        font-size: 12px;
+        border-radius: 3px;
+    }
+    .box-header .form-control {
+        margin-top: -2px;
+    }
+</style>
+@endpush
+
 @section('breadcrumb')
     @parent
     <li class="active">Daftar Produk</li>
@@ -20,6 +44,34 @@
                     <button onclick="cetakBarcode('{{ route('produk.cetak_barcode') }}')" class="btn btn-info btn-xs btn-flat"><i class="fa fa-barcode"></i> Cetak Barcode</button>
                     <a href="{{ route('importview') }}" class="btn btn-info btn-xs btn-flat">Import</a>
                 </div>
+                
+                {{-- Filter stok --}}
+                <div class="btn-group pull-left" style="margin-left: 10px;">
+                    <select id="filter_stok" class="form-control input-sm" style="width: 150px; display: inline-block;">
+                        <option value="">Semua Produk</option>
+                        <option value="habis">Stok Habis (≤0)</option>
+                        <option value="menipis">Stok Menipis (=1)</option>
+                        <option value="kritis">Stok Kritis (≤1)</option>
+                        <option value="normal">Stok Normal (>1)</option>
+                    </select>
+                </div>
+                
+                {{-- Summary info stok --}}
+                @php
+                    $produkMenipis = \App\Models\Produk::where('stok', '=', 1)->count();
+                    $produkHabis = \App\Models\Produk::where('stok', '<=', 0)->count();
+                @endphp
+                
+                @if($produkMenipis > 0 || $produkHabis > 0)
+                <div class="pull-right">
+                    @if($produkHabis > 0)
+                        <span class="label label-danger">{{ $produkHabis }} Produk Stok Habis</span>
+                    @endif
+                    @if($produkMenipis > 0)
+                        <span class="label label-warning">{{ $produkMenipis }} Produk Stok Menipis</span>
+                    @endif
+                </div>
+                @endif
             </div>
             <div class="box-body table-responsive">
                 <form action="" method="post" class="form-produk">
@@ -63,6 +115,9 @@
             autoWidth: false,
             ajax: {
                 url: '{{ route('produk.data') }}',
+                data: function (d) {
+                    d.filter_stok = $('#filter_stok').val();
+                }
             },
             columns: [
                 {data: 'select_all', searchable: false, sortable: false},
@@ -78,6 +133,11 @@
                 {data: 'stok'},
                 {data: 'aksi', searchable: false, sortable: false},
             ]
+        });
+
+        // Filter event handler
+        $('#filter_stok').on('change', function() {
+            table.ajax.reload();
         });
 
         $('#modal-form').validator().on('submit', function (e) {
@@ -182,6 +242,26 @@
                 .attr('target', '_blank')
                 .attr('action', url)
                 .submit();
+        }
+    }
+
+    function beliProduk(id) {
+        if (confirm('Stok produk menipis. Apakah Anda ingin melakukan pembelian sekarang?')) {
+            $.post('{{ route("produk.beli", ":id") }}'.replace(':id', id), {
+                    '_token': $('[name=csrf-token]').attr('content')
+                })
+                .done((response) => {
+                    if (response.redirect) {
+                        window.location.href = response.redirect;
+                    }
+                })
+                .fail((errors) => {
+                    let errorMsg = 'Tidak dapat memproses permintaan pembelian';
+                    if (errors.responseJSON && errors.responseJSON.error) {
+                        errorMsg = errors.responseJSON.error;
+                    }
+                    alert(errorMsg);
+                });
         }
     }
 </script>
