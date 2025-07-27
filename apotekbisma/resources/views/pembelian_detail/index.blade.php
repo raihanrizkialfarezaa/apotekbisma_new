@@ -21,6 +21,26 @@
         display: none;
     }
 
+    /* Styling untuk badge stok */
+    .badge.bg-green {
+        background-color: #00a65a !important;
+        color: white;
+    }
+    
+    .badge.bg-yellow {
+        background-color: #f39c12 !important;
+        color: white;
+    }
+    
+    .badge.bg-red {
+        background-color: #dd4b39 !important;
+        color: white;
+    }
+    
+    .table-produk td {
+        vertical-align: middle;
+    }
+
     @media(max-width: 768px) {
         .tampil-bayar {
             font-size: 3em;
@@ -173,6 +193,11 @@
     document.querySelector('.waktu').value = today; 
     let table, table2;
 
+    // Helper function untuk format angka seperti format_uang di PHP
+    function formatUang(angka) {
+        return new Intl.NumberFormat('id-ID').format(angka);
+    }
+
     $(function () {
         $('body').addClass('sidebar-collapse');
 
@@ -203,7 +228,69 @@
         .on('draw.dt', function () {
             loadForm($('#diskon').val());
         });
-        table2 = $('.table-produk').DataTable();
+        table2 = $('.table-produk').DataTable({
+            responsive: true,
+            processing: true,
+            serverSide: false,
+            autoWidth: false,
+            ajax: {
+                url: '{{ route('pembelian_detail.produk_data') }}',
+                dataSrc: ''
+            },
+            columns: [
+                {data: 'no', searchable: false, sortable: false},
+                {
+                    data: 'kode_produk',
+                    render: function(data) {
+                        return '<span class="label label-success">' + data + '</span>';
+                    }
+                },
+                {data: 'nama_produk'},
+                {
+                    data: null,
+                    render: function(data) {
+                        let badgeHtml = '<span class="badge ' + data.stok_badge_class + '">' + 
+                                       formatUang(data.stok) + ' unit</span>';
+                        
+                        if (data.stok_text) {
+                            badgeHtml += '<small class="' + data.stok_text_class + '"><br><i class="fa ' + 
+                                        data.stok_icon + '"></i> ' + data.stok_text + '</small>';
+                        }
+                        
+                        return badgeHtml;
+                    }
+                },
+                {
+                    data: 'harga_beli',
+                    render: function(data) {
+                        return 'Rp. ' + formatUang(data);
+                    }
+                },
+                {
+                    data: null,
+                    render: function(data) {
+                        return '<a href="#" class="btn btn-primary btn-xs btn-flat" ' +
+                               'onclick="pilihProduk(\'' + data.id + '\', \'' + data.kode_produk + '\')">' +
+                               '<i class="fa fa-check-circle"></i> Pilih</a>';
+                    },
+                    searchable: false,
+                    sortable: false
+                }
+            ],
+            order: [[2, 'asc']], // Sort by nama_produk
+            language: {
+                processing: "Memuat data produk...",
+                search: "Cari produk:",
+                lengthMenu: "Tampilkan _MENU_ produk",
+                info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ produk",
+                paginate: {
+                    first: "Pertama",
+                    last: "Terakhir",
+                    next: "Selanjutnya",
+                    previous: "Sebelumnya"
+                }
+            }
+        });
 
         $(document).on('input', '.quantity', function () {
             let id = $(this).data('id');
@@ -455,6 +542,8 @@
     }
 
     function tampilProduk() {
+        // Refresh data produk untuk mendapatkan stok terbaru
+        table2.ajax.reload();
         $('#modal-produk').modal('show');
     }
 
@@ -474,6 +563,10 @@
             .done(response => {
                 $('#kode_produk').focus();
                 table.ajax.reload(() => loadForm($('#diskon').val()));
+                // Refresh data produk di modal untuk update stok
+                if (table2) {
+                    table2.ajax.reload();
+                }
             })
             .fail(errors => {
                 alert('Tidak dapat menyimpan data');
@@ -489,6 +582,10 @@
                 })
                 .done((response) => {
                     table.ajax.reload(() => loadForm($('#diskon').val()));
+                    // Refresh data produk di modal untuk update stok
+                    if (table2) {
+                        table2.ajax.reload();
+                    }
                 })
                 .fail((errors) => {
                     alert('Tidak dapat menghapus data');

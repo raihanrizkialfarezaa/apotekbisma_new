@@ -21,6 +21,26 @@
         display: none;
     }
 
+    /* Styling untuk badge stok */
+    .badge.bg-green {
+        background-color: #00a65a !important;
+        color: white;
+    }
+    
+    .badge.bg-yellow {
+        background-color: #f39c12 !important;
+        color: white;
+    }
+    
+    .badge.bg-red {
+        background-color: #dd4b39 !important;
+        color: white;
+    }
+    
+    .table-produk td {
+        vertical-align: middle;
+    }
+
     @media(max-width: 768px) {
         .tampil-bayar {
             font-size: 3em;

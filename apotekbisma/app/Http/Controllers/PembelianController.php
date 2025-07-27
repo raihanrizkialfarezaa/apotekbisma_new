@@ -249,41 +249,23 @@ class PembelianController extends Controller
         foreach ($detail as $item) {
             $produk = Produk::find($item->id_produk);
             
-            // Cek apakah sudah ada rekaman stok untuk item ini
+            // TIDAK PERLU UPDATE STOK DI SINI
+            // Stok sudah diupdate secara real-time di PembelianDetailController
+            // Hanya pastikan rekaman stok sudah ada
             $existing_rekaman = RekamanStok::where('id_pembelian', $id_pembelian)
                                           ->where('id_produk', $item->id_produk)
                                           ->first();
             
-            if ($existing_rekaman) {
-                // Update rekaman stok yang sudah ada
-                $old_stok_masuk = $existing_rekaman->stok_masuk;
-                $new_stok_masuk = $item->jumlah;
-                $diff = $new_stok_masuk - $old_stok_masuk;
-                
-                $existing_rekaman->update([
-                    'waktu' => Carbon::now(),
-                    'stok_masuk' => $new_stok_masuk,
-                    'stok_sisa' => $produk->stok + $diff,
-                ]);
-                
-                // Update stok produk
-                $produk->stok += $diff;
-                $produk->update();
-            } else {
-                // Buat rekaman stok baru
-                $stok = $produk->stok;
-                
+            if (!$existing_rekaman) {
+                // Jika belum ada rekaman stok, buat tanpa mengubah stok (stok sudah diupdate)
                 RekamanStok::create([
                     'id_produk' => $item->id_produk,
                     'waktu' => Carbon::now(),
                     'stok_masuk' => $item->jumlah,
                     'id_pembelian' => $id_pembelian,
-                    'stok_awal' => $produk->stok,
-                    'stok_sisa' => $stok + $item->jumlah,
+                    'stok_awal' => $produk->stok - $item->jumlah,
+                    'stok_sisa' => $produk->stok,
                 ]);
-                
-                $produk->stok += $item->jumlah;
-                $produk->update();
             }
         }
         

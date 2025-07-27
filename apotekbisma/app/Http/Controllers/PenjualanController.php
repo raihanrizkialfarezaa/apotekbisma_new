@@ -228,53 +228,25 @@ class PenjualanController extends Controller
             $item->diskon = $request->diskon;
             $item->update();
 
+            // TIDAK PERLU UPDATE STOK DI SINI
+            // Stok sudah diupdate secara real-time di PenjualanDetailController
+            // Hanya pastikan rekaman stok sudah ada dan sesuai
             $produk = Produk::find($item->id_produk);
             
-            // Cek apakah sudah ada rekaman stok untuk item ini
             $existing_rekaman = RekamanStok::where('id_penjualan', $id_penjualan)
                                           ->where('id_produk', $item->id_produk)
                                           ->first();
             
-            if ($existing_rekaman) {
-                // Update rekaman stok yang sudah ada
-                $old_stok_keluar = $existing_rekaman->stok_keluar;
-                $new_stok_keluar = $item->jumlah;
-                $diff = $new_stok_keluar - $old_stok_keluar;
-                
-                // Validasi stok mencukupi
-                if ($diff > 0 && $produk->stok < $diff) {
-                    return redirect()->back()->with('error', 'Stok produk ' . $produk->nama_produk . ' tidak mencukupi');
-                }
-                
-                $existing_rekaman->update([
-                    'waktu' => Carbon::now(),
-                    'stok_keluar' => $new_stok_keluar,
-                    'stok_sisa' => $produk->stok - $diff,
-                ]);
-                
-                // Update stok produk
-                $produk->stok -= $diff;
-                $produk->update();
-            } else {
-                // Buat rekaman stok baru
-                $stok = $produk->stok;
-                
-                // Validasi stok mencukupi
-                if ($produk->stok < $item->jumlah) {
-                    return redirect()->back()->with('error', 'Stok produk ' . $produk->nama_produk . ' tidak mencukupi');
-                }
-                
+            if (!$existing_rekaman) {
+                // Jika belum ada rekaman stok, buat tanpa mengubah stok (stok sudah diupdate)
                 RekamanStok::create([
                     'id_produk' => $item->id_produk,
                     'waktu' => Carbon::now(),
                     'stok_keluar' => $item->jumlah,
                     'id_penjualan' => $id_penjualan,
-                    'stok_awal' => $produk->stok,
-                    'stok_sisa' => $stok - $item->jumlah,
+                    'stok_awal' => $produk->stok + $item->jumlah,
+                    'stok_sisa' => $produk->stok,
                 ]);
-                
-                $produk->stok -= $item->jumlah;
-                $produk->update();
             }
         }
 

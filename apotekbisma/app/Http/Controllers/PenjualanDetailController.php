@@ -90,9 +90,15 @@ class PenjualanDetailController extends Controller
             return response()->json('Data gagal disimpan', 400);
         }
 
+        // Normalisasi stok jika negatif
+        if ($produk->stok < 0) {
+            $produk->stok = 0;
+            $produk->save();
+        }
+
         // Cek stok apakah mencukupi - stok harus > 0
         if ($produk->stok <= 0) {
-            return response()->json('Stok habis atau tidak tersedia. Produk tidak dapat dijual.', 400);
+            return response()->json('Stok habis atau tidak tersedia. Produk harus dibeli terlebih dahulu sebelum dapat dijual.', 400);
         }
 
         // Cek apakah ada transaksi yang sedang berjalan
@@ -156,18 +162,26 @@ class PenjualanDetailController extends Controller
             return response()->json('Produk tidak ditemukan', 404);
         }
         
+        // Normalisasi stok jika negatif
+        if ($produk->stok < 0) {
+            $produk->stok = 0;
+            $produk->save();
+        }
+        
         // Validasi stok
         $old_jumlah = $detail->jumlah;
         $new_jumlah = $request->jumlah;
         $selisih = $new_jumlah - $old_jumlah;
         
-        // Cek apakah stok mencukupi jika ada penambahan
-        if ($selisih > 0 && $produk->stok < $selisih) {
-            return response()->json('Stok tidak cukup. Stok tersedia: ' . $produk->stok, 500);
+        // Hitung stok baru dan validasi
+        $new_stok = $produk->stok - $selisih;
+        
+        // Cek apakah stok mencukupi untuk perubahan ini
+        if ($new_stok < 0) {
+            return response()->json('Stok tidak cukup. Stok tersedia: ' . $produk->stok . ', dibutuhkan: ' . $selisih, 500);
         }
         
-        // Update stok produk berdasarkan selisih
-        $produk->stok -= $selisih;
+        $produk->stok = $new_stok;
         $produk->update();
         
         // Update detail transaksi

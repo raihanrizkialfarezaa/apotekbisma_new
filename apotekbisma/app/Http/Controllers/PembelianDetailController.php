@@ -12,6 +12,21 @@ use Illuminate\Http\Request;
 
 class PembelianDetailController extends Controller
 {
+    public function __construct()
+    {
+        // Normalisasi stok minus menjadi 0 saat controller diinisialisasi
+        $this->normalizeNegativeStock();
+    }
+
+    /**
+     * Normalisasi stok produk yang minus menjadi 0
+     */
+    private function normalizeNegativeStock()
+    {
+        // Update semua produk yang memiliki stok negatif menjadi 0
+        Produk::where('stok', '<', 0)->update(['stok' => 0]);
+    }
+
     public function index()
     {
         $id_pembelian = session('id_pembelian');
@@ -125,6 +140,12 @@ class PembelianDetailController extends Controller
             return response()->json('Data gagal disimpan', 400);
         }
 
+        // Normalisasi stok jika negatif
+        if ($produk->stok < 0) {
+            $produk->stok = 0;
+            $produk->save();
+        }
+
         // Selalu buat entry baru untuk memungkinkan produk yang sama ditambahkan berulang kali
         // Ini akan memungkinkan pengelompokan berdasarkan nama produk saat ditampilkan
         $detail = new PembelianDetail();
@@ -135,15 +156,76 @@ class PembelianDetailController extends Controller
         $detail->subtotal = $produk->harga_beli * 1;
         $detail->save();
 
+        // TIDAK UPDATE STOK DI SINI - stok akan diupdate saat quantity diubah
+        // Ini mencegah duplikasi penambahan stok
+
         return response()->json('Data berhasil disimpan', 200);
     }
 
     public function update(Request $request, $id)
     {
         $detail = PembelianDetail::find($id);
-        $detail->jumlah = $request->jumlah;
-        $detail->subtotal = $detail->harga_beli * $request->jumlah;
+        
+        if (!$detail) {
+            return response()->json('Detail pembelian tidak ditemukan', 404);
+        }
+        
+        $produk = Produk::where('id_produk', $detail->id_produk)->first();
+        
+        if (!$produk) {
+            return response()->json('Produk tidak ditemukan', 404);
+        }
+        
+        // Normalisasi stok jika negatif
+        if ($produk->stok < 0) {
+            $produk->stok = 0;
+            $produk->save();
+        }
+        
+        $old_jumlah = $detail->jumlah;
+        $new_jumlah = $request->jumlah;
+        $selisih = $new_jumlah - $old_jumlah;
+        
+        // Update stok produk berdasarkan selisih
+        $new_stok = $produk->stok + $selisih;
+        
+        // Pastikan stok tidak negatif
+        if ($new_stok < 0) {
+            $new_stok = 0;
+        }
+        
+        $produk->stok = $new_stok;
+        $produk->save();
+        
+        // Update detail pembelian
+        $detail->jumlah = $new_jumlah;
+        $detail->subtotal = $detail->harga_beli * $new_jumlah;
         $detail->update();
+        
+        // Cari rekaman stok yang sesuai dengan detail pembelian ini
+        $rekaman_stok = RekamanStok::where('id_pembelian', $detail->id_pembelian)
+                                   ->where('id_produk', $detail->id_produk)
+                                   ->orderBy('created_at', 'desc')
+                                   ->first();
+        
+        if ($rekaman_stok) {
+            // Update rekaman stok yang sudah ada
+            $rekaman_stok->update([
+                'waktu' => Carbon::now(),
+                'stok_masuk' => $new_jumlah,
+                'stok_sisa' => $new_stok,
+            ]);
+        } else {
+            // Buat rekaman stok baru
+            RekamanStok::create([
+                'id_produk' => $detail->id_produk,
+                'id_pembelian' => $detail->id_pembelian,
+                'waktu' => Carbon::now(),
+                'stok_masuk' => $new_jumlah,
+                'stok_awal' => $produk->stok - $new_jumlah,
+                'stok_sisa' => $new_stok,
+            ]);
+        }
         
         return response()->json('Data berhasil diperbarui', 200);
     }
@@ -162,36 +244,53 @@ class PembelianDetailController extends Controller
             return response()->json('Produk tidak ditemukan', 404);
         }
         
-        // Ambil atau buat rekaman stok
+        // Normalisasi stok jika negatif sebelum operasi
+        if ($produk->stok < 0) {
+            $produk->stok = 0;
+            $produk->save();
+        }
+        
+        // Cari rekaman stok yang sesuai dengan detail pembelian ini
         $rekaman_stok = RekamanStok::where('id_pembelian', $detail->id_pembelian)
                                    ->where('id_produk', $detail->id_produk)
+                                   ->where('stok_masuk', $detail->jumlah) // Match dengan jumlah yang sama
+                                   ->where('created_at', '>=', Carbon::now()->subMinutes(5)) // Dalam 5 menit terakhir
+                                   ->orderBy('created_at', 'desc')
                                    ->first();
         
         $old_jumlah = $detail->jumlah;
         $new_jumlah = $request->jumlah;
         $selisih = $new_jumlah - $old_jumlah;
         
+        // Hitung stok baru
+        $new_stok = $produk->stok + $selisih;
+        
+        // Pastikan stok tidak negatif
+        if ($new_stok < 0) {
+            $new_stok = 0;
+        }
+        
         if ($rekaman_stok) {
             // Update rekaman stok yang sudah ada
             $rekaman_stok->update([
                 'waktu' => Carbon::now(),
                 'stok_masuk' => $new_jumlah,
-                'stok_sisa' => $produk->stok + $selisih,
+                'stok_sisa' => $new_stok,
             ]);
         } else {
-            // Buat rekaman stok baru
+            // Buat rekaman stok baru jika tidak ditemukan
             RekamanStok::create([
                 'id_produk' => $detail->id_produk,
                 'id_pembelian' => $detail->id_pembelian,
                 'waktu' => Carbon::now(),
                 'stok_masuk' => $new_jumlah,
                 'stok_awal' => $produk->stok,
-                'stok_sisa' => $produk->stok + $selisih,
+                'stok_sisa' => $new_stok,
             ]);
         }
         
-        // Update stok produk
-        $produk->stok += $selisih;
+        // Update stok produk dengan nilai yang sudah dinormalisasi
+        $produk->stok = $new_stok;
         $produk->update();
         
         // Update detail pembelian
@@ -210,26 +309,51 @@ class PembelianDetailController extends Controller
             return response()->json(['success' => false, 'message' => 'Detail tidak ditemukan'], 404);
         }
         
-        // Jika ada rekaman stok terkait, kembalikan stok produk
-        $rekaman_stok = RekamanStok::where('id_pembelian', $detail->id_pembelian)
-                                   ->where('id_produk', $detail->id_produk)
-                                   ->first();
-        
-        if ($rekaman_stok) {
-            $produk = Produk::find($detail->id_produk);
-            if ($produk) {
-                // Kurangi stok yang sebelumnya ditambahkan
-                $produk->stok -= $rekaman_stok->stok_masuk;
-                $produk->update();
-                
-                // Hapus rekaman stok
-                $rekaman_stok->delete();
+        $produk = Produk::find($detail->id_produk);
+        if ($produk) {
+            // Kurangi stok yang sebelumnya ditambahkan
+            $new_stok = $produk->stok - $detail->jumlah;
+            
+            // Pastikan stok tidak negatif
+            if ($new_stok < 0) {
+                $new_stok = 0;
             }
+            
+            $produk->stok = $new_stok;
+            $produk->update();
         }
+        
+        // Hapus rekaman stok terkait
+        RekamanStok::where('id_pembelian', $detail->id_pembelian)
+                   ->where('id_produk', $detail->id_produk)
+                   ->delete();
         
         $detail->delete();
 
         return response(null, 204);
+    }
+
+    public function getProdukData()
+    {
+        $produk = Produk::orderBy('nama_produk')->get();
+        
+        $data = [];
+        foreach ($produk as $key => $item) {
+            $data[] = [
+                'id' => $item->id_produk,
+                'no' => $key + 1,
+                'kode_produk' => $item->kode_produk,
+                'nama_produk' => $item->nama_produk,
+                'stok' => $item->stok,
+                'harga_beli' => $item->harga_beli,
+                'stok_badge_class' => $item->stok == 0 ? 'bg-red' : ($item->stok <= 5 ? 'bg-yellow' : 'bg-green'),
+                'stok_text' => $item->stok == 0 ? 'Stok Habis - Harus Beli Dulu' : ($item->stok <= 5 ? 'Stok Menipis' : ''),
+                'stok_icon' => $item->stok == 0 ? 'fa-exclamation-triangle' : ($item->stok <= 5 ? 'fa-warning' : ''),
+                'stok_text_class' => $item->stok == 0 ? 'text-danger' : ($item->stok <= 5 ? 'text-warning' : '')
+            ];
+        }
+        
+        return response()->json($data);
     }
 
     public function loadForm($diskon, $total)
