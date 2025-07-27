@@ -198,6 +198,11 @@
         // Set tanggal setiap 2 detik untuk memastikan tidak kosong
         setInterval(ensureDateFilled, 2000);
 
+    // Helper function untuk format angka seperti format_uang di PHP
+    function formatUang(angka) {
+        return new Intl.NumberFormat('id-ID').format(angka);
+    }
+
         @if($id_penjualan)
         table = $('.table-penjualan').DataTable({
             responsive: true,
@@ -248,7 +253,69 @@
         });
         @endif
 
-        table2 = $('.table-produk').DataTable();
+        table2 = $('.table-produk').DataTable({
+            responsive: true,
+            processing: true,
+            serverSide: false,
+            autoWidth: false,
+            ajax: {
+                url: '{{ route('transaksi.produk_data') }}',
+                dataSrc: ''
+            },
+            columns: [
+                {data: 'no', searchable: false, sortable: false},
+                {
+                    data: 'kode_produk',
+                    render: function(data) {
+                        return '<span class="label label-success">' + data + '</span>';
+                    }
+                },
+                {data: 'nama_produk'},
+                {
+                    data: null,
+                    render: function(data) {
+                        let badgeHtml = '<span class="badge ' + data.stok_badge_class + '">' + 
+                                       formatUang(data.stok) + ' unit</span>';
+                        
+                        if (data.stok_text) {
+                            badgeHtml += '<small class="' + data.stok_text_class + '"><br><i class="fa ' + 
+                                        data.stok_icon + '"></i> ' + data.stok_text + '</small>';
+                        }
+                        
+                        return badgeHtml;
+                    }
+                },
+                {
+                    data: 'harga_jual',
+                    render: function(data) {
+                        return 'Rp. ' + formatUang(data);
+                    }
+                },
+                {
+                    data: null,
+                    render: function(data) {
+                        return '<a href="#" class="btn btn-primary btn-xs btn-flat" ' +
+                               'onclick="pilihProduk(\'' + data.id + '\', \'' + data.kode_produk + '\', \'' + data.stok + '\')">' +
+                               '<i class="fa fa-check-circle"></i> Pilih</a>';
+                    },
+                    searchable: false,
+                    sortable: false
+                }
+            ],
+            order: [[2, 'asc']], // Sort by nama_produk
+            language: {
+                processing: "Memuat data produk...",
+                search: "Cari produk:",
+                lengthMenu: "Tampilkan _MENU_ produk",
+                info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ produk",
+                paginate: {
+                    first: "Pertama",
+                    last: "Terakhir",
+                    next: "Selanjutnya",
+                    previous: "Sebelumnya"
+                }
+            }
+        });
 
         // Inisialisasi form berdasarkan kondisi transaksi
         @if($id_penjualan)
@@ -287,6 +354,10 @@
                                 $('#diterima').trigger('input');
                             });
                         });
+                        // Refresh data produk di modal untuk update stok
+                        if (table2) {
+                            table2.ajax.reload(null, false);
+                        }
                     });
                 })
                 .fail(errors => {
@@ -303,6 +374,10 @@
                                 $('#diterima').trigger('input');
                             });
                         });
+                        // Refresh data produk di modal untuk update stok
+                        if (table2) {
+                            table2.ajax.reload(null, false);
+                        }
                     })
                     return;
                 });
@@ -377,6 +452,10 @@
     });
 
     function tampilProduk() {
+        // Refresh data produk untuk mendapatkan stok terbaru
+        if (table2) {
+            table2.ajax.reload(null, false); // Reload tanpa reset halaman
+        }
         $('#modal-produk').modal('show');
     }
 
@@ -424,6 +503,13 @@
                             $('#diterima').trigger('input');
                         });
                     });
+                    
+                    // Refresh data produk di modal untuk update stok dengan delay kecil
+                    setTimeout(() => {
+                        if (table2) {
+                            table2.ajax.reload(null, false); // false = keep current page
+                        }
+                    }, 100);
                     
                     // Aktifkan tombol simpan jika belum aktif
                     if ($('.btn-simpan').prop('disabled')) {
@@ -481,6 +567,10 @@
                             $('#diterima').trigger('input');
                         });
                     });
+                    // Refresh data produk di modal untuk update stok
+                    if (table2) {
+                        table2.ajax.reload();
+                    }
                 })
                 .fail((errors) => {
                     alert('Tidak dapat menghapus data');

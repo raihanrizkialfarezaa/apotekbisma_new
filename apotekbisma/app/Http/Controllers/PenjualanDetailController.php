@@ -14,6 +14,21 @@ use Illuminate\Support\Facades\DB;
 
 class PenjualanDetailController extends Controller
 {
+    public function __construct()
+    {
+        // Normalisasi stok minus menjadi 0 saat controller diinisialisasi
+        $this->normalizeNegativeStock();
+    }
+
+    /**
+     * Normalisasi stok produk yang minus menjadi 0
+     */
+    private function normalizeNegativeStock()
+    {
+        // Update semua produk yang memiliki stok negatif menjadi 0
+        Produk::where('stok', '<', 0)->update(['stok' => 0]);
+    }
+
     public function index()
     {
         $produk = Produk::orderBy('nama_produk')->get();
@@ -200,7 +215,8 @@ class PenjualanDetailController extends Controller
             $rekaman_stok->update([
                 'waktu' => Carbon::now(),
                 'stok_keluar' => $new_jumlah,
-                'stok_sisa' => $produk->stok,
+                'stok_awal' => $new_stok + $new_jumlah,  // stok sebelum pengurangan
+                'stok_sisa' => $new_stok,
             ]);
         } else {
             // Buat rekaman stok baru jika belum ada
@@ -209,8 +225,8 @@ class PenjualanDetailController extends Controller
                 'id_penjualan' => $detail->id_penjualan,
                 'waktu' => Carbon::now(),
                 'stok_keluar' => $new_jumlah,
-                'stok_awal' => $produk->stok + $selisih,
-                'stok_sisa' => $produk->stok,
+                'stok_awal' => $new_stok + $new_jumlah,  // stok sebelum pengurangan
+                'stok_sisa' => $new_stok,
             ]);
         }
         
@@ -262,6 +278,7 @@ class PenjualanDetailController extends Controller
             $rekaman_stok->update([
                 'waktu' => Carbon::now(),
                 'stok_keluar' => $new_jumlah,
+                'stok_awal' => $produk->stok + $new_jumlah,  // stok sebelum pengurangan
                 'stok_sisa' => $produk->stok,
             ]);
         } else {
@@ -271,7 +288,7 @@ class PenjualanDetailController extends Controller
                 'id_penjualan' => $detail->id_penjualan,
                 'waktu' => Carbon::now(),
                 'stok_keluar' => $new_jumlah,
-                'stok_awal' => $produk->stok + $selisih,
+                'stok_awal' => $produk->stok + $new_jumlah,  // stok sebelum pengurangan
                 'stok_sisa' => $produk->stok,
             ]);
         }
@@ -319,6 +336,32 @@ class PenjualanDetailController extends Controller
         ];
 
         return response()->json($data);
+    }
+
+    public function getProdukData()
+    {
+        $produk = Produk::orderBy('nama_produk')->get();
+        
+        $data = [];
+        foreach ($produk as $key => $item) {
+            $data[] = [
+                'id' => $item->id_produk,
+                'no' => $key + 1,
+                'kode_produk' => $item->kode_produk,
+                'nama_produk' => $item->nama_produk,
+                'stok' => $item->stok,
+                'harga_jual' => $item->harga_jual,
+                'stok_badge_class' => $item->stok == 0 ? 'bg-red' : ($item->stok <= 5 ? 'bg-yellow' : 'bg-green'),
+                'stok_text' => $item->stok == 0 ? 'Stok Habis - Tidak Bisa Dijual' : ($item->stok <= 5 ? 'Stok Menipis' : ''),
+                'stok_icon' => $item->stok == 0 ? 'fa-exclamation-triangle' : ($item->stok <= 5 ? 'fa-warning' : ''),
+                'stok_text_class' => $item->stok == 0 ? 'text-danger' : ($item->stok <= 5 ? 'text-warning' : '')
+            ];
+        }
+        
+        return response()->json($data)
+               ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+               ->header('Pragma', 'no-cache')
+               ->header('Expires', '0');
     }
 
     /**

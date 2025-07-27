@@ -543,7 +543,9 @@
 
     function tampilProduk() {
         // Refresh data produk untuk mendapatkan stok terbaru
-        table2.ajax.reload();
+        if (table2) {
+            table2.ajax.reload(null, false); // Reload tanpa reset halaman
+        }
         $('#modal-produk').modal('show');
     }
 
@@ -562,11 +564,15 @@
         $.post('{{ route('pembelian_detail.store') }}', $('.form-produk').serialize())
             .done(response => {
                 $('#kode_produk').focus();
+                // Reload tabel pembelian detail
                 table.ajax.reload(() => loadForm($('#diskon').val()));
-                // Refresh data produk di modal untuk update stok
-                if (table2) {
-                    table2.ajax.reload();
-                }
+                
+                // Refresh data produk di modal untuk update stok dengan delay kecil
+                setTimeout(() => {
+                    if (table2) {
+                        table2.ajax.reload(null, false); // false = keep current page
+                    }
+                }, 100);
             })
             .fail(errors => {
                 alert('Tidak dapat menyimpan data');

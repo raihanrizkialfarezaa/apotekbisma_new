@@ -156,8 +156,19 @@ class PembelianDetailController extends Controller
         $detail->subtotal = $produk->harga_beli * 1;
         $detail->save();
 
-        // TIDAK UPDATE STOK DI SINI - stok akan diupdate saat quantity diubah
-        // Ini mencegah duplikasi penambahan stok
+        // UPDATE STOK LANGSUNG SAAT PRODUK DITAMBAHKAN
+        $produk->stok += 1;
+        $produk->save();
+
+        // Buat rekaman stok untuk tracking
+        RekamanStok::create([
+            'id_produk' => $produk->id_produk,
+            'id_pembelian' => $request->id_pembelian,
+            'waktu' => Carbon::now(),
+            'stok_masuk' => 1,
+            'stok_awal' => $produk->stok - 1,
+            'stok_sisa' => $produk->stok,
+        ]);
 
         return response()->json('Data berhasil disimpan', 200);
     }
@@ -213,6 +224,7 @@ class PembelianDetailController extends Controller
             $rekaman_stok->update([
                 'waktu' => Carbon::now(),
                 'stok_masuk' => $new_jumlah,
+                'stok_awal' => $new_stok - $new_jumlah,
                 'stok_sisa' => $new_stok,
             ]);
         } else {
@@ -222,7 +234,7 @@ class PembelianDetailController extends Controller
                 'id_pembelian' => $detail->id_pembelian,
                 'waktu' => Carbon::now(),
                 'stok_masuk' => $new_jumlah,
-                'stok_awal' => $produk->stok - $new_jumlah,
+                'stok_awal' => $new_stok - $new_jumlah,
                 'stok_sisa' => $new_stok,
             ]);
         }
@@ -323,10 +335,13 @@ class PembelianDetailController extends Controller
             $produk->update();
         }
         
-        // Hapus rekaman stok terkait
+        // Hapus rekaman stok terkait dengan detail ini saja
         RekamanStok::where('id_pembelian', $detail->id_pembelian)
                    ->where('id_produk', $detail->id_produk)
-                   ->delete();
+                   ->where('stok_masuk', $detail->jumlah)
+                   ->orderBy('created_at', 'desc')
+                   ->first()
+                   ?->delete();
         
         $detail->delete();
 
@@ -353,7 +368,10 @@ class PembelianDetailController extends Controller
             ];
         }
         
-        return response()->json($data);
+        return response()->json($data)
+               ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+               ->header('Pragma', 'no-cache')
+               ->header('Expires', '0');
     }
 
     public function loadForm($diskon, $total)
