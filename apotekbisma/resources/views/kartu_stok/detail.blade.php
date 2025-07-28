@@ -6,6 +6,7 @@
 
 @push('css')
 <link rel="stylesheet" href="{{ asset('/AdminLTE-2/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
     .info-box-content {
         padding: 5px 10px;
@@ -19,6 +20,32 @@
         box-shadow: 0 1px 1px rgba(0,0,0,0.1);
         border-radius: 2px;
         margin-bottom: 15px;
+    }
+    .filter-card {
+        background: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    .chart-container {
+        position: relative;
+        height: 300px;
+        margin-bottom: 20px;
+    }
+    .summary-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    .summary-item {
+        background: rgba(255,255,255,0.2);
+        border-radius: 5px;
+        padding: 10px;
+        margin: 5px 0;
     }
 </style>
 @endpush
@@ -73,6 +100,88 @@
     </div>
 </div>
 
+<!-- Summary & Chart Row -->
+<div class="row">
+    <div class="col-md-8">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    <i class="fa fa-line-chart"></i> Grafik Pergerakan Stok (30 Hari Terakhir)
+                </h3>
+            </div>
+            <div class="box-body">
+                <div class="chart-container">
+                    <canvas id="stockChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="summary-card">
+            <h4><i class="fa fa-chart-pie"></i> Ringkasan Periode</h4>
+            
+            <div class="summary-item">
+                <strong>Minggu Ini</strong><br>
+                <small>Masuk: {{ $stok_data['summary']['periode_minggu']['masuk'] }} | Keluar: {{ $stok_data['summary']['periode_minggu']['keluar'] }}</small>
+            </div>
+            
+            <div class="summary-item">
+                <strong>Bulan Ini</strong><br>
+                <small>Masuk: {{ $stok_data['summary']['periode_bulan']['masuk'] }} | Keluar: {{ $stok_data['summary']['periode_bulan']['keluar'] }}</small>
+            </div>
+            
+            <div class="summary-item">
+                <strong>Tahun Ini</strong><br>
+                <small>Masuk: {{ $stok_data['summary']['periode_tahun']['masuk'] }} | Keluar: {{ $stok_data['summary']['periode_tahun']['keluar'] }}</small>
+            </div>
+            
+            <div class="summary-item">
+                <strong>Total Keseluruhan</strong><br>
+                <small>{{ $stok_data['summary']['total_transaksi'] }} transaksi</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filter Section -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="filter-card">
+            <h4><i class="fa fa-filter"></i> Filter Data</h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Filter Cepat:</label>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default filter-btn" data-filter="all">Semua</button>
+                            <button type="button" class="btn btn-default filter-btn" data-filter="today">Hari Ini</button>
+                            <button type="button" class="btn btn-default filter-btn" data-filter="week">Minggu Ini</button>
+                            <button type="button" class="btn btn-primary filter-btn" data-filter="month">Bulan Ini</button>
+                            <button type="button" class="btn btn-default filter-btn" data-filter="year">Tahun Ini</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Filter Kustom:</label>
+                        <div class="input-group">
+                            <input type="date" class="form-control" id="start_date" placeholder="Tanggal Mulai">
+                            <span class="input-group-addon">s/d</span>
+                            <input type="date" class="form-control" id="end_date" placeholder="Tanggal Akhir">
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary" type="button" id="apply-custom-filter">
+                                    <i class="fa fa-search"></i> Terapkan
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Stock Movement Table -->
 <div class="row">
     <div class="col-lg-12">
@@ -117,8 +226,10 @@
 <script src="{{ asset('/AdminLTE-2/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
 <script>
     let table;
+    let currentFilter = 'month'; // Default filter
 
     $(function () {
+        // Initialize DataTable
         table = $('#kartu-stok-table').DataTable({
             responsive: true,
             processing: true,
@@ -126,6 +237,13 @@
             autoWidth: false,
             ajax: {
                 url: '{{ route('kartu_stok.data', $produk_id) }}',
+                data: function(d) {
+                    d.date_filter = currentFilter;
+                    if (currentFilter === 'custom') {
+                        d.start_date = $('#start_date').val();
+                        d.end_date = $('#end_date').val();
+                    }
+                }
             },
             columns: [
                 {data: 'DT_RowIndex', searchable: false, sortable: false, className: 'text-center'},
@@ -141,12 +259,14 @@
                 {
                     extend: 'excel',
                     text: '<i class="fa fa-file-excel-o"></i> Excel',
-                    className: 'btn btn-success btn-sm'
+                    className: 'btn btn-success btn-sm',
+                    title: 'Kartu Stok - {{ $nama_barang }}'
                 },
                 {
                     extend: 'print',
                     text: '<i class="fa fa-print"></i> Print',
-                    className: 'btn btn-primary btn-sm'
+                    className: 'btn btn-primary btn-sm',
+                    title: 'Kartu Stok - {{ $nama_barang }}'
                 }
             ],
             language: {
@@ -156,7 +276,7 @@
                 info: 'Menampilkan _START_ sampai _END_ dari _TOTAL_ data',
                 infoEmpty: 'Menampilkan 0 sampai 0 dari 0 data',
                 infoFiltered: '(disaring dari _MAX_ total data)',
-                zeroRecords: 'Tidak ada riwayat pergerakan stok untuk produk ini',
+                zeroRecords: 'Tidak ada riwayat pergerakan stok untuk periode ini',
                 emptyTable: 'Belum ada riwayat pergerakan stok',
                 paginate: {
                     first: 'Pertama',
@@ -166,9 +286,33 @@
                 }
             },
             order: [[1, 'desc']], // Order by date descending
+            pageLength: 25,
             drawCallback: function(settings) {
                 // Add styling to the summary row
                 $(this.api().table().node()).find('tbody tr:last-child').addClass('bg-light-blue');
+            }
+        });
+
+        // Initialize Chart
+        initStockChart();
+
+        // Filter button handlers
+        $('.filter-btn').click(function() {
+            $('.filter-btn').removeClass('btn-primary').addClass('btn-default');
+            $(this).removeClass('btn-default').addClass('btn-primary');
+            
+            currentFilter = $(this).data('filter');
+            table.ajax.reload();
+        });
+
+        // Custom filter handler
+        $('#apply-custom-filter').click(function() {
+            if ($('#start_date').val() && $('#end_date').val()) {
+                $('.filter-btn').removeClass('btn-primary').addClass('btn-default');
+                currentFilter = 'custom';
+                table.ajax.reload();
+            } else {
+                alert('Mohon pilih tanggal mulai dan tanggal akhir');
             }
         });
 
@@ -178,5 +322,105 @@
             todayHighlight: true
         });
     });
+
+    function initStockChart() {
+        const ctx = document.getElementById('stockChart').getContext('2d');
+        const chartData = @json($stok_data['chart_data']);
+        
+        // Prepare data for chart
+        const labels = [];
+        const stokMasukData = [];
+        const stokKeluarData = [];
+        const stokSisaData = [];
+
+        // Sort dates and prepare data
+        const sortedDates = Object.keys(chartData).sort();
+        
+        sortedDates.forEach(date => {
+            labels.push(new Date(date).toLocaleDateString('id-ID'));
+            stokMasukData.push(chartData[date].masuk || 0);
+            stokKeluarData.push(chartData[date].keluar || 0);
+            stokSisaData.push(chartData[date].sisa || 0);
+        });
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Stok Masuk',
+                        data: stokMasukData,
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Stok Keluar',
+                        data: stokKeluarData,
+                        borderColor: 'rgb(255, 99, 132)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Stok Tersisa',
+                        data: stokSisaData,
+                        borderColor: 'rgb(54, 162, 235)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        tension: 0.1,
+                        yAxisID: 'y1',
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Tanggal'
+                        }
+                    },
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Jumlah Masuk/Keluar'
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Stok Tersisa'
+                        },
+                        grid: {
+                            drawOnChartArea: false,
+                        },
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Pergerakan Stok {{ $nama_barang }}'
+                    },
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                }
+            }
+        });
+    }
 </script>
 @endpush

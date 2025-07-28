@@ -8,6 +8,7 @@ use App\Models\Pembelian;
 use App\Models\Penjualan;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class KartuStokController extends Controller
 {
@@ -29,7 +30,10 @@ class KartuStokController extends Controller
         $nama_barang = $produk->nama_produk;
         $produk_id = $id;
         
-        return view('kartu_stok.detail', compact('produk_id', 'nama_barang', 'produk'));
+        // Data untuk grafik dan ringkasan
+        $stok_data = $this->getStockData($id);
+        
+        return view('kartu_stok.detail', compact('produk_id', 'nama_barang', 'produk', 'stok_data'));
     }
     
     public function getData($id)
@@ -44,8 +48,8 @@ class KartuStokController extends Controller
         
         // Get all stock records for this product, ordered by date
         $stok = RekamanStok::where('id_produk', $id)
-                          ->orderBy('waktu', 'asc')
-                          ->get();
+                           ->orderBy('waktu', 'asc')
+                           ->get();
 
         foreach ($stok as $item) {
             $row = array();
@@ -106,14 +110,210 @@ class KartuStokController extends Controller
         return $data;
     }
 
-    public function data($id)
+    public function getStockData($id)
     {
-        $data = $this->getData($id);
+        $produk = Produk::find($id);
+        if (!$produk) {
+            return [
+                'chart_data' => [],
+                'summary' => []
+            ];
+        }
+
+        // Data untuk grafik (30 hari terakhir)
+        $chart_data = [];
+        $summary = [
+            'total_masuk' => 0,
+            'total_keluar' => 0,
+            'total_transaksi' => 0,
+            'periode_minggu' => [
+                'masuk' => 0,
+                'keluar' => 0
+            ],
+            'periode_bulan' => [
+                'masuk' => 0,
+                'keluar' => 0
+            ],
+            'periode_tahun' => [
+                'masuk' => 0,
+                'keluar' => 0
+            ]
+        ];
+
+        // Ambil data 30 hari terakhir untuk grafik
+        $stok_records = RekamanStok::where('id_produk', $id)
+                                  ->where('waktu', '>=', Carbon::now()->subDays(30))
+                                  ->orderBy('waktu', 'asc')
+                                  ->get();
+
+        // Generate data untuk chart
+        foreach ($stok_records as $record) {
+            $date = date('Y-m-d', strtotime($record->waktu));
+            if (!isset($chart_data[$date])) {
+                $chart_data[$date] = [
+                    'masuk' => 0,
+                    'keluar' => 0,
+                    'sisa' => $record->stok_sisa
+                ];
+            }
+            $chart_data[$date]['masuk'] += $record->stok_masuk ?? 0;
+            $chart_data[$date]['keluar'] += $record->stok_keluar ?? 0;
+            $chart_data[$date]['sisa'] = $record->stok_sisa ?? 0;
+        }
+
+        // Summary data untuk periode berbeda
+        $now = Carbon::now();
+        
+        // Total keseluruhan
+        $all_records = RekamanStok::where('id_produk', $id)->get();
+        $summary['total_masuk'] = $all_records->sum('stok_masuk');
+        $summary['total_keluar'] = $all_records->sum('stok_keluar');
+        $summary['total_transaksi'] = $all_records->count();
+
+        // Minggu ini
+        $week_records = RekamanStok::where('id_produk', $id)
+                                  ->where('waktu', '>=', $now->copy()->startOfWeek())
+                                  ->get();
+        $summary['periode_minggu']['masuk'] = $week_records->sum('stok_masuk');
+        $summary['periode_minggu']['keluar'] = $week_records->sum('stok_keluar');
+
+        // Bulan ini
+        $month_records = RekamanStok::where('id_produk', $id)
+                                   ->where('waktu', '>=', $now->copy()->startOfMonth())
+                                   ->get();
+        $summary['periode_bulan']['masuk'] = $month_records->sum('stok_masuk');
+        $summary['periode_bulan']['keluar'] = $month_records->sum('stok_keluar');
+
+        // Tahun ini
+        $year_records = RekamanStok::where('id_produk', $id)
+                                  ->where('waktu', '>=', $now->copy()->startOfYear())
+                                  ->get();
+        $summary['periode_tahun']['masuk'] = $year_records->sum('stok_masuk');
+        $summary['periode_tahun']['keluar'] = $year_records->sum('stok_keluar');
+
+        return [
+            'chart_data' => $chart_data,
+            'summary' => $summary
+        ];
+    }
+
+    public function data($id, Request $request)
+    {
+        $data = $this->getDataFiltered($id, $request);
 
         return datatables()
             ->of($data)
             ->rawColumns(['tanggal', 'stok_sisa', 'keterangan'])
             ->make(true);
+    }
+
+    public function getDataFiltered($id, Request $request)
+    {
+        $produk = Produk::find($id);
+        if (!$produk) {
+            return [];
+        }
+
+        $no = 1;
+        $data = array();
+        
+        // Build query with date filters
+        $query = RekamanStok::where('id_produk', $id);
+
+        // Apply date filters based on request
+        if ($request->has('date_filter') && $request->date_filter) {
+            $filter = $request->date_filter;
+            $now = Carbon::now();
+            
+            switch ($filter) {
+                case 'today':
+                    $query->whereDate('waktu', $now->toDateString());
+                    break;
+                case 'week':
+                    $query->whereBetween('waktu', [
+                        $now->copy()->startOfWeek()->toDateString(),
+                        $now->copy()->endOfWeek()->toDateString()
+                    ]);
+                    break;
+                case 'month':
+                    $query->whereMonth('waktu', $now->month)
+                          ->whereYear('waktu', $now->year);
+                    break;
+                case 'year':
+                    $query->whereYear('waktu', $now->year);
+                    break;
+                case 'custom':
+                    if ($request->has('start_date') && $request->has('end_date')) {
+                        $query->whereBetween('waktu', [
+                            $request->start_date . ' 00:00:00',
+                            $request->end_date . ' 23:59:59'
+                        ]);
+                    }
+                    break;
+            }
+        }
+
+        $stok = $query->orderBy('waktu', 'desc')->get();
+
+        foreach ($stok as $item) {
+            $row = array();
+            $row['DT_RowIndex'] = $no++;
+            $row['tanggal'] = tanggal_indonesia($item->waktu, false);
+            
+            // Format stock movements
+            $row['stok_masuk'] = ($item->stok_masuk != NULL && $item->stok_masuk > 0) 
+                               ? format_uang($item->stok_masuk) 
+                               : '-';
+            
+            $row['stok_keluar'] = ($item->stok_keluar != NULL && $item->stok_keluar > 0) 
+                                ? format_uang($item->stok_keluar) 
+                                : '-';
+            
+            $row['stok_awal'] = format_uang($item->stok_awal);
+            $row['stok_sisa'] = format_uang($item->stok_sisa);
+            
+            // Determine transaction type and add reference
+            $keterangan = '';
+            if ($item->stok_masuk > 0) {
+                $keterangan = '<span class="label label-success"><i class="fa fa-arrow-up"></i> Pembelian</span>';
+                if ($item->id_pembelian) {
+                    $pembelian = Pembelian::find($item->id_pembelian);
+                    if ($pembelian && $pembelian->no_faktur && $pembelian->no_faktur != 'o') {
+                        $keterangan .= '<br><small>Faktur: ' . $pembelian->no_faktur . '</small>';
+                    }
+                }
+            } elseif ($item->stok_keluar > 0) {
+                $keterangan = '<span class="label label-warning"><i class="fa fa-arrow-down"></i> Penjualan</span>';
+                if ($item->id_penjualan) {
+                    $penjualan = Penjualan::find($item->id_penjualan);
+                    if ($penjualan) {
+                        $keterangan .= '<br><small>ID Transaksi: ' . $penjualan->id_penjualan . '</small>';
+                    }
+                }
+            } else {
+                $keterangan = '<span class="label label-info"><i class="fa fa-cog"></i> Penyesuaian Stok</span>';
+            }
+            
+            $row['keterangan'] = $keterangan;
+            $data[] = $row;
+        }
+
+        // Add current stock summary as last row if not filtered
+        if (!$request->has('date_filter') || !$request->date_filter) {
+            if (!empty($data)) {
+                $data[] = [
+                    'DT_RowIndex' => '',
+                    'tanggal' => '<strong class="text-primary">STOK SAAT INI</strong>',
+                    'stok_masuk' => '',
+                    'stok_keluar' => '',
+                    'stok_awal' => '',
+                    'stok_sisa' => '<strong class="text-primary">' . format_uang($produk->stok) . ' unit</strong>',
+                    'keterangan' => '<strong class="text-primary">Stok Aktual Saat Ini</strong>',
+                ];
+            }
+        }
+
+        return $data;
     }
 
     public function exportPDF($id)

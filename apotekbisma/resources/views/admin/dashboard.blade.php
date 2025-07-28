@@ -57,6 +57,27 @@
         background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
         color: #333;
     }
+    .supplier-section {
+        border-left: 4px solid #3c8dbc;
+        background: #f9f9f9;
+    }
+    .supplier-section h5 {
+        margin-top: 0;
+        border-bottom: 1px solid #e0e0e0;
+        padding-bottom: 8px;
+    }
+    .bg-gold {
+        background-color: #f39c12 !important;
+    }
+    .bg-light-blue {
+        background-color: #3c8dbc !important;
+    }
+    .bg-orange {
+        background-color: #ff851b !important;
+    }
+    .bg-gray {
+        background-color: #95a5a6 !important;
+    }
 </style>
 @endpush
 
@@ -463,6 +484,133 @@
                     </div>
                 @else
                     <p class="text-muted text-center">Semua produk memiliki stok yang cukup.</p>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Supplier Analytics Section -->
+<div class="row">
+    <div class="col-lg-6">
+        <div class="box box-success">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    <i class="fa fa-truck"></i> Supplier dengan Pemasok Produk Terbanyak
+                </h3>
+                <div class="box-tools pull-right">
+                    <a href="{{ route('supplier.index') }}" class="btn btn-success btn-sm">
+                        <i class="fa fa-list"></i> Lihat Semua
+                    </a>
+                </div>
+            </div>
+            <div class="box-body">
+                @if($analytics['supplier_terbanyak']->count() > 0)
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Ranking</th>
+                                    <th>Nama Supplier</th>
+                                    <th>Total Barang</th>
+                                    <th>Jenis Produk</th>
+                                    <th>Total Pembelian</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($analytics['supplier_terbanyak'] as $key => $supplier)
+                                <tr>
+                                    <td>
+                                        <span class="badge {{ $key == 0 ? 'bg-gold' : ($key == 1 ? 'bg-light-blue' : ($key == 2 ? 'bg-orange' : 'bg-gray')) }}">
+                                            #{{ $key + 1 }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <strong>{{ $supplier->nama }}</strong>
+                                        @if($supplier->telepon)
+                                            <br><small class="text-muted"><i class="fa fa-phone"></i> {{ $supplier->telepon }}</small>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <span class="label {{ $key < 3 ? 'label-success' : 'label-default' }}">
+                                            {{ format_uang($supplier->total_barang_dibeli) }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-blue">{{ $supplier->jenis_produk }} produk</span>
+                                    </td>
+                                    <td>
+                                        <strong class="text-green">Rp. {{ format_uang($supplier->total_pembelian) }}</strong>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <p class="text-muted text-center">Belum ada data pembelian dari supplier.</p>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    <i class="fa fa-shopping-cart"></i> Produk Favorit per Supplier
+                </h3>
+            </div>
+            <div class="box-body" style="max-height: 400px; overflow-y: auto;">
+                @if(!empty($analytics['produk_per_supplier']))
+                    @foreach($analytics['produk_per_supplier'] as $supplier_id => $data)
+                        <div class="supplier-section" style="margin-bottom: 20px; padding: 15px; border: 1px solid #e0e0e0; border-radius: 5px;">
+                            <h5 class="text-primary">
+                                <i class="fa fa-truck"></i> {{ $data['supplier_info']->nama }}
+                                <small class="text-muted">({{ format_uang($data['supplier_info']->total_barang_dibeli) }} barang)</small>
+                            </h5>
+                            
+                            @if($data['produk_terlaris']->count() > 0)
+                                <div class="table-responsive">
+                                    <table class="table table-condensed table-hover">
+                                        <thead>
+                                            <tr class="bg-light-blue">
+                                                <th>Produk</th>
+                                                <th>Total Dibeli</th>
+                                                <th>Frekuensi</th>
+                                                <th>Nilai</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($data['produk_terlaris'] as $index => $produk)
+                                            <tr>
+                                                <td>
+                                                    <strong>{{ $produk->nama_produk }}</strong>
+                                                    <br><span class="label label-default">{{ $produk->kode_produk }}</span>
+                                                </td>
+                                                <td>
+                                                    <span class="badge {{ $index == 0 ? 'bg-green' : ($index == 1 ? 'bg-blue' : 'bg-orange') }}">
+                                                        {{ format_uang($produk->total_dibeli) }}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <small class="text-muted">{{ $produk->frekuensi_beli }}x beli</small>
+                                                </td>
+                                                <td>
+                                                    <strong class="text-green">Rp. {{ format_uang($produk->total_nilai) }}</strong>
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @else
+                                <p class="text-muted">Belum ada data produk untuk supplier ini.</p>
+                            @endif
+                        </div>
+                    @endforeach
+                @else
+                    <p class="text-muted text-center">Belum ada data produk per supplier.</p>
                 @endif
             </div>
         </div>

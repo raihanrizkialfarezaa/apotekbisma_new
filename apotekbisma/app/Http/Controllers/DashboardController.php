@@ -165,6 +165,49 @@ class DashboardController extends Controller
                              ->take(10)
                              ->get();
 
+        // Supplier dengan pemasok produk terbanyak (berdasarkan total barang yang dibeli)
+        $supplier_terbanyak = PembelianDetail::join('pembelian', 'pembelian_detail.id_pembelian', '=', 'pembelian.id_pembelian')
+                                            ->join('supplier', 'pembelian.id_supplier', '=', 'supplier.id_supplier')
+                                            ->join('produk', 'pembelian_detail.id_produk', '=', 'produk.id_produk')
+                                            ->selectRaw('
+                                                supplier.id_supplier,
+                                                supplier.nama,
+                                                supplier.telepon,
+                                                supplier.alamat,
+                                                SUM(pembelian_detail.jumlah) as total_barang_dibeli,
+                                                COUNT(DISTINCT pembelian_detail.id_produk) as jenis_produk,
+                                                SUM(pembelian_detail.subtotal) as total_pembelian
+                                            ')
+                                            ->groupBy('supplier.id_supplier', 'supplier.nama', 'supplier.telepon', 'supplier.alamat')
+                                            ->orderBy('total_barang_dibeli', 'desc')
+                                            ->take(10)
+                                            ->get();
+
+        // Produk yang paling sering dibeli dari setiap supplier (top 3 untuk setiap supplier teratas)
+        $produk_per_supplier = [];
+        foreach ($supplier_terbanyak->take(5) as $supplier) {
+            $produk_terlaris_supplier = PembelianDetail::join('pembelian', 'pembelian_detail.id_pembelian', '=', 'pembelian.id_pembelian')
+                                                      ->join('produk', 'pembelian_detail.id_produk', '=', 'produk.id_produk')
+                                                      ->where('pembelian.id_supplier', $supplier->id_supplier)
+                                                      ->selectRaw('
+                                                          produk.id_produk,
+                                                          produk.nama_produk,
+                                                          produk.kode_produk,
+                                                          SUM(pembelian_detail.jumlah) as total_dibeli,
+                                                          COUNT(pembelian_detail.id_pembelian_detail) as frekuensi_beli,
+                                                          SUM(pembelian_detail.subtotal) as total_nilai
+                                                      ')
+                                                      ->groupBy('produk.id_produk', 'produk.nama_produk', 'produk.kode_produk')
+                                                      ->orderBy('total_dibeli', 'desc')
+                                                      ->take(3)
+                                                      ->get();
+            
+            $produk_per_supplier[$supplier->id_supplier] = [
+                'supplier_info' => $supplier,
+                'produk_terlaris' => $produk_terlaris_supplier
+            ];
+        }
+
         return [
             'total_penjualan' => $total_penjualan,
             'total_pembelian' => $total_pembelian,
@@ -178,6 +221,8 @@ class DashboardController extends Controller
             'transaksi_terbaru' => $transaksi_terbaru,
             'stok_menipis' => $stok_menipis,
             'chart_data' => $chartData,
+            'supplier_terbanyak' => $supplier_terbanyak,
+            'produk_per_supplier' => $produk_per_supplier,
         ];
     }
 

@@ -12,8 +12,8 @@
                         <th width="5%">No</th>
                         <th>Kode</th>
                         <th>Nama</th>
-                        <th>Harga Jual</th>
                         <th>Sisa Stok</th>
+                        <th>Harga Jual</th>
                         <th><i class="fa fa-cog"></i></th>
                     </thead>
                     <tbody>
