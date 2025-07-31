@@ -68,26 +68,46 @@ class KartuStokController extends Controller
             $row['stok_awal'] = format_uang($item->stok_awal);
             $row['stok_sisa'] = format_uang($item->stok_sisa);
             
-            // Determine transaction type and add reference
+            // Determine transaction type and add reference with detailed information
             $keterangan = '';
-            if ($item->stok_masuk > 0) {
-                $keterangan = 'Pembelian';
+            
+            // Cek apakah ada keterangan dari database terlebih dahulu
+            if (!empty($item->keterangan)) {
+                $keterangan = $item->keterangan;
+                
+                // Tambahkan referensi transaksi jika ada
                 if ($item->id_pembelian) {
                     $pembelian = Pembelian::find($item->id_pembelian);
                     if ($pembelian && $pembelian->no_faktur && $pembelian->no_faktur != 'o') {
-                        $keterangan .= ' - Faktur: ' . $pembelian->no_faktur;
+                        $keterangan .= ' (Faktur: ' . $pembelian->no_faktur . ')';
                     }
-                }
-            } elseif ($item->stok_keluar > 0) {
-                $keterangan = 'Penjualan';
-                if ($item->id_penjualan) {
+                } elseif ($item->id_penjualan) {
                     $penjualan = Penjualan::find($item->id_penjualan);
                     if ($penjualan) {
-                        $keterangan .= ' - ID: ' . $penjualan->id_penjualan;
+                        $keterangan .= ' (ID Transaksi: ' . $penjualan->id_penjualan . ')';
                     }
                 }
             } else {
-                $keterangan = 'Penyesuaian Stok';
+                // Fallback untuk data lama yang belum ada keterangan
+                if ($item->stok_masuk > 0) {
+                    $keterangan = 'Pembelian';
+                    if ($item->id_pembelian) {
+                        $pembelian = Pembelian::find($item->id_pembelian);
+                        if ($pembelian && $pembelian->no_faktur && $pembelian->no_faktur != 'o') {
+                            $keterangan .= ' - Faktur: ' . $pembelian->no_faktur;
+                        }
+                    }
+                } elseif ($item->stok_keluar > 0) {
+                    $keterangan = 'Penjualan';
+                    if ($item->id_penjualan) {
+                        $penjualan = Penjualan::find($item->id_penjualan);
+                        if ($penjualan) {
+                            $keterangan .= ' - ID: ' . $penjualan->id_penjualan;
+                        }
+                    }
+                } else {
+                    $keterangan = 'Penyesuaian Stok';
+                }
             }
             
             $row['keterangan'] = $keterangan;
@@ -272,26 +292,62 @@ class KartuStokController extends Controller
             $row['stok_awal'] = format_uang($item->stok_awal);
             $row['stok_sisa'] = format_uang($item->stok_sisa);
             
-            // Determine transaction type and add reference
+            // Determine transaction type and add reference with styling
             $keterangan = '';
-            if ($item->stok_masuk > 0) {
-                $keterangan = '<span class="label label-success"><i class="fa fa-arrow-up"></i> Pembelian</span>';
-                if ($item->id_pembelian) {
-                    $pembelian = Pembelian::find($item->id_pembelian);
-                    if ($pembelian && $pembelian->no_faktur && $pembelian->no_faktur != 'o') {
-                        $keterangan .= '<br><small>Faktur: ' . $pembelian->no_faktur . '</small>';
+            
+            // Cek apakah ada keterangan dari database terlebih dahulu
+            if (!empty($item->keterangan)) {
+                // Parse jenis transaksi dari keterangan untuk styling
+                if (strpos($item->keterangan, 'Pembelian') !== false) {
+                    $keterangan = '<span class="label label-success"><i class="fa fa-arrow-up"></i> ' . $item->keterangan . '</span>';
+                    
+                    // Tambahkan referensi faktur jika ada
+                    if ($item->id_pembelian) {
+                        $pembelian = Pembelian::find($item->id_pembelian);
+                        if ($pembelian && $pembelian->no_faktur && $pembelian->no_faktur != 'o') {
+                            $keterangan .= '<br><small class="text-muted">Faktur: ' . $pembelian->no_faktur . '</small>';
+                        }
                     }
-                }
-            } elseif ($item->stok_keluar > 0) {
-                $keterangan = '<span class="label label-warning"><i class="fa fa-arrow-down"></i> Penjualan</span>';
-                if ($item->id_penjualan) {
-                    $penjualan = Penjualan::find($item->id_penjualan);
-                    if ($penjualan) {
-                        $keterangan .= '<br><small>ID Transaksi: ' . $penjualan->id_penjualan . '</small>';
+                    
+                } elseif (strpos($item->keterangan, 'Penjualan') !== false) {
+                    $keterangan = '<span class="label label-warning"><i class="fa fa-arrow-down"></i> ' . $item->keterangan . '</span>';
+                    
+                    // Tambahkan referensi ID transaksi jika ada
+                    if ($item->id_penjualan) {
+                        $penjualan = Penjualan::find($item->id_penjualan);
+                        if ($penjualan) {
+                            $keterangan .= '<br><small class="text-muted">ID Transaksi: ' . $penjualan->id_penjualan . '</small>';
+                        }
                     }
+                    
+                } elseif (strpos($item->keterangan, 'Perubahan Stok Manual') !== false) {
+                    $keterangan = '<span class="label label-info"><i class="fa fa-edit"></i> ' . $item->keterangan . '</span>';
+                    
+                } else {
+                    // Keterangan lainnya
+                    $keterangan = '<span class="label label-default"><i class="fa fa-cog"></i> ' . $item->keterangan . '</span>';
                 }
             } else {
-                $keterangan = '<span class="label label-info"><i class="fa fa-cog"></i> Penyesuaian Stok</span>';
+                // Fallback untuk data lama yang belum ada keterangan
+                if ($item->stok_masuk > 0) {
+                    $keterangan = '<span class="label label-success"><i class="fa fa-arrow-up"></i> Pembelian</span>';
+                    if ($item->id_pembelian) {
+                        $pembelian = Pembelian::find($item->id_pembelian);
+                        if ($pembelian && $pembelian->no_faktur && $pembelian->no_faktur != 'o') {
+                            $keterangan .= '<br><small class="text-muted">Faktur: ' . $pembelian->no_faktur . '</small>';
+                        }
+                    }
+                } elseif ($item->stok_keluar > 0) {
+                    $keterangan = '<span class="label label-warning"><i class="fa fa-arrow-down"></i> Penjualan</span>';
+                    if ($item->id_penjualan) {
+                        $penjualan = Penjualan::find($item->id_penjualan);
+                        if ($penjualan) {
+                            $keterangan .= '<br><small class="text-muted">ID Transaksi: ' . $penjualan->id_penjualan . '</small>';
+                        }
+                    }
+                } else {
+                    $keterangan = '<span class="label label-info"><i class="fa fa-cog"></i> Penyesuaian Stok</span>';
+                }
             }
             
             $row['keterangan'] = $keterangan;

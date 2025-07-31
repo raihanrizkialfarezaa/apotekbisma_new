@@ -208,6 +208,59 @@ class DashboardController extends Controller
             ];
         }
 
+        // Produk favorit per supplier berdasarkan penjualan terbanyak
+        $produk_favorit_penjualan_per_supplier = [];
+        
+        // Ambil semua supplier yang memiliki produk yang terjual dalam periode ini
+        $supplier_dengan_penjualan = DB::table('penjualan_detail')
+                                      ->join('penjualan', 'penjualan_detail.id_penjualan', '=', 'penjualan.id_penjualan')
+                                      ->join('produk', 'penjualan_detail.id_produk', '=', 'produk.id_produk')
+                                      ->join('pembelian_detail', 'produk.id_produk', '=', 'pembelian_detail.id_produk')
+                                      ->join('pembelian', 'pembelian_detail.id_pembelian', '=', 'pembelian.id_pembelian')
+                                      ->join('supplier', 'pembelian.id_supplier', '=', 'supplier.id_supplier')
+                                      ->whereBetween('penjualan.created_at', [$tanggal_awal . ' 00:00:00', $tanggal_akhir . ' 23:59:59'])
+                                      ->selectRaw('
+                                          supplier.id_supplier,
+                                          supplier.nama,
+                                          COUNT(DISTINCT penjualan_detail.id_produk) as jenis_produk_terjual,
+                                          SUM(penjualan_detail.jumlah) as total_qty_terjual
+                                      ')
+                                      ->groupBy('supplier.id_supplier', 'supplier.nama')
+                                      ->orderBy('total_qty_terjual', 'desc')
+                                      ->take(8)
+                                      ->get();
+
+        foreach ($supplier_dengan_penjualan as $supplier) {
+            // Ambil produk terlaris dari supplier ini berdasarkan penjualan
+            $produk_terlaris_penjualan = DB::table('penjualan_detail')
+                                          ->join('penjualan', 'penjualan_detail.id_penjualan', '=', 'penjualan.id_penjualan')
+                                          ->join('produk', 'penjualan_detail.id_produk', '=', 'produk.id_produk')
+                                          ->join('pembelian_detail', 'produk.id_produk', '=', 'pembelian_detail.id_produk')
+                                          ->join('pembelian', 'pembelian_detail.id_pembelian', '=', 'pembelian.id_pembelian')
+                                          ->where('pembelian.id_supplier', $supplier->id_supplier)
+                                          ->whereBetween('penjualan.created_at', [$tanggal_awal . ' 00:00:00', $tanggal_akhir . ' 23:59:59'])
+                                          ->selectRaw('
+                                              produk.id_produk,
+                                              produk.nama_produk,
+                                              produk.kode_produk,
+                                              SUM(penjualan_detail.jumlah) as total_terjual,
+                                              COUNT(DISTINCT penjualan_detail.id_penjualan_detail) as frekuensi_terjual,
+                                              SUM(penjualan_detail.subtotal) as total_revenue,
+                                              SUM(penjualan_detail.jumlah * (penjualan_detail.harga_jual - produk.harga_beli)) as total_profit
+                                          ')
+                                          ->groupBy('produk.id_produk', 'produk.nama_produk', 'produk.kode_produk')
+                                          ->orderBy('total_terjual', 'desc')
+                                          ->take(3)
+                                          ->get();
+            
+            if ($produk_terlaris_penjualan->count() > 0) {
+                $produk_favorit_penjualan_per_supplier[$supplier->id_supplier] = [
+                    'supplier_info' => $supplier,
+                    'produk_terlaris' => $produk_terlaris_penjualan
+                ];
+            }
+        }
+
         return [
             'total_penjualan' => $total_penjualan,
             'total_pembelian' => $total_pembelian,
@@ -223,6 +276,7 @@ class DashboardController extends Controller
             'chart_data' => $chartData,
             'supplier_terbanyak' => $supplier_terbanyak,
             'produk_per_supplier' => $produk_per_supplier,
+            'produk_favorit_penjualan_per_supplier' => $produk_favorit_penjualan_per_supplier,
         ];
     }
 

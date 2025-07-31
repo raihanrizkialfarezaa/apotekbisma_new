@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Imports\ObatImport;
 use App\Models\Kategori;
 use App\Models\PembelianDetail;
+use App\Models\RekamanStok;
 use Illuminate\Http\Request;
 use App\Models\Produk;
 use Barryvdh\DomPDF\Facade as PDF;
 use Maatwebsite\Excel\Facades\Excel;
+use Carbon\Carbon;
 
 class ProdukController extends Controller
 {
@@ -160,14 +162,18 @@ class ProdukController extends Controller
                 
             })
             ->addColumn('aksi', function ($produk) {
-                $buttons = '<div class="btn-group">';
+                $buttons = '<div class="btn-group" role="group">';
                 
-                $buttons .= '<button type="button" onclick="editForm(`'. route('produk.update', $produk->id_produk) .'`)" class="btn btn-xs btn-info btn-flat" title="Edit" data-toggle="tooltip"><i class="fa fa-pencil"></i></button>';
-                $buttons .= '<button type="button" onclick="deleteData(`'. route('produk.destroy', $produk->id_produk) .'`)" class="btn btn-xs btn-danger btn-flat" title="Hapus" data-toggle="tooltip"><i class="fa fa-trash"></i></button>';
+                $buttons .= '<button type="button" onclick="editForm(`'. route('produk.update', $produk->id_produk) .'`)" class="btn btn-xs btn-info btn-flat" title="Edit Produk" data-toggle="tooltip"><i class="fa fa-pencil"></i> Edit</button>';
+                
+                // Tambahkan button "Update Stok Manual" 
+                $buttons .= '<button type="button" onclick="updateStokManual('. $produk->id_produk .', \''. addslashes($produk->nama_produk) .'\', '. $produk->stok .')" class="btn btn-xs btn-success btn-flat" title="Update Stok Manual" data-toggle="tooltip"><i class="fa fa-refresh"></i> Stok</button>';
+                
+                $buttons .= '<button type="button" onclick="deleteData(`'. route('produk.destroy', $produk->id_produk) .'`)" class="btn btn-xs btn-danger btn-flat" title="Hapus Produk" data-toggle="tooltip"><i class="fa fa-trash"></i></button>';
                 
                 // Tambahkan button "Beli Sekarang" untuk produk dengan stok <= 1
                 if ($produk->stok <= 1) {
-                    $buttons .= '<button type="button" onclick="beliProduk('. $produk->id_produk .')" class="btn btn-xs btn-warning btn-flat" title="Beli Sekarang!" data-toggle="tooltip"><i class="fa fa-shopping-cart"></i></button>';
+                    $buttons .= '<button type="button" onclick="beliProduk('. $produk->id_produk .')" class="btn btn-xs btn-warning btn-flat" title="Beli Sekarang!" data-toggle="tooltip"><i class="fa fa-shopping-cart"></i> Beli</button>';
                 }
                 
                 $buttons .= '</div>';
@@ -239,9 +245,87 @@ class ProdukController extends Controller
     public function update(Request $request, $id)
     {
         $produk = Produk::find($id);
+        $stok_lama = $produk->stok;
+        
+        // Update produk
         $produk->update($request->all());
+        
+        // Jika stok diubah, buat rekaman stok untuk tracking
+        if ($request->has('stok') && $request->stok != $stok_lama) {
+            $selisih_stok = $request->stok - $stok_lama;
+            $keterangan_final = "Perubahan Stok Manual: Edit Produk - Form Update";
+            
+            RekamanStok::create([
+                'id_produk' => $produk->id_produk,
+                'waktu' => Carbon::now(),
+                'stok_masuk' => $selisih_stok > 0 ? $selisih_stok : 0,
+                'stok_keluar' => $selisih_stok < 0 ? abs($selisih_stok) : 0,
+                'stok_awal' => $stok_lama,
+                'stok_sisa' => $request->stok,
+                'keterangan' => $keterangan_final
+            ]);
+        }
 
         return response()->json('Data berhasil disimpan', 200);
+    }
+
+    /**
+     * Update stok produk secara manual dengan rekaman yang proper
+     */
+    public function updateStokManual(Request $request, $id)
+    {
+        $request->validate([
+            'stok' => 'required|integer|min:0',
+            'keterangan' => 'nullable|string|max:500'
+        ], [
+            'stok.required' => 'Stok wajib diisi',
+            'stok.integer' => 'Stok harus berupa angka',
+            'stok.min' => 'Stok tidak boleh negatif',
+            'keterangan.max' => 'Keterangan maksimal 500 karakter'
+        ]);
+
+        $produk = Produk::find($id);
+        if (!$produk) {
+            return response()->json('Produk tidak ditemukan', 404);
+        }
+
+        $stok_lama = $produk->stok;
+        $stok_baru = $request->stok;
+        $selisih_stok = $stok_baru - $stok_lama;
+
+        // Update stok produk
+        $produk->stok = $stok_baru;
+        $produk->save();
+
+        // Buat rekaman stok untuk tracking
+        if ($selisih_stok != 0) {
+            // Format keterangan berdasarkan input user
+            if ($request->keterangan && trim($request->keterangan) != '') {
+                $keterangan_final = "Perubahan Stok Manual: " . trim($request->keterangan);
+            } else {
+                $keterangan_final = "Perubahan Stok Manual";
+            }
+            
+            RekamanStok::create([
+                'id_produk' => $produk->id_produk,
+                'waktu' => Carbon::now(),
+                'stok_masuk' => $selisih_stok > 0 ? $selisih_stok : 0,
+                'stok_keluar' => $selisih_stok < 0 ? abs($selisih_stok) : 0,
+                'stok_awal' => $stok_lama,
+                'stok_sisa' => $stok_baru,
+                'keterangan' => $keterangan_final
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Stok berhasil diperbarui',
+            'data' => [
+                'stok_lama' => $stok_lama,
+                'stok_baru' => $stok_baru,
+                'selisih' => $selisih_stok
+            ]
+        ], 200);
     }
 
     /**

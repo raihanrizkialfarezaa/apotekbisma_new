@@ -51,6 +51,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/updateHargaBeli/{id}', [ProdukController::class, 'updateHargaBeli'])->name('updateHargaBeli');
         Route::put('/updateExpiredDate/{id}', [ProdukController::class, 'updateExpiredDate'])->name('updateExpiredDate');
         Route::put('/updateBatch/{id}', [ProdukController::class, 'updateBatch'])->name('updateBatch');
+        Route::put('/produk/update-stok-manual/{id}', [ProdukController::class, 'updateStokManual'])->name('produk.update_stok_manual');
 
         Route::get('/member/data', [MemberController::class, 'data'])->name('member.data');
         Route::post('/member/cetak-member', [MemberController::class, 'cetakMember'])->name('member.cetak_member');

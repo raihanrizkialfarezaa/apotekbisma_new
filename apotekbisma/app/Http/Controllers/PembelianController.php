@@ -380,24 +380,24 @@ class PembelianController extends Controller
         foreach ($detail as $item) {
             $produk = Produk::find($item->id_produk);
             if ($produk) {
-                // Cek apakah ada rekaman stok untuk item ini
-                $rekaman_stok = RekamanStok::where('id_pembelian', $pembelian->id_pembelian)
-                                           ->where('id_produk', $item->id_produk)
-                                           ->first();
+                // Kurangi stok sesuai jumlah yang pernah ditambahkan
+                $new_stok = $produk->stok - $item->jumlah;
                 
-                if ($rekaman_stok) {
-                    // Kurangi stok produk sesuai yang pernah ditambahkan
-                    $produk->stok -= $rekaman_stok->stok_masuk;
-                    $produk->update();
-                    
-                    // Hapus rekaman stok
-                    $rekaman_stok->delete();
+                // Pastikan stok tidak negatif
+                if ($new_stok < 0) {
+                    $new_stok = 0;
                 }
+                
+                $produk->stok = $new_stok;
+                $produk->update();
             }
             
             // Hapus detail pembelian
             $item->delete();
         }
+        
+        // Hapus semua rekaman stok yang terkait dengan pembelian ini
+        RekamanStok::where('id_pembelian', $pembelian->id_pembelian)->delete();
 
         // Hapus pembelian
         $pembelian->delete();

@@ -158,6 +158,7 @@ class PenjualanDetailController extends Controller
             'stok_keluar' => 1,
             'stok_awal' => $produk->stok + 1, // stok sebelum dikurangi
             'stok_sisa' => $produk->stok,
+            'keterangan' => 'Penjualan: Transaksi penjualan produk'
         ]);
 
         return response()->json('Data berhasil disimpan', 200);

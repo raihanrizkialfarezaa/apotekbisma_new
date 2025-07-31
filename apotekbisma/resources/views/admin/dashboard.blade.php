@@ -616,6 +616,96 @@
         </div>
     </div>
 </div>
+
+<!-- Produk Favorit per Supplier Berdasarkan Penjualan -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="box box-success">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    <i class="fa fa-star text-yellow"></i> Produk Favorit per Supplier (Berdasarkan Penjualan Terbanyak)
+                </h3>
+                <div class="box-tools pull-right">
+                    <small class="text-muted">Data berdasarkan periode yang dipilih</small>
+                </div>
+            </div>
+            <div class="box-body" style="max-height: 500px; overflow-y: auto;">
+                @if(!empty($analytics['produk_favorit_penjualan_per_supplier']))
+                    @foreach($analytics['produk_favorit_penjualan_per_supplier'] as $supplier_id => $data)
+                        <div class="supplier-section" style="margin-bottom: 20px; padding: 15px; border: 1px solid #d2d6de; border-radius: 5px; background: #f9f9f9;">
+                            <h5 class="text-success">
+                                <i class="fa fa-industry"></i> {{ $data['supplier_info']->nama }}
+                                <small class="text-muted">
+                                    (Total {{ format_uang($data['supplier_info']->total_qty_terjual) }} qty terjual | 
+                                     {{ $data['supplier_info']->jenis_produk_terjual }} jenis produk)
+                                </small>
+                            </h5>
+                            
+                            @if($data['produk_terlaris']->count() > 0)
+                                <div class="table-responsive">
+                                    <table class="table table-condensed table-hover">
+                                        <thead>
+                                            <tr class="bg-green">
+                                                <th style="color: white;">Produk</th>
+                                                <th style="color: white;">Qty Terjual</th>
+                                                <th style="color: white;">Frekuensi Jual</th>
+                                                <th style="color: white;">Revenue</th>
+                                                <th style="color: white;">Profit</th>
+                                                <th style="color: white;">Ranking</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($data['produk_terlaris'] as $index => $produk)
+                                            <tr>
+                                                <td>
+                                                    <strong>{{ $produk->nama_produk }}</strong>
+                                                    <br><span class="label label-primary">{{ $produk->kode_produk }}</span>
+                                                </td>
+                                                <td>
+                                                    <span class="badge {{ $index == 0 ? 'bg-gold' : ($index == 1 ? 'bg-green' : 'bg-blue') }}">
+                                                        {{ format_uang($produk->total_terjual) }} pcs
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <small class="text-info">
+                                                        <i class="fa fa-refresh"></i> {{ $produk->frekuensi_terjual }}x transaksi
+                                                    </small>
+                                                </td>
+                                                <td>
+                                                    <strong class="text-green">Rp. {{ format_uang($produk->total_revenue) }}</strong>
+                                                </td>
+                                                <td>
+                                                    <strong class="text-blue">Rp. {{ format_uang($produk->total_profit) }}</strong>
+                                                </td>
+                                                <td>
+                                                    @if($index == 0)
+                                                        <span class="badge bg-yellow"><i class="fa fa-trophy"></i> #1</span>
+                                                    @elseif($index == 1)
+                                                        <span class="badge bg-gray"><i class="fa fa-medal"></i> #2</span>
+                                                    @else
+                                                        <span class="badge bg-orange"><i class="fa fa-award"></i> #3</span>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @else
+                                <p class="text-muted">Belum ada data penjualan untuk supplier ini.</p>
+                            @endif
+                        </div>
+                    @endforeach
+                @else
+                    <div class="alert alert-info text-center">
+                        <i class="fa fa-info-circle"></i> Belum ada data penjualan untuk supplier dalam periode ini.
+                        <br><small>Silakan pilih periode yang berbeda atau tambahkan data penjualan.</small>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @push('scripts')

@@ -156,19 +156,9 @@ class PembelianDetailController extends Controller
         $detail->subtotal = $produk->harga_beli * 1;
         $detail->save();
 
-        // UPDATE STOK LANGSUNG SAAT PRODUK DITAMBAHKAN
-        $produk->stok += 1;
-        $produk->save();
-
-        // Buat rekaman stok untuk tracking
-        RekamanStok::create([
-            'id_produk' => $produk->id_produk,
-            'id_pembelian' => $request->id_pembelian,
-            'waktu' => Carbon::now(),
-            'stok_masuk' => 1,
-            'stok_awal' => $produk->stok - 1,
-            'stok_sisa' => $produk->stok,
-        ]);
+        // JANGAN UPDATE STOK DI SINI - Biarkan user mengedit jumlah dulu
+        // Stok akan diupdate saat user mengubah jumlah di method update()
+        // Atau saat transaksi diselesaikan
 
         return response()->json('Data berhasil disimpan', 200);
     }
@@ -213,10 +203,9 @@ class PembelianDetailController extends Controller
         $detail->subtotal = $detail->harga_beli * $new_jumlah;
         $detail->update();
         
-        // Cari rekaman stok yang sesuai dengan detail pembelian ini
+        // Cari atau buat rekaman stok
         $rekaman_stok = RekamanStok::where('id_pembelian', $detail->id_pembelian)
                                    ->where('id_produk', $detail->id_produk)
-                                   ->orderBy('created_at', 'desc')
                                    ->first();
         
         if ($rekaman_stok) {
@@ -226,9 +215,10 @@ class PembelianDetailController extends Controller
                 'stok_masuk' => $new_jumlah,
                 'stok_awal' => $new_stok - $new_jumlah,
                 'stok_sisa' => $new_stok,
+                'keterangan' => 'Pembelian: Transaksi pembelian produk'
             ]);
         } else {
-            // Buat rekaman stok baru
+            // Buat rekaman stok baru (untuk item yang ditambahkan tapi belum pernah diupdate)
             RekamanStok::create([
                 'id_produk' => $detail->id_produk,
                 'id_pembelian' => $detail->id_pembelian,
@@ -236,6 +226,7 @@ class PembelianDetailController extends Controller
                 'stok_masuk' => $new_jumlah,
                 'stok_awal' => $new_stok - $new_jumlah,
                 'stok_sisa' => $new_stok,
+                'keterangan' => 'Pembelian: Transaksi pembelian produk'
             ]);
         }
         
@@ -323,25 +314,30 @@ class PembelianDetailController extends Controller
         
         $produk = Produk::find($detail->id_produk);
         if ($produk) {
-            // Kurangi stok yang sebelumnya ditambahkan
-            $new_stok = $produk->stok - $detail->jumlah;
+            // Cek apakah ada rekaman stok untuk item ini
+            $rekaman_stok = RekamanStok::where('id_pembelian', $detail->id_pembelian)
+                                       ->where('id_produk', $detail->id_produk)
+                                       ->first();
             
-            // Pastikan stok tidak negatif
-            if ($new_stok < 0) {
-                $new_stok = 0;
+            if ($rekaman_stok) {
+                // Jika ada rekaman stok, kurangi stok sesuai yang tercatat
+                $jumlah_dikurangi = $rekaman_stok->stok_masuk;
+                $new_stok = $produk->stok - $jumlah_dikurangi;
+                
+                // Pastikan stok tidak negatif
+                if ($new_stok < 0) {
+                    $new_stok = 0;
+                }
+                
+                $produk->stok = $new_stok;
+                $produk->update();
+                
+                // Hapus rekaman stok
+                $rekaman_stok->delete();
             }
-            
-            $produk->stok = $new_stok;
-            $produk->update();
+            // Jika tidak ada rekaman stok, berarti belum pernah diupdate jumlahnya
+            // Jadi tidak perlu mengubah stok produk
         }
-        
-        // Hapus rekaman stok terkait dengan detail ini saja
-        RekamanStok::where('id_pembelian', $detail->id_pembelian)
-                   ->where('id_produk', $detail->id_produk)
-                   ->where('stok_masuk', $detail->jumlah)
-                   ->orderBy('created_at', 'desc')
-                   ->first()
-                   ?->delete();
         
         $detail->delete();
 
