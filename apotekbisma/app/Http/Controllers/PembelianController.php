@@ -159,7 +159,7 @@ class PembelianController extends Controller
     public function create($id = null)
     {
         // Jika ada ID, berarti ini untuk lanjutkan/edit transaksi
-        if ($id) {
+        if ($id && request('continue') === 'true') {
             $pembelian = Pembelian::find($id);
             if ($pembelian) {
                 session(['id_pembelian' => $pembelian->id_pembelian]);
@@ -168,30 +168,49 @@ class PembelianController extends Controller
             }
         }
 
-        // Cek apakah ada transaksi yang sedang berjalan
-        if ($id_pembelian = session('id_pembelian')) {
-            $pembelian = Pembelian::find($id_pembelian);
-            if ($pembelian) {
-                // Jika ada transaksi yang sedang berjalan, lanjutkan transaksi tersebut
-                return redirect()->route('pembelian_detail.index');
-            }
+        // Jika ini adalah transaksi baru (dipanggil dari pilih supplier)
+        // Hapus session lama untuk memastikan transaksi baru yang bersih
+        if ($id && is_numeric($id)) {
+            // Clear any existing session data
+            session()->forget(['id_pembelian', 'id_supplier']);
+            
+            // Cleanup transaksi incomplete yang mungkin tersisa dari session sebelumnya
+            $this->cleanupIncompleteTransactions();
+            
+            // Hanya buat record baru jika supplier dipilih untuk transaksi baru
+            $pembelian = new Pembelian();
+            $pembelian->id_supplier = $id;
+            $pembelian->total_item  = 0;
+            $pembelian->total_harga = 0;
+            $pembelian->diskon      = 0;
+            $pembelian->bayar       = 0;
+            $pembelian->waktu       = Carbon::now();
+            $pembelian->no_faktur   = 'o'; // Temporary value to indicate incomplete transaction
+            $pembelian->save();
+
+            session(['id_pembelian' => $pembelian->id_pembelian]);
+            session(['id_supplier' => $pembelian->id_supplier]);
+
+            return redirect()->route('pembelian_detail.index');
         }
 
-        // Hanya buat record baru jika supplier dipilih
-        $pembelian = new Pembelian();
-        $pembelian->id_supplier = $id;
-        $pembelian->total_item  = 0;
-        $pembelian->total_harga = 0;
-        $pembelian->diskon      = 0;
-        $pembelian->bayar       = 0;
-        $pembelian->waktu       = Carbon::now();
-        $pembelian->no_faktur   = 'o'; // Temporary value to indicate incomplete transaction
-        $pembelian->save();
+        // Redirect back jika tidak ada ID supplier
+        return redirect()->route('pembelian.index')->with('error', 'Silakan pilih supplier terlebih dahulu.');
+    }
 
-        session(['id_pembelian' => $pembelian->id_pembelian]);
-        session(['id_supplier' => $pembelian->id_supplier]);
-
-        return redirect()->route('pembelian_detail.index');
+    /**
+     * Lanjutkan transaksi pembelian yang sudah ada
+     */
+    public function lanjutkanTransaksi($id)
+    {
+        $pembelian = Pembelian::find($id);
+        if ($pembelian) {
+            session(['id_pembelian' => $pembelian->id_pembelian]);
+            session(['id_supplier' => $pembelian->id_supplier]);
+            return redirect()->route('pembelian_detail.index');
+        }
+        
+        return redirect()->route('pembelian.index')->with('error', 'Transaksi tidak ditemukan.');
     }
 
     public function store(Request $request)
@@ -412,7 +431,7 @@ class PembelianController extends Controller
             $query->where('no_faktur', '=', 'o')
                   ->orWhere('no_faktur', '=', '')
                   ->orWhereNull('no_faktur');
-        })->where('created_at', '<', now()->subMinutes(30)) // Hanya hapus yang sudah 30 menit atau lebih
+        })->where('created_at', '<', Carbon::now()->subMinutes(30)) // Hanya hapus yang sudah 30 menit atau lebih
         ->get();
 
         foreach ($incompleteTransactions as $transaction) {

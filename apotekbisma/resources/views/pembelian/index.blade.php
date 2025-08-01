@@ -135,7 +135,7 @@
     }
 
     function lanjutkanTransaksi(id) {
-        window.location.href = '{{ route("pembelian.create", ":id") }}'.replace(':id', id);
+        window.location.href = '{{ route("pembelian.lanjutkan", ":id") }}'.replace(':id', id);
     }
 
     function editTransaksi(id) {

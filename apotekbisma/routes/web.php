@@ -65,6 +65,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/pembelian/data', [PembelianController::class, 'data'])->name('pembelian.data');
         Route::get('/pembelian/{id}/create', [PembelianController::class, 'create'])->name('pembelian.create');
+        Route::get('/pembelian/{id}/lanjutkan', [PembelianController::class, 'lanjutkanTransaksi'])->name('pembelian.lanjutkan');
         Route::get('/pembelian/create', [PembelianController::class, 'create'])->name('pembelian.create.new');
         Route::get('/pembelian/nota-kecil', [PembelianController::class, 'notaKecil'])->name('pembelian.nota_kecil');
         Route::get('/pembelian/nota-besar', [PembelianController::class, 'notaBesar'])->name('pembelian.nota_besar');

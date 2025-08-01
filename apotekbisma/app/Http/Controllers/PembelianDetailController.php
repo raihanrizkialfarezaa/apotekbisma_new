@@ -32,17 +32,24 @@ class PembelianDetailController extends Controller
     {
         $id_pembelian = session('id_pembelian');
         
-        // If no session data, redirect to pembelian page
+        // If no session data, clear any stale data and redirect to pembelian page
         if (!$id_pembelian) {
+            session()->forget(['id_pembelian', 'id_supplier']); // Clear any stale session data
             return redirect()->route('pembelian.index')->with('error', 'Silakan pilih supplier terlebih dahulu untuk memulai pembelian.');
         }
         
         // Cek apakah pembelian ada
         $pembelian = Pembelian::find($id_pembelian);
         if (!$pembelian) {
-            session()->forget('id_pembelian');
-            session()->forget('id_supplier');
-            return redirect()->route('pembelian.index')->with('error', 'Transaksi pembelian tidak ditemukan.');
+            session()->forget(['id_pembelian', 'id_supplier']); // Clear invalid session data
+            return redirect()->route('pembelian.index')->with('error', 'Transaksi pembelian tidak ditemukan atau sudah tidak valid.');
+        }
+        
+        // Cek apakah supplier session sesuai dengan data pembelian
+        $session_supplier = session('id_supplier');
+        if ($session_supplier != $pembelian->id_supplier) {
+            session()->forget(['id_pembelian', 'id_supplier']); // Clear mismatched session data
+            return redirect()->route('pembelian.index')->with('error', 'Data session tidak sesuai. Silakan mulai transaksi baru.');
         }
         
         $produk = Produk::orderBy('nama_produk')->get();
