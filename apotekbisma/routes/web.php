@@ -103,6 +103,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/transaksi/updateTransaksi', [PenjualanController::class, 'notaBesar'])->name('transaksi.updateForm');
         Route::put('/transaksi/updatesTransaksi/{id}', [PenjualanController::class, 'update'])->name('transaksi.updates');
         Route::put('/transaksi/updateEdit/{id}', [PenjualanDetailController::class, 'updateEdit'])->name('transaksi.updateEdit');
+        Route::put('/transaksi/{id}', [PenjualanDetailController::class, 'update'])->name('transaksi.update');
 
         Route::get('/transaksi/{id}/data', [PenjualanDetailController::class, 'data'])->name('transaksi.data');
         Route::get('/transaksi/loadform/{diskon}/{total}/{diterima}', [PenjualanDetailController::class, 'loadForm'])->name('transaksi.load_form');

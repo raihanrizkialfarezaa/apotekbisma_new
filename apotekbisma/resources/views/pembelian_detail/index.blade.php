@@ -41,6 +41,11 @@
         vertical-align: middle;
     }
 
+    .quantity.updating {
+        background-color: #fff3cd !important;
+        border-color: #ffeaa7 !important;
+    }
+
     @media(max-width: 768px) {
         .tampil-bayar {
             font-size: 3em;
@@ -198,6 +203,11 @@
         return new Intl.NumberFormat('id-ID').format(angka);
     }
 
+    // Helper function untuk format angka seperti format_uang di PHP
+    function formatUang(angka) {
+        return new Intl.NumberFormat('id-ID').format(angka);
+    }
+
     $(function () {
         $('body').addClass('sidebar-collapse');
 
@@ -292,37 +302,153 @@
             }
         });
 
-        $(document).on('input', '.quantity', function () {
-            let id = $(this).data('id');
-            let jumlah = parseInt($(this).val());
+        // Variable untuk debouncing
+        let quantityTimeout;
+        let isUpdating = false; // Global flag untuk mencegah multiple updates
+        
+        // Event change untuk update yang lebih stabil (hanya saat user selesai edit)
+        $(document).on('change', '.quantity', function () {
+            let $input = $(this);
+            let id = $input.data('id');
+            let inputValue = $input.val();
+            
+            // Clear timeout jika ada
+            clearTimeout(quantityTimeout);
+            
+            // Jika input kosong, set ke 1
+            if (inputValue === '' || inputValue === '0') {
+                $input.val(1);
+                inputValue = '1';
+            }
+            
+            let jumlah = parseInt(inputValue);
 
-            if (jumlah < 1) {
-                $(this).val(1);
+            if (isNaN(jumlah) || jumlah < 1) {
+                $input.val(1);
+                jumlah = 1;
                 alert('Jumlah tidak boleh kurang dari 1');
-                return;
             }
             if (jumlah > 10000) {
-                $(this).val(10000);
+                $input.val(10000);
+                jumlah = 10000;
+                alert('Jumlah tidak boleh lebih dari 10000');
+            }
+
+            // Update jika nilai berbeda dari nilai asli
+            let originalValue = $input.data('original-value') || 1;
+            if (jumlah !== originalValue && !isUpdating) {
+                updateQuantity($input, id, jumlah);
+            }
+        });
+        
+        // Event input hanya untuk validasi real-time tanpa update
+        $(document).on('input', '.quantity', function () {
+            let $input = $(this);
+            let inputValue = $input.val();
+            
+            // Biarkan input kosong atau angka yang sedang diketik
+            if (inputValue === '' || inputValue === '0') {
+                return; // Biarkan user mengetik
+            }
+            
+            let jumlah = parseInt(inputValue);
+
+            // Validasi visual tanpa mengirim request
+            if (jumlah > 10000) {
+                $input.val(10000);
                 alert('Jumlah tidak boleh lebih dari 10000');
                 return;
             }
+        });
 
+        // Event focus untuk menyimpan nilai asli
+        $(document).on('focus', '.quantity', function () {
+            $(this).data('original-value', parseInt($(this).val()) || 1);
+            $(this).select(); // Select all text saat focus untuk memudahkan edit
+        });
+
+        // Mencegah form submission saat menekan Enter di input quantity
+        $(document).on('keypress', '.quantity', function (e) {
+            if (e.which === 13) { // Enter key
+                e.preventDefault();
+                $(this).blur(); // Trigger blur untuk validasi dan update
+                return false;
+            }
+        });
+
+        // Fungsi terpisah untuk update quantity
+        function updateQuantity($input, id, jumlah) {
+            // Cek apakah sedang ada request yang berjalan
+            if ($input.data('updating') || isUpdating) {
+                return;
+            }
+            
+            // Set flag bahwa sedang update
+            $input.data('updating', true);
+            isUpdating = true;
+            
+            // Disable input sementara dan beri indikator visual
+            $input.prop('disabled', true).addClass('updating');
+            
             $.post(`{{ url('/pembelian_detail') }}/${id}`, {
                     '_token': $('[name=csrf-token]').attr('content'),
                     '_method': 'put',
                     'jumlah': jumlah
                 })
                 .done(response => {
-                    $(this).on('mouseout', function () {
-                        console.log(id);
-                        table.ajax.reload(() => loadForm($('#diskon').val()));
-                    });
+                    // Update nilai asli setelah berhasil
+                    $input.data('original-value', jumlah);
+                    
+                    // Update hanya subtotal di kolom yang sama tanpa reload
+                    if (response.data && response.data.subtotal) {
+                        let $row = $input.closest('tr');
+                        let $subtotalCell = $row.find('td').eq(6); // Kolom subtotal (index 6)
+                        if ($subtotalCell.length) {
+                            $subtotalCell.text('Rp. ' + formatUang(response.data.subtotal));
+                        }
+                    }
+                    
+                    // Update form summary tanpa reload tabel
+                    setTimeout(() => {
+                        loadForm($('#diskon').val());
+                    }, 100);
                 })
                 .fail(errors => {
-                    alert('Tidak dapat menyimpan data');
-                    return;
+                    // Kembalikan ke nilai asli jika gagal
+                    let originalValue = $input.data('original-value') || 1;
+                    $input.val(originalValue);
+                    
+                    let errorMessage = 'Tidak dapat menyimpan data';
+                    
+                    if (errors.status === 500) {
+                        errorMessage = 'Terjadi kesalahan pada server';
+                    } else if (errors.responseJSON && errors.responseJSON.message) {
+                        errorMessage = errors.responseJSON.message;
+                    } else if (errors.responseText) {
+                        try {
+                            let errorObj = JSON.parse(errors.responseText);
+                            errorMessage = errorObj.message || errorMessage;
+                        } catch (e) {
+                            errorMessage = errors.responseText;
+                        }
+                    }
+                    
+                    alert(errorMessage);
+                    
+                    // Reload form untuk memastikan konsistensi tanpa reload tabel
+                    setTimeout(() => {
+                        loadForm($('#diskon').val());
+                    }, 100);
+                })
+                .always(() => {
+                    // Enable input kembali dan hapus flag updating
+                    $input.prop('disabled', false).removeClass('updating');
+                    $input.data('updating', false);
+                    isUpdating = false;
                 });
-        });
+        }
+        
+        // ===== EXISTING HANDLERS FOR OTHER FIELDS =====
         $(document).on('input', '.harga_jual', function () {
             let id = $(this).data('id');
             let harga_jual = parseInt($(this).val());

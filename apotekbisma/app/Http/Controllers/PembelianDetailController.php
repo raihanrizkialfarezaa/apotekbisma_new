@@ -9,6 +9,7 @@ use App\Models\RekamanStok;
 use App\Models\Supplier;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PembelianDetailController extends Controller
 {
@@ -156,81 +157,112 @@ class PembelianDetailController extends Controller
         $detail->subtotal = $produk->harga_beli * 1;
         $detail->save();
 
-        // JANGAN UPDATE STOK DI SINI - Biarkan user mengedit jumlah dulu
-        // Stok akan diupdate saat user mengubah jumlah di method update()
-        // Atau saat transaksi diselesaikan
+        // UPDATE STOK: Tambah stok karena ini pembelian (default jumlah = 1)
+        $produk->stok = $produk->stok + 1;
+        $produk->save();
+
+        // Buat rekaman stok untuk tracking
+        RekamanStok::create([
+            'id_produk' => $produk->id_produk,
+            'id_pembelian' => $detail->id_pembelian,
+            'waktu' => Carbon::now(),
+            'stok_masuk' => 1,
+            'stok_awal' => $produk->stok - 1,  // stok sebelum penambahan
+            'stok_sisa' => $produk->stok,
+        ]);
 
         return response()->json('Data berhasil disimpan', 200);
     }
 
     public function update(Request $request, $id)
     {
-        $detail = PembelianDetail::find($id);
-        
-        if (!$detail) {
-            return response()->json('Detail pembelian tidak ditemukan', 404);
-        }
-        
-        $produk = Produk::where('id_produk', $detail->id_produk)->first();
-        
-        if (!$produk) {
-            return response()->json('Produk tidak ditemukan', 404);
-        }
-        
-        // Normalisasi stok jika negatif
-        if ($produk->stok < 0) {
-            $produk->stok = 0;
+        try {
+            $detail = PembelianDetail::find($id);
+            
+            if (!$detail) {
+                return response()->json(['message' => 'Detail pembelian tidak ditemukan'], 404);
+            }
+            
+            $produk = Produk::where('id_produk', $detail->id_produk)->first();
+            
+            if (!$produk) {
+                return response()->json(['message' => 'Produk tidak ditemukan'], 404);
+            }
+            
+            // Validasi input jumlah
+            $new_jumlah = (int) $request->jumlah;
+            if ($new_jumlah < 1) {
+                return response()->json(['message' => 'Jumlah harus minimal 1'], 400);
+            }
+            
+            if ($new_jumlah > 10000) {
+                return response()->json(['message' => 'Jumlah tidak boleh lebih dari 10000'], 400);
+            }
+            
+            // Normalisasi stok jika negatif
+            if ($produk->stok < 0) {
+                $produk->stok = 0;
+                $produk->save();
+            }
+            
+            $old_jumlah = $detail->jumlah;
+            $selisih = $new_jumlah - $old_jumlah;
+            
+            // Update stok produk berdasarkan selisih (pembelian menambah stok)
+            $new_stok = $produk->stok + $selisih;
+            
+            // Pastikan stok tidak negatif
+            if ($new_stok < 0) {
+                $new_stok = 0;
+            }
+            
+            $produk->stok = $new_stok;
             $produk->save();
+            
+            // Update detail pembelian
+            $detail->jumlah = $new_jumlah;
+            $detail->subtotal = $detail->harga_beli * $new_jumlah;
+            $detail->save();
+            
+            // Update atau buat rekaman stok
+            $rekaman_stok = RekamanStok::where('id_pembelian', $detail->id_pembelian)
+                                       ->where('id_produk', $detail->id_produk)
+                                       ->where('stok_masuk', $old_jumlah)
+                                       ->first();
+            
+            if ($rekaman_stok) {
+                // Update rekaman stok yang sudah ada
+                $rekaman_stok->update([
+                    'waktu' => Carbon::now(),
+                    'stok_masuk' => $new_jumlah,
+                    'stok_awal' => $new_stok - $new_jumlah,  // stok sebelum penambahan
+                    'stok_sisa' => $new_stok,
+                ]);
+            } else {
+                // Buat rekaman stok baru jika belum ada
+                RekamanStok::create([
+                    'id_produk' => $produk->id_produk,
+                    'id_pembelian' => $detail->id_pembelian,
+                    'waktu' => Carbon::now(),
+                    'stok_masuk' => $new_jumlah,
+                    'stok_awal' => $new_stok - $new_jumlah,  // stok sebelum penambahan
+                    'stok_sisa' => $new_stok,
+                ]);
+            }
+            
+            return response()->json([
+                'message' => 'Data berhasil diperbarui',
+                'data' => [
+                    'jumlah' => $new_jumlah,
+                    'subtotal' => $detail->subtotal,
+                    'stok_tersisa' => $new_stok
+                ]
+            ], 200);
+            
+        } catch (\Exception $e) {
+            Log::error('Error updating pembelian detail: ' . $e->getMessage());
+            return response()->json(['message' => 'Terjadi kesalahan: ' . $e->getMessage()], 500);
         }
-        
-        $old_jumlah = $detail->jumlah;
-        $new_jumlah = $request->jumlah;
-        $selisih = $new_jumlah - $old_jumlah;
-        
-        // Update stok produk berdasarkan selisih
-        $new_stok = $produk->stok + $selisih;
-        
-        // Pastikan stok tidak negatif
-        if ($new_stok < 0) {
-            $new_stok = 0;
-        }
-        
-        $produk->stok = $new_stok;
-        $produk->save();
-        
-        // Update detail pembelian
-        $detail->jumlah = $new_jumlah;
-        $detail->subtotal = $detail->harga_beli * $new_jumlah;
-        $detail->update();
-        
-        // Cari atau buat rekaman stok
-        $rekaman_stok = RekamanStok::where('id_pembelian', $detail->id_pembelian)
-                                   ->where('id_produk', $detail->id_produk)
-                                   ->first();
-        
-        if ($rekaman_stok) {
-            // Update rekaman stok yang sudah ada
-            $rekaman_stok->update([
-                'waktu' => Carbon::now(),
-                'stok_masuk' => $new_jumlah,
-                'stok_awal' => $new_stok - $new_jumlah,
-                'stok_sisa' => $new_stok,
-                'keterangan' => 'Pembelian: Transaksi pembelian produk'
-            ]);
-        } else {
-            // Buat rekaman stok baru (untuk item yang ditambahkan tapi belum pernah diupdate)
-            RekamanStok::create([
-                'id_produk' => $detail->id_produk,
-                'id_pembelian' => $detail->id_pembelian,
-                'waktu' => Carbon::now(),
-                'stok_masuk' => $new_jumlah,
-                'stok_awal' => $new_stok - $new_jumlah,
-                'stok_sisa' => $new_stok,
-                'keterangan' => 'Pembelian: Transaksi pembelian produk'
-            ]);
-        }
-        
-        return response()->json('Data berhasil diperbarui', 200);
     }
 
     public function updateEdit(Request $request, $id)
@@ -314,29 +346,23 @@ class PembelianDetailController extends Controller
         
         $produk = Produk::find($detail->id_produk);
         if ($produk) {
-            // Cek apakah ada rekaman stok untuk item ini
-            $rekaman_stok = RekamanStok::where('id_pembelian', $detail->id_pembelian)
-                                       ->where('id_produk', $detail->id_produk)
-                                       ->first();
+            // Kurangi stok berdasarkan jumlah yang ada di detail
+            $jumlah_dikurangi = $detail->jumlah;
+            $new_stok = $produk->stok - $jumlah_dikurangi;
             
-            if ($rekaman_stok) {
-                // Jika ada rekaman stok, kurangi stok sesuai yang tercatat
-                $jumlah_dikurangi = $rekaman_stok->stok_masuk;
-                $new_stok = $produk->stok - $jumlah_dikurangi;
-                
-                // Pastikan stok tidak negatif
-                if ($new_stok < 0) {
-                    $new_stok = 0;
-                }
-                
-                $produk->stok = $new_stok;
-                $produk->update();
-                
-                // Hapus rekaman stok
-                $rekaman_stok->delete();
+            // Pastikan stok tidak negatif
+            if ($new_stok < 0) {
+                $new_stok = 0;
             }
-            // Jika tidak ada rekaman stok, berarti belum pernah diupdate jumlahnya
-            // Jadi tidak perlu mengubah stok produk
+            
+            $produk->stok = $new_stok;
+            $produk->save();
+            
+            // Hapus rekaman stok yang terkait
+            RekamanStok::where('id_pembelian', $detail->id_pembelian)
+                       ->where('id_produk', $detail->id_produk)
+                       ->where('stok_masuk', $jumlah_dikurangi)
+                       ->delete();
         }
         
         $detail->delete();
