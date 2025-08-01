@@ -236,7 +236,13 @@
             paginate: false
         })
         .on('draw.dt', function () {
-            loadForm($('#diskon').val());
+            // Setiap kali tabel di-draw, hitung ulang total dan update form dengan delay untuk memastikan DOM ready
+            setTimeout(() => {
+                recalculateTotal();
+                setTimeout(() => {
+                    loadForm($('#diskon').val());
+                }, 10);
+            }, 100); // Delay lebih lama untuk memastikan semua input sudah ter-render
         });
         table2 = $('.table-produk').DataTable({
             responsive: true,
@@ -304,6 +310,8 @@
 
         // Variable untuk debouncing
         let quantityTimeout;
+        let hargaBeliTimeout;
+        let hargaJualTimeout;
         let isUpdating = false; // Global flag untuk mencegah multiple updates
         
         // Event change untuk update yang lebih stabil (hanya saat user selesai edit)
@@ -402,16 +410,17 @@
                     // Update hanya subtotal di kolom yang sama tanpa reload
                     if (response.data && response.data.subtotal) {
                         let $row = $input.closest('tr');
-                        let $subtotalCell = $row.find('td').eq(6); // Kolom subtotal (index 6)
+                        let $subtotalCell = $row.find('td').eq(8); // Kolom subtotal (index 8)
                         if ($subtotalCell.length) {
                             $subtotalCell.text('Rp. ' + formatUang(response.data.subtotal));
                         }
                     }
                     
-                    // Update form summary tanpa reload tabel
-                    setTimeout(() => {
-                        loadForm($('#diskon').val());
-                    }, 100);
+                    // Hitung ulang total secara langsung tanpa delay
+                    recalculateTotal();
+                    
+                    // Update form summary langsung setelah kalkulasi ulang
+                    loadForm($('#diskon').val());
                 })
                 .fail(errors => {
                     // Kembalikan ke nilai asli jika gagal
@@ -435,10 +444,9 @@
                     
                     alert(errorMessage);
                     
-                    // Reload form untuk memastikan konsistensi tanpa reload tabel
-                    setTimeout(() => {
-                        loadForm($('#diskon').val());
-                    }, 100);
+                    // Hitung ulang total dan reload form untuk memastikan konsistensi
+                    recalculateTotal();
+                    loadForm($('#diskon').val());
                 })
                 .always(() => {
                     // Enable input kembali dan hapus flag updating
@@ -446,6 +454,61 @@
                     $input.data('updating', false);
                     isUpdating = false;
                 });
+        }
+        
+        // Fungsi untuk menghitung ulang total secara langsung dari tabel
+        function recalculateTotal() {
+            let total = 0;
+            let total_item = 0;
+            
+            // Cache jQuery selector untuk performa
+            let $tableRows = $('.table-pembelian tbody tr:visible');
+            
+            // Loop melalui semua baris tabel yang terlihat
+            $tableRows.each(function() {
+                let $row = $(this);
+                
+                // Skip baris yang mengandung elemen .total atau .total_item (baris tersembunyi)
+                if ($row.find('.total, .total_item').length > 0) {
+                    return true; // continue ke iterasi berikutnya
+                }
+                
+                let $quantityInput = $row.find('.quantity');
+                let $hargaBeliInput = $row.find('.harga_beli');
+                
+                // Pastikan kedua input ada dan memiliki nilai valid
+                if ($quantityInput.length && $hargaBeliInput.length) {
+                    let jumlah = parseInt($quantityInput.val()) || 0;
+                    let harga_beli = parseInt($hargaBeliInput.val()) || 0;
+                    
+                    // Hanya hitung jika nilai positif
+                    if (jumlah > 0 && harga_beli > 0) {
+                        let subtotal = jumlah * harga_beli;
+                        total += subtotal;
+                        total_item += jumlah;
+                    }
+                }
+            });
+            
+            // Pastikan nilai tidak negatif
+            total = Math.max(0, total);
+            total_item = Math.max(0, total_item);
+            
+            // Update hidden input
+            $('#total').val(total);
+            $('#total_item').val(total_item);
+            
+            // Update elemen total tersembunyi di tabel (untuk kompatibilitas dengan loadForm)
+            if ($('.total').length > 0) {
+                $('.total').text(total);
+            }
+            if ($('.total_item').length > 0) {
+                $('.total_item').text(total_item);
+            }
+            
+            console.log('Recalculated - Total:', total, 'Items:', total_item);
+            
+            return {total: total, total_item: total_item};
         }
         
         // ===== EXISTING HANDLERS FOR OTHER FIELDS =====
@@ -470,9 +533,9 @@
                     'jumlah': jumlah
                 })
                 .done(response => {
-                    $(this).on('mouseout', function () {
-                        table.ajax.reload(() => loadForm($('#diskon').val()));
-                    });
+                    // Tidak perlu reload tabel, cukup hitung ulang total
+                    recalculateTotal();
+                    loadForm($('#diskon').val());
                 })
                 .fail(errors => {
                     alert('Tidak dapat menyimpan data');
@@ -480,35 +543,51 @@
                 });
         });
         $(document).on('input', '.harga_beli', function () {
-            let id = $(this).data('id');
-	        console.log($(this).data('id'));
-            let id_pembelian_detail = $(this).data('uid');
-            console.log(id_pembelian_detail);
-            let harga_beli = parseInt($(this).val());
+            let $input = $(this);
+            let id = $input.data('id');
+            let id_pembelian_detail = $input.data('uid');
+            let harga_beli = parseInt($input.val());
             let jumlah = parseInt($('.quantity').val());
 
+            // Clear timeout sebelumnya
+            clearTimeout(hargaBeliTimeout);
+
             if (harga_beli < 1) {
-                $(this).val(1);
+                $input.val(1);
                 alert('Harga tidak boleh kurang dari Rp. 1');
                 return;
             }
 
-            $.post(`{{ url('/updateHargaBeli') }}/${id}`, {
-                    '_token': $('[name=csrf-token]').attr('content'),
-                    '_method': 'put',
-                    'harga_beli': harga_beli,
-                    'id_pembayaran_detail': id_pembelian_detail,
-                    'jumlah': jumlah
-                })
-                .done(response => {
-                    $(this).on('mouseout', function () {
-                        table.ajax.reload(() => loadForm($('#diskon').val()));
+            // Debounce untuk mengurangi request berlebihan
+            hargaBeliTimeout = setTimeout(() => {
+                $.post(`{{ url('/updateHargaBeli') }}/${id}`, {
+                        '_token': $('[name=csrf-token]').attr('content'),
+                        '_method': 'put',
+                        'harga_beli': harga_beli,
+                        'id_pembayaran_detail': id_pembelian_detail,
+                        'jumlah': jumlah
+                    })
+                    .done(response => {
+                        // Update subtotal di baris yang sama secara langsung
+                        let $row = $input.closest('tr');
+                        let $quantityInput = $row.find('.quantity');
+                        let currentJumlah = parseInt($quantityInput.val()) || 1;
+                        let newSubtotal = harga_beli * currentJumlah;
+                        
+                        let $subtotalCell = $row.find('td').eq(8); // Kolom subtotal (index 8)
+                        if ($subtotalCell.length) {
+                            $subtotalCell.text('Rp. ' + formatUang(newSubtotal));
+                        }
+                        
+                        // Hitung ulang total dan update form secara real-time
+                        recalculateTotal();
+                        loadForm($('#diskon').val());
+                    })
+                    .fail(errors => {
+                        alert('Tidak dapat menyimpan data');
+                        return;
                     });
-                })
-                .fail(errors => {
-                    alert('Tidak dapat menyimpan data');
-                    return;
-                });
+            }, 300); // Delay 300ms untuk debouncing
         });
         $(document).on('input', '.expired_date', function () {
             let id = $(this).data('id');
@@ -528,9 +607,8 @@
                     'expired_date': expired_date,
                 })
                 .done(response => {
-                    $(this).on('mouseout', function () {
-                        table.ajax.reload(() => loadForm($('#diskon').val()));
-                    });
+                    // Tidak perlu reload tabel untuk update expired date
+                    console.log('Expired date updated successfully');
                 })
                 .fail(errors => {
                     alert('Tidak dapat menyimpan data');
@@ -550,9 +628,8 @@
                     'batch': batch,
                 })
                 .done(response => {
-                    $(this).on('mouseout', function () {
-                        table.ajax.reload(() => loadForm($('#diskon').val()));
-                    });
+                    // Tidak perlu reload tabel untuk update batch
+                    console.log('Batch updated successfully');
                 })
                 .fail(errors => {
                     alert('Tidak dapat menyimpan data');
@@ -690,15 +767,28 @@
         $.post('{{ route('pembelian_detail.store') }}', $('.form-produk').serialize())
             .done(response => {
                 $('#kode_produk').focus();
-                // Reload tabel pembelian detail
-                table.ajax.reload(() => loadForm($('#diskon').val()));
                 
-                // Refresh data produk di modal untuk update stok dengan delay kecil
+                // Clear input kode produk untuk input berikutnya
+                $('#kode_produk').val('');
+                $('#id_produk').val('');
+                
+                // Reload tabel dengan callback untuk memastikan kalkulasi setelah reload selesai
+                table.ajax.reload(function() {
+                    // Setelah reload selesai, tunggu sebentar untuk DOM ready, lalu kalkulasi
+                    setTimeout(() => {
+                        recalculateTotal();
+                        setTimeout(() => {
+                            loadForm($('#diskon').val());
+                        }, 50);
+                    }, 150);
+                }, false);
+                
+                // Refresh data produk di modal untuk update stok
                 setTimeout(() => {
                     if (table2) {
-                        table2.ajax.reload(null, false); // false = keep current page
+                        table2.ajax.reload(null, false);
                     }
-                }, 100);
+                }, 200);
             })
             .fail(errors => {
                 alert('Tidak dapat menyimpan data');
@@ -708,15 +798,48 @@
 
     function deleteData(url) {
         if (confirm('Yakin ingin menghapus data terpilih?')) {
+            // Simpan informasi baris yang akan dihapus untuk kalkulasi cepat
+            let $rowToDelete = $(event.target).closest('tr');
+            let deletedQuantity = parseInt($rowToDelete.find('.quantity').val()) || 0;
+            let deletedHargaBeli = parseInt($rowToDelete.find('.harga_beli').val()) || 0;
+            let deletedSubtotal = deletedQuantity * deletedHargaBeli;
+            
+            // Hitung total baru secara langsung (tanpa menunggu reload)
+            let currentTotal = parseInt($('#total').val()) || 0;
+            let currentTotalItem = parseInt($('#total_item').val()) || 0;
+            let newTotal = Math.max(0, currentTotal - deletedSubtotal);
+            let newTotalItem = Math.max(0, currentTotalItem - deletedQuantity);
+            
             $.post(url, {
                     '_token': $('[name=csrf-token]').attr('content'),
                     '_method': 'delete'
                 })
                 .done((response) => {
-                    table.ajax.reload(() => loadForm($('#diskon').val()));
+                    // Update total langsung untuk feedback instant
+                    $('#total').val(newTotal);
+                    $('#total_item').val(newTotalItem);
+                    
+                    // Update elemen tersembunyi
+                    if ($('.total').length > 0) {
+                        $('.total').text(newTotal);
+                    }
+                    if ($('.total_item').length > 0) {
+                        $('.total_item').text(newTotalItem);
+                    }
+                    
+                    // Update form dengan nilai yang sudah dihitung untuk feedback instant
+                    loadForm($('#diskon').val());
+                    
+                    // Hapus baris secara visual langsung untuk feedback instant
+                    $rowToDelete.fadeOut(300, function() {
+                        // Setelah animasi selesai, reload tabel
+                        // Kalkulasi akan otomatis terjadi di event draw.dt
+                        table.ajax.reload(null, false);
+                    });
+                    
                     // Refresh data produk di modal untuk update stok
                     if (table2) {
-                        table2.ajax.reload();
+                        table2.ajax.reload(null, false);
                     }
                 })
                 .fail((errors) => {
@@ -727,11 +850,20 @@
     }
 
     function loadForm(diskon = 0) {
-        $('#total').val($('.total').text());
-        $('#total_item').val($('.total_item').text());
+        // Pastikan nilai total dari hidden input atau dari elemen tersembunyi
+        let totalValue = parseInt($('#total').val()) || parseInt($('.total').text()) || 0;
+        let totalItemValue = parseInt($('#total_item').val()) || parseInt($('.total_item').text()) || 0;
+        
+        // Update hidden input dengan nilai yang sudah dipastikan
+        $('#total').val(totalValue);
+        $('#total_item').val(totalItemValue);
 
-        $.get(`{{ url('/pembelian_detail/loadform') }}/${diskon}/${$('.total').text()}`)
+        // Gunakan cache buster sederhana untuk memastikan data fresh
+        let timestamp = Date.now();
+        
+        $.get(`{{ url('/pembelian_detail/loadform') }}/${diskon}/${totalValue}?t=${timestamp}`)
             .done(response => {
+                // Update semua field form secara bersamaan untuk efisiensi
                 $('#totalrp').val('Rp. '+ response.totalrp);
                 $('#bayarrp').val('Rp. '+ response.bayarrp);
                 $('#bayar').val(response.bayar);
@@ -746,6 +878,7 @@
                 }
             })
             .fail(errors => {
+                console.error('Error loading form:', errors);
                 alert('Tidak dapat menampilkan data');
                 return;
             })

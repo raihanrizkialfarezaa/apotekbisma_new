@@ -208,7 +208,7 @@
                             <th class="text-center">Stok Masuk</th>
                             <th class="text-center">Stok Keluar</th>
                             <th class="text-center">Stok Awal</th>
-                            <th class="text-center">Stok Sisa</th>
+                            <th class="text-center">Stok Saat ini</th>
                             <th class="text-center">Keterangan</th>
                         </tr>
                     </thead>
@@ -286,11 +286,7 @@
                 }
             },
             order: [[1, 'desc']], // Order by date descending
-            pageLength: 25,
-            drawCallback: function(settings) {
-                // Add styling to the summary row
-                $(this.api().table().node()).find('tbody tr:last-child').addClass('bg-light-blue');
-            }
+            pageLength: 25
         });
 
         // Initialize Chart
