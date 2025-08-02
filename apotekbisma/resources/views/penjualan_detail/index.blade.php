@@ -208,6 +208,50 @@
         return new Intl.NumberFormat('id-ID').format(angka);
     }
 
+    // Fungsi untuk menghitung ulang total dari tabel - definisikan lebih awal
+    function updateTotalFromTable() {
+        let newTotal = 0;
+        let newTotalItem = 0;
+        
+        // Loop through semua baris tabel (kecuali header dan baris terakhir yang tersembunyi)
+        $('.table-penjualan tbody tr').each(function(index) {
+            let $row = $(this);
+            
+            // Skip baris terakhir yang berisi total hidden
+            if ($row.find('.total').length > 0) {
+                return;
+            }
+            
+            // Ambil jumlah dari input quantity
+            let quantity = parseInt($row.find('.quantity').val()) || 0;
+            newTotalItem += quantity;
+            
+            // Ambil subtotal dari cell (hapus "Rp. " dan format angka)
+            let subtotalText = $row.find('td').eq(6).text(); // Kolom subtotal
+            if (subtotalText && subtotalText.includes('Rp. ')) {
+                // Hapus "Rp. " dan ubah format Indonesia ke format numerik
+                let cleanText = subtotalText.replace('Rp. ', '').replace(/\./g, '').replace(',', '.');
+                let subtotalValue = parseFloat(cleanText) || 0;
+                newTotal += subtotalValue;
+            }
+        });
+        
+        // Update elemen total dan total_item yang tersembunyi
+        $('.total').text(newTotal);
+        $('.total_item').text(newTotalItem);
+    }
+
+    // Fungsi untuk auto-update diterima mengikuti bayar
+    function syncDiterimaWithBayar() {
+        let currentBayar = parseInt($('#bayar').val()) || 0;
+        let currentDiterima = parseInt($('#diterima').val()) || 0;
+        
+        // Jika diterima masih kosong atau 0, atau jika bayar berubah, update diterima
+        if (currentDiterima == 0 || currentDiterima < currentBayar) {
+            $('#diterima').val(currentBayar);
+        }
+    }
+
         @if($id_penjualan)
         table = $('.table-penjualan').DataTable({
             responsive: true,
@@ -232,10 +276,16 @@
             paginate: false
         })
         .on('draw.dt', function () {
-            loadForm($('#diskon').val());
+            // Update total setelah tabel di-draw
             setTimeout(() => {
-                $('#diterima').trigger('input');
-            }, 300);
+                updateTotalFromTable();
+                loadForm($('#diskon').val());
+                setTimeout(() => {
+                    // Auto-update diterima dengan nilai bayar yang baru setelah tabel di-draw
+                    syncDiterimaWithBayar();
+                    $('#diterima').trigger('input');
+                }, 300);
+            }, 100);
         });
         @else
         // Inisialisasi tabel kosong untuk transaksi baru
@@ -436,10 +486,14 @@
                         }
                     }
                     
+                    // Update total dan total_item secara manual setelah perubahan subtotal
+                    updateTotalFromTable();
+                    
                     // Update form summary tanpa reload tabel
                     setTimeout(() => {
                         loadForm($('#diskon').val(), 0, function() {
-                            $('#diterima').val($('#bayar').val());
+                            // Auto-update diterima dengan nilai bayar yang baru
+                            syncDiterimaWithBayar();
                             $('#diterima').trigger('input');
                         });
                     }, 100);
@@ -471,10 +525,12 @@
                     
                     alert(errorMessage);
                     
-                    // Reload form untuk memastikan konsistensi tanpa reload tabel
+                    // Reload form dan update total untuk memastikan konsistensi tanpa reload tabel
                     setTimeout(() => {
+                        updateTotalFromTable();
                         loadForm($('#diskon').val(), 0, function() {
-                            $('#diterima').val($('#bayar').val());
+                            // Auto-update diterima dengan nilai bayar yang baru
+                            syncDiterimaWithBayar();
                             $('#diterima').trigger('input');
                         });
                     }, 100);
@@ -492,9 +548,11 @@
                 $(this).val(0).select();
             }
 
+            // Pastikan total ter-update sebelum loadForm
+            updateTotalFromTable();
             loadForm($(this).val(), 0, function() {
-                // Update diterima immediately after discount change
-                $('#diterima').val($('#bayar').val());
+                // Auto-update diterima dengan nilai bayar yang baru setelah diskon berubah
+                syncDiterimaWithBayar();
                 $('#diterima').trigger('input');
             });
         });
@@ -601,11 +659,15 @@
                 @else
                     // Jika sudah ada transaksi, reload tabel saja
                     table.ajax.reload(() => {
-                        loadForm($('#diskon').val(), 0, function() {
-                            // Update diterima immediately after adding product
-                            $('#diterima').val($('#bayar').val());
-                            $('#diterima').trigger('input');
-                        });
+                        // Update total setelah reload tabel
+                        setTimeout(() => {
+                            updateTotalFromTable();
+                            loadForm($('#diskon').val(), 0, function() {
+                                // Auto-update diterima dengan nilai bayar yang baru setelah menambah produk
+                                syncDiterimaWithBayar();
+                                $('#diterima').trigger('input');
+                            });
+                        }, 100);
                     });
                     
                     // Refresh data produk di modal untuk update stok dengan delay kecil
@@ -645,9 +707,11 @@
         $('#id_member').val(id);
         $('#kode_member').val(kode);
         $('#diskon').val('{{ $diskon }}');
+        // Pastikan total ter-update sebelum loadForm
+        updateTotalFromTable();
         loadForm($('#diskon').val(), 0, function() {
-            // Update diterima immediately after member selection
-            $('#diterima').val($('#bayar').val());
+            // Auto-update diterima dengan nilai bayar yang baru setelah memilih member
+            syncDiterimaWithBayar();
             $('#diterima').focus().select();
         });
         hideMember();
@@ -665,11 +729,15 @@
                 })
                 .done((response) => {
                     table.ajax.reload(() => {
-                        loadForm($('#diskon').val(), 0, function() {
-                            // Update diterima immediately after deletion
-                            $('#diterima').val($('#bayar').val());
-                            $('#diterima').trigger('input');
-                        });
+                        // Update total setelah reload tabel
+                        setTimeout(() => {
+                            updateTotalFromTable();
+                            loadForm($('#diskon').val(), 0, function() {
+                                // Auto-update diterima dengan nilai bayar yang baru setelah menghapus produk
+                                syncDiterimaWithBayar();
+                                $('#diterima').trigger('input');
+                            });
+                        }, 100);
                     });
                     // Refresh data produk di modal untuk update stok
                     if (table2) {
@@ -700,7 +768,16 @@
                 $('.tampil-terbilang').text(response.terbilang);
 
                 // Auto-fill diterima dengan nilai bayar jika diterima masih 0 atau kosong
-                if ($('#diterima').val() == 0 || $('#diterima').val() == '') {
+                // ATAU jika nilai bayar berubah dari sebelumnya
+                let currentDiterima = parseInt($('#diterima').val()) || 0;
+                let newBayar = parseInt(response.bayar) || 0;
+                
+                if (currentDiterima == 0 || currentDiterima == '' || diterima == 0) {
+                    $('#diterima').val(response.bayar);
+                }
+                
+                // Pastikan diterima tidak kurang dari bayar
+                if (currentDiterima < newBayar && newBayar > 0) {
                     $('#diterima').val(response.bayar);
                 }
 
