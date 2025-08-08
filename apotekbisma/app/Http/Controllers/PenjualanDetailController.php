@@ -106,13 +106,7 @@ class PenjualanDetailController extends Controller
             return response()->json('Data gagal disimpan', 400);
         }
 
-        // Normalisasi stok jika negatif
-        if ($produk->stok < 0) {
-            $produk->stok = 0;
-            $produk->save();
-        }
-
-        // Cek stok apakah mencukupi - stok harus > 0
+        // Pastikan stok tidak minus - normalisasi otomatis melalui mutator
         if ($produk->stok <= 0) {
             return response()->json('Stok habis atau tidak tersedia. Produk harus dibeli terlebih dahulu sebelum dapat dijual.', 400);
         }
@@ -147,9 +141,15 @@ class PenjualanDetailController extends Controller
         $detail->subtotal = $produk->harga_jual - ($produk->diskon / 100 * $produk->harga_jual);
         $detail->save();
 
-        // Kurangi stok produk sebanyak 1
-        $produk->stok -= 1;
-        $produk->save();
+        // Gunakan method reduceStock untuk validasi dan pengurangan stok
+        try {
+            $produk->reduceStock(1);
+            $produk->save();
+        } catch (\Exception $e) {
+            // Rollback detail jika gagal mengurangi stok
+            $detail->delete();
+            return response()->json($e->getMessage(), 400);
+        }
 
         // Buat rekaman stok untuk tracking
         RekamanStok::create([
@@ -190,28 +190,32 @@ class PenjualanDetailController extends Controller
                 return response()->json(['message' => 'Jumlah tidak boleh lebih dari 10000'], 400);
             }
             
-            // Normalisasi stok jika negatif
-            if ($produk->stok < 0) {
-                $produk->stok = 0;
-                $produk->save();
-            }
-            
-            // Validasi stok
             $old_jumlah = $detail->jumlah;
             $selisih = $new_jumlah - $old_jumlah;
             
-            // Hitung stok baru dan validasi
-            $new_stok = $produk->stok - $selisih;
-            
-            // Cek apakah stok mencukupi untuk perubahan ini
-            if ($new_stok < 0) {
-                return response()->json([
-                    'message' => 'Stok tidak cukup. Stok tersedia: ' . $produk->stok . ', tambahan dibutuhkan: ' . abs($selisih)
-                ], 500);
+            // Jika ada penambahan jumlah, cek apakah stok mencukupi
+            if ($selisih > 0) {
+                if ($produk->stok < $selisih) {
+                    return response()->json([
+                        'message' => 'Stok tidak cukup. Stok tersedia: ' . $produk->stok . ', tambahan dibutuhkan: ' . $selisih
+                    ], 500);
+                }
             }
             
-            $produk->stok = $new_stok;
-            $produk->update();
+            // Update stok dengan cara yang aman
+            if ($selisih > 0) {
+                // Menambah jumlah - kurangi stok
+                try {
+                    $produk->reduceStock($selisih);
+                } catch (\Exception $e) {
+                    return response()->json(['message' => $e->getMessage()], 500);
+                }
+            } elseif ($selisih < 0) {
+                // Mengurangi jumlah - tambah stok kembali
+                $produk->addStock(abs($selisih));
+            }
+            
+            $produk->save();
             
             // Update detail transaksi
             $detail->jumlah = $new_jumlah;
@@ -229,8 +233,8 @@ class PenjualanDetailController extends Controller
                 $rekaman_stok->update([
                     'waktu' => Carbon::now(),
                     'stok_keluar' => $new_jumlah,
-                    'stok_awal' => $new_stok + $new_jumlah,  // stok sebelum pengurangan
-                    'stok_sisa' => $new_stok,
+                    'stok_awal' => $produk->stok + $new_jumlah,  // stok sebelum pengurangan
+                    'stok_sisa' => $produk->stok,
                 ]);
             } else {
                 // Buat rekaman stok baru jika belum ada
@@ -239,8 +243,8 @@ class PenjualanDetailController extends Controller
                     'id_penjualan' => $detail->id_penjualan,
                     'waktu' => Carbon::now(),
                     'stok_keluar' => $new_jumlah,
-                    'stok_awal' => $new_stok + $new_jumlah,  // stok sebelum pengurangan
-                    'stok_sisa' => $new_stok,
+                    'stok_awal' => $produk->stok + $new_jumlah,  // stok sebelum pengurangan
+                    'stok_sisa' => $produk->stok,
                 ]);
             }
             
@@ -249,7 +253,7 @@ class PenjualanDetailController extends Controller
                 'data' => [
                     'jumlah' => $new_jumlah,
                     'subtotal' => $detail->subtotal,
-                    'stok_tersisa' => $new_stok
+                    'stok_tersisa' => $produk->stok
                 ]
             ], 200);
             
@@ -327,10 +331,10 @@ class PenjualanDetailController extends Controller
         $detail = PenjualanDetail::find($id);
         
         if ($detail) {
-            // Kembalikan stok produk
+            // Kembalikan stok produk dengan method yang aman
             $produk = Produk::find($detail->id_produk);
             if ($produk) {
-                $produk->stok += $detail->jumlah;
+                $produk->addStock($detail->jumlah);
                 $produk->save();
                 
                 // Hapus hanya rekaman stok yang spesifik untuk detail ini

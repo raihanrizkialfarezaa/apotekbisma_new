@@ -148,12 +148,6 @@ class PembelianDetailController extends Controller
             return response()->json('Data gagal disimpan', 400);
         }
 
-        // Normalisasi stok jika negatif
-        if ($produk->stok < 0) {
-            $produk->stok = 0;
-            $produk->save();
-        }
-
         // Selalu buat entry baru untuk memungkinkan produk yang sama ditambahkan berulang kali
         // Ini akan memungkinkan pengelompokan berdasarkan nama produk saat ditampilkan
         $detail = new PembelianDetail();
@@ -165,7 +159,7 @@ class PembelianDetailController extends Controller
         $detail->save();
 
         // UPDATE STOK: Tambah stok karena ini pembelian (default jumlah = 1)
-        $produk->stok = $produk->stok + 1;
+        $produk->addStock(1);
         $produk->save();
 
         // Buat rekaman stok untuk tracking
@@ -176,6 +170,7 @@ class PembelianDetailController extends Controller
             'stok_masuk' => 1,
             'stok_awal' => $produk->stok - 1,  // stok sebelum penambahan
             'stok_sisa' => $produk->stok,
+            'keterangan' => 'Pembelian: Penambahan stok dari supplier'
         ]);
 
         return response()->json('Data berhasil disimpan', 200);
@@ -206,24 +201,18 @@ class PembelianDetailController extends Controller
                 return response()->json(['message' => 'Jumlah tidak boleh lebih dari 10000'], 400);
             }
             
-            // Normalisasi stok jika negatif
-            if ($produk->stok < 0) {
-                $produk->stok = 0;
-                $produk->save();
-            }
-            
             $old_jumlah = $detail->jumlah;
             $selisih = $new_jumlah - $old_jumlah;
             
             // Update stok produk berdasarkan selisih (pembelian menambah stok)
-            $new_stok = $produk->stok + $selisih;
-            
-            // Pastikan stok tidak negatif
-            if ($new_stok < 0) {
-                $new_stok = 0;
+            if ($selisih > 0) {
+                // Menambah jumlah - tambah stok
+                $produk->addStock($selisih);
+            } elseif ($selisih < 0) {
+                // Mengurangi jumlah - kurangi stok
+                $produk->stok = max(0, $produk->stok + $selisih); // Pastikan tidak negatif
             }
             
-            $produk->stok = $new_stok;
             $produk->save();
             
             // Update detail pembelian
@@ -242,8 +231,8 @@ class PembelianDetailController extends Controller
                 $rekaman_stok->update([
                     'waktu' => Carbon::now(),
                     'stok_masuk' => $new_jumlah,
-                    'stok_awal' => $new_stok - $new_jumlah,  // stok sebelum penambahan
-                    'stok_sisa' => $new_stok,
+                    'stok_awal' => $produk->stok - $new_jumlah,  // stok sebelum penambahan
+                    'stok_sisa' => $produk->stok,
                 ]);
             } else {
                 // Buat rekaman stok baru jika belum ada
@@ -252,8 +241,8 @@ class PembelianDetailController extends Controller
                     'id_pembelian' => $detail->id_pembelian,
                     'waktu' => Carbon::now(),
                     'stok_masuk' => $new_jumlah,
-                    'stok_awal' => $new_stok - $new_jumlah,  // stok sebelum penambahan
-                    'stok_sisa' => $new_stok,
+                    'stok_awal' => $produk->stok - $new_jumlah,  // stok sebelum penambahan
+                    'stok_sisa' => $produk->stok,
                 ]);
             }
             
@@ -262,7 +251,7 @@ class PembelianDetailController extends Controller
                 'data' => [
                     'jumlah' => $new_jumlah,
                     'subtotal' => $detail->subtotal,
-                    'stok_tersisa' => $new_stok
+                    'stok_tersisa' => $produk->stok
                 ]
             ], 200);
             
@@ -355,12 +344,7 @@ class PembelianDetailController extends Controller
         if ($produk) {
             // Kurangi stok berdasarkan jumlah yang ada di detail
             $jumlah_dikurangi = $detail->jumlah;
-            $new_stok = $produk->stok - $jumlah_dikurangi;
-            
-            // Pastikan stok tidak negatif
-            if ($new_stok < 0) {
-                $new_stok = 0;
-            }
+            $new_stok = max(0, $produk->stok - $jumlah_dikurangi); // Pastikan tidak negatif
             
             $produk->stok = $new_stok;
             $produk->save();

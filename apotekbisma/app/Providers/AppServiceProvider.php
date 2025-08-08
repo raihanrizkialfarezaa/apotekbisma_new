@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Models\Setting;
+use App\Models\Produk;
+use App\Observers\ProdukObserver;
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
 
@@ -36,5 +38,8 @@ class AppServiceProvider extends ServiceProvider
         config(['app.locale' => 'id']);
         Carbon::setLocale('id');
         date_default_timezone_set('Asia/Jakarta');
+        
+        // Daftarkan observer untuk memastikan stok tidak pernah minus
+        Produk::observe(ProdukObserver::class);
     }
 }
