@@ -10,6 +10,7 @@ use App\Models\Pengeluaran;
 use App\Models\Penjualan;
 use App\Models\PenjualanDetail;
 use App\Models\Produk;
+use App\Models\RekamanStok;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -39,9 +40,12 @@ class DashboardController extends Controller
             // Get comprehensive analytics for admin
             $analytics = $this->getAnalytics($tanggal_awal, $tanggal_akhir, $period);
             
+            // Get stock health status
+            $stockHealth = $this->getStockHealthStatus();
+            
             return view('admin.dashboard', compact(
                 'kategori', 'produk', 'supplier', 'member', 
-                'tanggal_awal', 'tanggal_akhir', 'analytics', 'period'
+                'tanggal_awal', 'tanggal_akhir', 'analytics', 'period', 'stockHealth'
             ));
         } else {
             // Get kasir-specific analytics for today
@@ -512,6 +516,48 @@ class DashboardController extends Controller
         return [
             'labels' => $data_tanggal,
             'penjualan' => $data_penjualan,
+        ];
+    }
+
+    private function getStockHealthStatus()
+    {
+        $totalProduk = Produk::count();
+        $produkStokMinus = Produk::where('stok', '<', 0)->count();
+        $produkStokNol = Produk::where('stok', '=', 0)->count();
+        $produkStokRendah = Produk::where('stok', '>', 0)->where('stok', '<=', 5)->count();
+        
+        // Calculate health score
+        $score = 100;
+        if ($produkStokMinus > 0) $score -= 40;
+        if ($produkStokNol > 0) $score -= min(30, $produkStokNol * 2);
+        if ($produkStokRendah > 0) $score -= min(20, $produkStokRendah);
+        
+        $healthScore = max(0, $score);
+        
+        // Determine status
+        $status = 'healthy';
+        $message = 'Sistem stok dalam kondisi sehat';
+        $alertClass = 'success';
+        
+        if ($healthScore < 60) {
+            $status = 'critical';
+            $message = 'Stok memerlukan sinkronisasi segera';
+            $alertClass = 'danger';
+        } elseif ($healthScore < 80) {
+            $status = 'warning';
+            $message = 'Stok perlu perhatian';
+            $alertClass = 'warning';
+        }
+        
+        return [
+            'health_score' => $healthScore,
+            'status' => $status,
+            'message' => $message,
+            'alert_class' => $alertClass,
+            'produk_minus' => $produkStokMinus,
+            'produk_nol' => $produkStokNol,
+            'produk_rendah' => $produkStokRendah,
+            'total_produk' => $totalProduk
         ];
     }
 }

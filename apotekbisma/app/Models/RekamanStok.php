@@ -13,6 +13,42 @@ class RekamanStok extends Model
     protected $primaryKey = 'id_rekaman_stok';
     protected $guarded = [];
     protected $dates = ['waktu'];
+    
+    public static $skipMutators = false;
+
+    public function setStokAwalAttribute($value)
+    {
+        if (static::$skipMutators) {
+            $this->attributes['stok_awal'] = $value;
+        } else {
+            $this->attributes['stok_awal'] = max(0, intval($value));
+        }
+    }
+
+    public function getStokAwalAttribute($value)
+    {
+        if (static::$skipMutators) {
+            return $value;
+        }
+        return max(0, intval($value));
+    }
+
+    public function setStokSisaAttribute($value)
+    {
+        if (static::$skipMutators) {
+            $this->attributes['stok_sisa'] = $value;
+        } else {
+            $this->attributes['stok_sisa'] = max(0, intval($value));
+        }
+    }
+
+    public function getStokSisaAttribute($value)
+    {
+        if (static::$skipMutators) {
+            return $value;
+        }
+        return max(0, intval($value));
+    }
 
     public function produk()
     {

@@ -22,6 +22,16 @@
 
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
+                @if(auth()->user()->level == 1)
+                <!-- Quick Stock Sync Button for Admin -->
+                <li class="dropdown">
+                    <a href="{{ route('admin.stock-sync.index') }}" class="dropdown-toggle" title="Sinkronisasi Stok">
+                        <i class="fa fa-refresh"></i>
+                        <span class="label label-warning">Stok</span>
+                    </a>
+                </li>
+                @endif
+                
                 <!-- User Account: style can be found in dropdown.less -->
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">

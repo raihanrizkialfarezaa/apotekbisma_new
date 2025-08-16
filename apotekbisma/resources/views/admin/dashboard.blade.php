@@ -87,6 +87,38 @@
 @endsection
 
 @section('content')
+<!-- Stock Health Alert -->
+@if(isset($stockHealth))
+    @if($stockHealth['status'] != 'healthy')
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="alert alert-{{ $stockHealth['alert_class'] }} alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h4><i class="icon fa fa-{{ $stockHealth['status'] == 'critical' ? 'ban' : 'warning' }}"></i> 
+                    Peringatan Stok!</h4>
+                <p>{{ $stockHealth['message'] }}. Health Score: <strong>{{ $stockHealth['health_score'] }}%</strong></p>
+                <ul>
+                    @if($stockHealth['produk_minus'] > 0)
+                        <li><strong>{{ $stockHealth['produk_minus'] }}</strong> produk dengan stok minus</li>
+                    @endif
+                    @if($stockHealth['produk_nol'] > 0)
+                        <li><strong>{{ $stockHealth['produk_nol'] }}</strong> produk dengan stok habis</li>
+                    @endif
+                    @if($stockHealth['produk_rendah'] > 0)
+                        <li><strong>{{ $stockHealth['produk_rendah'] }}</strong> produk dengan stok rendah (≤5)</li>
+                    @endif
+                </ul>
+                <p>
+                    <a href="{{ route('admin.stock-sync.index') }}" class="btn btn-{{ $stockHealth['alert_class'] }}">
+                        <i class="fa fa-refresh"></i> Sinkronisasi Sekarang
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+    @endif
+@endif
+
 <!-- Period Selection -->
 <div class="row period-selector">
     <div class="col-lg-12">
@@ -242,6 +274,104 @@
             <a href="{{ route('supplier.index') }}" class="small-box-footer">
                 Lihat <i class="fa fa-arrow-circle-right"></i>
             </a>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Access Row -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="box box-warning">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    <i class="fa fa-flash"></i> Quick Actions
+                </h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="info-box bg-light-blue">
+                            <span class="info-box-icon"><i class="fa fa-refresh"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Sinkronisasi Stok</span>
+                                <span class="info-box-number">
+                                    @if(isset($stockHealth))
+                                        {{ $stockHealth['health_score'] }}%
+                                        @if($stockHealth['status'] == 'critical')
+                                            <i class="fa fa-exclamation-triangle text-red"></i>
+                                        @elseif($stockHealth['status'] == 'warning')
+                                            <i class="fa fa-warning text-yellow"></i>
+                                        @else
+                                            <i class="fa fa-check text-green"></i>
+                                        @endif
+                                    @else
+                                        Auto Sync
+                                    @endif
+                                </span>
+                                <div class="progress">
+                                    <div class="progress-bar" style="width: {{ isset($stockHealth) ? $stockHealth['health_score'] : 100 }}%"></div>
+                                </div>
+                                <a href="{{ route('admin.stock-sync.index') }}" class="btn btn-sm btn-primary">
+                                    <i class="fa fa-cogs"></i> Kelola Stok
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <div class="info-box bg-green">
+                            <span class="info-box-icon"><i class="fa fa-cart-plus"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Transaksi Baru</span>
+                                <span class="info-box-number">Kasir</span>
+                                <div class="progress">
+                                    <div class="progress-bar" style="width: 100%"></div>
+                                </div>
+                                <a href="{{ route('transaksi.baru') }}" class="btn btn-sm btn-success">
+                                    <i class="fa fa-plus"></i> Mulai Transaksi
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <div class="info-box bg-orange">
+                            <span class="info-box-icon"><i class="fa fa-file-pdf-o"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Laporan</span>
+                                <span class="info-box-number">Export</span>
+                                <div class="progress">
+                                    <div class="progress-bar" style="width: 100%"></div>
+                                </div>
+                                <a href="{{ route('laporan.index') }}" class="btn btn-sm btn-warning">
+                                    <i class="fa fa-download"></i> Buat Laporan
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <div class="info-box bg-gray">
+                            <span class="info-box-icon"><i class="fa fa-cogs"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Pengaturan</span>
+                                <span class="info-box-number">System</span>
+                                <div class="progress">
+                                    <div class="progress-bar" style="width: 100%"></div>
+                                </div>
+                                <a href="{{ route('setting.index') }}" class="btn btn-sm btn-default">
+                                    <i class="fa fa-gear"></i> Konfigurasi
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

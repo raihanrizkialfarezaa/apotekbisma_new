@@ -92,6 +92,11 @@
                     <i class="fa fa-cogs"></i> <span>Pengaturan</span>
                 </a>
             </li>
+            <li>
+                <a href="{{ route('admin.stock-sync.index') }}">
+                    <i class="fa fa-refresh"></i> <span>Sinkronisasi Stok</span>
+                </a>
+            </li>
             @else
             <li>
                 <a href="{{ route('transaksi.index') }}">

@@ -15,8 +15,10 @@ use App\Http\Controllers\{
     SettingController,
     SupplierController,
     UserController,
+    StockSyncController,
 };
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -128,6 +130,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
         Route::get('/setting/first', [SettingController::class, 'show'])->name('setting.show');
         Route::post('/setting', [SettingController::class, 'update'])->name('setting.update');
+        
+        Route::get('/stock-sync', [StockSyncController::class, 'index'])->name('admin.stock-sync.index');
+        Route::post('/stock-sync/perform', [StockSyncController::class, 'performSync'])->name('admin.stock-sync.perform');
+        Route::get('/stock-sync/analysis', [StockSyncController::class, 'getAnalysisData'])->name('admin.stock-sync.analysis');
     });
  
     Route::group(['middleware' => 'level:1,2'], function () {
@@ -135,3 +141,4 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/profil', [UserController::class, 'updateProfil'])->name('user.update_profil');
     });
 });
+

@@ -35,6 +35,11 @@ class Produk extends Model
         return $this->hasOne(Kategori::class, 'id_kategori', 'id_kategori');
     }
 
+    public function rekamanStoks()
+    {
+        return $this->hasMany(RekamanStok::class, 'id_produk', 'id_produk');
+    }
+
     /**
      * Method untuk mengurangi stok dengan validasi
      */
