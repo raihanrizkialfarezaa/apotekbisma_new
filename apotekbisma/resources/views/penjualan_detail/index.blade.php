@@ -510,10 +510,23 @@
                     
                     let errorMessage = 'Tidak dapat menyimpan data';
                     
-                    if (errors.status === 500) {
-                        errorMessage = 'Stok barang tidak cukup';
-                    } else if (errors.responseJSON && errors.responseJSON.message) {
-                        errorMessage = errors.responseJSON.message;
+                    if (errors.status === 400 || errors.status === 500) {
+                        if (errors.responseJSON && errors.responseJSON.message) {
+                            if (errors.responseJSON.message.includes('Tidak dapat mengubah jumlah') ||
+                                errors.responseJSON.message.includes('Stok tersedia') ||
+                                errors.responseJSON.message.includes('Maksimal untuk item ini')) {
+                                errorMessage = '❌ JUMLAH MELEBIHI STOK!\n\n' + errors.responseJSON.message;
+                            } else {
+                                errorMessage = errors.responseJSON.message;
+                            }
+                        } else if (errors.responseText) {
+                            try {
+                                let errorObj = JSON.parse(errors.responseText);
+                                errorMessage = errorObj.message || errorMessage;
+                            } catch (e) {
+                                errorMessage = errors.responseText;
+                            }
+                        }
                     } else if (errors.responseText) {
                         try {
                             let errorObj = JSON.parse(errors.responseText);
@@ -628,8 +641,16 @@
     function pilihProduk(id, kode, stok) {
         // Validasi stok sebelum menambahkan produk
         if (stok <= 0) {
-            alert('Produk tidak dapat dijual karena stok habis!');
+            alert('❌ STOK HABIS!\n\nProduk tidak dapat dijual karena stok sudah habis (0).\nSilakan lakukan pembelian terlebih dahulu.');
             return;
+        }
+        
+        // Peringatan jika stok menipis
+        if (stok <= 3) {
+            const confirmation = confirm(`⚠️ PERINGATAN STOK MENIPIS!\n\nStok tersisa: ${stok} unit\n\nApakah Anda yakin ingin menambahkan produk ini ke keranjang?`);
+            if (!confirmation) {
+                return;
+            }
         }
         
         $('#id_produk').val(id);
@@ -689,8 +710,11 @@
                 
                 if (errors.responseText) {
                     const responseText = errors.responseText;
-                    if (responseText.includes('Stok habis') || responseText.includes('Stok tidak cukup')) {
-                        errorMessage = responseText;
+                    if (responseText.includes('Stok habis') || 
+                        responseText.includes('Stok tidak cukup') || 
+                        responseText.includes('Tidak dapat menambah produk') ||
+                        responseText.includes('Maksimal dapat ditambah')) {
+                        errorMessage = '❌ GAGAL MENAMBAH PRODUK\n\n' + responseText;
                     }
                 }
                 

@@ -21,7 +21,7 @@ class RekamanStok extends Model
         if (static::$skipMutators) {
             $this->attributes['stok_awal'] = $value;
         } else {
-            $this->attributes['stok_awal'] = max(0, intval($value));
+            $this->attributes['stok_awal'] = intval($value);
         }
     }
 
@@ -30,7 +30,7 @@ class RekamanStok extends Model
         if (static::$skipMutators) {
             return $value;
         }
-        return max(0, intval($value));
+        return intval($value);
     }
 
     public function setStokSisaAttribute($value)
@@ -38,7 +38,7 @@ class RekamanStok extends Model
         if (static::$skipMutators) {
             $this->attributes['stok_sisa'] = $value;
         } else {
-            $this->attributes['stok_sisa'] = max(0, intval($value));
+            $this->attributes['stok_sisa'] = intval($value);
         }
     }
 
@@ -47,7 +47,7 @@ class RekamanStok extends Model
         if (static::$skipMutators) {
             return $value;
         }
-        return max(0, intval($value));
+        return intval($value);
     }
 
     public function produk()

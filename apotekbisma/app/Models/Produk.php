@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class Produk extends Model
 {
@@ -14,20 +15,23 @@ class Produk extends Model
     protected $guarded = [];
 
     /**
-     * Mutator untuk memastikan stok tidak pernah negatif
+     * Mutator untuk stok - warning jika akan negatif tapi tidak force ke 0
      */
     public function setStokAttribute($value)
     {
-        // Pastikan stok tidak pernah kurang dari 0
-        $this->attributes['stok'] = max(0, intval($value));
+        $intValue = intval($value);
+        if ($intValue < 0) {
+            Log::warning("Attempting to set negative stock for product ID {$this->id_produk}: {$intValue}");
+        }
+        $this->attributes['stok'] = $intValue;
     }
 
     /**
-     * Accessor untuk stok dengan normalisasi otomatis
+     * Accessor untuk stok
      */
     public function getStokAttribute($value)
     {
-        return max(0, intval($value));
+        return intval($value);
     }
 
     public function kategori()

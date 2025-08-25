@@ -9,6 +9,7 @@ use App\Models\Produk;
 use App\Models\RekamanStok;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
 
@@ -289,45 +290,58 @@ class PenjualanController extends Controller
 
     public function destroy($id)
     {
-        $penjualan = Penjualan::find($id);
+        DB::beginTransaction();
         
-        if (!$penjualan) {
-            return response()->json(['success' => false, 'message' => 'Transaksi tidak ditemukan'], 404);
-        }
-
-        // Hapus record rekaman stok lama yang terkait dengan transaksi ini
-        \App\Models\RekamanStok::where('id_penjualan', $penjualan->id_penjualan)->delete();
-
-        // Ambil detail transaksi untuk mengembalikan stok
-        $detail = PenjualanDetail::where('id_penjualan', $penjualan->id_penjualan)->get();
-        
-        foreach ($detail as $item) {
-            $produk = Produk::find($item->id_produk);
-            if ($produk) {
-                // Kembalikan stok produk sesuai jumlah yang dibeli
-                $stok_awal = $produk->stok;
-                $produk->stok += $item->jumlah;
-                $produk->update();
-                
-                // Buat record untuk melacak pengembalian stok
-                \App\Models\RekamanStok::create([
-                    'id_produk' => $item->id_produk,
-                    'waktu' => now(),
-                    'stok_masuk' => $item->jumlah,
-                    'id_penjualan' => $penjualan->id_penjualan,
-                    'stok_awal' => $stok_awal,
-                    'stok_sisa' => $produk->stok,
-                ]);
-            }
+        try {
+            $penjualan = Penjualan::find($id);
             
-            // Hapus detail transaksi
-            $item->delete();
+            if (!$penjualan) {
+                DB::rollBack();
+                return response()->json(['success' => false, 'message' => 'Transaksi tidak ditemukan'], 404);
+            }
+
+            // Ambil detail transaksi untuk mengembalikan stok
+            $detail = PenjualanDetail::where('id_penjualan', $penjualan->id_penjualan)->get();
+            
+            foreach ($detail as $item) {
+                $produk = Produk::find($item->id_produk);
+                if ($produk) {
+                    // Catat stok sebelum perubahan
+                    $stokSebelum = $produk->stok;
+                    
+                    // Kembalikan stok produk sesuai jumlah yang dijual
+                    $produk->stok = $stokSebelum + $item->jumlah;
+                    $produk->save();
+                    
+                    // Buat rekaman audit untuk pengembalian stok
+                    \App\Models\RekamanStok::create([
+                        'id_produk' => $item->id_produk,
+                        'waktu' => now(),
+                        'stok_masuk' => $item->jumlah,
+                        'stok_awal' => $stokSebelum,
+                        'stok_sisa' => $produk->stok,
+                        'keterangan' => 'Penghapusan transaksi penjualan: Pengembalian stok'
+                    ]);
+                }
+                
+                // Hapus detail transaksi
+                $item->delete();
+            }
+
+            // Hapus semua rekaman stok yang terkait dengan transaksi ini
+            \App\Models\RekamanStok::where('id_penjualan', $penjualan->id_penjualan)->delete();
+
+            // Hapus transaksi
+            $penjualan->delete();
+
+            DB::commit();
+            
+            return response()->json(['success' => true, 'message' => 'Transaksi berhasil dihapus dan stok dikembalikan'], 200);
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()], 500);
         }
-
-        // Hapus transaksi
-        $penjualan->delete();
-
-        return response()->json(['success' => true, 'message' => 'Transaksi berhasil dihapus dan stok dikembalikan'], 200);
     }
 
     public function lanjutkanTransaksi($id)

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\Pembelian;
 use App\Models\PembelianDetail;
 use App\Models\Produk;
@@ -386,42 +387,62 @@ class PembelianController extends Controller
 
     public function destroy($id)
     {
-        $pembelian = Pembelian::find($id);
+        DB::beginTransaction();
         
-        if (!$pembelian) {
-            return response()->json(['success' => false, 'message' => 'Pembelian tidak ditemukan'], 404);
-        }
+        try {
+            $pembelian = Pembelian::find($id);
+            
+            if (!$pembelian) {
+                DB::rollBack();
+                return response()->json(['success' => false, 'message' => 'Pembelian tidak ditemukan'], 404);
+            }
 
-        // Ambil detail pembelian untuk mengembalikan stok
-        $detail = PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)->get();
-        
-        // Proses pengembalian stok untuk setiap item
-        foreach ($detail as $item) {
-            $produk = Produk::find($item->id_produk);
-            if ($produk) {
-                // Kurangi stok sesuai jumlah yang pernah ditambahkan
-                $new_stok = $produk->stok - $item->jumlah;
-                
-                // Pastikan stok tidak negatif
-                if ($new_stok < 0) {
-                    $new_stok = 0;
+            // Ambil detail pembelian untuk mengembalikan stok
+            $detail = PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)->get();
+            
+            // Proses pengembalian stok untuk setiap item
+            foreach ($detail as $item) {
+                $produk = Produk::find($item->id_produk);
+                if ($produk) {
+                    // Catat stok sebelum perubahan
+                    $stokSebelum = $produk->stok;
+                    
+                    // Kurangi stok sesuai jumlah yang pernah ditambahkan
+                    $stokBaru = $stokSebelum - $item->jumlah;
+                    
+                    // Update stok produk (biarkan negatif untuk audit)
+                    $produk->stok = $stokBaru;
+                    $produk->save();
+                    
+                    // Buat rekaman audit untuk pengurangan stok
+                    RekamanStok::create([
+                        'id_produk' => $item->id_produk,
+                        'waktu' => now(),
+                        'stok_keluar' => $item->jumlah,
+                        'stok_awal' => $stokSebelum,
+                        'stok_sisa' => $stokBaru,
+                        'keterangan' => 'Penghapusan transaksi pembelian: Pengurangan stok'
+                    ]);
                 }
                 
-                $produk->stok = $new_stok;
-                $produk->update();
+                // Hapus detail pembelian
+                $item->delete();
             }
+
+            // Hapus semua rekaman stok yang terkait dengan pembelian ini
+            RekamanStok::where('id_pembelian', $pembelian->id_pembelian)->delete();
+
+            // Hapus pembelian
+            $pembelian->delete();
+
+            DB::commit();
             
-            // Hapus detail pembelian
-            $item->delete();
+            return response()->json(['success' => true, 'message' => 'Pembelian berhasil dihapus dan stok disesuaikan'], 200);
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()], 500);
         }
-        
-        // Hapus semua rekaman stok yang terkait dengan pembelian ini
-        RekamanStok::where('id_pembelian', $pembelian->id_pembelian)->delete();
-
-        // Hapus pembelian
-        $pembelian->delete();
-
-        return response()->json(['success' => true, 'message' => 'Pembelian berhasil dihapus dan stok disesuaikan'], 200);
     }
 
     public function cleanupIncompleteTransactions()
