@@ -541,11 +541,11 @@ class DashboardController extends Controller
         
         if ($healthScore < 60) {
             $status = 'critical';
-            $message = 'Stok memerlukan sinkronisasi segera';
+            $message = 'Banyak produk memerlukan restock';
             $alertClass = 'danger';
         } elseif ($healthScore < 80) {
             $status = 'warning';
-            $message = 'Stok perlu perhatian';
+            $message = 'Beberapa produk perlu di-restock';
             $alertClass = 'warning';
         }
         

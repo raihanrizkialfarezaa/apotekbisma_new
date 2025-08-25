@@ -94,23 +94,26 @@
         <div class="col-lg-12">
             <div class="alert alert-{{ $stockHealth['alert_class'] }} alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                <h4><i class="icon fa fa-{{ $stockHealth['status'] == 'critical' ? 'ban' : 'warning' }}"></i> 
-                    Peringatan Stok!</h4>
-                <p>{{ $stockHealth['message'] }}. Health Score: <strong>{{ $stockHealth['health_score'] }}%</strong></p>
+                <h4><i class="icon fa fa-{{ $stockHealth['status'] == 'critical' ? 'exclamation-triangle' : 'warning' }}"></i> 
+                    Peringatan Inventory!</h4>
+                <p>{{ $stockHealth['message'] }}. Inventory Score: <strong>{{ $stockHealth['health_score'] }}%</strong></p>
                 <ul>
                     @if($stockHealth['produk_minus'] > 0)
-                        <li><strong>{{ $stockHealth['produk_minus'] }}</strong> produk dengan stok minus</li>
+                        <li><strong>{{ $stockHealth['produk_minus'] }}</strong> produk dengan stok minus (perlu koreksi)</li>
                     @endif
                     @if($stockHealth['produk_nol'] > 0)
-                        <li><strong>{{ $stockHealth['produk_nol'] }}</strong> produk dengan stok habis</li>
+                        <li><strong>{{ $stockHealth['produk_nol'] }}</strong> produk dengan stok habis (perlu restock)</li>
                     @endif
                     @if($stockHealth['produk_rendah'] > 0)
-                        <li><strong>{{ $stockHealth['produk_rendah'] }}</strong> produk dengan stok rendah (≤5)</li>
+                        <li><strong>{{ $stockHealth['produk_rendah'] }}</strong> produk dengan stok rendah ≤5 (segera restock)</li>
                     @endif
                 </ul>
                 <p>
-                    <a href="{{ route('admin.stock-sync.index') }}" class="btn btn-{{ $stockHealth['alert_class'] }}">
-                        <i class="fa fa-refresh"></i> Sinkronisasi Sekarang
+                    <a href="{{ route('produk.index') }}" class="btn btn-primary">
+                        <i class="fa fa-cubes"></i> Kelola Stok Produk
+                    </a>
+                    <a href="{{ route('admin.stock-sync.index') }}" class="btn btn-info">
+                        <i class="fa fa-refresh"></i> Cek Konsistensi Data
                     </a>
                 </p>
             </div>
