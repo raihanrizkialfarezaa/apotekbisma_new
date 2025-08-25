@@ -278,7 +278,7 @@ class PenjualanDetailController extends Controller
                 $rekaman_stok->update([
                     'waktu' => Carbon::now(),
                     'stok_keluar' => $new_jumlah,
-                    'stok_awal' => $stok_sebelum,
+                    'stok_awal' => $stok_sebelum + $old_jumlah,
                     'stok_sisa' => $produk->stok,
                     'keterangan' => 'Penjualan: Update jumlah transaksi'
                 ]);
@@ -289,7 +289,7 @@ class PenjualanDetailController extends Controller
                     'id_penjualan' => $detail->id_penjualan,
                     'waktu' => Carbon::now(),
                     'stok_keluar' => $new_jumlah,
-                    'stok_awal' => $stok_sebelum,
+                    'stok_awal' => $stok_sebelum + $old_jumlah,
                     'stok_sisa' => $produk->stok,
                     'keterangan' => 'Penjualan: Update jumlah transaksi'
                 ]);
@@ -333,6 +333,9 @@ class PenjualanDetailController extends Controller
         $new_jumlah = $request->jumlah;
         $selisih = $new_jumlah - $old_jumlah;
         
+        // Catat stok sebelum perubahan untuk rekaman yang benar
+        $stok_sebelum_perubahan = $produk->stok;
+        
         // Cek apakah stok mencukupi jika ada penambahan
         if ($selisih > 0 && $produk->stok < $selisih) {
             return response()->json('Stok tidak cukup. Stok tersedia: ' . $produk->stok, 500);
@@ -354,11 +357,11 @@ class PenjualanDetailController extends Controller
                                    ->first();
         
         if ($rekaman_stok) {
-            // Update rekaman stok yang sudah ada
+            // Update rekaman stok yang sudah ada dengan stok_awal yang benar
             $rekaman_stok->update([
                 'waktu' => Carbon::now(),
                 'stok_keluar' => $new_jumlah,
-                'stok_awal' => $produk->stok + $new_jumlah,  // stok sebelum pengurangan
+                'stok_awal' => $stok_sebelum_perubahan + $old_jumlah,
                 'stok_sisa' => $produk->stok,
             ]);
         } else {
@@ -368,7 +371,7 @@ class PenjualanDetailController extends Controller
                 'id_penjualan' => $detail->id_penjualan,
                 'waktu' => Carbon::now(),
                 'stok_keluar' => $new_jumlah,
-                'stok_awal' => $produk->stok + $new_jumlah,  // stok sebelum pengurangan
+                'stok_awal' => $stok_sebelum_perubahan + $old_jumlah,
                 'stok_sisa' => $produk->stok,
             ]);
         }

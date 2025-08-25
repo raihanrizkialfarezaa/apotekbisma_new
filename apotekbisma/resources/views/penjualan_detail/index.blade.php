@@ -675,8 +675,8 @@
                 $('#kode_produk').val('').focus();
                 
                 @if(!$id_penjualan)
-                    // Jika ini adalah produk pertama, reload halaman untuk mendapatkan ID transaksi
-                    location.reload();
+                    // Jika ini adalah produk pertama, redirect ke transaksi aktif
+                    window.location.href = '{{ route('transaksi.aktif') }}';
                 @else
                     // Jika sudah ada transaksi, reload tabel saja
                     table.ajax.reload(() => {

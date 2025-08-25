@@ -151,6 +151,22 @@ class PenjualanController extends Controller
 
     public function create()
     {
+        // SELALU bersihkan session untuk memastikan transaksi baru yang benar-benar bersih
+        session()->forget('id_penjualan');
+        
+        // Tampilkan halaman kosong untuk transaksi baru tanpa membuat record di database
+        $produk = Produk::orderBy('nama_produk')->get();
+        $member = Member::orderBy('nama')->get();
+        $diskon = Setting::first()->diskon ?? 0;
+        $id_penjualan = null;
+        $penjualan = new Penjualan();
+        $memberSelected = new Member();
+
+        return view('penjualan_detail.index', compact('produk', 'member', 'diskon', 'id_penjualan', 'penjualan', 'memberSelected'));
+    }
+
+    public function createOrContinue()
+    {
         // Cek apakah ada transaksi yang sedang berjalan
         if ($id_penjualan = session('id_penjualan')) {
             $penjualan = Penjualan::find($id_penjualan);
@@ -165,15 +181,8 @@ class PenjualanController extends Controller
             }
         }
 
-        // Tampilkan halaman kosong untuk transaksi baru tanpa membuat record di database
-        $produk = Produk::orderBy('nama_produk')->get();
-        $member = Member::orderBy('nama')->get();
-        $diskon = Setting::first()->diskon ?? 0;
-        $id_penjualan = null;
-        $penjualan = new Penjualan();
-        $memberSelected = new Member();
-
-        return view('penjualan_detail.index', compact('produk', 'member', 'diskon', 'id_penjualan', 'penjualan', 'memberSelected'));
+        // Jika tidak ada transaksi aktif, redirect ke transaksi baru
+        return redirect()->route('transaksi.baru');
     }
 
     public function update(Request $request, $id)
@@ -229,9 +238,6 @@ class PenjualanController extends Controller
             $item->diskon = $request->diskon;
             $item->update();
 
-            // TIDAK PERLU UPDATE STOK DI SINI
-            // Stok sudah diupdate secara real-time di PenjualanDetailController
-            // Hanya pastikan rekaman stok sudah ada dan sesuai
             $produk = Produk::find($item->id_produk);
             
             $existing_rekaman = RekamanStok::where('id_penjualan', $id_penjualan)
@@ -239,7 +245,6 @@ class PenjualanController extends Controller
                                           ->first();
             
             if (!$existing_rekaman) {
-                // Jika belum ada rekaman stok, buat tanpa mengubah stok (stok sudah diupdate)
                 RekamanStok::create([
                     'id_produk' => $item->id_produk,
                     'waktu' => Carbon::now(),
