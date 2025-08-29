@@ -147,7 +147,8 @@ class PembelianDetailController extends Controller
         DB::beginTransaction();
         
         try {
-            $produk = Produk::where('id_produk', $request->id_produk)->first();
+            // Lock produk untuk mencegah race condition
+            $produk = Produk::where('id_produk', $request->id_produk)->lockForUpdate()->first();
             if (! $produk) {
                 DB::rollBack();
                 return response()->json('Data gagal disimpan', 400);
@@ -166,7 +167,8 @@ class PembelianDetailController extends Controller
             $detail->save();
 
             // UPDATE STOK: Tambah stok karena ini pembelian
-            $produk->stok = $stok_sebelum + 1;
+            $stok_baru = $stok_sebelum + 1;
+            $produk->stok = $stok_baru;
             $produk->save();
 
             // Buat rekaman stok untuk tracking dengan data yang konsisten
@@ -176,9 +178,15 @@ class PembelianDetailController extends Controller
                 'waktu' => Carbon::now(),
                 'stok_masuk' => 1,
                 'stok_awal' => $stok_sebelum,
-                'stok_sisa' => $produk->stok,
+                'stok_sisa' => $stok_baru,
                 'keterangan' => 'Pembelian: Penambahan stok dari supplier'
             ]);
+
+            // Validasi akhir konsistensi
+            if ($produk->fresh()->stok != $stok_baru) {
+                DB::rollBack();
+                return response()->json('Error: Inkonsistensi stok terdeteksi', 500);
+            }
 
             DB::commit();
             return response()->json('Data berhasil disimpan', 200);
@@ -201,7 +209,8 @@ class PembelianDetailController extends Controller
                 return response()->json(['message' => 'Detail pembelian tidak ditemukan'], 404);
             }
             
-            $produk = Produk::where('id_produk', $detail->id_produk)->first();
+            // Lock produk untuk mencegah race condition
+            $produk = Produk::where('id_produk', $detail->id_produk)->lockForUpdate()->first();
             
             if (!$produk) {
                 DB::rollBack();
@@ -227,7 +236,8 @@ class PembelianDetailController extends Controller
             $stok_sebelum = $produk->stok;
             
             // Update stok produk berdasarkan selisih (pembelian menambah stok)
-            $produk->stok = $stok_sebelum + $selisih;
+            $stok_baru = $stok_sebelum + $selisih;
+            $produk->stok = $stok_baru;
             $produk->save();
             
             // Update detail pembelian
@@ -242,12 +252,13 @@ class PembelianDetailController extends Controller
                                        ->first();
             
             if ($rekaman_stok) {
-                // Update rekaman stok yang sudah ada
+                // Update rekaman stok yang sudah ada dengan perhitungan yang benar
                 $rekaman_stok->update([
                     'waktu' => Carbon::now(),
                     'stok_masuk' => $new_jumlah,
-                    'stok_awal' => $stok_sebelum,
-                    'stok_sisa' => $produk->stok,
+                    'stok_awal' => $stok_sebelum - $old_jumlah, // Stok sebelum ada penambahan sama sekali
+                    'stok_sisa' => $stok_baru,
+                    'keterangan' => 'Pembelian: Update jumlah transaksi'
                 ]);
             } else {
                 // Buat rekaman stok baru jika belum ada
@@ -256,9 +267,16 @@ class PembelianDetailController extends Controller
                     'id_pembelian' => $detail->id_pembelian,
                     'waktu' => Carbon::now(),
                     'stok_masuk' => $new_jumlah,
-                    'stok_awal' => $stok_sebelum,
-                    'stok_sisa' => $produk->stok,
+                    'stok_awal' => $stok_sebelum - $old_jumlah, // Stok sebelum ada penambahan sama sekali
+                    'stok_sisa' => $stok_baru,
+                    'keterangan' => 'Pembelian: Update jumlah transaksi'
                 ]);
+            }
+            
+            // Validasi akhir konsistensi
+            if ($produk->fresh()->stok != $stok_baru) {
+                DB::rollBack();
+                return response()->json(['message' => 'Error: Inkonsistensi stok terdeteksi'], 500);
             }
             
             DB::commit();
@@ -268,7 +286,7 @@ class PembelianDetailController extends Controller
                 'data' => [
                     'jumlah' => $new_jumlah,
                     'subtotal' => $detail->subtotal,
-                    'stok_tersisa' => $produk->stok
+                    'stok_tersisa' => $stok_baru
                 ]
             ], 200);
             

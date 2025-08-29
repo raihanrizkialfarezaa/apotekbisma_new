@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use App\Models\Setting;
 use App\Models\Produk;
+use App\Models\RekamanStok;
 use App\Observers\ProdukObserver;
+use App\Observers\RekamanStokObserver;
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
 
@@ -41,5 +43,8 @@ class AppServiceProvider extends ServiceProvider
         
         // Daftarkan observer untuk memastikan stok tidak pernah minus
         Produk::observe(ProdukObserver::class);
+        
+        // Observer untuk validasi konsistensi rekaman stok
+        RekamanStok::observe(RekamanStokObserver::class);
     }
 }

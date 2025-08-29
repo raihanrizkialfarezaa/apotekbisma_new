@@ -15,13 +15,13 @@ class Produk extends Model
     protected $guarded = [];
 
     /**
-     * Mutator untuk stok - warning jika akan negatif tapi tidak force ke 0
+     * Mutator untuk stok - dengan validasi ketat
      */
     public function setStokAttribute($value)
     {
-        $intValue = intval($value);
-        if ($intValue < 0) {
-            Log::warning("Attempting to set negative stock for product ID {$this->id_produk}: {$intValue}");
+        $intValue = max(0, intval($value)); // Pastikan tidak negatif
+        if ($intValue != intval($value) && intval($value) < 0) {
+            Log::warning("Prevented negative stock for product ID {$this->id_produk}: attempted {$value}, set to {$intValue}");
         }
         $this->attributes['stok'] = $intValue;
     }
