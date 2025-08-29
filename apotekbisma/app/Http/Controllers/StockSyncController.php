@@ -117,93 +117,41 @@ class StockSyncController extends Controller
 
     public function performSync(Request $request)
     {
-        try {
-            // Set memory dan timeout
-            ini_set('memory_limit', '512M');
-            set_time_limit(120);
-            
-            // Log untuk debugging
-            $logFile = storage_path('logs/web-sync-simple.log');
-            $timestamp = now()->format('Y-m-d H:i:s');
-            $logEntry = "[$timestamp] Web sync started\n";
-            file_put_contents($logFile, $logEntry, FILE_APPEND | LOCK_EX);
-            
-            // SISTEM SINKRONISASI SEDERHANA
-            $result = $this->performSimpleSync();
-            
-            $logEntry = "[$timestamp] Web sync completed: " . json_encode($result) . "\n";
-            file_put_contents($logFile, $logEntry, FILE_APPEND | LOCK_EX);
-            
-            return response()->json([
-                'success' => true,
-                'message' => 'Sinkronisasi berhasil!',
-                'data' => $result
-            ]);
-            
-        } catch (\Exception $e) {
-            $logEntry = "[$timestamp] Web sync error: " . $e->getMessage() . "\n";
-            file_put_contents($logFile, $logEntry, FILE_APPEND | LOCK_EX);
-            
-            return response()->json([
-                'success' => false,
-                'message' => 'Error: ' . $e->getMessage()
-            ], 500);
-        }
+        return response()->json([
+            'success' => false,
+            'message' => '🚨 FITUR SINKRONISASI DINONAKTIFKAN UNTUK KEAMANAN DATA!',
+            'details' => [
+                'reason' => 'Fitur ini dapat merusak integritas data dan audit trail',
+                'recommendation' => 'Sistem sudah dilindungi dengan Observer auto-correction',
+                'safe_alternative' => 'Gunakan penyesuaian stok manual melalui transaksi pembelian/penjualan'
+            ]
+        ], 400);
     }
     
     private function performSimpleSync()
     {
         $timestamp = now()->format('Y-m-d H:i:s');
-        $output = "=== SINKRONISASI SEDERHANA ===\n";
+        $output = "=== FITUR SINKRONISASI DINONAKTIFKAN ===\n";
         $output .= "Waktu: $timestamp\n\n";
-        
-        $fixedCount = 0;
-        
-        // 1. Cari semua produk dengan rekaman stok yang tidak konsisten
-        $inconsistentData = DB::table('rekaman_stoks as rs')
-            ->join('produk as p', 'rs.id_produk', '=', 'p.id_produk')
-            ->select('p.id_produk', 'p.nama_produk', 'p.stok as current_stok', 'rs.id_rekaman_stok', 'rs.stok_awal', 'rs.stok_sisa')
-            ->where(function($query) {
-                $query->whereRaw('rs.stok_awal != p.stok')
-                      ->orWhereRaw('rs.stok_sisa != p.stok');
-            })
-            ->whereIn('rs.id_rekaman_stok', function($query) {
-                $query->select(DB::raw('MAX(id_rekaman_stok)'))
-                      ->from('rekaman_stoks')
-                      ->groupBy('id_produk');
-            })
-            ->get();
-        
-        $output .= "Ditemukan " . $inconsistentData->count() . " produk yang tidak konsisten:\n";
-        
-        // 2. Perbaiki satu per satu
-        foreach ($inconsistentData as $data) {
-            $output .= "- {$data->nama_produk}: ";
-            
-            // Update rekaman stok sesuai dengan stok produk saat ini
-            DB::table('rekaman_stoks')
-                ->where('id_rekaman_stok', $data->id_rekaman_stok)
-                ->update([
-                    'stok_awal' => $data->current_stok,
-                    'stok_sisa' => $data->current_stok,
-                    'updated_at' => now()
-                ]);
-            
-            $output .= "Disamakan menjadi {$data->current_stok}\n";
-            $fixedCount++;
-        }
-        
-        if ($fixedCount == 0) {
-            $output .= "Tidak ada data yang perlu diperbaiki\n";
-        }
-        
-        $output .= "\n=== HASIL ===\n";
-        $output .= "Total diperbaiki: $fixedCount produk\n";
+        $output .= "🚨 PERINGATAN KEAMANAN:\n";
+        $output .= "Fitur sinkronisasi ini telah dinonaktifkan karena BERBAHAYA!\n\n";
+        $output .= "ALASAN:\n";
+        $output .= "- Menghancurkan audit trail dan history transaksi\n";
+        $output .= "- Menulis ulang stok_awal dan stok_sisa secara paksa\n";
+        $output .= "- Menciptakan konsistensi palsu yang menyembunyikan masalah\n";
+        $output .= "- Dapat menyebabkan anomali stok seperti '10 + 15 = 0'\n\n";
+        $output .= "SOLUSI AMAN:\n";
+        $output .= "- Sistem Observer sudah otomatis mencegah kesalahan matematika\n";
+        $output .= "- Gunakan penyesuaian stok manual melalui transaksi\n";
+        $output .= "- Manual adjustment lebih aman dan teraudit\n\n";
+        $output .= "Status: DISABLED FOR SAFETY\n";
         
         return [
             'output' => $output,
-            'fixed_count' => $fixedCount,
-            'success' => true
+            'fixed_count' => 0,
+            'success' => false,
+            'disabled' => true,
+            'message' => 'Fitur dinonaktifkan untuk melindungi integritas data'
         ];
     }
 
