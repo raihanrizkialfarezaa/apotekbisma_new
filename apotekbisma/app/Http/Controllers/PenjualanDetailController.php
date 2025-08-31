@@ -383,15 +383,14 @@ class PenjualanDetailController extends Controller
                                    ->first();
         
         if ($rekaman_stok) {
-            // Update rekaman stok yang sudah ada dengan stok_awal yang benar
             $rekaman_stok->update([
                 'waktu' => Carbon::now(),
                 'stok_keluar' => $new_jumlah,
                 'stok_awal' => $stok_sebelum_perubahan + $old_jumlah,
                 'stok_sisa' => $produk->stok,
+                'keterangan' => 'Penjualan: Edit transaksi - Update jumlah produk'
             ]);
         } else {
-            // Buat rekaman stok baru jika belum ada
             RekamanStok::create([
                 'id_produk' => $produk->id_produk,
                 'id_penjualan' => $detail->id_penjualan,
@@ -399,6 +398,7 @@ class PenjualanDetailController extends Controller
                 'stok_keluar' => $new_jumlah,
                 'stok_awal' => $stok_sebelum_perubahan + $old_jumlah,
                 'stok_sisa' => $produk->stok,
+                'keterangan' => 'Penjualan: Edit transaksi - Update jumlah produk'
             ]);
         }
         
