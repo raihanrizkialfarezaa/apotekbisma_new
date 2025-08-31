@@ -151,8 +151,17 @@ class PenjualanController extends Controller
 
     public function create()
     {
-        // SELALU bersihkan session untuk memastikan transaksi baru yang benar-benar bersih
-        session()->forget('id_penjualan');
+        // Jika ada transaksi yang sedang aktif, redirect ke transaksi tersebut
+        if ($id_penjualan = session('id_penjualan')) {
+            $penjualan = Penjualan::find($id_penjualan);
+            if ($penjualan) {
+                // Ada transaksi aktif, lanjutkan transaksi yang ada
+                return redirect()->route('transaksi.aktif');
+            } else {
+                // ID penjualan di session tidak valid, bersihkan session
+                session()->forget('id_penjualan');
+            }
+        }
         
         // Tampilkan halaman kosong untuk transaksi baru tanpa membuat record di database
         $produk = Produk::orderBy('nama_produk')->get();
@@ -175,7 +184,10 @@ class PenjualanController extends Controller
                 $diskon = Setting::first()->diskon ?? 0;
                 $memberSelected = $penjualan->member ?? new Member();
 
-                return view('penjualan_detail.detail', compact('produk', 'member', 'diskon', 'id_penjualan', 'penjualan', 'memberSelected'));
+                return view('penjualan_detail.index', compact('produk', 'member', 'diskon', 'id_penjualan', 'penjualan', 'memberSelected'));
+            } else {
+                // ID penjualan di session tidak valid, bersihkan session
+                session()->forget('id_penjualan');
             }
         }
 

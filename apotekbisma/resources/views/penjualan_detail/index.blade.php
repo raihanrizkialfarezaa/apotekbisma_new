@@ -15,8 +15,10 @@
     .tampil-terbilang {
         padding: 10px;
         background: #f0f0f0;
+        border: 1px solid #ccc;
+        margin-top: 5px;
     }
-
+        
     .table-penjualan tbody tr:last-child {
         display: none;
     }
@@ -153,7 +155,7 @@
                             <div class="form-group row">
                                 <label for="kembali" class="col-lg-2 control-label">Kembali</label>
                                 <div class="col-lg-8">
-                                    <input type="text" id="kembali" name="kembali" class="form-control" value="0" readonly>
+                                    <input type="text" id="kembali" name="kembali" class="form-control" value="Rp. 0" readonly>
                                 </div>
                             </div>
                         </form>
@@ -237,8 +239,16 @@
         });
         
         // Update elemen total dan total_item yang tersembunyi
-        $('.total').text(newTotal);
-        $('.total_item').text(newTotalItem);
+        $('#total').val(newTotal);
+        $('#total_item').val(newTotalItem);
+        
+        // Update form dengan total baru
+        let currentDiskon = parseInt($('#diskon').val()) || 0;
+        let currentDiterima = parseInt($('#diterima').val()) || 0;
+        
+        loadForm(currentDiskon, newTotal, currentDiterima, function() {
+            syncDiterimaWithBayar();
+        });
     }
 
     // Fungsi untuk auto-update diterima mengikuti bayar
@@ -279,12 +289,6 @@
             // Update total setelah tabel di-draw
             setTimeout(() => {
                 updateTotalFromTable();
-                loadForm($('#diskon').val());
-                setTimeout(() => {
-                    // Auto-update diterima dengan nilai bayar yang baru setelah tabel di-draw
-                    syncDiterimaWithBayar();
-                    $('#diterima').trigger('input');
-                }, 300);
             }, 100);
         });
         @else
@@ -489,15 +493,6 @@
                     // Update total dan total_item secara manual setelah perubahan subtotal
                     updateTotalFromTable();
                     
-                    // Update form summary tanpa reload tabel
-                    setTimeout(() => {
-                        loadForm($('#diskon').val(), 0, function() {
-                            // Auto-update diterima dengan nilai bayar yang baru
-                            syncDiterimaWithBayar();
-                            $('#diterima').trigger('input');
-                        });
-                    }, 100);
-                    
                     // Refresh data produk di modal untuk update stok
                     if (table2) {
                         table2.ajax.reload(null, false);
@@ -541,11 +536,6 @@
                     // Reload form dan update total untuk memastikan konsistensi tanpa reload tabel
                     setTimeout(() => {
                         updateTotalFromTable();
-                        loadForm($('#diskon').val(), 0, function() {
-                            // Auto-update diterima dengan nilai bayar yang baru
-                            syncDiterimaWithBayar();
-                            $('#diterima').trigger('input');
-                        });
                     }, 100);
                 })
                 .always(() => {
@@ -563,11 +553,6 @@
 
             // Pastikan total ter-update sebelum loadForm
             updateTotalFromTable();
-            loadForm($(this).val(), 0, function() {
-                // Auto-update diterima dengan nilai bayar yang baru setelah diskon berubah
-                syncDiterimaWithBayar();
-                $('#diterima').trigger('input');
-            });
         });
 
         $('#diterima').on('input', function () {
@@ -575,7 +560,10 @@
                 $(this).val(0).select();
             }
 
-            loadForm($('#diskon').val(), $(this).val());
+            let currentDiskon = parseInt($('#diskon').val()) || 0;
+            let currentTotal = parseInt($('#total').val()) || 0;
+            
+            loadForm(currentDiskon, currentTotal, $(this).val());
         }).focus(function () {
             $(this).select();
         });
@@ -674,15 +662,54 @@
             .done(response => {
                 $('#kode_produk').val('').focus();
                 
-                table.ajax.reload(() => {
-                    setTimeout(() => {
-                        updateTotalFromTable();
-                        loadForm($('#diskon').val(), 0, function() {
-                            syncDiterimaWithBayar();
-                            $('#diterima').trigger('input');
+                @if($id_penjualan)
+                    table.ajax.reload(() => {
+                        setTimeout(() => {
+                            updateTotalFromTable();
+                        }, 100);
+                    });
+                @else
+                    if (response.id_penjualan && typeof table !== 'undefined' && table) {
+                        // Update hidden input dengan ID penjualan baru di semua form
+                        $('input[name="id_penjualan"]').val(response.id_penjualan);
+                        $('.form-penjualan input[name="id_penjualan"]').val(response.id_penjualan);
+                        
+                        table.destroy();
+                        
+                        table = $('.table-penjualan').DataTable({
+                            responsive: true,
+                            processing: true,
+                            serverSide: true,
+                            autoWidth: false,
+                            ajax: {
+                                url: '{{ url('transaksi_detail') }}/' + response.id_penjualan + '/data',
+                            },
+                            columns: [
+                                {data: 'DT_RowIndex', searchable: false, sortable: false},
+                                {data: 'kode_produk'},
+                                {data: 'nama_produk'},
+                                {data: 'harga_jual'},
+                                {data: 'jumlah'},
+                                {data: 'diskon'},
+                                {data: 'subtotal'},
+                                {data: 'aksi', searchable: false, sortable: false},
+                            ],
+                            dom: 'Brt',
+                            bSort: false,
+                            paginate: false
+                        })
+                        .on('draw.dt', function () {
+                            setTimeout(() => {
+                                updateTotalFromTable();
+                            }, 100);
                         });
-                    }, 100);
-                });
+                        
+                        if ($('.btn-simpan').prop('disabled')) {
+                            $('.btn-simpan').prop('disabled', false).removeClass('disabled');
+                            $('.btn-simpan').html('<i class="fa fa-floppy-o"></i> Simpan Transaksi');
+                        }
+                    }
+                @endif
                 
                 setTimeout(() => {
                     if (table2) {
@@ -723,11 +750,6 @@
         $('#diskon').val('{{ $diskon }}');
         // Pastikan total ter-update sebelum loadForm
         updateTotalFromTable();
-        loadForm($('#diskon').val(), 0, function() {
-            // Auto-update diterima dengan nilai bayar yang baru setelah memilih member
-            syncDiterimaWithBayar();
-            $('#diterima').focus().select();
-        });
         hideMember();
     }
 
@@ -746,11 +768,6 @@
                         // Update total setelah reload tabel
                         setTimeout(() => {
                             updateTotalFromTable();
-                            loadForm($('#diskon').val(), 0, function() {
-                                // Auto-update diterima dengan nilai bayar yang baru setelah menghapus produk
-                                syncDiterimaWithBayar();
-                                $('#diterima').trigger('input');
-                            });
                         }, 100);
                     });
                     // Refresh data produk di modal untuk update stok
@@ -765,9 +782,11 @@
         }
     }
 
-    function loadForm(diskon = 0, diterima = 0, callback = null) {
-        let total = $('.total').text() || 0;
-        let totalItem = $('.total_item').text() || 0;
+    function loadForm(diskon = 0, total = 0, diterima = 0, callback = null) {
+        if (total == 0) {
+            total = parseInt($('#total').val()) || 0;
+        }
+        let totalItem = parseInt($('#total_item').val()) || 0;
         
         $('#total').val(total);
         $('#total_item').val(totalItem);
@@ -781,8 +800,6 @@
                 $('.tampil-bayar').text('Bayar: Rp. '+ response.bayarrp);
                 $('.tampil-terbilang').text(response.terbilang);
 
-                // Auto-fill diterima dengan nilai bayar jika diterima masih 0 atau kosong
-                // ATAU jika nilai bayar berubah dari sebelumnya
                 let currentDiterima = parseInt($('#diterima').val()) || 0;
                 let newBayar = parseInt(response.bayar) || 0;
                 
@@ -790,18 +807,23 @@
                     $('#diterima').val(response.bayar);
                 }
                 
-                // Pastikan diterima tidak kurang dari bayar
                 if (currentDiterima < newBayar && newBayar > 0) {
                     $('#diterima').val(response.bayar);
                 }
 
-                $('#kembali').val('Rp.'+ response.kembalirp);
-                if ($('#diterima').val() != 0) {
+                $('#kembali').val('Rp. '+ response.kembalirp);
+                if (parseInt(response.kembali) > 0) {
                     $('.tampil-bayar').text('Kembali: Rp. '+ response.kembalirp);
                     $('.tampil-terbilang').text(response.kembali_terbilang);
+                } else {
+                    $('.tampil-bayar').text('Bayar: Rp. '+ response.bayarrp);
+                    $('.tampil-terbilang').text(response.terbilang);
                 }
+    // Event: setiap kali input diterima berubah, update kembali
+    $(document).on('input', '#diterima', function() {
+        updateTotalFromTable();
+    });
 
-                // Execute callback if provided
                 if (callback && typeof callback === 'function') {
                     callback();
                 }
@@ -811,16 +833,30 @@
                 return;
             });
         @else
-        // Untuk transaksi baru yang belum ada ID
-        $('#totalrp').val('Rp. 0');
-        $('#bayarrp').val('Rp. 0');
-        $('#bayar').val(0);
-        $('.tampil-bayar').text('Bayar: Rp. 0');
-        $('.tampil-terbilang').text('Nol Rupiah');
-        $('#kembali').val('Rp. 0');
-        $('#diterima').val(0);
+        if (total > 0) {
+            let bayar = total - (diskon / 100 * total);
+            let kembali = (diterima != 0) ? diterima - bayar : 0;
+            
+            $('#totalrp').val('Rp. ' + new Intl.NumberFormat('id-ID').format(total));
+            $('#bayarrp').val('Rp. ' + new Intl.NumberFormat('id-ID').format(bayar));
+            $('#bayar').val(bayar);
+            $('.tampil-bayar').text('Bayar: Rp. ' + new Intl.NumberFormat('id-ID').format(bayar));
+            $('.tampil-terbilang').text('Calculated payment');
+            $('#kembali').val('Rp. ' + new Intl.NumberFormat('id-ID').format(kembali));
+            
+            if (diterima == 0 || diterima < bayar) {
+                $('#diterima').val(bayar);
+            }
+        } else {
+            $('#totalrp').val('Rp. 0');
+            $('#bayarrp').val('Rp. 0');
+            $('#bayar').val(0);
+            $('.tampil-bayar').text('Bayar: Rp. 0');
+            $('.tampil-terbilang').text('Nol Rupiah');
+            $('#kembali').val('Rp. 0');
+            $('#diterima').val(0);
+        }
         
-        // Execute callback if provided
         if (callback && typeof callback === 'function') {
             callback();
         }

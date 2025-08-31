@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\SyncStockConsistency::class,
+        // Commands\SyncStockConsistency::class, // Disabled - deprecated
     ];
 
     /**

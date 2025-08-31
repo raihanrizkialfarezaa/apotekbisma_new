@@ -298,7 +298,8 @@
                         <div class="info-box bg-light-blue">
                             <span class="info-box-icon"><i class="fa fa-refresh"></i></span>
                             <div class="info-box-content">
-                                <span class="info-box-text">Sinkronisasi Stok</span>
+                                {{-- Sinkronisasi Stok - Feature removed --}}
+                                <span class="info-box-text">Sistem Terintegrasi</span>
                                 <span class="info-box-number">
                                     @if(isset($stockHealth))
                                         {{ $stockHealth['health_score'] }}%

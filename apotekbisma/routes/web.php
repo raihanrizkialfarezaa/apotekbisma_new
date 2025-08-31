@@ -109,6 +109,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/transaksi/{id}', [PenjualanDetailController::class, 'update'])->name('transaksi.update');
 
         Route::get('/transaksi/{id}/data', [PenjualanDetailController::class, 'data'])->name('transaksi.data');
+        Route::get('/transaksi_detail/{id}/data', [PenjualanDetailController::class, 'data'])->name('transaksi_detail.data');
         Route::get('/transaksi/loadform/{diskon}/{total}/{diterima}', [PenjualanDetailController::class, 'loadForm'])->name('transaksi.load_form');
         Route::get('/transaksi/produk-data', [PenjualanDetailController::class, 'getProdukData'])->name('transaksi.produk_data');
         Route::resource('/transaksi', PenjualanDetailController::class)
@@ -137,7 +138,3 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/profil', [UserController::class, 'updateProfil'])->name('user.update_profil');
     });
 });
-
-Route::get('/test-produk', [ProdukController::class, 'index'])->name('test.produk');
-Route::get('/test-produk-data', [ProdukController::class, 'data'])->name('test.produk.data');
-

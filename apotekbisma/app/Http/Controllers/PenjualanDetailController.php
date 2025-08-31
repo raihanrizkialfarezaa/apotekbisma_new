@@ -204,7 +204,12 @@ class PenjualanDetailController extends Controller
             }
 
             DB::commit();
-            return response()->json('Produk berhasil ditambahkan ke keranjang. Stok tersisa: ' . $stok_baru, 200);
+            return response()->json([
+                'success' => true,
+                'message' => 'Produk berhasil ditambahkan ke keranjang. Stok tersisa: ' . $stok_baru,
+                'id_penjualan' => $id_penjualan,
+                'stok_tersisa' => $stok_baru
+            ], 200);
             
         } catch (\Exception $e) {
             DB::rollBack();
@@ -460,6 +465,7 @@ class PenjualanDetailController extends Controller
             'bayar' => $bayar,
             'bayarrp' => format_uang($bayar),
             'terbilang' => ucwords(terbilang($bayar). ' Rupiah'),
+            'kembali' => $kembali,
             'kembalirp' => format_uang($kembali),
             'kembali_terbilang' => ucwords(terbilang($kembali). ' Rupiah'),
         ];
