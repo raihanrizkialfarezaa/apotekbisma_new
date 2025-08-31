@@ -372,9 +372,13 @@ class PenjualanDetailController extends Controller
             return response()->json('Stok tidak cukup. Stok tersedia: ' . $produk->stok, 500);
         }
         
-        // Update stok produk berdasarkan selisih
-        $produk->stok -= $selisih;
-        $produk->update();
+        if ($selisih > 0) {
+            $produk->stok -= $selisih;
+            $produk->update();
+        } elseif ($selisih < 0) {
+            $produk->stok += abs($selisih);
+            $produk->update();
+        }
         
         // Update detail transaksi
         $detail->jumlah = $new_jumlah;
