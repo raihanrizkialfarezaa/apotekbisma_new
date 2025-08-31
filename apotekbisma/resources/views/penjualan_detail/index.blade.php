@@ -674,36 +674,26 @@
             .done(response => {
                 $('#kode_produk').val('').focus();
                 
-                @if(!$id_penjualan)
-                    // Jika ini adalah produk pertama, redirect ke transaksi aktif
-                    window.location.href = '{{ route('transaksi.aktif') }}';
-                @else
-                    // Jika sudah ada transaksi, reload tabel saja
-                    table.ajax.reload(() => {
-                        // Update total setelah reload tabel
-                        setTimeout(() => {
-                            updateTotalFromTable();
-                            loadForm($('#diskon').val(), 0, function() {
-                                // Auto-update diterima dengan nilai bayar yang baru setelah menambah produk
-                                syncDiterimaWithBayar();
-                                $('#diterima').trigger('input');
-                            });
-                        }, 100);
-                    });
-                    
-                    // Refresh data produk di modal untuk update stok dengan delay kecil
+                table.ajax.reload(() => {
                     setTimeout(() => {
-                        if (table2) {
-                            table2.ajax.reload(null, false); // false = keep current page
-                        }
+                        updateTotalFromTable();
+                        loadForm($('#diskon').val(), 0, function() {
+                            syncDiterimaWithBayar();
+                            $('#diterima').trigger('input');
+                        });
                     }, 100);
-                    
-                    // Aktifkan tombol simpan jika belum aktif
-                    if ($('.btn-simpan').prop('disabled')) {
-                        $('.btn-simpan').prop('disabled', false).removeClass('disabled');
-                        $('.btn-simpan').html('<i class="fa fa-floppy-o"></i> Simpan Transaksi');
+                });
+                
+                setTimeout(() => {
+                    if (table2) {
+                        table2.ajax.reload(null, false);
                     }
-                @endif
+                }, 100);
+                
+                if ($('.btn-simpan').prop('disabled')) {
+                    $('.btn-simpan').prop('disabled', false).removeClass('disabled');
+                    $('.btn-simpan').html('<i class="fa fa-floppy-o"></i> Simpan Transaksi');
+                }
             })
             .fail(errors => {
                 let errorMessage = 'Tidak dapat menyimpan data';
