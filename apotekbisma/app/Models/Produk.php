@@ -15,6 +15,32 @@ class Produk extends Model
     protected $guarded = [];
 
     /**
+     * Boot method untuk event monitoring
+     */
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::updating(function ($product) {
+            if ($product->isDirty('stok')) {
+                $oldStock = $product->getOriginal('stok');
+                $newStock = $product->stok;
+                
+                if (abs($newStock - $oldStock) > 100) {
+                    Log::warning("Large stock change detected", [
+                        'product_id' => $product->id_produk,
+                        'product_name' => $product->nama_produk,
+                        'old_stock' => $oldStock,
+                        'new_stock' => $newStock,
+                        'difference' => $newStock - $oldStock,
+                        'timestamp' => now()
+                    ]);
+                }
+            }
+        });
+    }
+
+    /**
      * Mutator untuk stok - dengan validasi ketat
      */
     public function setStokAttribute($value)
