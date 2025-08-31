@@ -13,7 +13,6 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\SyncStockRecords::class,
         Commands\SyncStockConsistency::class,
     ];
 

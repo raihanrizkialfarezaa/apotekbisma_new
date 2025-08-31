@@ -112,9 +112,6 @@
                     <a href="{{ route('produk.index') }}" class="btn btn-primary">
                         <i class="fa fa-cubes"></i> Kelola Stok Produk
                     </a>
-                    <a href="{{ route('admin.stock-sync.index') }}" class="btn btn-info">
-                        <i class="fa fa-refresh"></i> Cek Konsistensi Data
-                    </a>
                 </p>
             </div>
         </div>
@@ -319,7 +316,7 @@
                                 <div class="progress">
                                     <div class="progress-bar" style="width: {{ isset($stockHealth) ? $stockHealth['health_score'] : 100 }}%"></div>
                                 </div>
-                                <a href="{{ route('admin.stock-sync.index') }}" class="btn btn-sm btn-primary">
+                                <a href="{{ route('produk.index') }}" class="btn btn-sm btn-primary">
                                     <i class="fa fa-cogs"></i> Kelola Stok
                                 </a>
                             </div>
