@@ -143,3 +143,6 @@ Route::group(['middleware' => 'auth'], function () {
     });
 });
 
+Route::get('/test-produk', [ProdukController::class, 'index'])->name('test.produk');
+Route::get('/test-produk-data', [ProdukController::class, 'data'])->name('test.produk.data');
+

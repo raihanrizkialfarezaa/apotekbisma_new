@@ -169,6 +169,9 @@ class ProdukController extends Controller
                 // Tambahkan button "Update Stok Manual" 
                 $buttons .= '<button type="button" onclick="updateStokManual('. $produk->id_produk .', \''. addslashes($produk->nama_produk) .'\', '. $produk->stok .')" class="btn btn-xs btn-success btn-flat" title="Update Stok Manual" data-toggle="tooltip"><i class="fa fa-refresh"></i> Stok</button>';
                 
+                // Tambahkan button "Kartu Stok"
+                $buttons .= '<a href="'. route('kartu_stok.detail', $produk->id_produk) .'" class="btn btn-xs btn-primary btn-flat" title="Lihat Kartu Stok" data-toggle="tooltip" target="_blank"><i class="fa fa-file-text-o"></i> Kartu Stok</a>';
+                
                 $buttons .= '<button type="button" onclick="deleteData(`'. route('produk.destroy', $produk->id_produk) .'`)" class="btn btn-xs btn-danger btn-flat" title="Hapus Produk" data-toggle="tooltip"><i class="fa fa-trash"></i></button>';
                 
                 // Tambahkan button "Beli Sekarang" untuk produk dengan stok <= 1
