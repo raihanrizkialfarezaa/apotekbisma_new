@@ -167,21 +167,18 @@ class PenjualanController extends Controller
 
     public function createOrContinue()
     {
-        // Cek apakah ada transaksi yang sedang berjalan
         if ($id_penjualan = session('id_penjualan')) {
             $penjualan = Penjualan::find($id_penjualan);
             if ($penjualan) {
-                // Jika ada transaksi yang sedang berjalan, lanjutkan transaksi tersebut
                 $produk = Produk::orderBy('nama_produk')->get();
                 $member = Member::orderBy('nama')->get();
                 $diskon = Setting::first()->diskon ?? 0;
                 $memberSelected = $penjualan->member ?? new Member();
 
-                return view('penjualan_detail.index', compact('produk', 'member', 'diskon', 'id_penjualan', 'penjualan', 'memberSelected'));
+                return view('penjualan_detail.detail', compact('produk', 'member', 'diskon', 'id_penjualan', 'penjualan', 'memberSelected'));
             }
         }
 
-        // Jika tidak ada transaksi aktif, redirect ke transaksi baru
         return redirect()->route('transaksi.baru');
     }
 
@@ -357,10 +354,9 @@ class PenjualanController extends Controller
             return redirect()->back()->with('error', 'Transaksi tidak ditemukan');
         }
 
-        // Set session untuk melanjutkan transaksi
         session(['id_penjualan' => $penjualan->id_penjualan]);
         
-        return redirect()->route('transaksi.baru')->with('success', 'Melanjutkan transaksi #' . $penjualan->id_penjualan);
+        return redirect()->route('transaksi.aktif')->with('success', 'Melanjutkan transaksi #' . $penjualan->id_penjualan);
     }
 
     public function editTransaksi($id)
@@ -371,10 +367,9 @@ class PenjualanController extends Controller
             return redirect()->back()->with('error', 'Transaksi tidak ditemukan');
         }
 
-        // Set session untuk mengedit transaksi
         session(['id_penjualan' => $penjualan->id_penjualan]);
         
-        return redirect()->route('transaksi.baru')->with('success', 'Mengedit transaksi #' . $penjualan->id_penjualan);
+        return redirect()->route('transaksi.aktif')->with('success', 'Mengedit transaksi #' . $penjualan->id_penjualan);
     }
 
     public function destroyEmpty()
