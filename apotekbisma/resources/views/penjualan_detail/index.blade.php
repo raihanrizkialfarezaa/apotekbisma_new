@@ -243,14 +243,12 @@
             let currentDiskon = parseFloat($('#diskon').val()) || 0;
             let currentDiterima = parseFloat($('#diterima').val()) || 0;
 
-            // Render client-side langsung (bayar/kembali) supaya UI tidak terasa lambat
             let bayar = newTotal - (currentDiskon / 100 * newTotal);
             bayar = Number(bayar) || 0;
-            let diterimaVal = Number(currentDiterima) || 0;
-            if (!userEditedDiterima && (diterimaVal === 0 || diterimaVal < bayar)) {
-                diterimaVal = bayar;
-                $('#diterima').val(diterimaVal);
+            if (!userEditedDiterima) {
+                $('#diterima').val(bayar);
             }
+            let diterimaVal = Number($('#diterima').val()) || 0;
             let kembali = diterimaVal - bayar;
 
             $('#totalrp').val('Rp. ' + new Intl.NumberFormat('id-ID').format(newTotal));
@@ -795,16 +793,26 @@
                         });
                         if (row) {
                             table.row(row).remove().draw(false);
+                            // After draw completes, update totals
+                            table.on('draw', function handler() {
+                                updateTotalFromTable();
+                                table.off('draw', handler);
+                            });
                         } else {
-                            // Fallback: reload full table
-                            table.ajax.reload();
+                            // Fallback: reload full table then update totals
+                            table.ajax.reload(function() {
+                                updateTotalFromTable();
+                            });
                         }
                     } catch (e) {
                         table.ajax.reload();
                     }
 
                     userEditedDiterima = false;
-                    updateTotalFromTable();
+                    // If draw/reload callbacks didn't run, ensure totals update once after a short tick
+                    setTimeout(() => {
+                        updateTotalFromTable();
+                    }, 0);
 
                     // Refresh data produk di modal untuk update stok
                     if (table2) {
