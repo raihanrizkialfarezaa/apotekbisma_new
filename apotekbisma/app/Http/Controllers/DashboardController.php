@@ -560,4 +560,38 @@ class DashboardController extends Controller
             'total_produk' => $totalProduk
         ];
     }
+
+    public function syncStock(Request $request)
+    {
+        try {
+            $exitCode = \Illuminate\Support\Facades\Artisan::call('stok:sinkronisasi');
+            
+            if ($exitCode === 0) {
+                $output = \Illuminate\Support\Facades\Artisan::output();
+                
+                preg_match('/Produk yang disinkronkan: (\d+)/', $output, $updatedMatches);
+                preg_match('/Produk yang sudah sinkron: (\d+)/', $output, $synchronizedMatches);
+                
+                $updated = isset($updatedMatches[1]) ? (int)$updatedMatches[1] : 0;
+                $synchronized = isset($synchronizedMatches[1]) ? (int)$synchronizedMatches[1] : 0;
+                
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Sinkronisasi stok berhasil',
+                    'updated' => $updated,
+                    'synchronized' => $synchronized
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Gagal menjalankan sinkronisasi stok'
+                ], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }

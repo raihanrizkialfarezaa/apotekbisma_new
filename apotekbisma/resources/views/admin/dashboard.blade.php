@@ -157,6 +157,9 @@
                         <button type="submit" name="period" value="custom" class="btn btn-success btn-sm">
                             <i class="fa fa-search"></i> Tampilkan
                         </button>
+                        <button type="button" id="syncStockBtn" class="btn btn-warning btn-sm" style="margin-left: 10px;">
+                            <i class="fa fa-refresh"></i> Cocokkan data Stok Produk
+                        </button>
                     </div>
                 </form>
                 
@@ -943,6 +946,39 @@ $(function() {
     setInterval(function() {
         location.reload();
     }, 300000);
+
+    // Stock synchronization button handler
+    $('#syncStockBtn').click(function() {
+        var btn = $(this);
+        var originalText = btn.html();
+        
+        // Disable button and show loading
+        btn.prop('disabled', true);
+        btn.html('<i class="fa fa-spinner fa-spin"></i> Memproses...');
+        
+        $.ajax({
+            url: '{{ route("admin.sync.stock") }}',
+            type: 'POST',
+            data: {
+                '_token': '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                alert('Sinkronisasi stok berhasil!\n' + 
+                      'Produk yang disinkronkan: ' + response.updated + '\n' +
+                      'Produk yang sudah sinkron: ' + response.synchronized);
+                location.reload();
+            },
+            error: function(xhr) {
+                alert('Terjadi kesalahan saat sinkronisasi stok');
+                console.error(xhr.responseText);
+            },
+            complete: function() {
+                // Re-enable button
+                btn.prop('disabled', false);
+                btn.html(originalText);
+            }
+        });
+    });
 });
 </script>
 @endpush
