@@ -23,70 +23,89 @@ class SinkronisasiStok extends Command
     {
         $this->info('Memulai sinkronisasi stok...');
         
-        $produkList = Produk::all();
         $updated = 0;
         $synchronized = 0;
+        $currentTime = Carbon::now();
         
-        foreach ($produkList as $produk) {
-            $latestRekaman = RekamanStok::where('id_produk', $produk->id_produk)
-                ->orderBy('waktu', 'desc')
-                ->orderBy('id_rekaman_stok', 'desc')
-                ->first();
+        $produkData = DB::table('produk as p')
+            ->leftJoin(DB::raw('(SELECT id_produk, stok_sisa, 
+                ROW_NUMBER() OVER (PARTITION BY id_produk ORDER BY waktu DESC, id_rekaman_stok DESC) as rn 
+                FROM rekaman_stoks) as latest_rekaman'), function($join) {
+                $join->on('p.id_produk', '=', 'latest_rekaman.id_produk')
+                     ->where('latest_rekaman.rn', '=', 1);
+            })
+            ->select('p.id_produk', 'p.nama_produk', 'p.stok', 'latest_rekaman.stok_sisa')
+            ->whereNotNull('latest_rekaman.stok_sisa')
+            ->whereRaw('p.stok != latest_rekaman.stok_sisa')
+            ->get();
+        
+        if ($produkData->isEmpty()) {
+            $totalProduk = Produk::whereExists(function($query) {
+                $query->select(DB::raw(1))
+                      ->from('rekaman_stoks')
+                      ->whereColumn('rekaman_stoks.id_produk', 'produk.id_produk');
+            })->count();
             
-            if (!$latestRekaman) {
-                continue;
-            }
+            $this->info("Sinkronisasi selesai!");
+            $this->info("Produk yang disinkronkan: 0");
+            $this->info("Produk yang sudah sinkron: {$totalProduk}");
+            return 0;
+        }
+        
+        $insertData = [];
+        $produkNames = [];
+        
+        foreach ($produkData as $row) {
+            $stokProduk = intval($row->stok);
+            $stokSisa = intval($row->stok_sisa);
+            $selisih = $stokProduk - $stokSisa;
             
-            $stokProduk = intval($produk->stok);
-            $stokSisa = intval($latestRekaman->stok_sisa);
+            $insertData[] = [
+                'id_produk' => $row->id_produk,
+                'waktu' => $currentTime,
+                'stok_awal' => $stokSisa,
+                'stok_masuk' => $selisih > 0 ? $selisih : 0,
+                'stok_keluar' => $selisih < 0 ? abs($selisih) : 0,
+                'stok_sisa' => $stokProduk,
+                'keterangan' => 'Sinkronisasi otomatis stok produk',
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime
+            ];
             
-            if ($stokProduk === $stokSisa) {
-                $synchronized++;
-                continue;
-            }
-            
+            $produkNames[] = "{$row->nama_produk} (Selisih: {$selisih})";
+            $updated++;
+        }
+        
+        if (!empty($insertData)) {
             DB::beginTransaction();
-            
             try {
-                RekamanStok::$skipMutators = true;
-                
-                $selisih = $stokProduk - $stokSisa;
-                
-                $newRekaman = new RekamanStok();
-                $newRekaman->id_produk = $produk->id_produk;
-                $newRekaman->waktu = Carbon::now();
-                $newRekaman->stok_awal = $stokSisa;
-                
-                if ($selisih > 0) {
-                    $newRekaman->stok_masuk = $selisih;
-                    $newRekaman->stok_keluar = 0;
-                } else {
-                    $newRekaman->stok_masuk = 0;
-                    $newRekaman->stok_keluar = abs($selisih);
-                }
-                
-                $newRekaman->stok_sisa = $stokProduk;
-                $newRekaman->keterangan = 'Sinkronisasi otomatis stok produk';
-                
-                $newRekaman->save();
-                
-                RekamanStok::$skipMutators = false;
-                
+                DB::table('rekaman_stoks')->insert($insertData);
                 DB::commit();
-                $updated++;
                 
-                $this->line("Produk: {$produk->nama_produk} - Selisih: {$selisih} - Berhasil disinkronkan");
-                
+                foreach ($produkNames as $name) {
+                    $this->line("Produk: {$name} - Berhasil disinkronkan");
+                }
             } catch (\Exception $e) {
                 DB::rollback();
-                RekamanStok::$skipMutators = false;
-                $this->error("Error pada produk {$produk->nama_produk}: " . $e->getMessage());
+                $this->error("Error bulk insert: " . $e->getMessage());
+                return 1;
             }
         }
         
+        $totalSynchronized = DB::table('produk as p')
+            ->leftJoin(DB::raw('(SELECT id_produk, stok_sisa, 
+                ROW_NUMBER() OVER (PARTITION BY id_produk ORDER BY waktu DESC, id_rekaman_stok DESC) as rn 
+                FROM rekaman_stoks) as latest_rekaman'), function($join) {
+                $join->on('p.id_produk', '=', 'latest_rekaman.id_produk')
+                     ->where('latest_rekaman.rn', '=', 1);
+            })
+            ->whereNotNull('latest_rekaman.stok_sisa')
+            ->whereRaw('p.stok = latest_rekaman.stok_sisa')
+            ->count();
+        
         $this->info("Sinkronisasi selesai!");
         $this->info("Produk yang disinkronkan: {$updated}");
-        $this->info("Produk yang sudah sinkron: {$synchronized}");
+        $this->info("Produk yang sudah sinkron: {$totalSynchronized}");
         
         return 0;
     }
