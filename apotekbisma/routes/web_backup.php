@@ -34,8 +34,87 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+Route::get('/debug-current-state', function() {
+    echo "=== Debug Current State ===\n";
+    
+    $rekaman = \App\Models\RekamanStok::where('id_produk', 2)
+                                     ->orderBy('id_rekaman_stok', 'desc')
+                                     ->take(5)
+                                     ->get();
+    
+    foreach ($rekaman as $r) {
+        echo "ID: {$r->id_rekaman_stok} | Waktu: {$r->waktu} | Masuk: {$r->stok_masuk} | Keluar: {$r->stok_keluar}\n";
+        echo "  Penjualan ID: " . ($r->id_penjualan ?? 'NULL') . " | Keterangan: {$r->keterangan}\n";
+        
+        if ($r->id_penjualan) {
+            $penjualan = \App\Models\Penjualan::find($r->id_penjualan);
+            if ($penjualan) {
+                echo "  Penjualan waktu: {$penjualan->waktu}\n";
+                echo "  SYNC STATUS: " . ($r->waktu == $penjualan->waktu ? "SYNCED" : "MISMATCH") . "\n";
+            }
+        }
+        echo "\n";
+    }
+    
+    return response('Debug selesai', 200)->header('Content-Type', 'text/plain');
+});
 
+Route::get('/debug-manual-sync/{id_penjualan}', function($id_penjualan) {
+    echo "=== Manual Sync for Penjualan {$id_penjualan} ===\n";
+    
+    $penjualan = \App\Models\Penjualan::findOrFail($id_penjualan);
+    echo "Penjualan waktu: {$penjualan->waktu}\n\n";
+    
+    $rekamanStok = \App\Models\RekamanStok::where('id_penjualan', $id_penjualan)->get();
+    
+    echo "RekamanStok records before sync:\n";
+    foreach ($rekamanStok as $rekaman) {
+        echo "ID: {$rekaman->id_rekaman_stok} | Waktu: {$rekaman->waktu}\n";
+    }
+    
+    // Perform sync
+    $updated = \App\Models\RekamanStok::where('id_penjualan', $id_penjualan)
+        ->update(['waktu' => $penjualan->waktu]);
+    
+    echo "\nUpdated {$updated} records\n\n";
+    
+    $rekamanStokAfter = \App\Models\RekamanStok::where('id_penjualan', $id_penjualan)->get();
+    echo "RekamanStok records after sync:\n";
+    foreach ($rekamanStokAfter as $rekaman) {
+        echo "ID: {$rekaman->id_rekaman_stok} | Waktu: {$rekaman->waktu}\n";
+    }
+    
+    return response('Manual sync selesai', 200)->header('Content-Type', 'text/plain');
+});
 
+Route::get('/test-update/{id}', function($id) {
+    // Test route to simulate an update without form submission
+    $penjualan = \App\Models\Penjualan::findOrFail($id);
+    
+    echo "=== Testing Update Method ===\n";
+    echo "Penjualan ID: {$penjualan->id_penjualan}\n";
+    echo "Current waktu: {$penjualan->waktu}\n";
+    
+    // Create a fake request with a different date
+    $request = new \Illuminate\Http\Request();
+    $request->replace([
+        'id_member' => $penjualan->id_member,
+        'total_item' => $penjualan->total_item,
+        'total' => $penjualan->total_harga,
+        'diskon' => $penjualan->diskon,
+        'bayar' => $penjualan->bayar,
+        'waktu' => '2025-09-01 00:00:00' // Force different date
+    ]);
+    
+    // Call the update method directly
+    $controller = new \App\Http\Controllers\PenjualanController();
+    $result = $controller->update($request, $id);
+    
+    echo "Update completed\n";
+    echo "Check logs for details\n";
+    
+    return response('Test update selesai', 200)->header('Content-Type', 'text/plain');
+});
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

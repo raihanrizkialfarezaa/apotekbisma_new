@@ -54,7 +54,22 @@ class KartuStokController extends Controller
         foreach ($stok as $item) {
             $row = array();
             $row['DT_RowIndex'] = $no++;
-            $row['tanggal'] = tanggal_indonesia($item->waktu, false);
+            // Use transaction time from Penjualan or Pembelian when available so edits to those
+            // transactions reflect here; otherwise fallback to RekamanStok.waktu
+            $tanggal_source = $item->waktu;
+            if (!empty($item->id_penjualan)) {
+                $penjualan = Penjualan::find($item->id_penjualan);
+                if ($penjualan && $penjualan->waktu) {
+                    $tanggal_source = $penjualan->waktu;
+                }
+            } elseif (!empty($item->id_pembelian)) {
+                $pembelian = Pembelian::find($item->id_pembelian);
+                if ($pembelian && $pembelian->waktu) {
+                    $tanggal_source = $pembelian->waktu;
+                }
+            }
+
+            $row['tanggal'] = tanggal_indonesia($tanggal_source, false);
             
             // Format stock movements
             $row['stok_masuk'] = ($item->stok_masuk != NULL && $item->stok_masuk > 0) 
@@ -278,7 +293,22 @@ class KartuStokController extends Controller
         foreach ($stok as $item) {
             $row = array();
             $row['DT_RowIndex'] = $no++;
-            $row['tanggal'] = tanggal_indonesia($item->waktu, false);
+            // Use transaction time from Penjualan or Pembelian when available so edits to those
+            // transactions reflect here; otherwise fallback to RekamanStok.waktu
+            $tanggal_source = $item->waktu;
+            if (!empty($item->id_penjualan)) {
+                $penjualan = Penjualan::find($item->id_penjualan);
+                if ($penjualan && $penjualan->waktu) {
+                    $tanggal_source = $penjualan->waktu;
+                }
+            } elseif (!empty($item->id_pembelian)) {
+                $pembelian = Pembelian::find($item->id_pembelian);
+                if ($pembelian && $pembelian->waktu) {
+                    $tanggal_source = $pembelian->waktu;
+                }
+            }
+
+            $row['tanggal'] = tanggal_indonesia($tanggal_source, false);
             
             // Format stock movements
             $row['stok_masuk'] = ($item->stok_masuk != NULL && $item->stok_masuk > 0) 

@@ -10,6 +10,7 @@ use App\Models\RekamanStok;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
 
@@ -190,16 +191,33 @@ class PenjualanController extends Controller
 
     public function update(Request $request, $id)
     {
-        $penjualan = Penjualan::findOrFail($id);
-        $penjualan->id_member = $request->id_member;
-        $penjualan->total_item = $request->total_item;
-        $penjualan->total_harga = $request->total;
-        $penjualan->diskon = $request->diskon;
-        $penjualan->bayar = $request->bayar;
-        $penjualan->waktu = $request->waktu;
-        $penjualan->update();
+        DB::beginTransaction();
+        
+        try {
+            $penjualan = Penjualan::findOrFail($id);
+            
+            $waktu_lama = $penjualan->waktu;
+            $waktu_baru = $request->waktu;
+            
+            $penjualan->id_member = $request->id_member;
+            $penjualan->total_item = $request->total_item;
+            $penjualan->total_harga = $request->total;
+            $penjualan->diskon = $request->diskon;
+            $penjualan->bayar = $request->bayar;
+            $penjualan->waktu = $waktu_baru;
+            $penjualan->update();
 
-        return redirect()->route('transaksi.selesai');
+            \App\Models\RekamanStok::where('id_penjualan', $penjualan->id_penjualan)
+                ->update(['waktu' => $waktu_baru]);
+
+            DB::commit();
+            
+            return redirect()->route('transaksi.selesai');
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors('Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 
     public function store(Request $request)
@@ -250,7 +268,7 @@ class PenjualanController extends Controller
             if (!$existing_rekaman) {
                 RekamanStok::create([
                     'id_produk' => $item->id_produk,
-                    'waktu' => Carbon::now(),
+                    'waktu' => $penjualan->waktu ?? Carbon::now(),
                     'stok_keluar' => $item->jumlah,
                     'id_penjualan' => $id_penjualan,
                     'stok_awal' => $produk->stok + $item->jumlah,
@@ -298,6 +316,11 @@ class PenjualanController extends Controller
 
     public function destroy($id)
     {
+        try {
+            Log::info('PenjualanController@destroy called', ['id' => $id, 'user_id' => auth()->id()]);
+        } catch (\Exception $e) {
+            // ignore logging failures
+        }
         DB::beginTransaction();
         
         try {

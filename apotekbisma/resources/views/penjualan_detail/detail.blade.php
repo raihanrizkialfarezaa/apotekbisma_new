@@ -331,7 +331,6 @@
         });
 
         $('.btn-simpan').on('click', function () {
-            // Pastikan tanggal terisi sebelum submit
             const waktuInput = document.getElementById('waktu_transaksi');
             if (waktuInput && (!waktuInput.value || waktuInput.value === '')) {
                 const today = new Date();
@@ -340,7 +339,19 @@
                     String(today.getDate()).padStart(2, '0');
                 waktuInput.value = todayString;
             }
-            
+
+            computeTotalsInDetail();
+
+            const currentTotal = parseFloat($('#total').val()) || 0;
+            if (currentTotal <= 0) {
+                alert('Transaksi kosong. Tambahkan produk sebelum menyimpan.');
+                return false;
+            }
+
+            $('input[name="total"]').val($('#total').val());
+            $('input[name="total_item"]').val($('#total_item').val());
+            $('input[name="bayar"]').val($('#bayar').val());
+
             $('.form-penjualan').submit();
         });
     });

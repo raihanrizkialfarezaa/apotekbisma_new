@@ -12,6 +12,7 @@ use App\Models\Supplier;
 use App\Models\Setting;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Support\Facades\Log;
 
 class PembelianController extends Controller
 {
@@ -297,7 +298,6 @@ class PembelianController extends Controller
     }
     public function update(Request $request, $id)
     {
-        // Validasi server-side
         $request->validate([
             'nomor_faktur' => 'required|string|max:255',
             'total_item' => 'required|integer|min:1',
@@ -314,44 +314,56 @@ class PembelianController extends Controller
             'waktu.date' => 'Format tanggal tidak valid'
         ]);
 
-        $pembelian = Pembelian::findOrFail($request->id_pembelian);
+        DB::beginTransaction();
         
-        // Cek apakah ada detail pembelian
-        $detail = PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)->get();
-        if ($detail->isEmpty()) {
-            return redirect()->back()->with('error', 'Tidak dapat menyimpan transaksi tanpa produk');
-        }
+        try {
+            $pembelian = Pembelian::findOrFail($request->id_pembelian);
+            
+            $detail = PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)->get();
+            if ($detail->isEmpty()) {
+                DB::rollBack();
+                return redirect()->back()->with('error', 'Tidak dapat menyimpan transaksi tanpa produk');
+            }
 
-        // Cek apakah semua produk memiliki jumlah > 0
-        $hasZeroQuantity = $detail->where('jumlah', '<=', 0)->count() > 0;
-        if ($hasZeroQuantity) {
-            return redirect()->back()->with('error', 'Semua produk harus memiliki jumlah lebih dari 0');
-        }
+            $hasZeroQuantity = $detail->where('jumlah', '<=', 0)->count() > 0;
+            if ($hasZeroQuantity) {
+                DB::rollBack();
+                return redirect()->back()->with('error', 'Semua produk harus memiliki jumlah lebih dari 0');
+            }
 
-        // Cek duplikasi nomor faktur
-        $duplicateCheck = Pembelian::where('no_faktur', $request->nomor_faktur)
-                                   ->where('id_pembelian', '!=', $pembelian->id_pembelian)
-                                   ->exists();
-        if ($duplicateCheck) {
-            return redirect()->back()->with('error', 'Nomor faktur sudah digunakan untuk transaksi lain');
-        }
+            $duplicateCheck = Pembelian::where('no_faktur', $request->nomor_faktur)
+                                       ->where('id_pembelian', '!=', $pembelian->id_pembelian)
+                                       ->exists();
+            if ($duplicateCheck) {
+                DB::rollBack();
+                return redirect()->back()->with('error', 'Nomor faktur sudah digunakan untuk transaksi lain');
+            }
 
-        $pembelian->total_item = $request->total_item;
-        $pembelian->total_harga = $request->total;
-        $pembelian->diskon = $request->diskon ?? 0;
-        $pembelian->bayar = $request->bayar;
-        $pembelian->no_faktur = $request->nomor_faktur;
-        if ($request->waktu != NULL) {
-            $pembelian->waktu = $request->waktu;
+            $pembelian->total_item = $request->total_item;
+            $pembelian->total_harga = $request->total;
+            $pembelian->diskon = $request->diskon ?? 0;
+            $pembelian->bayar = $request->bayar;
+            $pembelian->no_faktur = $request->nomor_faktur;
+            if ($request->waktu != NULL) {
+                $pembelian->waktu = $request->waktu;
+            }
+            
+            $pembelian->update();
+
+            \App\Models\RekamanStok::where('id_pembelian', $pembelian->id_pembelian)
+                ->update(['waktu' => $pembelian->waktu]);
+            
+            DB::commit();
+            
+            session()->forget('id_pembelian');
+            session()->forget('id_supplier');
+            
+            return redirect()->route('pembelian.index')->with('success', 'Transaksi pembelian berhasil diperbarui');
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-        
-        $pembelian->update();
-        
-        // Hapus session setelah edit selesai
-        session()->forget('id_pembelian');
-        session()->forget('id_supplier');
-        
-        return redirect()->route('pembelian.index')->with('success', 'Transaksi pembelian berhasil diperbarui');
     }
 
     public function show($id)

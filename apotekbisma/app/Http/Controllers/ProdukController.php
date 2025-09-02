@@ -243,31 +243,13 @@ class ProdukController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, $id)
     {
         $produk = Produk::find($id);
-        $stok_lama = $produk->stok;
         
-        // Update produk
         $produk->update($request->all());
-        
-        // Jika stok diubah, buat rekaman stok untuk tracking
-        if ($request->has('stok') && $request->stok != $stok_lama) {
-            $selisih_stok = $request->stok - $stok_lama;
-            $keterangan_final = "Perubahan Stok Manual: Edit Produk - Form Update";
-            
-            RekamanStok::create([
-                'id_produk' => $produk->id_produk,
-                'waktu' => Carbon::now(),
-                'stok_masuk' => $selisih_stok > 0 ? $selisih_stok : 0,
-                'stok_keluar' => $selisih_stok < 0 ? abs($selisih_stok) : 0,
-                'stok_awal' => $stok_lama,
-                'stok_sisa' => $request->stok,
-                'keterangan' => $keterangan_final
-            ]);
-        }
 
         return response()->json('Data berhasil disimpan', 200);
     }
@@ -300,26 +282,10 @@ class ProdukController extends Controller
         $produk->stok = $stok_baru;
         $produk->save();
 
-        // Buat rekaman stok untuk tracking
-        if ($selisih_stok != 0) {
-            // Format keterangan berdasarkan input user
-            if ($request->keterangan && trim($request->keterangan) != '') {
-                $keterangan_final = "Perubahan Stok Manual: " . trim($request->keterangan);
-            } else {
-                $keterangan_final = "Perubahan Stok Manual";
-            }
-            
-            RekamanStok::create([
-                'id_produk' => $produk->id_produk,
-                'waktu' => Carbon::now(),
-                'stok_masuk' => $selisih_stok > 0 ? $selisih_stok : 0,
-                'stok_keluar' => $selisih_stok < 0 ? abs($selisih_stok) : 0,
-                'stok_awal' => $stok_lama,
-                'stok_sisa' => $stok_baru,
-                'keterangan' => $keterangan_final
-            ]);
-        }
-
+        // DISABLED: Auto-tracking moved to explicit transaction controllers
+        // RekamanStok tracking is now handled by PenjualanController, PembelianController, etc.
+        // Manual stock changes should be done through proper transaction flow
+        
         return response()->json([
             'success' => true,
             'message' => 'Stok berhasil diperbarui',

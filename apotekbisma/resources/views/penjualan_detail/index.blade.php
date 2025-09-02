@@ -410,7 +410,8 @@
 
         // Inisialisasi form berdasarkan kondisi transaksi
         @if($id_penjualan)
-            loadForm($('#diskon').val());
+            // NOTE: removed premature loadForm call here to avoid race with DataTable ajax reload
+            // loadForm will be called from the table.ajax.reload callback after the rows are rendered
         @else
             $('.btn-simpan').prop('disabled', true).addClass('disabled');
             $('.btn-simpan').html('<i class="fa fa-plus"></i> Tambahkan Produk Terlebih Dahulu');

@@ -34,9 +34,6 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-
-
-
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -114,19 +111,22 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/transaksi/{id}/data', [PenjualanDetailController::class, 'data'])->name('transaksi.data');
         Route::get('/transaksi_detail/{id}/data', [PenjualanDetailController::class, 'data'])->name('transaksi_detail.data');
         Route::get('/transaksi/loadform/{diskon}/{total}/{diterima}', [PenjualanDetailController::class, 'loadForm'])->name('transaksi.load_form');
+        Route::get('/transaksi/addproduk', [PenjualanDetailController::class, 'addProduk'])->name('transaksi.add_produk');
+        Route::post('/transaksi/produk-simpan', [PenjualanDetailController::class, 'store'])->name('transaksi.simpan_produk');
+        Route::delete('/transaksi/{id}', [PenjualanDetailController::class, 'destroy'])->name('transaksi.destroy');
+        Route::get('/transaksi/produk/{barcode}/data', [PenjualanDetailController::class, 'getProdukByBarcode'])->name('transaksi.produk.bybarcode');
         Route::get('/transaksi/produk-data', [PenjualanDetailController::class, 'getProdukData'])->name('transaksi.produk_data');
-        Route::resource('/transaksi', PenjualanDetailController::class)
-            ->except('create', 'show', 'edit', 'update');
+
+        Route::get('/kartustok', [KartuStokController::class, 'index'])->name('kartustok.index');
+        Route::get('/kartustok/data', [KartuStokController::class, 'data'])->name('kartustok.data');
+        Route::get('/kartustok/detail/{id}', [KartuStokController::class, 'detail'])->name('kartustok.detail');
+        Route::get('/kartustok/detail/{id}/riwayat', [KartuStokController::class, 'riwayat'])->name('kartustok.riwayat');
     });
 
-    Route::group(['middleware' => 'level:1'], function () {
+    Route::group(['middleware' => 'level:1,2'], function () {
         Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
         Route::get('/laporan/data/{awal}/{akhir}', [LaporanController::class, 'data'])->name('laporan.data');
         Route::get('/laporan/pdf/{awal}/{akhir}', [LaporanController::class, 'exportPDF'])->name('laporan.export_pdf');
-        Route::get('/kartustok', [KartuStokController::class, 'index'])->name('kartu_stok.index');
-        Route::get('/kartustok/data/{id}', [KartuStokController::class, 'data'])->name('kartu_stok.data');
-        Route::get('/kartustok/detail/{id}', [KartuStokController::class, 'detail'])->name('kartu_stok.detail');
-        Route::get('/kartustok/pdf/{id}', [KartuStokController::class, 'exportPDF'])->name('kartu_stok.export_pdf');
 
         Route::get('/user/data', [UserController::class, 'data'])->name('user.data');
         Route::resource('/user', UserController::class);
@@ -135,9 +135,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/setting/first', [SettingController::class, 'show'])->name('setting.show');
         Route::post('/setting', [SettingController::class, 'update'])->name('setting.update');
     });
- 
-    Route::group(['middleware' => 'level:1,2'], function () {
-        Route::get('/profil', [UserController::class, 'profil'])->name('user.profil');
-        Route::post('/profil', [UserController::class, 'updateProfil'])->name('user.update_profil');
-    });
 });
+
+require __DIR__.'/auth.php';

@@ -171,11 +171,13 @@ class PembelianDetailController extends Controller
             $produk->stok = $stok_baru;
             $produk->save();
 
-            // Buat rekaman stok untuk tracking dengan data yang konsisten
+            $pembelian = \App\Models\Pembelian::find($detail->id_pembelian);
+            $waktu_transaksi = $pembelian && $pembelian->waktu ? $pembelian->waktu : Carbon::now();
+            
             RekamanStok::create([
                 'id_produk' => $produk->id_produk,
                 'id_pembelian' => $detail->id_pembelian,
-                'waktu' => Carbon::now(),
+                'waktu' => $waktu_transaksi,
                 'stok_masuk' => 1,
                 'stok_awal' => $stok_sebelum,
                 'stok_sisa' => $stok_baru,
@@ -251,23 +253,24 @@ class PembelianDetailController extends Controller
                                        ->orderBy('id_rekaman_stok', 'desc')
                                        ->first();
             
+            $pembelian = \App\Models\Pembelian::find($detail->id_pembelian);
+            $waktu_transaksi = $pembelian && $pembelian->waktu ? $pembelian->waktu : Carbon::now();
+            
             if ($rekaman_stok) {
-                // Update rekaman stok yang sudah ada dengan perhitungan yang benar
                 $rekaman_stok->update([
-                    'waktu' => Carbon::now(),
+                    'waktu' => $waktu_transaksi,
                     'stok_masuk' => $new_jumlah,
-                    'stok_awal' => $stok_sebelum - $old_jumlah, // Stok sebelum ada penambahan sama sekali
+                    'stok_awal' => $stok_sebelum - $old_jumlah,
                     'stok_sisa' => $stok_baru,
                     'keterangan' => 'Pembelian: Update jumlah transaksi'
                 ]);
             } else {
-                // Buat rekaman stok baru jika belum ada
                 RekamanStok::create([
                     'id_produk' => $produk->id_produk,
                     'id_pembelian' => $detail->id_pembelian,
-                    'waktu' => Carbon::now(),
+                    'waktu' => $waktu_transaksi,
                     'stok_masuk' => $new_jumlah,
-                    'stok_awal' => $stok_sebelum - $old_jumlah, // Stok sebelum ada penambahan sama sekali
+                    'stok_awal' => $stok_sebelum - $old_jumlah,
                     'stok_sisa' => $stok_baru,
                     'keterangan' => 'Pembelian: Update jumlah transaksi'
                 ]);
@@ -338,18 +341,20 @@ class PembelianDetailController extends Controller
         }
         
         if ($rekaman_stok) {
-            // Update rekaman stok yang sudah ada
+            $pembelian = \App\Models\Pembelian::find($detail->id_pembelian);
+
             $rekaman_stok->update([
-                'waktu' => Carbon::now(),
+                'waktu' => $pembelian && $pembelian->waktu ? $pembelian->waktu : Carbon::now(),
                 'stok_masuk' => $new_jumlah,
                 'stok_sisa' => $new_stok,
             ]);
         } else {
-            // Buat rekaman stok baru jika tidak ditemukan
+            $pembelian = \App\Models\Pembelian::find($detail->id_pembelian);
+
             RekamanStok::create([
                 'id_produk' => $detail->id_produk,
                 'id_pembelian' => $detail->id_pembelian,
-                'waktu' => Carbon::now(),
+                'waktu' => $pembelian && $pembelian->waktu ? $pembelian->waktu : Carbon::now(),
                 'stok_masuk' => $new_jumlah,
                 'stok_awal' => $produk->stok,
                 'stok_sisa' => $new_stok,
@@ -370,6 +375,11 @@ class PembelianDetailController extends Controller
 
     public function destroy($id)
     {
+        try {
+            Log::info('PembelianDetailController@destroy called', ['id' => $id, 'user_id' => auth()->id()]);
+        } catch (\Exception $e) {
+            // ignore logging failures
+        }
         DB::beginTransaction();
         
         try {
@@ -389,16 +399,17 @@ class PembelianDetailController extends Controller
                 $produk->stok = $stokSebelum - $detail->jumlah;
                 $produk->save();
                 
-                // Hapus rekaman stok yang terkait
+                // Hapus rekaman stok yang terkait (yang merepresentasikan penambahan)
                 RekamanStok::where('id_pembelian', $detail->id_pembelian)
                            ->where('id_produk', $detail->id_produk)
                            ->where('stok_masuk', $detail->jumlah)
                            ->delete();
-                
-                // Buat rekaman audit untuk pengurangan stok
+
+                $pembelian = \App\Models\Pembelian::find($detail->id_pembelian);
+
                 RekamanStok::create([
                     'id_produk' => $produk->id_produk,
-                    'waktu' => now(),
+                    'waktu' => $pembelian && $pembelian->waktu ? $pembelian->waktu : now(),
                     'stok_keluar' => $detail->jumlah,
                     'stok_awal' => $stokSebelum,
                     'stok_sisa' => $produk->stok,
