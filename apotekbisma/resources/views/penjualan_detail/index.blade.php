@@ -179,6 +179,7 @@
     let table, table2;
     let userEditedDiterima = false;
     let totalUpdateTimeout = null;
+    let loadFormTimeout = null;
     let isLoadingForm = false;
 
     $(function () {
@@ -213,75 +214,78 @@
         return new Intl.NumberFormat('id-ID').format(angka);
     }
 
-    // Fungsi untuk menghitung ulang total dari tabel - definisikan lebih awal
-    function updateTotalFromTable() {
-        clearTimeout(totalUpdateTimeout);
-        // Hitung segera di client untuk responsifitas
-        totalUpdateTimeout = setTimeout(() => {
-            let newTotal = 0;
-            let newTotalItem = 0;
+    // Fungsi untuk menghitung ulang total dari tabel - definisikan lebih awal (exposed globally)
+    window.updateTotalFromTable = function() {
+        // Hitung segera di client untuk responsifitas (synchronous)
+        let newTotal = 0;
+        let newTotalItem = 0;
 
-            $('.table-penjualan tbody tr').each(function(index) {
-                let $row = $(this);
-                if ($row.find('.total').length > 0) {
-                    return;
-                }
-                let quantity = parseInt($row.find('.quantity').val()) || 0;
-                newTotalItem += quantity;
-
-                let subtotalText = $row.find('td').eq(6).text();
-                if (subtotalText && subtotalText.includes('Rp. ')) {
-                    let cleanText = subtotalText.replace('Rp. ', '').replace(/\./g, '').replace(',', '.');
-                    let subtotalValue = parseFloat(cleanText) || 0;
-                    newTotal += subtotalValue;
-                }
-            });
-
-            $('#total').val(newTotal);
-            $('#total_item').val(newTotalItem);
-
-            let currentDiskon = parseFloat($('#diskon').val()) || 0;
-            let currentDiterima = parseFloat($('#diterima').val()) || 0;
-
-            let bayar = newTotal - (currentDiskon / 100 * newTotal);
-            bayar = Number(bayar) || 0;
-            if (!userEditedDiterima) {
-                $('#diterima').val(bayar);
+        $('.table-penjualan tbody tr').each(function(index) {
+            let $row = $(this);
+            if ($row.find('.total').length > 0) {
+                return;
             }
-            let diterimaVal = Number($('#diterima').val()) || 0;
-            let kembali = diterimaVal - bayar;
+            let quantity = parseInt($row.find('.quantity').val()) || 0;
+            newTotalItem += quantity;
 
-            $('#totalrp').val('Rp. ' + new Intl.NumberFormat('id-ID').format(newTotal));
-            $('#bayarrp').val('Rp. ' + new Intl.NumberFormat('id-ID').format(bayar));
-            $('#bayar').val(bayar);
-            $('#kembali').val('Rp. ' + new Intl.NumberFormat('id-ID').format(kembali));
-            if (kembali > 0) {
-                $('.tampil-bayar').text('Kembali: Rp. ' + new Intl.NumberFormat('id-ID').format(kembali));
-            } else {
-                $('.tampil-bayar').text('Bayar: Rp. ' + new Intl.NumberFormat('id-ID').format(bayar));
+            let subtotalText = $row.find('td').eq(6).text();
+            if (subtotalText && subtotalText.includes('Rp. ')) {
+                let cleanText = subtotalText.replace('Rp. ', '').replace(/\./g, '').replace(',', '.');
+                let subtotalValue = parseFloat(cleanText) || 0;
+                newTotal += subtotalValue;
             }
+        });
 
-            // Debounce pemanggilan server untuk terbilang/format agar tidak berulang-ulang
-            if (totalUpdateTimeout) {
-                clearTimeout(totalUpdateTimeout);
-            }
-            totalUpdateTimeout = setTimeout(() => {
-                loadForm(currentDiskon, newTotal, parseFloat($('#diterima').val()) || 0, function() {
-                    syncDiterimaWithBayar();
-                });
-            }, 60);
-        }, 0);
+    $('#total').val(newTotal);
+    $('#total_item').val(newTotalItem);
+
+    let currentDiskon = parseFloat($('#diskon').val()) || 0;
+
+    let bayar = newTotal - (currentDiskon / 100 * newTotal);
+
+    bayar = Number(bayar) || 0;
+
+    if (!userEditedDiterima) {
+        $('#diterima').val(bayar);
     }
 
-    // Fungsi untuk auto-update diterima mengikuti bayar
-    function syncDiterimaWithBayar() {
+    let diterimaVal = Number($('#diterima').val()) || 0;
+
+    let kembali = diterimaVal - bayar;
+
+    $('#totalrp').val('Rp. ' + new Intl.NumberFormat('id-ID').format(newTotal));
+    $('#bayarrp').val('Rp. ' + new Intl.NumberFormat('id-ID').format(bayar));
+    $('#bayar').val(bayar);
+    $('#kembali').val('Rp. ' + new Intl.NumberFormat('id-ID').format(kembali));
+    if (kembali > 0) {
+        $('.tampil-bayar').text('Kembali: Rp. ' + new Intl.NumberFormat('id-ID').format(kembali));
+    } else {
+        $('.tampil-bayar').text('Bayar: Rp. ' + new Intl.NumberFormat('id-ID').format(bayar));
+    }
+
+    // Debounce pemanggilan server untuk terbilang/format agar tidak berulang-ulang
+    if (loadFormTimeout) {
+        clearTimeout(loadFormTimeout);
+    }
+    loadFormTimeout = setTimeout(() => {
+        loadForm(currentDiskon, parseFloat($('#total').val()) || 0, parseFloat($('#diterima').val()) || 0, function() {
+            syncDiterimaWithBayar();
+        });
+
+        loadFormTimeout = null;
+
+    }, 60);
+}
+
+    // Fungsi untuk auto-update diterima mengikuti bayar (exposed globally)
+    window.syncDiterimaWithBayar = function() {
         let currentBayar = parseFloat($('#bayar').val()) || 0;
         let currentDiterima = parseFloat($('#diterima').val()) || 0;
 
         if (isNaN(currentDiterima) || currentDiterima === 0 || currentDiterima < currentBayar) {
             $('#diterima').val(currentBayar);
         }
-    }
+    };
 
         @if($id_penjualan)
         table = $('.table-penjualan').DataTable({
@@ -309,6 +313,15 @@
         })
         .on('draw.dt', function () {
             updateTotalFromTable();
+        });
+
+        // Ensure totals are correct after initial load; sometimes DataTables async load
+        // can race with other scripts, so force a reload and update in the callback.
+        table.ajax.reload(function() {
+            userEditedDiterima = false;
+            updateTotalFromTable();
+            // Pastikan total dikalkulasi terlebih dahulu, lalu kirim (diskon, total, diterima)
+            loadForm($('#diskon').val(), parseFloat($('#total').val()) || 0, parseFloat($('#diterima').val()) || 0);
         });
         @else
         // Inisialisasi tabel kosong untuk transaksi baru
@@ -667,6 +680,7 @@
     }
 
     function tambahProduk() {
+        console.log('[tambahProduk] called, id_produk:', $('#id_produk').val(), 'kode_produk:', $('#kode_produk').val());
         // Pastikan tanggal terisi sebelum menambah produk
         const waktuInput = document.getElementById('waktu_transaksi');
         if (waktuInput && (!waktuInput.value || waktuInput.value === '')) {
@@ -679,6 +693,7 @@
         
         $.post('{{ route('transaksi.store') }}', $('.form-produk').serialize())
             .done(response => {
+                console.log('[tambahProduk].done response:', response);
                 $('#kode_produk').val('').focus();
                 
                 @if($id_penjualan)
@@ -688,11 +703,16 @@
                     });
                 @else
                     if (response.id_penjualan && typeof table !== 'undefined' && table) {
+                        console.log('Reinitializing table for new id_penjualan', response.id_penjualan);
                         // Update hidden input dengan ID penjualan baru di semua form
                         $('input[name="id_penjualan"]').val(response.id_penjualan);
                         $('.form-penjualan input[name="id_penjualan"]').val(response.id_penjualan);
                         
-                        table.destroy();
+                        try {
+                            table.destroy();
+                        } catch(e) {
+                            console.warn('table.destroy failed', e);
+                        }
                         
                         table = $('.table-penjualan').DataTable({
                             responsive: true,
@@ -719,6 +739,14 @@
                         })
                         .on('draw.dt', function () {
                             updateTotalFromTable();
+                        });
+                        // Force initial load and update after table creation
+                        table.ajax.reload(function() {
+                            console.log('table.ajax.reload callback after create');
+                            userEditedDiterima = false;
+                            updateTotalFromTable();
+                            // Pass total explicitly to loadForm: (diskon, total, diterima)
+                            loadForm($('#diskon').val(), parseFloat($('#total').val()) || 0, parseFloat($('#diterima').val()) || 0);
                         });
                         
                         if ($('.btn-simpan').prop('disabled')) {
@@ -827,6 +855,7 @@
     }
 
     function loadForm(diskon = 0, total = 0, diterima = 0, callback = null) {
+        console.log('[loadForm] called with:', {diskon, total, diterima, callback});
         if (total == 0) {
             total = parseInt($('#total').val()) || 0;
         }

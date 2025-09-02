@@ -124,26 +124,17 @@ class PenjualanDetailController extends Controller
                 $id_penjualan = session('id_penjualan');
             }
             
-            $total_di_keranjang = 0;
-            if ($id_penjualan) {
-                $total_di_keranjang = PenjualanDetail::where('id_penjualan', $id_penjualan)
-                                                    ->where('id_produk', $produk->id_produk)
-                                                    ->sum('jumlah');
-            }
-            
             // Jumlah yang akan ditambahkan (default 1)
             $jumlah_tambahan = 1;
-            
-            // VALIDASI KRITIS: Cek apakah stok mencukupi untuk tambahan ini
-            if (($total_di_keranjang + $jumlah_tambahan) > $produk->stok) {
+
+            // VALIDASI: Cukupkan stok saat ini untuk tambahan ini.
+            // Note: produk->stok sudah diupdate setiap kali item ditambahkan, sehingga
+            // membandingkan total_di_keranjang + tambahan terhadap produk->stok
+            // akan menolak penambahan yang seharusnya valid. Cukup periksa apakah
+            // sisa stok (produk->stok) >= jumlah yang akan ditambahkan.
+            if ($produk->stok < $jumlah_tambahan) {
                 DB::rollBack();
-                return response()->json(
-                    'Tidak dapat menambah produk! ' . 
-                    'Stok tersedia: ' . $produk->stok . ', ' .
-                    'Sudah di keranjang: ' . $total_di_keranjang . ', ' .
-                    'Maksimal dapat ditambah: ' . max(0, $produk->stok - $total_di_keranjang), 
-                    400
-                );
+                return response()->json('Tidak dapat menambah produk! Stok tersedia: ' . $produk->stok, 400);
             }
             
             if (!$id_penjualan || !session('id_penjualan')) {

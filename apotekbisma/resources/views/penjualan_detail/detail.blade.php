@@ -261,6 +261,12 @@
             computeTotalsInDetail();
             loadForm($('#diskon').val(), parseFloat($('#diterima').val()) || 0);
         });
+
+        table.ajax.reload(function() {
+            userEditedDiterima = false;
+            computeTotalsInDetail();
+            loadForm($('#diskon').val(), parseFloat($('#total').val()) || 0, parseFloat($('#diterima').val()) || 0);
+        });
         table2 = $('.table-produk').DataTable();
 
         $(document).on('input', '.quantity', function () {
@@ -310,7 +316,7 @@
 
             userEditedDiterima = false;
             computeTotalsInDetail();
-            loadForm($(this).val(), parseFloat($('#diterima').val()) || 0);
+            loadForm($(this).val(), parseFloat($('#total').val()) || 0, parseFloat($('#diterima').val()) || 0);
         });
 
         $('#diterima').on('input', function () {
@@ -319,7 +325,7 @@
             }
             userEditedDiterima = true;
             computeTotalsInDetail();
-            loadForm($('#diskon').val(), parseFloat($(this).val()) || 0);
+            loadForm($('#diskon').val(), parseFloat($('#total').val()) || 0, parseFloat($(this).val()) || 0);
         }).focus(function () {
             $(this).select();
         });
@@ -371,7 +377,7 @@
                 userEditedDiterima = false;
                 table.ajax.reload(null, false);
                 computeTotalsInDetail();
-                loadForm($('#diskon').val(), parseFloat($('#diterima').val()) || 0);
+                loadForm($('#diskon').val(), parseFloat($('#total').val()) || 0, parseFloat($('#diterima').val()) || 0);
             })
             .fail(errors => {
                 alert('Tidak dapat menyimpan data');
@@ -409,7 +415,7 @@
                     userEditedDiterima = false;
                     table.ajax.reload(function() {
                         computeTotalsInDetail();
-                        loadForm($('#diskon').val(), parseFloat($('#diterima').val()) || 0);
+                        loadForm($('#diskon').val(), parseFloat($('#total').val()) || 0, parseFloat($('#diterima').val()) || 0);
                     });
                 })
                 .fail((errors) => {
@@ -419,11 +425,11 @@
         }
     }
 
-    function loadForm(diskon = 0, diterima = 0, callback = null) {
+    function loadForm(diskon = 0, total = 0, diterima = 0, callback = null) {
         $('#total').val($('#total').val() || 0);
         $('#total_item').val($('#total_item').val() || 0);
 
-        $.get(`{{ url('/transaksi/loadform') }}/${diskon}/${$('#total').val()}/${diterima}`)
+        $.get(`{{ url('/transaksi/loadform') }}/${diskon}/${total}/${diterima}`)
             .done(response => {
                 $('#totalrp').val('Rp. '+ response.totalrp);
                 $('#bayarrp').val('Rp. '+ response.bayarrp);

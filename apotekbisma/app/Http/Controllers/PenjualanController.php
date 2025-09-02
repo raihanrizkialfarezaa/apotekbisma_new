@@ -151,18 +151,12 @@ class PenjualanController extends Controller
 
     public function create()
     {
-        // Jika ada transaksi yang sedang aktif, redirect ke transaksi tersebut
-        if ($id_penjualan = session('id_penjualan')) {
-            $penjualan = Penjualan::find($id_penjualan);
-            if ($penjualan) {
-                // Ada transaksi aktif, lanjutkan transaksi yang ada
-                return redirect()->route('transaksi.aktif');
-            } else {
-                // ID penjualan di session tidak valid, bersihkan session
-                session()->forget('id_penjualan');
-            }
+        // Pastikan saat membuka halaman 'Transaksi Baru' kita mulai dengan transaksi baru
+        // sehingga tidak otomatis diarahkan ke transaksi aktif yang tersimpan di session.
+        if (session('id_penjualan')) {
+            session()->forget('id_penjualan');
         }
-        
+
         // Tampilkan halaman kosong untuk transaksi baru tanpa membuat record di database
         $produk = Produk::orderBy('nama_produk')->get();
         $member = Member::orderBy('nama')->get();
