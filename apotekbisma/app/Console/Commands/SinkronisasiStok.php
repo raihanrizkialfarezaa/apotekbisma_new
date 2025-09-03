@@ -27,19 +27,19 @@ class SinkronisasiStok extends Command
         $synchronized = 0;
         $currentTime = Carbon::now();
         
-        $produkData = DB::table('produk as p')
-            ->leftJoin(DB::raw('(SELECT id_produk, stok_sisa, 
-                ROW_NUMBER() OVER (PARTITION BY id_produk ORDER BY waktu DESC, id_rekaman_stok DESC) as rn 
-                FROM rekaman_stoks) as latest_rekaman'), function($join) {
-                $join->on('p.id_produk', '=', 'latest_rekaman.id_produk')
-                     ->where('latest_rekaman.rn', '=', 1);
-            })
-            ->select('p.id_produk', 'p.nama_produk', 'p.stok', 'latest_rekaman.stok_sisa')
-            ->whereNotNull('latest_rekaman.stok_sisa')
-            ->whereRaw('p.stok != latest_rekaman.stok_sisa')
-            ->get();
+        $produkData = DB::select("
+            SELECT p.id_produk, p.nama_produk, p.stok, latest_rekaman.stok_sisa
+            FROM produk as p
+            LEFT JOIN (
+                SELECT id_produk, stok_sisa,
+                ROW_NUMBER() OVER (PARTITION BY id_produk ORDER BY waktu DESC, id_rekaman_stok DESC) as rn
+                FROM rekaman_stoks
+            ) as latest_rekaman ON p.id_produk = latest_rekaman.id_produk AND latest_rekaman.rn = 1
+            WHERE latest_rekaman.stok_sisa IS NOT NULL 
+            AND p.stok != latest_rekaman.stok_sisa
+        ");
         
-        if ($produkData->isEmpty()) {
+        if (empty($produkData)) {
             $totalProduk = Produk::whereExists(function($query) {
                 $query->select(DB::raw(1))
                       ->from('rekaman_stoks')
@@ -92,16 +92,17 @@ class SinkronisasiStok extends Command
             }
         }
         
-        $totalSynchronized = DB::table('produk as p')
-            ->leftJoin(DB::raw('(SELECT id_produk, stok_sisa, 
-                ROW_NUMBER() OVER (PARTITION BY id_produk ORDER BY waktu DESC, id_rekaman_stok DESC) as rn 
-                FROM rekaman_stoks) as latest_rekaman'), function($join) {
-                $join->on('p.id_produk', '=', 'latest_rekaman.id_produk')
-                     ->where('latest_rekaman.rn', '=', 1);
-            })
-            ->whereNotNull('latest_rekaman.stok_sisa')
-            ->whereRaw('p.stok = latest_rekaman.stok_sisa')
-            ->count();
+        $totalSynchronized = DB::select("
+            SELECT COUNT(*) as count
+            FROM produk as p
+            LEFT JOIN (
+                SELECT id_produk, stok_sisa,
+                ROW_NUMBER() OVER (PARTITION BY id_produk ORDER BY waktu DESC, id_rekaman_stok DESC) as rn
+                FROM rekaman_stoks
+            ) as latest_rekaman ON p.id_produk = latest_rekaman.id_produk AND latest_rekaman.rn = 1
+            WHERE latest_rekaman.stok_sisa IS NOT NULL 
+            AND p.stok = latest_rekaman.stok_sisa
+        ")[0]->count;
         
         $this->info("Sinkronisasi selesai!");
         $this->info("Produk yang disinkronkan: {$updated}");
