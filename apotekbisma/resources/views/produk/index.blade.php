@@ -545,7 +545,7 @@
                 
                 if (response.success) {
                     const data = response.data;
-                    let message = 'Stok berhasil diperbarui!\n\n';
+                    let message = 'Stok berhasil diperbarui dan disinkronkan!\n\n';
                     message += 'Produk: ' + $('#produk_info').text() + '\n';
                     message += 'Stok lama: ' + data.stok_lama + ' unit\n';
                     message += 'Stok baru: ' + data.stok_baru + ' unit\n';
@@ -556,6 +556,8 @@
                     } else {
                         message += 'Keterangan: Update stok manual (tanpa keterangan khusus)';
                     }
+                    
+                    message += '\n\n✓ Rekaman stok telah disinkronkan otomatis';
                     
                     alert(message);
                 }

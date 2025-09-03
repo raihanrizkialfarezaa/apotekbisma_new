@@ -11,6 +11,8 @@ use App\Models\Produk;
 use Barryvdh\DomPDF\Facade as PDF;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ProdukController extends Controller
 {
@@ -282,19 +284,54 @@ class ProdukController extends Controller
         $produk->stok = $stok_baru;
         $produk->save();
 
-        // DISABLED: Auto-tracking moved to explicit transaction controllers
-        // RekamanStok tracking is now handled by PenjualanController, PembelianController, etc.
-        // Manual stock changes should be done through proper transaction flow
-        
+        // Jalankan sinkronisasi otomatis untuk produk ini
+        $this->sinkronisasiStokProduk($produk, $request->keterangan ?? 'Update stok manual');
+
         return response()->json([
             'success' => true,
-            'message' => 'Stok berhasil diperbarui',
+            'message' => 'Stok berhasil diperbarui dan disinkronkan',
             'data' => [
                 'stok_lama' => $stok_lama,
                 'stok_baru' => $stok_baru,
                 'selisih' => $selisih_stok
             ]
         ], 200);
+    }
+
+    private function sinkronisasiStokProduk($produk, $keterangan = 'Update stok manual')
+    {
+        try {
+            $currentTime = Carbon::now();
+            
+            // Ambil rekaman stok terakhir untuk produk ini
+            $latestRekaman = DB::table('rekaman_stoks')
+                ->where('id_produk', $produk->id_produk)
+                ->orderBy('waktu', 'desc')
+                ->orderBy('id_rekaman_stok', 'desc')
+                ->first();
+            
+            $stokProduk = intval($produk->stok);
+            $stokSisaTerakhir = $latestRekaman ? intval($latestRekaman->stok_sisa) : 0;
+            
+            // Hanya buat rekaman baru jika ada perbedaan stok
+            if ($stokProduk !== $stokSisaTerakhir) {
+                $selisih = $stokProduk - $stokSisaTerakhir;
+                
+                DB::table('rekaman_stoks')->insert([
+                    'id_produk' => $produk->id_produk,
+                    'waktu' => $currentTime,
+                    'stok_awal' => $stokSisaTerakhir,
+                    'stok_masuk' => $selisih > 0 ? $selisih : 0,
+                    'stok_keluar' => $selisih < 0 ? abs($selisih) : 0,
+                    'stok_sisa' => $stokProduk,
+                    'keterangan' => $keterangan,
+                    'created_at' => $currentTime,
+                    'updated_at' => $currentTime
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error sinkronisasi stok produk: ' . $e->getMessage());
+        }
     }
 
     /**
