@@ -159,35 +159,47 @@
 
     function syncStock() {
         if (confirm('Apakah Anda yakin ingin melakukan sinkronisasi stok produk?\n\nProses ini akan mencocokkan data stok produk dengan rekaman stok terbaru.')) {
-            // Tampilkan loading
-            $('button[onclick="syncStock()"]').prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Memproses...');
+            const btn = $('button[onclick="syncStock()"]');
+            const originalText = btn.html();
             
-            $.post('{{ route("admin.sync.stock") }}', {
-                '_token': $('[name=csrf-token]').attr('content')
-            })
-            .done(function(response) {
-                if (response.success) {
-                    alert('Sinkronisasi berhasil!\n\nProduk yang diperbarui: ' + response.updated + '\nProduk yang sudah sinkron: ' + response.synchronized);
-                    // Reload DataTable jika diperlukan
-                    if (typeof table !== 'undefined') {
-                        table.ajax.reload();
+            btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Memproses...');
+            
+            const startTime = Date.now();
+            
+            $.ajax({
+                url: '{{ route("admin.sync.stock") }}',
+                type: 'POST',
+                data: {
+                    '_token': $('[name=csrf-token]').attr('content')
+                },
+                timeout: 300000,
+                success: function(response) {
+                    const duration = ((Date.now() - startTime) / 1000).toFixed(1);
+                    if (response.success) {
+                        alert('Sinkronisasi berhasil dalam ' + duration + ' detik!\n\n' +
+                              'Produk yang diperbarui: ' + response.updated + '\n' +
+                              'Produk yang sudah sinkron: ' + response.synchronized);
+                        if (typeof table !== 'undefined') {
+                            table.ajax.reload(null, false);
+                        }
+                    } else {
+                        alert('Gagal melakukan sinkronisasi: ' + response.message);
                     }
-                } else {
-                    alert('Gagal melakukan sinkronisasi: ' + response.message);
+                },
+                error: function(xhr) {
+                    let errorMsg = 'Terjadi kesalahan saat melakukan sinkronisasi';
+                    if (xhr.status === 429) {
+                        errorMsg = 'Sinkronisasi sedang berlangsung, silakan tunggu beberapa saat';
+                    } else if (xhr.status === 403) {
+                        errorMsg = 'Anda tidak memiliki akses untuk melakukan sinkronisasi stok';
+                    } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMsg = xhr.responseJSON.message;
+                    }
+                    alert(errorMsg);
+                },
+                complete: function() {
+                    btn.prop('disabled', false).html(originalText);
                 }
-            })
-            .fail(function(xhr) {
-                let errorMsg = 'Terjadi kesalahan saat melakukan sinkronisasi';
-                if (xhr.status === 403) {
-                    errorMsg = 'Anda tidak memiliki akses untuk melakukan sinkronisasi stok';
-                } else if (xhr.responseJSON && xhr.responseJSON.message) {
-                    errorMsg = xhr.responseJSON.message;
-                }
-                alert(errorMsg);
-            })
-            .always(function() {
-                // Kembalikan button ke state normal
-                $('button[onclick="syncStock()"]').prop('disabled', false).html('<i class="fa fa-refresh"></i> Cocokkan data Stok Produk');
             });
         }
     }

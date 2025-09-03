@@ -952,9 +952,10 @@ $(function() {
         var btn = $(this);
         var originalText = btn.html();
         
-        // Disable button and show loading
         btn.prop('disabled', true);
         btn.html('<i class="fa fa-spinner fa-spin"></i> Memproses...');
+        
+        const startTime = Date.now();
         
         $.ajax({
             url: '{{ route("admin.sync.stock") }}',
@@ -962,18 +963,25 @@ $(function() {
             data: {
                 '_token': '{{ csrf_token() }}'
             },
+            timeout: 300000,
             success: function(response) {
-                alert('Sinkronisasi stok berhasil!\n' + 
+                const duration = ((Date.now() - startTime) / 1000).toFixed(1);
+                alert('Sinkronisasi stok berhasil dalam ' + duration + ' detik!\n' + 
                       'Produk yang disinkronkan: ' + response.updated + '\n' +
                       'Produk yang sudah sinkron: ' + response.synchronized);
                 location.reload();
             },
             error: function(xhr) {
-                alert('Terjadi kesalahan saat sinkronisasi stok');
+                let errorMsg = 'Terjadi kesalahan saat sinkronisasi stok';
+                if (xhr.status === 429) {
+                    errorMsg = 'Sinkronisasi sedang berlangsung, silakan tunggu beberapa saat';
+                } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMsg = xhr.responseJSON.message;
+                }
+                alert(errorMsg);
                 console.error(xhr.responseText);
             },
             complete: function() {
-                // Re-enable button
                 btn.prop('disabled', false);
                 btn.html(originalText);
             }

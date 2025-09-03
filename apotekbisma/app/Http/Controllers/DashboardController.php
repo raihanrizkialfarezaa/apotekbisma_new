@@ -564,30 +564,51 @@ class DashboardController extends Controller
     public function syncStock(Request $request)
     {
         try {
-            $exitCode = \Illuminate\Support\Facades\Artisan::call('stok:sinkronisasi');
+            $lockKey = 'sync_stock_in_progress';
+            $lockTimeout = 300;
             
-            if ($exitCode === 0) {
-                $output = \Illuminate\Support\Facades\Artisan::output();
-                
-                preg_match('/Produk yang disinkronkan: (\d+)/', $output, $updatedMatches);
-                preg_match('/Produk yang sudah sinkron: (\d+)/', $output, $synchronizedMatches);
-                
-                $updated = isset($updatedMatches[1]) ? (int)$updatedMatches[1] : 0;
-                $synchronized = isset($synchronizedMatches[1]) ? (int)$synchronizedMatches[1] : 0;
-                
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Sinkronisasi stok berhasil',
-                    'updated' => $updated,
-                    'synchronized' => $synchronized
-                ]);
-            } else {
+            if (cache()->has($lockKey)) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Gagal menjalankan sinkronisasi stok'
-                ], 500);
+                    'message' => 'Sinkronisasi sedang berlangsung, silakan tunggu beberapa saat'
+                ], 429);
+            }
+            
+            cache()->put($lockKey, true, $lockTimeout);
+            
+            try {
+                $exitCode = \Illuminate\Support\Facades\Artisan::call('stok:sinkronisasi');
+                
+                if ($exitCode === 0) {
+                    $output = \Illuminate\Support\Facades\Artisan::output();
+                    
+                    preg_match('/Produk yang disinkronkan: (\d+)/', $output, $updatedMatches);
+                    preg_match('/Produk yang sudah sinkron: (\d+)/', $output, $synchronizedMatches);
+                    
+                    $updated = isset($updatedMatches[1]) ? (int)$updatedMatches[1] : 0;
+                    $synchronized = isset($synchronizedMatches[1]) ? (int)$synchronizedMatches[1] : 0;
+                    
+                    cache()->forget($lockKey);
+                    
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Sinkronisasi stok berhasil',
+                        'updated' => $updated,
+                        'synchronized' => $synchronized
+                    ]);
+                } else {
+                    cache()->forget($lockKey);
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Gagal menjalankan sinkronisasi stok'
+                    ], 500);
+                }
+            } catch (\Exception $e) {
+                cache()->forget($lockKey);
+                throw $e;
             }
         } catch (\Exception $e) {
+            cache()->forget($lockKey);
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan: ' . $e->getMessage()

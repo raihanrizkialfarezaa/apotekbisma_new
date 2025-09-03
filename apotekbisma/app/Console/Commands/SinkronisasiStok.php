@@ -14,6 +14,8 @@ class SinkronisasiStok extends Command
 
     protected $description = 'Sinkronisasi data stok produk dengan rekaman stok';
 
+    private $batchSize = 500;
+
     public function __construct()
     {
         parent::__construct();
@@ -27,23 +29,42 @@ class SinkronisasiStok extends Command
         $synchronized = 0;
         $currentTime = Carbon::now();
         
-        $produkData = DB::table('produk as p')
-            ->join('rekaman_stoks as r', 'p.id_produk', '=', 'r.id_produk')
-            ->leftJoin('rekaman_stoks as r2', function($join) {
-                $join->on('r.id_produk', '=', 'r2.id_produk')
-                     ->where('r.id_rekaman_stok', '<', DB::raw('r2.id_rekaman_stok'));
-            })
-            ->whereNull('r2.id_rekaman_stok')
-            ->whereColumn('p.stok', '!=', 'r.stok_sisa')
-            ->select('p.id_produk', 'p.nama_produk', 'p.stok', 'r.stok_sisa')
-            ->get();
+        $produkDataQuery = "
+            WITH latest_rekaman AS (
+                SELECT 
+                    id_produk,
+                    stok_sisa,
+                    ROW_NUMBER() OVER (PARTITION BY id_produk ORDER BY id_rekaman_stok DESC) as rn
+                FROM rekaman_stoks
+            )
+            SELECT 
+                p.id_produk,
+                p.nama_produk,
+                p.stok,
+                lr.stok_sisa
+            FROM produk p
+            INNER JOIN latest_rekaman lr ON p.id_produk = lr.id_produk
+            WHERE lr.rn = 1 AND p.stok != lr.stok_sisa
+        ";
         
-        if ($produkData->isEmpty()) {
-            $totalProduk = Produk::whereExists(function($query) {
-                $query->select(DB::raw(1))
-                      ->from('rekaman_stoks')
-                      ->whereColumn('rekaman_stoks.id_produk', 'produk.id_produk');
-            })->count();
+        $produkData = DB::select($produkDataQuery);
+        
+        if (empty($produkData)) {
+            $synchronizedQuery = "
+                WITH latest_rekaman AS (
+                    SELECT 
+                        id_produk,
+                        stok_sisa,
+                        ROW_NUMBER() OVER (PARTITION BY id_produk ORDER BY id_rekaman_stok DESC) as rn
+                    FROM rekaman_stoks
+                )
+                SELECT COUNT(*) as total
+                FROM produk p
+                INNER JOIN latest_rekaman lr ON p.id_produk = lr.id_produk
+                WHERE lr.rn = 1 AND p.stok = lr.stok_sisa
+            ";
+            
+            $totalProduk = DB::select($synchronizedQuery)[0]->total ?? 0;
             
             $this->info("Sinkronisasi selesai!");
             $this->info("Produk yang disinkronkan: 0");
@@ -51,55 +72,65 @@ class SinkronisasiStok extends Command
             return 0;
         }
         
-        $insertData = [];
+        $chunks = array_chunk($produkData, $this->batchSize);
         $produkNames = [];
         
-        foreach ($produkData as $row) {
-            $stokProduk = intval($row->stok);
-            $stokSisa = intval($row->stok_sisa);
-            $selisih = $stokProduk - $stokSisa;
-            
-            $insertData[] = [
-                'id_produk' => $row->id_produk,
-                'waktu' => $currentTime,
-                'stok_awal' => $stokSisa,
-                'stok_masuk' => $selisih > 0 ? $selisih : 0,
-                'stok_keluar' => $selisih < 0 ? abs($selisih) : 0,
-                'stok_sisa' => $stokProduk,
-                'keterangan' => 'Sinkronisasi otomatis stok produk',
-                'created_at' => $currentTime,
-                'updated_at' => $currentTime
-            ];
-            
-            $produkNames[] = "{$row->nama_produk} (Selisih: {$selisih})";
-            $updated++;
-        }
-        
-        if (!empty($insertData)) {
-            DB::beginTransaction();
-            try {
-                DB::table('rekaman_stoks')->insert($insertData);
-                DB::commit();
+        DB::beginTransaction();
+        try {
+            foreach ($chunks as $chunk) {
+                $insertData = [];
                 
-                foreach ($produkNames as $name) {
-                    $this->line("Produk: {$name} - Berhasil disinkronkan");
+                foreach ($chunk as $row) {
+                    $stokProduk = intval($row->stok);
+                    $stokSisa = intval($row->stok_sisa);
+                    $selisih = $stokProduk - $stokSisa;
+                    
+                    $insertData[] = [
+                        'id_produk' => $row->id_produk,
+                        'waktu' => $currentTime,
+                        'stok_awal' => $stokSisa,
+                        'stok_masuk' => $selisih > 0 ? $selisih : 0,
+                        'stok_keluar' => $selisih < 0 ? abs($selisih) : 0,
+                        'stok_sisa' => $stokProduk,
+                        'keterangan' => 'Sinkronisasi otomatis stok produk',
+                        'created_at' => $currentTime,
+                        'updated_at' => $currentTime
+                    ];
+                    
+                    $produkNames[] = "{$row->nama_produk} (Selisih: {$selisih})";
+                    $updated++;
                 }
-            } catch (\Exception $e) {
-                DB::rollback();
-                $this->error("Error bulk insert: " . $e->getMessage());
-                return 1;
+                
+                DB::table('rekaman_stoks')->insert($insertData);
             }
+            
+            DB::commit();
+            
+            foreach ($produkNames as $name) {
+                $this->line("Produk: {$name} - Berhasil disinkronkan");
+            }
+            
+        } catch (\Exception $e) {
+            DB::rollback();
+            $this->error("Error bulk insert: " . $e->getMessage());
+            return 1;
         }
         
-        $totalSynchronized = DB::table('produk as p')
-            ->join('rekaman_stoks as r', 'p.id_produk', '=', 'r.id_produk')
-            ->leftJoin('rekaman_stoks as r2', function($join) {
-                $join->on('r.id_produk', '=', 'r2.id_produk')
-                     ->where('r.id_rekaman_stok', '<', DB::raw('r2.id_rekaman_stok'));
-            })
-            ->whereNull('r2.id_rekaman_stok')
-            ->whereColumn('p.stok', '=', 'r.stok_sisa')
-            ->count();
+        $synchronizedQuery = "
+            WITH latest_rekaman AS (
+                SELECT 
+                    id_produk,
+                    stok_sisa,
+                    ROW_NUMBER() OVER (PARTITION BY id_produk ORDER BY id_rekaman_stok DESC) as rn
+                FROM rekaman_stoks
+            )
+            SELECT COUNT(*) as total
+            FROM produk p
+            INNER JOIN latest_rekaman lr ON p.id_produk = lr.id_produk
+            WHERE lr.rn = 1 AND p.stok = lr.stok_sisa
+        ";
+        
+        $totalSynchronized = DB::select($synchronizedQuery)[0]->total ?? 0;
         
         $this->info("Sinkronisasi selesai!");
         $this->info("Produk yang disinkronkan: {$updated}");

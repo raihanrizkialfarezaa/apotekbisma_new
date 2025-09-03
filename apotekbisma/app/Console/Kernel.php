@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
     // Commands\SyncStockConsistency::class, // Disabled - deprecated
     \App\Console\Commands\ReconcileRekamanStok::class,
+    \App\Console\Commands\OptimizeStokIndex::class,
     ];
 
     /**
