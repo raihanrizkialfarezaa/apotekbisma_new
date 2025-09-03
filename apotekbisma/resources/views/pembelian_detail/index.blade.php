@@ -308,11 +308,13 @@
             }
         });
 
-        // Variable untuk debouncing
+        // Variable untuk debouncing dan request management
         let quantityTimeout;
         let hargaBeliTimeout;
         let hargaJualTimeout;
-        let isUpdating = false; // Global flag untuk mencegah multiple updates
+        let activeRequests = new Map(); // Track active requests per input
+        let requestQueue = []; // Queue untuk sequential processing
+        let isProcessingQueue = false;
         
         // Event change untuk update yang lebih stabil (hanya saat user selesai edit)
         $(document).on('change', '.quantity', function () {
@@ -344,7 +346,7 @@
 
             // Update jika nilai berbeda dari nilai asli
             let originalValue = $input.data('original-value') || 1;
-            if (jumlah !== originalValue && !isUpdating) {
+            if (jumlah !== originalValue) {
                 updateQuantity($input, id, jumlah);
             }
         });
@@ -384,75 +386,112 @@
             }
         });
 
-        // Fungsi terpisah untuk update quantity
+        // Fungsi terpisah untuk update quantity dengan improved error handling
         function updateQuantity($input, id, jumlah) {
-            // Cek apakah sedang ada request yang berjalan
-            if ($input.data('updating') || isUpdating) {
-                return;
+            // Cek apakah sudah ada request aktif untuk input ini
+            if (activeRequests.has(id)) {
+                // Abort request sebelumnya jika masih berjalan
+                const activeRequest = activeRequests.get(id);
+                if (activeRequest && activeRequest.readyState !== 4) {
+                    activeRequest.abort();
+                }
             }
             
             // Set flag bahwa sedang update
-            $input.data('updating', true);
-            isUpdating = true;
-            
-            // Disable input sementara dan beri indikator visual
             $input.prop('disabled', true).addClass('updating');
             
-            $.post(`{{ url('/pembelian_detail') }}/${id}`, {
-                    '_token': $('[name=csrf-token]').attr('content'),
-                    '_method': 'put',
-                    'jumlah': jumlah
-                })
+            const requestData = {
+                '_token': $('[name=csrf-token]').attr('content'),
+                '_method': 'put',
+                'jumlah': jumlah
+            };
+            
+            // Buat request dengan timeout
+            const xhr = $.ajax({
+                url: `{{ url('/pembelian_detail') }}/${id}`,
+                type: 'POST',
+                data: requestData,
+                timeout: 15000, // 15 second timeout
+                beforeSend: function(xhr) {
+                    // Track request yang aktif
+                    activeRequests.set(id, xhr);
+                }
+            })
                 .done(response => {
-                    // Update nilai asli setelah berhasil
-                    $input.data('original-value', jumlah);
-                    
-                    // Update hanya subtotal di kolom yang sama tanpa reload
-                    if (response.data && response.data.subtotal) {
-                        let $row = $input.closest('tr');
-                        let $subtotalCell = $row.find('td').eq(8); // Kolom subtotal (index 8)
-                        if ($subtotalCell.length) {
-                            $subtotalCell.text('Rp. ' + formatUang(response.data.subtotal));
+                    try {
+                        // Update nilai asli setelah berhasil
+                        $input.data('original-value', jumlah);
+                        
+                        // Update hanya subtotal di kolom yang sama tanpa reload
+                        if (response.data && response.data.subtotal) {
+                            let $row = $input.closest('tr');
+                            let $subtotalCell = $row.find('td').eq(8); // Kolom subtotal (index 8)
+                            if ($subtotalCell.length) {
+                                $subtotalCell.text('Rp. ' + formatUang(response.data.subtotal));
+                            }
                         }
+                        
+                        // Hitung ulang total secara langsung tanpa delay
+                        recalculateTotal();
+                        
+                        // Update form summary langsung setelah kalkulasi ulang
+                        loadForm($('#diskon').val());
+                    } catch (e) {
+                        console.error('Error processing successful response:', e);
+                        alert('Terjadi kesalahan saat memproses response');
                     }
-                    
-                    // Hitung ulang total secara langsung tanpa delay
-                    recalculateTotal();
-                    
-                    // Update form summary langsung setelah kalkulasi ulang
-                    loadForm($('#diskon').val());
                 })
-                .fail(errors => {
+                .fail(function(xhr, status, error) {
                     // Kembalikan ke nilai asli jika gagal
                     let originalValue = $input.data('original-value') || 1;
                     $input.val(originalValue);
                     
                     let errorMessage = 'Tidak dapat menyimpan data';
                     
-                    if (errors.status === 500) {
-                        errorMessage = 'Terjadi kesalahan pada server';
-                    } else if (errors.responseJSON && errors.responseJSON.message) {
-                        errorMessage = errors.responseJSON.message;
-                    } else if (errors.responseText) {
-                        try {
-                            let errorObj = JSON.parse(errors.responseText);
-                            errorMessage = errorObj.message || errorMessage;
-                        } catch (e) {
-                            errorMessage = errors.responseText;
+                    try {
+                        if (status === 'timeout') {
+                            errorMessage = 'Request timeout. Silakan coba lagi.';
+                        } else if (status === 'abort') {
+                            // Request dibatalkan, tidak perlu tampilkan error
+                            return;
+                        } else if (xhr.status === 500) {
+                            errorMessage = 'Terjadi kesalahan pada server';
+                        } else if (xhr.status === 0) {
+                            errorMessage = 'Koneksi terputus. Periksa koneksi internet Anda.';
+                        } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        } else if (xhr.responseText) {
+                            try {
+                                let errorObj = JSON.parse(xhr.responseText);
+                                errorMessage = errorObj.message || errorMessage;
+                            } catch (e) {
+                                errorMessage = xhr.responseText || errorMessage;
+                            }
                         }
+                        
+                        console.error('AJAX Error:', {
+                            status: xhr.status,
+                            statusText: xhr.statusText,
+                            responseText: xhr.responseText,
+                            error: error
+                        });
+                        
+                        alert(errorMessage);
+                    } catch (e) {
+                        console.error('Error handling AJAX failure:', e);
+                        alert('Terjadi kesalahan sistem');
                     }
-                    
-                    alert(errorMessage);
                     
                     // Hitung ulang total dan reload form untuk memastikan konsistensi
                     recalculateTotal();
                     loadForm($('#diskon').val());
                 })
                 .always(() => {
+                    // Remove dari active requests
+                    activeRequests.delete(id);
+                    
                     // Enable input kembali dan hapus flag updating
                     $input.prop('disabled', false).removeClass('updating');
-                    $input.data('updating', false);
-                    isUpdating = false;
                 });
         }
         

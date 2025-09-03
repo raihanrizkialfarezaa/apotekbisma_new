@@ -201,6 +201,8 @@ class PembelianDetailController extends Controller
 
     public function update(Request $request, $id)
     {
+        set_time_limit(30);
+        
         DB::beginTransaction();
         
         try {
@@ -211,7 +213,7 @@ class PembelianDetailController extends Controller
                 return response()->json(['message' => 'Detail pembelian tidak ditemukan'], 404);
             }
             
-            // Lock produk untuk mencegah race condition
+            // Lock produk untuk mencegah race condition dengan timeout
             $produk = Produk::where('id_produk', $detail->id_produk)->lockForUpdate()->first();
             
             if (!$produk) {
@@ -219,8 +221,21 @@ class PembelianDetailController extends Controller
                 return response()->json(['message' => 'Produk tidak ditemukan'], 404);
             }
             
-            // Validasi input jumlah
-            $new_jumlah = (int) $request->jumlah;
+            // Validasi input jumlah dengan lebih ketat
+            $input_jumlah = $request->input('jumlah');
+            
+            if ($input_jumlah === null || $input_jumlah === '') {
+                DB::rollBack();
+                return response()->json(['message' => 'Jumlah harus diisi'], 400);
+            }
+            
+            if (!is_numeric($input_jumlah)) {
+                DB::rollBack();
+                return response()->json(['message' => 'Jumlah harus berupa angka'], 400);
+            }
+            
+            $new_jumlah = (int) $input_jumlah;
+            
             if ($new_jumlah < 1) {
                 DB::rollBack();
                 return response()->json(['message' => 'Jumlah harus minimal 1'], 400);
@@ -239,6 +254,13 @@ class PembelianDetailController extends Controller
             
             // Update stok produk berdasarkan selisih (pembelian menambah stok)
             $stok_baru = $stok_sebelum + $selisih;
+            
+            // Validasi stok tidak overflow
+            if ($stok_baru > 2147483647) { // Max INT value
+                DB::rollBack();
+                return response()->json(['message' => 'Stok hasil akan melebihi batas maksimum'], 400);
+            }
+            
             $produk->stok = $stok_baru;
             $produk->save();
             
@@ -277,7 +299,8 @@ class PembelianDetailController extends Controller
             }
             
             // Validasi akhir konsistensi
-            if ($produk->fresh()->stok != $stok_baru) {
+            $produk_fresh = $produk->fresh();
+            if (!$produk_fresh || $produk_fresh->stok != $stok_baru) {
                 DB::rollBack();
                 return response()->json(['message' => 'Error: Inkonsistensi stok terdeteksi'], 500);
             }
@@ -293,10 +316,29 @@ class PembelianDetailController extends Controller
                 ]
             ], 200);
             
+        } catch (\Illuminate\Database\QueryException $e) {
+            DB::rollBack();
+            Log::error('Database error in pembelian detail update: ' . $e->getMessage(), [
+                'detail_id' => $id,
+                'sql' => $e->getSql(),
+                'bindings' => $e->getBindings()
+            ]);
+            
+            if (strpos($e->getMessage(), 'Deadlock') !== false) {
+                return response()->json(['message' => 'Database sedang sibuk. Silakan coba lagi.'], 503);
+            } elseif (strpos($e->getMessage(), 'Lock wait timeout') !== false) {
+                return response()->json(['message' => 'Request timeout. Silakan coba lagi.'], 503);
+            } else {
+                return response()->json(['message' => 'Terjadi kesalahan database'], 500);
+            }
+            
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Error updating pembelian detail: ' . $e->getMessage());
-            return response()->json(['message' => 'Terjadi kesalahan: ' . $e->getMessage()], 500);
+            Log::error('General error in pembelian detail update: ' . $e->getMessage(), [
+                'detail_id' => $id,
+                'trace' => $e->getTraceAsString()
+            ]);
+            return response()->json(['message' => 'Terjadi kesalahan sistem. Silakan coba lagi.'], 500);
         }
     }
 
