@@ -120,7 +120,8 @@ class PenjualanDetailController extends Controller
             // Hitung total yang sudah ada di keranjang untuk produk ini
             $id_penjualan = $request->id_penjualan;
             
-            if (!$id_penjualan && session('id_penjualan')) {
+            // Prioritaskan id_penjualan dari request, jika tidak ada gunakan session
+            if (!$id_penjualan) {
                 $id_penjualan = session('id_penjualan');
             }
             
@@ -137,8 +138,9 @@ class PenjualanDetailController extends Controller
                 return response()->json('Tidak dapat menambah produk! Stok tersedia: ' . $produk->stok, 400);
             }
             
-            if (!$id_penjualan || !session('id_penjualan')) {
-                // Buat transaksi baru hanya ketika produk pertama ditambahkan
+            // Jika belum ada id_penjualan (transaksi baru), buat penjualan baru
+            if (!$id_penjualan) {
+                // Buat transaksi baru hanya ketika belum ada
                 $penjualan = new Penjualan();
                 $penjualan->id_member = null;
                 $penjualan->total_item = 0;
@@ -152,6 +154,13 @@ class PenjualanDetailController extends Controller
 
                 session(['id_penjualan' => $penjualan->id_penjualan]);
                 $id_penjualan = $penjualan->id_penjualan;
+            } else {
+                // Ambil penjualan yang sudah ada
+                $penjualan = Penjualan::find($id_penjualan);
+                if (!$penjualan) {
+                    DB::rollBack();
+                    return response()->json('Transaksi tidak ditemukan', 400);
+                }
             }
 
             // Catat stok sebelum perubahan
