@@ -77,6 +77,10 @@
         @endif
         
         <div class="box">
+            <div class="box-header with-border">
+                <button onclick="syncStock()" class="btn btn-primary btn-xs btn-flat pull-right"><i class="fa fa-refresh"></i> Cocokkan data Stok Produk</button>
+                <div class="clearfix"></div>
+            </div>
             <div class="box-body table-responsive">
                 <table class="table table-stiped table-bordered table-penjualan">
                     <thead>
@@ -189,6 +193,41 @@
     function printReceipt(id) {
         if (confirm('Yakin ingin mencetak struk transaksi #' + id + '?')) {
             window.open('{{ url('/penjualan') }}/' + id + '/print', '_blank');
+        }
+    }
+
+    function syncStock() {
+        if (confirm('Apakah Anda yakin ingin melakukan sinkronisasi stok produk?\n\nProses ini akan mencocokkan data stok produk dengan rekaman stok terbaru.')) {
+            // Tampilkan loading
+            $('button[onclick="syncStock()"]').prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Memproses...');
+            
+            $.post('{{ route("admin.sync.stock") }}', {
+                '_token': $('[name=csrf-token]').attr('content')
+            })
+            .done(function(response) {
+                if (response.success) {
+                    alert('Sinkronisasi berhasil!\n\nProduk yang diperbarui: ' + response.updated + '\nProduk yang sudah sinkron: ' + response.synchronized);
+                    // Reload DataTable jika diperlukan
+                    if (typeof table !== 'undefined') {
+                        table.ajax.reload();
+                    }
+                } else {
+                    alert('Gagal melakukan sinkronisasi: ' + response.message);
+                }
+            })
+            .fail(function(xhr) {
+                let errorMsg = 'Terjadi kesalahan saat melakukan sinkronisasi';
+                if (xhr.status === 403) {
+                    errorMsg = 'Anda tidak memiliki akses untuk melakukan sinkronisasi stok';
+                } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMsg = xhr.responseJSON.message;
+                }
+                alert(errorMsg);
+            })
+            .always(function() {
+                // Kembalikan button ke state normal
+                $('button[onclick="syncStock()"]').prop('disabled', false).html('<i class="fa fa-refresh"></i> Cocokkan data Stok Produk');
+            });
         }
     }
 </script>
