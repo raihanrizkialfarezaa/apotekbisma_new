@@ -21,6 +21,10 @@
     <link rel="stylesheet" href="{{ asset('/AdminLTE-2/dist/css/skins/_all-skins.min.css') }}">
     <!-- DataTables -->
     <link rel="stylesheet" href="{{ asset('/AdminLTE-2/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css') }}">
+    <!-- DataTables Responsive -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap.min.css">
+    <!-- Mobile Responsive CSS -->
+    <link rel="stylesheet" href="{{ asset('/css/mobile-responsive.css') }}">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -80,6 +84,9 @@
     <!-- DataTables -->
     <script src="{{ asset('AdminLTE-2/bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('AdminLTE-2/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <!-- DataTables Responsive -->
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap.min.js"></script>
     <!-- AdminLTE App -->
     <script src="{{ asset('AdminLTE-2/dist/js/adminlte.min.js') }}"></script>
     <!-- Validator -->
@@ -90,6 +97,29 @@
             $(selector).empty();
             $(selector).append(`<img src="${window.URL.createObjectURL(temporaryFile)}" width="${width}">`);
         }
+        
+        // Mobile table enhancement
+        $(document).ready(function() {
+            // Add touch-friendly scrolling indicators for mobile tables
+            if (window.innerWidth <= 768) {
+                $('.table-responsive-mobile').each(function() {
+                    const $this = $(this);
+                    const $table = $this.find('table');
+                    
+                    // Add scroll indicator
+                    if ($table.width() > $this.width()) {
+                        if (!$this.find('.scroll-indicator').length) {
+                            $this.append('<div class="scroll-indicator" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; padding: 5px 10px; border-radius: 15px; font-size: 12px; z-index: 5; pointer-events: none;">← Geser →</div>');
+                        }
+                    }
+                    
+                    // Hide indicator on scroll
+                    $this.on('scroll', function() {
+                        $this.find('.scroll-indicator').fadeOut(300);
+                    });
+                });
+            }
+        });
     </script>
     @stack('scripts')
 </body>

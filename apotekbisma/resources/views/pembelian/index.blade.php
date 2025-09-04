@@ -4,6 +4,59 @@
     Daftar Pembelian
 @endsection
 
+@push('css')
+<style>
+    /* Mobile responsive fixes */
+    .table-responsive-mobile {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    @media (max-width: 768px) {
+        .table-responsive-mobile {
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 15px;
+        }
+        
+        .table-pembelian {
+            min-width: 800px;
+            margin-bottom: 0;
+        }
+        
+        .table-pembelian td, 
+        .table-pembelian th {
+            white-space: nowrap;
+            padding: 8px 4px;
+            font-size: 12px;
+        }
+        
+        .table-pembelian td:last-child,
+        .table-pembelian th:last-child {
+            position: sticky;
+            right: 0;
+            background-color: #fff;
+            border-left: 2px solid #ddd;
+            z-index: 10;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+        }
+        
+        .box-header .btn {
+            margin-bottom: 5px;
+            font-size: 12px;
+            padding: 5px 10px;
+        }
+        
+        .box-header .pull-right {
+            float: none !important;
+            margin-top: 10px;
+        }
+    }
+</style>
+@endpush
+
 @section('breadcrumb')
     @parent
     <li class="active">Daftar Pembelian</li>
@@ -33,20 +86,22 @@
                 <button onclick="addForm()" class="btn btn-success btn-xs btn-flat"><i class="fa fa-plus-circle"></i> Transaksi Baru</button>
                 <button onclick="syncStock()" class="btn btn-primary btn-xs btn-flat pull-right"><i class="fa fa-refresh"></i> Cocokkan data Stok Produk</button>
             </div>
-            <div class="box-body table-responsive">
-                <table class="table table-stiped table-bordered table-pembelian">
-                    <thead>
-                        <th width="5%">No</th>
-                        <th>Tanggal Obat Datang</th>
-                        <th>Supplier</th>
-                        <th>Total Item</th>
-                        <th>Total Harga</th>
-                        <th>Diskon</th>
-                        <th>Total Bayar</th>
-                        <th>Waktu Faktur Dibuat</th>
-                        <th width="15%"><i class="fa fa-cog"></i></th>
-                    </thead>
-                </table>
+            <div class="box-body">
+                <div class="table-responsive-mobile">
+                    <table class="table table-stiped table-bordered table-pembelian">
+                        <thead>
+                            <th width="5%">No</th>
+                            <th>Tanggal Obat Datang</th>
+                            <th>Supplier</th>
+                            <th>Total Item</th>
+                            <th>Total Harga</th>
+                            <th>Diskon</th>
+                            <th>Total Bayar</th>
+                            <th>Waktu Faktur Dibuat</th>
+                            <th width="15%"><i class="fa fa-cog"></i></th>
+                        </thead>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -62,11 +117,18 @@
 
     $(function () {
         table = $('.table-pembelian').DataTable({
-            responsive: true,
+            responsive: {
+                details: {
+                    type: 'column',
+                    target: 'tr'
+                }
+            },
             processing: true,
             serverSide: true,
             autoWidth: false,
             searchable: true,
+            scrollX: true,
+            scrollCollapse: true,
             ajax: {
                 url: '{{ route('pembelian.data') }}',
                 error: function(xhr, error, code) {
