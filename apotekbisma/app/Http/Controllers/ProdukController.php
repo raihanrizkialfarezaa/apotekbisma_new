@@ -276,15 +276,15 @@ class ProdukController extends Controller
             return response()->json('Produk tidak ditemukan', 404);
         }
 
+        $this->ensureProdukHasRekamanStok($produk);
+
         $stok_lama = $produk->stok;
         $stok_baru = $request->stok;
         $selisih_stok = $stok_baru - $stok_lama;
 
-        // Update stok produk
         $produk->stok = $stok_baru;
         $produk->save();
 
-        // Jalankan sinkronisasi otomatis untuk produk ini
         $this->sinkronisasiStokProduk($produk, $request->keterangan ?? 'Update stok manual');
 
         return response()->json([
@@ -390,7 +390,6 @@ class ProdukController extends Controller
         if ($pembelianDetail && $pembelianDetail->pembelian && $pembelianDetail->pembelian->supplier) {
             $supplierId = $pembelianDetail->pembelian->id_supplier;
         } else {
-            // Jika tidak ada riwayat pembelian, ambil supplier pertama yang tersedia
             $supplier = \App\Models\Supplier::orderBy('nama')->first();
             $supplierId = $supplier ? $supplier->id_supplier : null;
         }
@@ -399,8 +398,23 @@ class ProdukController extends Controller
             return response()->json(['error' => 'Tidak ada supplier yang tersedia'], 400);
         }
 
-        // Redirect ke halaman pembelian dengan supplier yang sudah dipilih
         $url = route('pembelian.create', $supplierId);
         return response()->json(['redirect' => $url]);
+    }
+
+    private function ensureProdukHasRekamanStok($produk)
+    {
+        $hasRekaman = RekamanStok::where('id_produk', $produk->id_produk)->exists();
+        
+        if (!$hasRekaman) {
+            RekamanStok::create([
+                'id_produk' => $produk->id_produk,
+                'waktu' => Carbon::now(),
+                'stok_masuk' => $produk->stok,
+                'stok_awal' => 0,
+                'stok_sisa' => $produk->stok,
+                'keterangan' => 'Auto-created: Rekaman stok awal produk'
+            ]);
+        }
     }
 }

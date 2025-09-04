@@ -5,6 +5,8 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\Produk;
 use App\Models\RekamanStok;
+use App\Models\Penjualan;
+use App\Models\Pembelian;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -23,7 +25,113 @@ class SinkronisasiStok extends Command
 
     public function handle()
     {
-        $this->info('Memulai sinkronisasi stok...');
+        $this->info('Memulai sinkronisasi komprehensif...');
+        
+        $this->perbaikiTransaksiNull();
+        $this->perbaikiRekaman();
+        $this->sinkronisasiStok();
+        
+        return 0;
+    }
+
+    private function perbaikiTransaksiNull()
+    {
+        $this->info('1. Memperbaiki transaksi dengan waktu NULL...');
+        
+        DB::beginTransaction();
+        try {
+            $penjualanNull = Penjualan::whereNull('waktu')->get();
+            $fixedPenjualan = 0;
+            
+            foreach ($penjualanNull as $penjualan) {
+                $waktuDefault = $penjualan->created_at ?? Carbon::today();
+                $penjualan->waktu = $waktuDefault;
+                $penjualan->save();
+                
+                RekamanStok::where('id_penjualan', $penjualan->id_penjualan)
+                           ->update(['waktu' => $waktuDefault]);
+                
+                $fixedPenjualan++;
+            }
+            
+            $pembelianNull = Pembelian::whereNull('waktu')->get();
+            $fixedPembelian = 0;
+            
+            foreach ($pembelianNull as $pembelian) {
+                $waktuDefault = $pembelian->created_at ?? Carbon::today();
+                $pembelian->waktu = $waktuDefault;
+                $pembelian->save();
+                
+                RekamanStok::where('id_pembelian', $pembelian->id_pembelian)
+                           ->update(['waktu' => $waktuDefault]);
+                
+                $fixedPembelian++;
+            }
+            
+            DB::commit();
+            $this->info("   Diperbaiki: {$fixedPenjualan} penjualan, {$fixedPembelian} pembelian");
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $this->error("Error memperbaiki transaksi NULL: " . $e->getMessage());
+        }
+    }
+
+    private function perbaikiRekaman()
+    {
+        $this->info('2. Memperbaiki produk tanpa rekaman stok...');
+        
+        DB::beginTransaction();
+        try {
+            $produkTanpaRekaman = DB::select("
+                SELECT p.id_produk, p.nama_produk, p.stok
+                FROM produk p
+                LEFT JOIN rekaman_stoks rs ON p.id_produk = rs.id_produk
+                WHERE rs.id_produk IS NULL
+                ORDER BY p.nama_produk
+            ");
+            
+            if (!empty($produkTanpaRekaman)) {
+                $batchSize = 50;
+                $batches = array_chunk($produkTanpaRekaman, $batchSize);
+                $currentTime = Carbon::now();
+                $totalFixed = 0;
+                
+                foreach ($batches as $batch) {
+                    $insertData = [];
+                    foreach ($batch as $produkData) {
+                        $insertData[] = [
+                            'id_produk' => $produkData->id_produk,
+                            'waktu' => $currentTime,
+                            'stok_masuk' => $produkData->stok,
+                            'stok_awal' => 0,
+                            'stok_sisa' => $produkData->stok,
+                            'keterangan' => 'Rekonstruksi: Rekaman stok awal produk',
+                            'created_at' => $currentTime,
+                            'updated_at' => $currentTime
+                        ];
+                        $totalFixed++;
+                    }
+                    
+                    DB::table('rekaman_stoks')->insert($insertData);
+                }
+                
+                $this->info("   Dibuat rekaman untuk: {$totalFixed} produk");
+            } else {
+                $this->info("   Semua produk sudah memiliki rekaman stok");
+            }
+            
+            DB::commit();
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $this->error("Error memperbaiki rekaman: " . $e->getMessage());
+        }
+    }
+
+    private function sinkronisasiStok()
+    {
+        $this->info('3. Sinkronisasi stok produk dengan rekaman...');
         
         $updated = 0;
         $synchronized = 0;
@@ -69,11 +177,10 @@ class SinkronisasiStok extends Command
             $this->info("Sinkronisasi selesai!");
             $this->info("Produk yang disinkronkan: 0");
             $this->info("Produk yang sudah sinkron: {$totalProduk}");
-            return 0;
+            return;
         }
         
         $chunks = array_chunk($produkData, $this->batchSize);
-        $produkNames = [];
         
         DB::beginTransaction();
         try {
@@ -97,7 +204,6 @@ class SinkronisasiStok extends Command
                         'updated_at' => $currentTime
                     ];
                     
-                    $produkNames[] = "{$row->nama_produk} (Selisih: {$selisih})";
                     $updated++;
                 }
                 
@@ -106,14 +212,10 @@ class SinkronisasiStok extends Command
             
             DB::commit();
             
-            foreach ($produkNames as $name) {
-                $this->line("Produk: {$name} - Berhasil disinkronkan");
-            }
-            
         } catch (\Exception $e) {
             DB::rollback();
-            $this->error("Error bulk insert: " . $e->getMessage());
-            return 1;
+            $this->error("Error sinkronisasi stok: " . $e->getMessage());
+            return;
         }
         
         $synchronizedQuery = "
@@ -135,7 +237,5 @@ class SinkronisasiStok extends Command
         $this->info("Sinkronisasi selesai!");
         $this->info("Produk yang disinkronkan: {$updated}");
         $this->info("Produk yang sudah sinkron: {$totalSynchronized}");
-        
-        return 0;
     }
 }

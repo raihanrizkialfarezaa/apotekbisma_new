@@ -147,17 +147,16 @@ class PembelianDetailController extends Controller
         DB::beginTransaction();
         
         try {
-            // Lock produk untuk mencegah race condition
             $produk = Produk::where('id_produk', $request->id_produk)->lockForUpdate()->first();
             if (! $produk) {
                 DB::rollBack();
                 return response()->json('Data gagal disimpan', 400);
             }
 
-            // Catat stok sebelum perubahan
+            $this->ensureProdukHasRekamanStok($produk);
+
             $stok_sebelum = $produk->stok;
 
-            // Selalu buat entry baru untuk memungkinkan produk yang sama ditambahkan berulang kali
             $detail = new PembelianDetail();
             $detail->id_pembelian = $request->id_pembelian;
             $detail->id_produk = $produk->id_produk;
@@ -166,12 +165,13 @@ class PembelianDetailController extends Controller
             $detail->subtotal = $produk->harga_beli * 1;
             $detail->save();
 
-            // UPDATE STOK: Tambah stok karena ini pembelian
             $stok_baru = $stok_sebelum + 1;
             $produk->stok = $stok_baru;
             $produk->save();
 
             $pembelian = \App\Models\Pembelian::find($detail->id_pembelian);
+            $this->ensurePembelianHasWaktu($pembelian);
+            
             $waktu_transaksi = $pembelian && $pembelian->waktu ? $pembelian->waktu : Carbon::now();
             
             RekamanStok::create([
@@ -184,7 +184,6 @@ class PembelianDetailController extends Controller
                 'keterangan' => 'Pembelian: Penambahan stok dari supplier'
             ]);
 
-            // Validasi akhir konsistensi
             if ($produk->fresh()->stok != $stok_baru) {
                 DB::rollBack();
                 return response()->json('Error: Inkonsistensi stok terdeteksi', 500);
@@ -507,5 +506,29 @@ class PembelianDetailController extends Controller
         ];
 
         return response()->json($data);
+    }
+
+    private function ensureProdukHasRekamanStok($produk)
+    {
+        $hasRekaman = RekamanStok::where('id_produk', $produk->id_produk)->exists();
+        
+        if (!$hasRekaman) {
+            RekamanStok::create([
+                'id_produk' => $produk->id_produk,
+                'waktu' => Carbon::now(),
+                'stok_masuk' => $produk->stok,
+                'stok_awal' => 0,
+                'stok_sisa' => $produk->stok,
+                'keterangan' => 'Auto-created: Rekaman stok awal produk'
+            ]);
+        }
+    }
+
+    private function ensurePembelianHasWaktu($pembelian)
+    {
+        if (!$pembelian->waktu) {
+            $pembelian->waktu = $pembelian->created_at ?? Carbon::today();
+            $pembelian->save();
+        }
     }
 }
