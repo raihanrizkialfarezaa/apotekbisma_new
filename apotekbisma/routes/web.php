@@ -87,8 +87,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/pembelian_detail/produk-data', [PembelianDetailController::class, 'getProdukData'])->name('pembelian_detail.produk_data');
         Route::get('/pembelian_detail/editBayar/{id}', [PembelianDetailController::class, 'editBayar'])->name('pembelian_detail.editBayar');
         Route::put('/pembelian_detail/updateEdit/{id}', [PembelianDetailController::class, 'updateEdit'])->name('pembelian_detail.updateEdit');
+        Route::post('/pembelian_detail/batch-update', [PembelianDetailController::class, 'batchUpdate'])->name('pembelian_detail.batch_update')->middleware('optimize.bulk');
         Route::resource('/pembelian_detail', PembelianDetailController::class)
-            ->except('create', 'show', 'edit');
+            ->except('create', 'show', 'edit')
+            ->middleware('optimize.bulk');
 
         Route::get('/penjualan/data', [PenjualanController::class, 'data'])->name('penjualan.data');
         Route::get('/penjualan', [PenjualanController::class, 'index'])->name('penjualan.index');

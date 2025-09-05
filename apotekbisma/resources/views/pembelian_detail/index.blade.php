@@ -652,7 +652,7 @@
                 url: `{{ url('/pembelian_detail') }}/${id}`,
                 type: 'POST',
                 data: requestData,
-                timeout: 15000, // 15 second timeout
+                timeout: 30000, // 30 second timeout untuk hosting
                 beforeSend: function(xhr) {
                     // Track request yang aktif
                     activeRequests.set(id, xhr);

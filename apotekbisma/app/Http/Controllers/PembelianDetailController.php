@@ -10,6 +10,7 @@ use App\Models\Supplier;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Services\PembelianBatchService;
 use Illuminate\Support\Facades\DB;
 
 class PembelianDetailController extends Controller
@@ -144,179 +145,214 @@ class PembelianDetailController extends Controller
 
     public function store(Request $request)
     {
-        DB::beginTransaction();
+        set_time_limit(60);
+        ini_set('memory_limit', '256M');
         
         try {
-            $produk = Produk::where('id_produk', $request->id_produk)->lockForUpdate()->first();
-            if (! $produk) {
-                DB::rollBack();
-                return response()->json('Data gagal disimpan', 400);
-            }
-
-            $this->ensureProdukHasRekamanStok($produk);
-
-            $stok_sebelum = $produk->stok;
-
-            $detail = new PembelianDetail();
-            $detail->id_pembelian = $request->id_pembelian;
-            $detail->id_produk = $produk->id_produk;
-            $detail->harga_beli = $produk->harga_beli;
-            $detail->jumlah = 1;
-            $detail->subtotal = $produk->harga_beli * 1;
-            $detail->save();
-
-            $stok_baru = $stok_sebelum + 1;
-            $produk->stok = $stok_baru;
-            $produk->save();
-
-            $pembelian = \App\Models\Pembelian::find($detail->id_pembelian);
-            $this->ensurePembelianHasWaktu($pembelian);
+            $result = DB::transaction(function () use ($request) {
+                $produk = Produk::where('id_produk', $request->id_produk)
+                                ->lockForUpdate()
+                                ->first();
+                
+                if (!$produk) {
+                    throw new \Exception('Data produk tidak ditemukan');
+                }
+                
+                $this->ensureProdukHasRekamanStok($produk);
+                
+                $stok_sebelum = $produk->stok;
+                
+                $existing_detail = PembelianDetail::where('id_pembelian', $request->id_pembelian)
+                                                  ->where('id_produk', $request->id_produk)
+                                                  ->first();
+                
+                if ($existing_detail) {
+                    $existing_detail->jumlah += 1;
+                    $existing_detail->subtotal = $existing_detail->harga_beli * $existing_detail->jumlah;
+                    $existing_detail->save();
+                } else {
+                    $detail = new PembelianDetail();
+                    $detail->id_pembelian = $request->id_pembelian;
+                    $detail->id_produk = $produk->id_produk;
+                    $detail->harga_beli = $produk->harga_beli;
+                    $detail->jumlah = 1;
+                    $detail->subtotal = $produk->harga_beli;
+                    $detail->save();
+                }
+                
+                $stok_baru = $stok_sebelum + 1;
+                $produk->stok = $stok_baru;
+                $produk->save();
+                
+                $pembelian = \App\Models\Pembelian::find($request->id_pembelian);
+                $this->ensurePembelianHasWaktu($pembelian);
+                
+                $waktu_transaksi = $pembelian && $pembelian->waktu ? $pembelian->waktu : Carbon::now();
+                
+                $existing_rekaman = RekamanStok::where('id_pembelian', $request->id_pembelian)
+                                               ->where('id_produk', $request->id_produk)
+                                               ->first();
+                
+                if ($existing_rekaman) {
+                    $existing_rekaman->stok_masuk += 1;
+                    $existing_rekaman->stok_sisa = $stok_baru;
+                    $existing_rekaman->waktu = $waktu_transaksi;
+                    $existing_rekaman->save();
+                } else {
+                    RekamanStok::create([
+                        'id_produk' => $produk->id_produk,
+                        'id_pembelian' => $request->id_pembelian,
+                        'waktu' => $waktu_transaksi,
+                        'stok_masuk' => 1,
+                        'stok_awal' => $stok_sebelum,
+                        'stok_sisa' => $stok_baru,
+                        'keterangan' => 'Pembelian: Penambahan stok dari supplier'
+                    ]);
+                }
+                
+                return $stok_baru;
+            }, 3);
             
-            $waktu_transaksi = $pembelian && $pembelian->waktu ? $pembelian->waktu : Carbon::now();
-            
-            RekamanStok::create([
-                'id_produk' => $produk->id_produk,
-                'id_pembelian' => $detail->id_pembelian,
-                'waktu' => $waktu_transaksi,
-                'stok_masuk' => 1,
-                'stok_awal' => $stok_sebelum,
-                'stok_sisa' => $stok_baru,
-                'keterangan' => 'Pembelian: Penambahan stok dari supplier'
-            ]);
-
-            if ($produk->fresh()->stok != $stok_baru) {
-                DB::rollBack();
-                return response()->json('Error: Inkonsistensi stok terdeteksi', 500);
-            }
-
-            DB::commit();
             return response()->json('Data berhasil disimpan', 200);
             
+        } catch (\Illuminate\Database\QueryException $e) {
+            Log::error('Database error in pembelian detail store: ' . $e->getMessage(), [
+                'request_data' => $request->all(),
+                'sql' => $e->getSql() ?? 'N/A',
+                'bindings' => $e->getBindings() ?? []
+            ]);
+            
+            if (strpos($e->getMessage(), 'Deadlock') !== false) {
+                return response()->json('Database sedang sibuk. Silakan coba lagi.', 503);
+            } elseif (strpos($e->getMessage(), 'Lock wait timeout') !== false) {
+                return response()->json('Request timeout. Silakan coba lagi.', 503);
+            } else {
+                return response()->json('Terjadi kesalahan database', 500);
+            }
+            
         } catch (\Exception $e) {
-            DB::rollBack();
+            Log::error('General error in pembelian detail store: ' . $e->getMessage(), [
+                'request_data' => $request->all(),
+                'trace' => $e->getTraceAsString()
+            ]);
             return response()->json('Error: ' . $e->getMessage(), 500);
         }
     }
 
     public function update(Request $request, $id)
     {
-        set_time_limit(30);
-        
-        DB::beginTransaction();
+        set_time_limit(60);
+        ini_set('memory_limit', '256M');
         
         try {
             $detail = PembelianDetail::find($id);
             
             if (!$detail) {
-                DB::rollBack();
                 return response()->json(['message' => 'Detail pembelian tidak ditemukan'], 404);
             }
             
-            // Lock produk untuk mencegah race condition dengan timeout
-            $produk = Produk::where('id_produk', $detail->id_produk)->lockForUpdate()->first();
-            
-            if (!$produk) {
-                DB::rollBack();
-                return response()->json(['message' => 'Produk tidak ditemukan'], 404);
-            }
-            
-            // Validasi input jumlah dengan lebih ketat
             $input_jumlah = $request->input('jumlah');
             
             if ($input_jumlah === null || $input_jumlah === '') {
-                DB::rollBack();
                 return response()->json(['message' => 'Jumlah harus diisi'], 400);
             }
             
             if (!is_numeric($input_jumlah)) {
-                DB::rollBack();
                 return response()->json(['message' => 'Jumlah harus berupa angka'], 400);
             }
             
             $new_jumlah = (int) $input_jumlah;
             
             if ($new_jumlah < 1) {
-                DB::rollBack();
                 return response()->json(['message' => 'Jumlah harus minimal 1'], 400);
             }
             
             if ($new_jumlah > 10000) {
-                DB::rollBack();
                 return response()->json(['message' => 'Jumlah tidak boleh lebih dari 10000'], 400);
             }
             
             $old_jumlah = $detail->jumlah;
             $selisih = $new_jumlah - $old_jumlah;
             
-            // Catat stok sebelum perubahan
-            $stok_sebelum = $produk->stok;
-            
-            // Update stok produk berdasarkan selisih (pembelian menambah stok)
-            $stok_baru = $stok_sebelum + $selisih;
-            
-            // Validasi stok tidak overflow
-            if ($stok_baru > 2147483647) { // Max INT value
-                DB::rollBack();
-                return response()->json(['message' => 'Stok hasil akan melebihi batas maksimum'], 400);
+            if ($selisih == 0) {
+                return response()->json([
+                    'message' => 'Data berhasil diperbarui',
+                    'data' => [
+                        'jumlah' => $new_jumlah,
+                        'subtotal' => $detail->subtotal,
+                        'stok_tersisa' => $detail->produk->stok ?? 0
+                    ]
+                ], 200);
             }
             
-            $produk->stok = $stok_baru;
-            $produk->save();
-            
-            // Update detail pembelian
-            $detail->jumlah = $new_jumlah;
-            $detail->subtotal = $detail->harga_beli * $new_jumlah;
-            $detail->save();
-            
-            // Update atau buat rekaman stok
-            $rekaman_stok = RekamanStok::where('id_pembelian', $detail->id_pembelian)
-                                       ->where('id_produk', $detail->id_produk)
-                                       ->orderBy('id_rekaman_stok', 'desc')
-                                       ->first();
-            
-            $pembelian = \App\Models\Pembelian::find($detail->id_pembelian);
-            $waktu_transaksi = $pembelian && $pembelian->waktu ? $pembelian->waktu : Carbon::now();
-            
-            if ($rekaman_stok) {
-                $rekaman_stok->update([
-                    'waktu' => $waktu_transaksi,
-                    'stok_masuk' => $new_jumlah,
-                    'stok_awal' => $stok_sebelum - $old_jumlah,
-                    'stok_sisa' => $stok_baru,
-                    'keterangan' => 'Pembelian: Update jumlah transaksi'
-                ]);
-            } else {
-                RekamanStok::create([
-                    'id_produk' => $produk->id_produk,
-                    'id_pembelian' => $detail->id_pembelian,
-                    'waktu' => $waktu_transaksi,
-                    'stok_masuk' => $new_jumlah,
-                    'stok_awal' => $stok_sebelum - $old_jumlah,
-                    'stok_sisa' => $stok_baru,
-                    'keterangan' => 'Pembelian: Update jumlah transaksi'
-                ]);
-            }
-            
-            // Validasi akhir konsistensi
-            $produk_fresh = $produk->fresh();
-            if (!$produk_fresh || $produk_fresh->stok != $stok_baru) {
-                DB::rollBack();
-                return response()->json(['message' => 'Error: Inkonsistensi stok terdeteksi'], 500);
-            }
-            
-            DB::commit();
-            
-            return response()->json([
-                'message' => 'Data berhasil diperbarui',
-                'data' => [
+            $result = DB::transaction(function () use ($detail, $new_jumlah, $old_jumlah, $selisih) {
+                $produk = Produk::where('id_produk', $detail->id_produk)
+                                ->lockForUpdate()
+                                ->first();
+                
+                if (!$produk) {
+                    throw new \Exception('Produk tidak ditemukan');
+                }
+                
+                $stok_sebelum = $produk->stok;
+                $stok_baru = $stok_sebelum + $selisih;
+                
+                if ($stok_baru > 2147483647) {
+                    throw new \Exception('Stok hasil akan melebihi batas maksimum');
+                }
+                
+                if ($stok_baru < 0) {
+                    throw new \Exception('Stok tidak boleh negatif');
+                }
+                
+                $produk->stok = $stok_baru;
+                $produk->save();
+                
+                $detail->jumlah = $new_jumlah;
+                $detail->subtotal = $detail->harga_beli * $new_jumlah;
+                $detail->save();
+                
+                $pembelian = \App\Models\Pembelian::find($detail->id_pembelian);
+                $waktu_transaksi = $pembelian && $pembelian->waktu ? $pembelian->waktu : Carbon::now();
+                
+                $rekaman_stok = RekamanStok::where('id_pembelian', $detail->id_pembelian)
+                                           ->where('id_produk', $detail->id_produk)
+                                           ->orderBy('id_rekaman_stok', 'desc')
+                                           ->first();
+                
+                if ($rekaman_stok) {
+                    $rekaman_stok->update([
+                        'waktu' => $waktu_transaksi,
+                        'stok_masuk' => $new_jumlah,
+                        'stok_awal' => $stok_sebelum - $old_jumlah,
+                        'stok_sisa' => $stok_baru,
+                        'keterangan' => 'Pembelian: Update jumlah transaksi'
+                    ]);
+                } else {
+                    RekamanStok::create([
+                        'id_produk' => $produk->id_produk,
+                        'id_pembelian' => $detail->id_pembelian,
+                        'waktu' => $waktu_transaksi,
+                        'stok_masuk' => $new_jumlah,
+                        'stok_awal' => $stok_sebelum - $old_jumlah,
+                        'stok_sisa' => $stok_baru,
+                        'keterangan' => 'Pembelian: Update jumlah transaksi'
+                    ]);
+                }
+                
+                return [
                     'jumlah' => $new_jumlah,
                     'subtotal' => $detail->subtotal,
                     'stok_tersisa' => $stok_baru
-                ]
+                ];
+            }, 3);
+            
+            return response()->json([
+                'message' => 'Data berhasil diperbarui',
+                'data' => $result
             ], 200);
             
         } catch (\Illuminate\Database\QueryException $e) {
-            DB::rollBack();
             Log::error('Database error in pembelian detail update: ' . $e->getMessage(), [
                 'detail_id' => $id,
                 'sql' => $e->getSql(),
@@ -332,7 +368,6 @@ class PembelianDetailController extends Controller
             }
             
         } catch (\Exception $e) {
-            DB::rollBack();
             Log::error('General error in pembelian detail update: ' . $e->getMessage(), [
                 'detail_id' => $id,
                 'trace' => $e->getTraceAsString()
@@ -529,6 +564,45 @@ class PembelianDetailController extends Controller
         if (!$pembelian->waktu) {
             $pembelian->waktu = $pembelian->created_at ?? Carbon::today();
             $pembelian->save();
+        }
+    }
+    
+    public function batchUpdate(Request $request)
+    {
+        set_time_limit(180);
+        ini_set('memory_limit', '1G');
+        
+        try {
+            $updates = $request->input('updates', []);
+            
+            if (empty($updates)) {
+                return response()->json(['message' => 'Tidak ada data untuk diupdate'], 400);
+            }
+            
+            if (count($updates) > 100) {
+                return response()->json(['message' => 'Maksimal 100 item per batch'], 400);
+            }
+            
+            $batchService = new PembelianBatchService();
+            $result = $batchService->bulkUpdateStok($updates);
+            
+            if (!empty($result['errors'])) {
+                Log::warning('Batch update completed with errors', $result['errors']);
+            }
+            
+            return response()->json([
+                'message' => 'Batch update completed',
+                'data' => $result
+            ], 200);
+            
+        } catch (\Exception $e) {
+            Log::error('Batch update failed: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json([
+                'message' => 'Batch update gagal: ' . $e->getMessage()
+            ], 500);
         }
     }
 }
