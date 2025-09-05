@@ -352,7 +352,7 @@ class PembelianDetailController extends Controller
                     $rekaman_stok->update([
                         'waktu' => $waktu_transaksi,
                         'stok_masuk' => $new_jumlah,
-                        'stok_awal' => $stok_sebelum - $old_jumlah,
+                        'stok_awal' => $stok_baru - $new_jumlah,
                         'stok_sisa' => $stok_baru,
                         'keterangan' => 'Pembelian: Update jumlah transaksi'
                     ]);
@@ -362,7 +362,7 @@ class PembelianDetailController extends Controller
                         'id_pembelian' => $detail->id_pembelian,
                         'waktu' => $waktu_transaksi,
                         'stok_masuk' => $new_jumlah,
-                        'stok_awal' => $stok_sebelum - $old_jumlah,
+                        'stok_awal' => $stok_baru - $new_jumlah,
                         'stok_sisa' => $stok_baru,
                         'keterangan' => 'Pembelian: Update jumlah transaksi'
                     ]);

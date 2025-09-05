@@ -80,7 +80,9 @@ class KartuStokController extends Controller
                                 ? format_uang($item->stok_keluar) 
                                 : '-';
             
-            $row['stok_awal'] = format_uang($item->stok_awal);
+            $row['stok_awal'] = $item->stok_awal < 0 
+                              ? '<span class="text-danger" title="Kondisi oversold - stok tidak mencukupi pada saat transaksi">' . format_uang($item->stok_awal) . '</span>' 
+                              : format_uang($item->stok_awal);
             $row['stok_sisa'] = format_uang($item->stok_sisa);
             
             // Determine transaction type and add reference with detailed information
@@ -319,7 +321,9 @@ class KartuStokController extends Controller
                                 ? format_uang($item->stok_keluar) 
                                 : '-';
             
-            $row['stok_awal'] = format_uang($item->stok_awal);
+            $row['stok_awal'] = $item->stok_awal < 0 
+                              ? '<span class="text-danger" title="Kondisi oversold - stok tidak mencukupi pada saat transaksi">' . format_uang($item->stok_awal) . '</span>' 
+                              : format_uang($item->stok_awal);
             $row['stok_sisa'] = format_uang($item->stok_sisa);
             
             // Determine transaction type and add reference with styling
