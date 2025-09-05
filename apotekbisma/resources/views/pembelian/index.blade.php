@@ -150,12 +150,43 @@
             ]
         });
 
-        $('.table-supplier').DataTable();
+        $('.table-supplier').DataTable({
+            responsive: {
+                details: {
+                    type: 'column',
+                    target: 'tr'
+                }
+            },
+            scrollX: true,
+            scrollCollapse: true,
+            autoWidth: false,
+            order: [[1, 'asc']],
+            language: {
+                search: "Cari supplier:",
+                lengthMenu: "Tampilkan _MENU_ supplier",
+                info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ supplier",
+                paginate: {
+                    first: "Pertama",
+                    last: "Terakhir", 
+                    next: "Selanjutnya",
+                    previous: "Sebelumnya"
+                }
+            }
+        });
         table1 = $('.table-detail').DataTable({
+            responsive: {
+                details: {
+                    type: 'column',
+                    target: 'tr'
+                }
+            },
             processing: true,
             bSort: false,
             dom: 'fplrt',
             searchable: true,
+            scrollX: true,
+            scrollCollapse: true,
+            autoWidth: false,
             columns: [
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
                 {data: 'kode_produk'},

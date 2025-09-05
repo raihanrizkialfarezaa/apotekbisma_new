@@ -34,6 +34,149 @@
             height: 70px;
             padding-top: 5px;
         }
+        
+        .form-group {
+            margin-bottom: 10px;
+        }
+        
+        .form-group .col-lg-2 {
+            width: 100%;
+            margin-bottom: 5px;
+            text-align: left;
+        }
+        
+        .form-group .col-lg-8,
+        .form-group .col-lg-5 {
+            width: 100%;
+        }
+        
+        .box-footer .btn {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        .table-responsive-mobile {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        
+        /* Transform table to card layout on mobile */
+        .table-penjualan {
+            border: 0;
+            width: 100%;
+        }
+        
+        .table-penjualan thead {
+            display: none; /* Hide table headers */
+        }
+        
+        .table-penjualan tbody {
+            display: block;
+        }
+        
+        .table-penjualan tbody tr {
+            display: block;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            padding: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .table-penjualan tbody td {
+            display: block;
+            border: none;
+            padding: 4px 0;
+            position: relative;
+        }
+        
+        /* Hide certain columns on mobile */
+        .table-penjualan tbody td:nth-child(2), /* Kode */
+        .table-penjualan tbody td:nth-child(6)  /* Diskon */ {
+            display: none;
+        }
+        
+        /* Style remaining columns as cards */
+        .table-penjualan tbody td:before {
+            content: attr(data-label) ": ";
+            font-weight: 600;
+            font-size: 11px;
+            color: #666;
+            display: inline-block;
+            min-width: 80px;
+            margin-right: 10px;
+        }
+        
+        /* Remove labels for number and action columns */
+        .table-penjualan tbody td:nth-child(1):before,
+        .table-penjualan tbody td:nth-child(8):before {
+            display: none;
+        }
+        
+        /* Style the number column as header */
+        .table-penjualan tbody td:nth-child(1) {
+            background: #3c8dbc;
+            color: white;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+            margin: -12px -12px 10px -12px;
+        }
+        
+        /* Style action column */
+        .table-penjualan tbody td:nth-child(8) {
+            text-align: center;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+            margin: 10px -12px -12px -12px;
+        }
+        
+        /* Grid layout for main content */
+        .table-penjualan tbody td:nth-child(3),
+        .table-penjualan tbody td:nth-child(4),
+        .table-penjualan tbody td:nth-child(5),
+        .table-penjualan tbody td:nth-child(7) {
+            display: inline-block;
+            width: 48%;
+            vertical-align: top;
+            margin-right: 2%;
+        }
+        
+        /* Full width for product name */
+        .table-penjualan tbody td:nth-child(3) {
+            width: 100%;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        /* Mobile-friendly inputs */
+        .table-penjualan input[type="number"],
+        .table-penjualan input[type="text"] {
+            width: 100%;
+            padding: 4px 6px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+        
+        .table-penjualan .btn {
+            padding: 4px 8px;
+            font-size: 11px;
+            border-radius: 3px;
+        }
+        
+        .input-group-btn .btn {
+            height: 34px;
+        }
+    }
+    
+    /* Hide mobile cards on desktop */
+    @media(min-width: 769px) {
+        .mobile-table-cards {
+            display: none;
+        }
     }
 </style>
 @endpush
@@ -82,18 +225,25 @@
                     </div>
                 </form>
 
-                <table class="table table-stiped table-bordered table-penjualan">
-                    <thead>
-                        <th width="5%">No</th>
-                        <th>Kode</th>
-                        <th>Nama</th>
-                        <th>Harga</th>
-                        <th width="15%">Jumlah</th>
-                        <th>Diskon</th>
-                        <th>Subtotal</th>
-                        <th width="15%"><i class="fa fa-cog"></i></th>
-                    </thead>
-                </table>
+                <!-- Mobile Table Info -->
+                <div class="alert alert-info d-block d-md-none" style="display: none; margin-bottom: 10px; padding: 8px; font-size: 12px;" id="mobile-table-info">
+                    <i class="fa fa-info-circle"></i> <strong>Mobile View:</strong> Data ditampilkan dalam format kartu untuk kemudahan akses.
+                </div>
+
+                <div class="table-responsive-mobile">
+                    <table class="table table-stiped table-bordered table-penjualan">
+                        <thead>
+                            <th width="5%">No</th>
+                            <th>Kode</th>
+                            <th>Nama</th>
+                            <th>Harga</th>
+                            <th width="15%">Jumlah</th>
+                            <th>Diskon</th>
+                            <th>Subtotal</th>
+                            <th width="15%"><i class="fa fa-cog"></i></th>
+                        </thead>
+                    </table>
+                </div>
 
                 <div class="row">
                     <div class="col-lg-8">
@@ -176,6 +326,37 @@
 
 @push('scripts')
 <script>
+    // Mobile detection and UI adjustments
+    function checkMobileView() {
+        if (window.innerWidth <= 768) {
+            const mobileInfo = document.getElementById('mobile-table-info');
+            if (mobileInfo) {
+                mobileInfo.style.display = 'block';
+            }
+            // Add data labels to table cells for mobile card view
+            addMobileDataLabels();
+        }
+    }
+    
+    // Add data-label attributes to table cells for mobile view (penjualan)
+    function addMobileDataLabels() {
+        const tableRows = document.querySelectorAll('.table-penjualan tbody tr');
+        const labels = ['No', 'Kode', 'Nama', 'Harga', 'Jumlah', 'Diskon', 'Subtotal', 'Aksi'];
+        
+        tableRows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            cells.forEach((cell, index) => {
+                if (labels[index]) {
+                    cell.setAttribute('data-label', labels[index]);
+                }
+            });
+        });
+    }
+    
+    // Check on load and resize
+    document.addEventListener('DOMContentLoaded', checkMobileView);
+    window.addEventListener('resize', checkMobileView);
+
     let table, table2;
     let userEditedDiterima = false;
     let totalUpdateTimeout = null;
@@ -289,10 +470,17 @@
 
         @if($id_penjualan)
         table = $('.table-penjualan').DataTable({
-            responsive: true,
+            responsive: {
+                details: {
+                    type: 'column',
+                    target: 'tr'
+                }
+            },
             processing: false,
             serverSide: false,
             autoWidth: false,
+            scrollX: true,
+            scrollCollapse: true,
             ajax: {
                 url: '{{ route('transaksi.data', $id_penjualan) }}',
                 dataSrc: 'data'
@@ -313,6 +501,10 @@
         })
         .on('draw.dt', function () {
             updateTotalFromTable();
+            // Add mobile data labels after table draw
+            if (window.innerWidth <= 768) {
+                addMobileDataLabels();
+            }
         });
 
         // Ensure totals are correct after initial load; sometimes DataTables async load
@@ -326,8 +518,16 @@
         @else
         // Inisialisasi tabel kosong untuk transaksi baru
         table = $('.table-penjualan').DataTable({
-            responsive: true,
+            responsive: {
+                details: {
+                    type: 'column',
+                    target: 'tr'
+                }
+            },
             data: [],
+            scrollX: true,
+            scrollCollapse: true,
+            autoWidth: false,
             columns: [
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
                 {data: 'kode_produk'},
@@ -345,10 +545,17 @@
         @endif
 
         table2 = $('.table-produk').DataTable({
-            responsive: true,
+            responsive: {
+                details: {
+                    type: 'column',
+                    target: 'tr'
+                }
+            },
             processing: true,
             serverSide: false,
             autoWidth: false,
+            scrollX: true,
+            scrollCollapse: true,
             ajax: {
                 url: '{{ route('transaksi.produk_data') }}',
                 dataSrc: ''
@@ -399,6 +606,31 @@
                 search: "Cari produk:",
                 lengthMenu: "Tampilkan _MENU_ produk",
                 info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ produk",
+                paginate: {
+                    first: "Pertama",
+                    last: "Terakhir",
+                    next: "Selanjutnya",
+                    previous: "Sebelumnya"
+                }
+            }
+        });
+
+        // Inisialisasi DataTable untuk member
+        $('.table-member').DataTable({
+            responsive: {
+                details: {
+                    type: 'column',
+                    target: 'tr'
+                }
+            },
+            scrollX: true,
+            scrollCollapse: true,
+            autoWidth: false,
+            order: [[1, 'asc']],
+            language: {
+                search: "Cari member:",
+                lengthMenu: "Tampilkan _MENU_ member",
+                info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ member",
                 paginate: {
                     first: "Pertama",
                     last: "Terakhir",
@@ -716,10 +948,17 @@
                         }
                         
                         table = $('.table-penjualan').DataTable({
-                            responsive: true,
+                            responsive: {
+                                details: {
+                                    type: 'column',
+                                    target: 'tr'
+                                }
+                            },
                             processing: false,
                             serverSide: false,
                             autoWidth: false,
+                            scrollX: true,
+                            scrollCollapse: true,
                             ajax: {
                                 url: '{{ url('transaksi_detail') }}/' + response.id_penjualan + '/data',
                                 dataSrc: 'data'
@@ -740,6 +979,10 @@
                         })
                         .on('draw.dt', function () {
                             updateTotalFromTable();
+                            // Add mobile data labels after table draw
+                            if (window.innerWidth <= 768) {
+                                addMobileDataLabels();
+                            }
                         });
                         // Force initial load and update after table creation
                         table.ajax.reload(function() {

@@ -52,6 +52,151 @@
             height: 70px;
             padding-top: 5px;
         }
+        
+        .form-group {
+            margin-bottom: 10px;
+        }
+        
+        .form-group .col-lg-2 {
+            width: 100%;
+            margin-bottom: 5px;
+            text-align: left;
+        }
+        
+        .form-group .col-lg-8,
+        .form-group .col-lg-5 {
+            width: 100%;
+        }
+        
+        .box-footer .btn {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        .table-responsive-mobile {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        
+        /* Transform table to card layout on mobile */
+        .table-pembelian {
+            border: 0;
+            width: 100%;
+        }
+        
+        .table-pembelian thead {
+            display: none; /* Hide table headers */
+        }
+        
+        .table-pembelian tbody {
+            display: block;
+        }
+        
+        .table-pembelian tbody tr {
+            display: block;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            padding: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .table-pembelian tbody td {
+            display: block;
+            border: none;
+            padding: 4px 0;
+            position: relative;
+        }
+        
+        /* Hide certain columns on mobile */
+        .table-pembelian tbody td:nth-child(2), /* Kode */
+        .table-pembelian tbody td:nth-child(5), /* Harga Jual */
+        .table-pembelian tbody td:nth-child(6), /* Expired Date */
+        .table-pembelian tbody td:nth-child(7)  /* Batch */ {
+            display: none;
+        }
+        
+        /* Style remaining columns as cards */
+        .table-pembelian tbody td:before {
+            content: attr(data-label) ": ";
+            font-weight: 600;
+            font-size: 11px;
+            color: #666;
+            display: inline-block;
+            min-width: 80px;
+            margin-right: 10px;
+        }
+        
+        /* Remove labels for number and action columns */
+        .table-pembelian tbody td:nth-child(1):before,
+        .table-pembelian tbody td:nth-child(10):before {
+            display: none;
+        }
+        
+        /* Style the number column as header */
+        .table-pembelian tbody td:nth-child(1) {
+            background: #3c8dbc;
+            color: white;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+            margin: -12px -12px 10px -12px;
+        }
+        
+        /* Style action column */
+        .table-pembelian tbody td:nth-child(10) {
+            text-align: center;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+            margin: 10px -12px -12px -12px;
+        }
+        
+        /* Grid layout for main content */
+        .table-pembelian tbody td:nth-child(3),
+        .table-pembelian tbody td:nth-child(4),
+        .table-pembelian tbody td:nth-child(8),
+        .table-pembelian tbody td:nth-child(9) {
+            display: inline-block;
+            width: 48%;
+            vertical-align: top;
+            margin-right: 2%;
+        }
+        
+        /* Full width for product name */
+        .table-pembelian tbody td:nth-child(3) {
+            width: 100%;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        /* Mobile-friendly inputs */
+        .table-pembelian input[type="number"],
+        .table-pembelian input[type="text"] {
+            width: 100%;
+            padding: 4px 6px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+        
+        .table-pembelian .btn {
+            padding: 4px 8px;
+            font-size: 11px;
+            border-radius: 3px;
+        }
+        
+        .input-group-btn .btn {
+            height: 34px;
+        }
+    }
+    
+    /* Hide mobile cards on desktop */
+    @media(min-width: 769px) {
+        .mobile-table-cards {
+            display: none;
+        }
     }
 </style>
 @endpush
@@ -116,20 +261,27 @@
                     </div>
                 </form>
 
-                <table class="table table-stiped table-bordered table-pembelian">
-                    <thead>
-                        <th width="5%">No</th>
-                        <th>Kode</th>
-                        <th>Nama</th>
-                        <th>Harga Beli</th>
-                        <th>Harga Jual</th>
-                        <th>Expired Date</th>
-                        <th>Batch</th>
-                        <th width="15%">Jumlah</th>
-                        <th>Subtotal</th>
-                        <th width="15%"><i class="fa fa-cog"></i></th>
-                    </thead>
-                </table>
+                <!-- Mobile Table Info -->
+                <div class="alert alert-info d-block d-md-none" style="display: none; margin-bottom: 10px; padding: 8px; font-size: 12px;" id="mobile-table-info">
+                    <i class="fa fa-info-circle"></i> <strong>Mobile View:</strong> Data ditampilkan dalam format kartu untuk kemudahan akses.
+                </div>
+
+                <div class="table-responsive-mobile">
+                    <table class="table table-stiped table-bordered table-pembelian">
+                        <thead>
+                            <th width="5%">No</th>
+                            <th>Kode</th>
+                            <th>Nama</th>
+                            <th>Harga Beli</th>
+                            <th>Harga Jual</th>
+                            <th>Expired Date</th>
+                            <th>Batch</th>
+                            <th width="15%">Jumlah</th>
+                            <th>Subtotal</th>
+                            <th width="15%"><i class="fa fa-cog"></i></th>
+                        </thead>
+                    </table>
+                </div>
 
                 <div class="row">
                     <div class="col-lg-8">
@@ -192,11 +344,45 @@
 
 @push('scripts')
 <script>
+    // Mobile detection and UI adjustments
+    function checkMobileView() {
+        if (window.innerWidth <= 768) {
+            const mobileInfo = document.getElementById('mobile-table-info');
+            if (mobileInfo) {
+                mobileInfo.style.display = 'block';
+            }
+            // Add data labels to table cells for mobile card view
+            addMobileDataLabels();
+        }
+    }
+    
+    // Add data-label attributes to table cells for mobile view
+    function addMobileDataLabels() {
+        const tableRows = document.querySelectorAll('.table-pembelian tbody tr');
+        const labels = ['No', 'Kode', 'Nama', 'Harga Beli', 'Harga Jual', 'Expired Date', 'Batch', 'Jumlah', 'Subtotal', 'Aksi'];
+        
+        tableRows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            cells.forEach((cell, index) => {
+                if (labels[index]) {
+                    cell.setAttribute('data-label', labels[index]);
+                }
+            });
+        });
+    }
+    
+    // Check on load and resize
+    document.addEventListener('DOMContentLoaded', checkMobileView);
+    window.addEventListener('resize', checkMobileView);
+    
     const date = new Date();
     const today = date.toISOString().substring(0, 10);
     console.log(today);
     document.querySelector('.waktu').value = today; 
     let table, table2;
+    
+    // Declare table2 as global variable
+    window.table2 = null;
 
     // Helper function untuk format angka seperti format_uang di PHP
     function formatUang(angka) {
@@ -212,10 +398,17 @@
         $('body').addClass('sidebar-collapse');
 
         table = $('.table-pembelian').DataTable({
-            responsive: true,
+            responsive: {
+                details: {
+                    type: 'column',
+                    target: 'tr'
+                }
+            },
             processing: true,
             serverSide: true,
             autoWidth: false,
+            scrollX: true,
+            scrollCollapse: true,
             ajax: {
                 url: '{{ route('pembelian_detail.data', $id_pembelian) }}',
             },
@@ -242,69 +435,117 @@
                 setTimeout(() => {
                     loadForm($('#diskon').val());
                 }, 10);
+                // Add mobile data labels after table draw
+                if (window.innerWidth <= 768) {
+                    addMobileDataLabels();
+                }
             }, 100); // Delay lebih lama untuk memastikan semua input sudah ter-render
         });
-        table2 = $('.table-produk').DataTable({
-            responsive: true,
+        
+        console.log('Initializing table2 for produk...');
+        
+        // Pastikan elemen tabel ada sebelum inisialisasi
+        if ($('#table-produk-pembelian').length === 0) {
+            console.error('Elemen #table-produk-pembelian tidak ditemukan');
+            return;
+        }
+        
+        // Destroy existing DataTable if any
+        if ($.fn.DataTable.isDataTable('#table-produk-pembelian')) {
+            $('#table-produk-pembelian').DataTable().destroy();
+        }
+        
+        table2 = $('#table-produk-pembelian').DataTable({
+            responsive: false, // Disable responsive untuk debugging
             processing: true,
             serverSide: false,
             autoWidth: false,
+            scrollX: true,
+            scrollCollapse: true,
+            destroy: true, // Allow reinitialization
             ajax: {
                 url: '{{ route('pembelian_detail.produk_data') }}',
-                dataSrc: ''
+                dataSrc: '',
+                error: function(xhr, error, code) {
+                    console.log('DataTables Error:', error);
+                    console.log('Status:', xhr.status);
+                    console.log('Response:', xhr.responseText);
+                    
+                    // Try fallback: show modal anyway with static data
+                    if ($('#table-produk-pembelian tbody tr').length === 0) {
+                        $('#table-produk-pembelian tbody').html('<tr><td colspan="6" class="text-center">Data tidak dapat dimuat. Silakan refresh halaman.</td></tr>');
+                    }
+                }
             },
             columns: [
-                {data: 'no', searchable: false, sortable: false},
+                {data: 'no', searchable: false, sortable: false, className: 'text-center'},
                 {
                     data: 'kode_produk',
-                    render: function(data) {
+                    render: function(data, type, row) {
                         return '<span class="label label-success">' + data + '</span>';
                     }
                 },
                 {data: 'nama_produk'},
                 {
                     data: null,
-                    render: function(data) {
-                        let badgeHtml = '<span class="badge ' + data.stok_badge_class + '">' + 
-                                       formatUang(data.stok) + ' unit</span>';
+                    render: function(data, type, row) {
+                        let badgeClass = 'bg-green';
+                        let statusText = '';
                         
-                        if (data.stok_text) {
-                            badgeHtml += '<small class="' + data.stok_text_class + '"><br><i class="fa ' + 
-                                        data.stok_icon + '"></i> ' + data.stok_text + '</small>';
+                        if (data.stok == 0) {
+                            badgeClass = 'bg-red';
+                            statusText = '<br><small class="text-danger"><i class="fa fa-exclamation-triangle"></i> Stok Habis</small>';
+                        } else if (data.stok <= 5) {
+                            badgeClass = 'bg-yellow';
+                            statusText = '<br><small class="text-warning"><i class="fa fa-warning"></i> Stok Menipis</small>';
                         }
                         
-                        return badgeHtml;
+                        return '<span class="badge ' + badgeClass + '">' + formatUang(data.stok) + ' unit</span>' + statusText;
                     }
                 },
                 {
                     data: 'harga_beli',
-                    render: function(data) {
+                    render: function(data, type, row) {
                         return 'Rp. ' + formatUang(data);
-                    }
+                    },
+                    className: 'text-right'
                 },
                 {
                     data: null,
-                    render: function(data) {
+                    render: function(data, type, row) {
                         return '<a href="#" class="btn btn-primary btn-xs btn-flat" ' +
                                'onclick="pilihProduk(\'' + data.id + '\', \'' + data.kode_produk + '\')">' +
                                '<i class="fa fa-check-circle"></i> Pilih</a>';
                     },
                     searchable: false,
-                    sortable: false
+                    sortable: false,
+                    className: 'text-center'
                 }
             ],
             order: [[2, 'asc']], // Sort by nama_produk
+            pageLength: 10,
             language: {
                 processing: "Memuat data produk...",
                 search: "Cari produk:",
-                lengthMenu: "Tampilkan _MENU_ produk",
+                lengthMenu: "Tampilkan _MENU_ produk per halaman",
                 info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ produk",
+                infoEmpty: "Tidak ada produk yang ditemukan",
+                infoFiltered: "(difilter dari _MAX_ total produk)",
+                zeroRecords: "Tidak ada produk yang cocok dengan pencarian",
                 paginate: {
                     first: "Pertama",
                     last: "Terakhir",
                     next: "Selanjutnya",
                     previous: "Sebelumnya"
                 }
+            },
+            initComplete: function(settings, json) {
+                console.log('DataTable produk berhasil diinisialisasi');
+                console.log('Data loaded:', json);
+                window.table2 = this.api();
+            },
+            drawCallback: function(settings) {
+                console.log('Table draw completed');
             }
         });
 
@@ -784,11 +1025,62 @@
     }
 
     function tampilProduk() {
-        // Refresh data produk untuk mendapatkan stok terbaru
-        if (table2) {
-            table2.ajax.reload(null, false); // Reload tanpa reset halaman
-        }
+        console.log('tampilProduk() called');
+        
+        // Show modal first
         $('#modal-produk').modal('show');
+        
+        // Check if DataTable is initialized
+        if ($.fn.DataTable.isDataTable('#table-produk-pembelian')) {
+            console.log('DataTable already exists, reloading...');
+            const tableInstance = window.table2 || table2 || $('#table-produk-pembelian').DataTable();
+            tableInstance.ajax.reload(function(json) {
+                console.log('Data reloaded:', json);
+            }, false);
+        } else {
+            console.log('DataTable not found, trying to initialize...');
+            
+            // Wait a bit for modal to fully show, then try to initialize
+            setTimeout(function() {
+                try {
+                    if ($('#table-produk-pembelian').length > 0) {
+                        const newTable = $('#table-produk-pembelian').DataTable({
+                            responsive: false,
+                            processing: true,
+                            serverSide: false,
+                            autoWidth: false,
+                            scrollX: true,
+                            destroy: true,
+                            ajax: {
+                                url: '{{ route('pembelian_detail.produk_data') }}',
+                                dataSrc: '',
+                                error: function(xhr, error, code) {
+                                    console.log('Fallback DataTable Error:', error);
+                                    $('#table-produk-pembelian tbody').html('<tr><td colspan="6" class="text-center text-danger">Gagal memuat data produk</td></tr>');
+                                }
+                            },
+                            columns: [
+                                {data: 'no', searchable: false, sortable: false},
+                                {data: 'kode_produk', render: function(data) { return '<span class="label label-success">' + data + '</span>'; }},
+                                {data: 'nama_produk'},
+                                {data: 'stok', render: function(data) { return '<span class="badge bg-green">' + formatUang(data) + ' unit</span>'; }},
+                                {data: 'harga_beli', render: function(data) { return 'Rp. ' + formatUang(data); }},
+                                {data: null, render: function(data) { 
+                                    return '<a href="#" class="btn btn-primary btn-xs" onclick="pilihProduk(\'' + data.id + '\', \'' + data.kode_produk + '\')"><i class="fa fa-check"></i> Pilih</a>';
+                                }, searchable: false, sortable: false}
+                            ]
+                        });
+                        window.table2 = newTable;
+                        console.log('Fallback DataTable initialized successfully');
+                    } else {
+                        console.error('Table element not found');
+                    }
+                } catch (e) {
+                    console.error('Failed to initialize DataTable:', e);
+                    $('#table-produk-pembelian tbody').html('<tr><td colspan="6" class="text-center text-warning">Terjadi kesalahan saat memuat tabel</td></tr>');
+                }
+            }, 500);
+        }
     }
 
     function hideProduk() {
@@ -824,8 +1116,9 @@
                 
                 // Refresh data produk di modal untuk update stok
                 setTimeout(() => {
-                    if (table2) {
-                        table2.ajax.reload(null, false);
+                    const tableInstance = window.table2 || table2;
+                    if (tableInstance) {
+                        tableInstance.ajax.reload(null, false);
                     }
                 }, 200);
             })

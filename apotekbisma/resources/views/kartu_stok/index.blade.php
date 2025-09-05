@@ -58,9 +58,17 @@
         $('#modal-produk').modal('show');
         if (!$.fn.DataTable.isDataTable('.table-produk')) {
             $('.table-produk').DataTable({
-                responsive: true,
+                responsive: {
+                    details: {
+                        type: 'column',
+                        target: 'tr'
+                    }
+                },
                 searching: true,
                 paging: true,
+                scrollX: true,
+                scrollCollapse: true,
+                autoWidth: false,
                 language: {
                     search: "Cari produk:",
                     lengthMenu: "Tampilkan _MENU_ data",

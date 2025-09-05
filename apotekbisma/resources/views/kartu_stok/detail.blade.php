@@ -47,6 +47,58 @@
         padding: 10px;
         margin: 5px 0;
     }
+    
+    @media (max-width: 768px) {
+        .info-box {
+            margin-bottom: 10px;
+        }
+        
+        .info-box-content {
+            margin-left: 70px;
+            padding: 5px;
+        }
+        
+        .info-box-icon {
+            width: 70px;
+            height: 70px;
+            line-height: 70px;
+        }
+        
+        .filter-card {
+            padding: 10px;
+        }
+        
+        .btn-group .btn {
+            font-size: 11px;
+            padding: 4px 8px;
+            margin: 2px;
+        }
+        
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .table td, .table th {
+            white-space: nowrap;
+            font-size: 12px;
+            padding: 6px 4px;
+        }
+        
+        .box-tools .btn {
+            margin: 2px;
+            font-size: 11px;
+            padding: 4px 8px;
+        }
+        
+        .form-group label {
+            font-size: 12px;
+        }
+        
+        .input-group .form-control {
+            font-size: 12px;
+        }
+    }
 </style>
 @endpush
 
@@ -231,10 +283,17 @@
     $(function () {
         // Initialize DataTable
         table = $('#kartu-stok-table').DataTable({
-            responsive: true,
+            responsive: {
+                details: {
+                    type: 'column',
+                    target: 'tr'
+                }
+            },
             processing: true,
             serverSide: true,
             autoWidth: false,
+            scrollX: true,
+            scrollCollapse: true,
             ajax: {
                 url: '{{ route('kartu_stok.data', $produk_id) }}',
                 data: function(d) {
