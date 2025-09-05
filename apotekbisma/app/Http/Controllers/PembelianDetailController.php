@@ -34,10 +34,27 @@ class PembelianDetailController extends Controller
     {
         $id_pembelian = session('id_pembelian');
         
-        // If no session data, clear any stale data and redirect to pembelian page
+        // If no session data, check if there's an active incomplete transaction
         if (!$id_pembelian) {
-            session()->forget(['id_pembelian', 'id_supplier']); // Clear any stale session data
-            return redirect()->route('pembelian.index')->with('error', 'Silakan pilih supplier terlebih dahulu untuk memulai pembelian.');
+            // Look for the most recent incomplete transaction
+            $incompletePembelian = Pembelian::where('no_faktur', 'o')
+                ->orWhere('no_faktur', '')
+                ->orWhereNull('no_faktur')
+                ->orWhere('total_harga', 0)
+                ->orWhere('bayar', 0)
+                ->latest()
+                ->first();
+            
+            if ($incompletePembelian) {
+                // Set session for the incomplete transaction
+                session(['id_pembelian' => $incompletePembelian->id_pembelian]);
+                session(['id_supplier' => $incompletePembelian->id_supplier]);
+                $id_pembelian = $incompletePembelian->id_pembelian;
+            } else {
+                // Clear any stale data and redirect to pembelian page
+                session()->forget(['id_pembelian', 'id_supplier']);
+                return redirect()->route('pembelian.index')->with('info', 'Silakan pilih supplier terlebih dahulu untuk memulai pembelian.');
+            }
         }
         
         // Cek apakah pembelian ada
@@ -50,16 +67,17 @@ class PembelianDetailController extends Controller
         // Cek apakah supplier session sesuai dengan data pembelian
         $session_supplier = session('id_supplier');
         if ($session_supplier != $pembelian->id_supplier) {
-            session()->forget(['id_pembelian', 'id_supplier']); // Clear mismatched session data
-            return redirect()->route('pembelian.index')->with('error', 'Data session tidak sesuai. Silakan mulai transaksi baru.');
+            // Update session to match the found transaction
+            session(['id_supplier' => $pembelian->id_supplier]);
         }
         
         $produk = Produk::orderBy('nama_produk')->get();
-        $supplier = Supplier::find(session('id_supplier'));
+        $supplier = Supplier::find($pembelian->id_supplier);
         $diskon = $pembelian->diskon ?? 0;
 
         if (! $supplier) {
-            abort(404);
+            session()->forget(['id_pembelian', 'id_supplier']);
+            return redirect()->route('pembelian.index')->with('error', 'Supplier tidak ditemukan. Silakan mulai transaksi baru.');
         }
 
         return view('pembelian_detail.index', compact('id_pembelian', 'produk', 'supplier', 'diskon', 'pembelian'));
@@ -241,14 +259,24 @@ class PembelianDetailController extends Controller
 
     public function update(Request $request, $id)
     {
-        set_time_limit(60);
+        set_time_limit(90);
         ini_set('memory_limit', '256M');
         
         try {
-            $detail = PembelianDetail::find($id);
+            $detail = PembelianDetail::where('id_pembelian_detail', $id)->first();
             
             if (!$detail) {
                 return response()->json(['message' => 'Detail pembelian tidak ditemukan'], 404);
+            }
+            
+            $session_id_pembelian = session('id_pembelian');
+            if (!$session_id_pembelian || $session_id_pembelian != $detail->id_pembelian) {
+                session(['id_pembelian' => $detail->id_pembelian]);
+                
+                $pembelian = \App\Models\Pembelian::find($detail->id_pembelian);
+                if ($pembelian) {
+                    session(['id_supplier' => $pembelian->id_supplier]);
+                }
             }
             
             $input_jumlah = $request->input('jumlah');
@@ -302,7 +330,7 @@ class PembelianDetailController extends Controller
                 }
                 
                 if ($stok_baru < 0) {
-                    throw new \Exception('Stok tidak boleh negatif');
+                    $stok_baru = 0;
                 }
                 
                 $produk->stok = $stok_baru;
@@ -345,7 +373,7 @@ class PembelianDetailController extends Controller
                     'subtotal' => $detail->subtotal,
                     'stok_tersisa' => $stok_baru
                 ];
-            }, 3);
+            }, 5);
             
             return response()->json([
                 'message' => 'Data berhasil diperbarui',
@@ -364,7 +392,7 @@ class PembelianDetailController extends Controller
             } elseif (strpos($e->getMessage(), 'Lock wait timeout') !== false) {
                 return response()->json(['message' => 'Request timeout. Silakan coba lagi.'], 503);
             } else {
-                return response()->json(['message' => 'Terjadi kesalahan database'], 500);
+                return response()->json(['message' => 'Terjadi kesalahan database. Silakan coba lagi.'], 500);
             }
             
         } catch (\Exception $e) {
@@ -504,8 +532,20 @@ class PembelianDetailController extends Controller
         return response(null, 204);
     }
 
-    public function getProdukData()
+    public function getProdukData(Request $request)
     {
+        // Handle CSRF token refresh request
+        if ($request->has('refresh_token')) {
+            return response()->json([
+                'csrf_token' => csrf_token()
+            ]);
+        }
+        
+        // Handle session keep-alive ping
+        if ($request->has('ping')) {
+            return response()->json(['status' => 'ok']);
+        }
+        
         $produk = Produk::orderBy('nama_produk')->get();
         
         $data = [];

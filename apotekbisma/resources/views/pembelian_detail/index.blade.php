@@ -553,9 +553,40 @@
         let quantityTimeout;
         let hargaBeliTimeout;
         let hargaJualTimeout;
-        let activeRequests = new Map(); // Track active requests per input
-        let requestQueue = []; // Queue untuk sequential processing
+        let activeRequests = new Map();
+        let requestQueue = [];
         let isProcessingQueue = false;
+        
+        // Function to refresh CSRF token
+        function refreshCsrfToken() {
+            return $.get('{{ route("pembelian_detail.produk_data") }}', { refresh_token: true })
+                .done(function(response) {
+                    if (response.csrf_token) {
+                        $('meta[name="csrf-token"]').attr('content', response.csrf_token);
+                        $('[name="csrf-token"]').attr('content', response.csrf_token);
+                    }
+                })
+                .fail(function() {
+                    console.warn('Failed to refresh CSRF token');
+                });
+        }
+        
+        // Refresh CSRF token every 30 minutes
+        setInterval(refreshCsrfToken, 30 * 60 * 1000);
+        
+        // Keep session alive during active transaction
+        function keepSessionAlive() {
+            $.get('{{ route("pembelian_detail.produk_data") }}', { ping: true })
+                .fail(function(xhr) {
+                    if (xhr.status === 419) {
+                        alert('Session expired. Halaman akan dimuat ulang.');
+                        window.location.reload();
+                    }
+                });
+        }
+        
+        // Keep session alive every 15 minutes
+        setInterval(keepSessionAlive, 15 * 60 * 1000);
         
         // Event change untuk update yang lebih stabil (hanya saat user selesai edit)
         $(document).on('change', '.quantity', function () {
@@ -588,7 +619,9 @@
             // Update jika nilai berbeda dari nilai asli
             let originalValue = $input.data('original-value') || 1;
             if (jumlah !== originalValue) {
-                updateQuantity($input, id, jumlah);
+                quantityTimeout = setTimeout(() => {
+                    updateQuantity($input, id, jumlah);
+                }, 500);
             }
         });
         
@@ -599,7 +632,7 @@
             
             // Biarkan input kosong atau angka yang sedang diketik
             if (inputValue === '' || inputValue === '0') {
-                return; // Biarkan user mengetik
+                return;
             }
             
             let jumlah = parseInt(inputValue);
@@ -615,14 +648,14 @@
         // Event focus untuk menyimpan nilai asli
         $(document).on('focus', '.quantity', function () {
             $(this).data('original-value', parseInt($(this).val()) || 1);
-            $(this).select(); // Select all text saat focus untuk memudahkan edit
+            $(this).select();
         });
 
         // Mencegah form submission saat menekan Enter di input quantity
         $(document).on('keypress', '.quantity', function (e) {
-            if (e.which === 13) { // Enter key
+            if (e.which === 13) {
                 e.preventDefault();
-                $(this).blur(); // Trigger blur untuk validasi dan update
+                $(this).blur();
                 return false;
             }
         });
@@ -641,21 +674,28 @@
             // Set flag bahwa sedang update
             $input.prop('disabled', true).addClass('updating');
             
+            // Refresh CSRF token sebelum request
+            let csrfToken = $('meta[name="csrf-token"]').attr('content');
+            if (!csrfToken) {
+                csrfToken = $('[name=csrf-token]').attr('content');
+            }
+            
             const requestData = {
-                '_token': $('[name=csrf-token]').attr('content'),
+                '_token': csrfToken,
                 '_method': 'put',
                 'jumlah': jumlah
             };
             
-            // Buat request dengan timeout
+            // Buat request dengan timeout dan retry logic
             const xhr = $.ajax({
                 url: `{{ url('/pembelian_detail') }}/${id}`,
                 type: 'POST',
                 data: requestData,
-                timeout: 30000, // 30 second timeout untuk hosting
+                timeout: 45000,
                 beforeSend: function(xhr) {
                     // Track request yang aktif
                     activeRequests.set(id, xhr);
+                    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
                 }
             })
                 .done(response => {
@@ -666,7 +706,7 @@
                         // Update hanya subtotal di kolom yang sama tanpa reload
                         if (response.data && response.data.subtotal) {
                             let $row = $input.closest('tr');
-                            let $subtotalCell = $row.find('td').eq(8); // Kolom subtotal (index 8)
+                            let $subtotalCell = $row.find('td').eq(8);
                             if ($subtotalCell.length) {
                                 $subtotalCell.text('Rp. ' + formatUang(response.data.subtotal));
                             }
@@ -695,8 +735,15 @@
                         } else if (status === 'abort') {
                             // Request dibatalkan, tidak perlu tampilkan error
                             return;
+                        } else if (xhr.status === 419) {
+                            errorMessage = 'Session expired. Halaman akan dimuat ulang.';
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 2000);
                         } else if (xhr.status === 500) {
                             errorMessage = 'Terjadi kesalahan pada server';
+                        } else if (xhr.status === 503) {
+                            errorMessage = 'Server sedang sibuk. Silakan coba lagi.';
                         } else if (xhr.status === 0) {
                             errorMessage = 'Koneksi terputus. Periksa koneksi internet Anda.';
                         } else if (xhr.responseJSON && xhr.responseJSON.message) {
