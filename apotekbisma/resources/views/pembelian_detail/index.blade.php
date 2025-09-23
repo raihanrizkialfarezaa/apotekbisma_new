@@ -385,9 +385,14 @@
         return new Intl.NumberFormat('id-ID').format(angka);
     }
 
-    // Helper function untuk format angka seperti format_uang di PHP
-    function formatUang(angka) {
-        return new Intl.NumberFormat('id-ID').format(angka);
+    function parseNumber(value) {
+        if (value === null || value === undefined) return 0;
+        if (typeof value === 'number') return value;
+        let s = String(value).replace(/[^0-9\-,\.]/g, '');
+        s = s.replace(/\./g, '');
+        s = s.replace(/,/g, '.');
+        let n = Number(s);
+        return isNaN(n) ? 0 : n;
     }
 
     $(function () {
@@ -798,13 +803,10 @@
                 
                 let $quantityInput = $row.find('.quantity');
                 let $hargaBeliInput = $row.find('.harga_beli');
-                
-                // Pastikan kedua input ada dan memiliki nilai valid
+
                 if ($quantityInput.length && $hargaBeliInput.length) {
-                    let jumlah = parseInt($quantityInput.val()) || 0;
-                    let harga_beli = parseInt($hargaBeliInput.val()) || 0;
-                    
-                    // Hanya hitung jika nilai positif
+                    let jumlah = parseNumber($quantityInput.val()) || 0;
+                    let harga_beli = parseNumber($hargaBeliInput.val()) || 0;
                     if (jumlah > 0 && harga_beli > 0) {
                         let subtotal = jumlah * harga_beli;
                         total += subtotal;
@@ -836,14 +838,15 @@
         
         // ===== EXISTING HANDLERS FOR OTHER FIELDS =====
         $(document).on('input', '.harga_jual', function () {
-            let id = $(this).data('id');
-            let harga_jual = parseInt($(this).val());
-            let id_pembelian_detail = $(this).data('uid');
-            let jumlah = parseInt($('.quantity').val());
-            console.log(id_pembelian_detail);
+            let $input = $(this);
+            let id = $input.data('id');
+            let harga_jual = parseNumber($input.val());
+            let id_pembelian_detail = $input.data('uid');
+            let $row = $input.closest('tr');
+            let jumlah = parseNumber($row.find('.quantity').val()) || 0;
 
             if (harga_jual < 1) {
-                $(this).val(1);
+                $input.val(1);
                 alert('Harga tidak boleh kurang dari Rp. 1');
                 return;
             }
@@ -856,7 +859,6 @@
                     'jumlah': jumlah
                 })
                 .done(response => {
-                    // Tidak perlu reload tabel, cukup hitung ulang total
                     recalculateTotal();
                     loadForm($('#diskon').val());
                 })
@@ -869,10 +871,10 @@
             let $input = $(this);
             let id = $input.data('id');
             let id_pembelian_detail = $input.data('uid');
-            let harga_beli = parseInt($input.val());
-            let jumlah = parseInt($('.quantity').val());
+            let harga_beli = parseNumber($input.val());
+            let $row = $input.closest('tr');
+            let jumlah = parseNumber($row.find('.quantity').val()) || 0;
 
-            // Clear timeout sebelumnya
             clearTimeout(hargaBeliTimeout);
 
             if (harga_beli < 1) {
@@ -881,7 +883,6 @@
                 return;
             }
 
-            // Debounce untuk mengurangi request berlebihan
             hargaBeliTimeout = setTimeout(() => {
                 $.post(`{{ url('/updateHargaBeli') }}/${id}`, {
                         '_token': $('[name=csrf-token]').attr('content'),
@@ -891,18 +892,13 @@
                         'jumlah': jumlah
                     })
                     .done(response => {
-                        // Update subtotal di baris yang sama secara langsung
-                        let $row = $input.closest('tr');
                         let $quantityInput = $row.find('.quantity');
-                        let currentJumlah = parseInt($quantityInput.val()) || 1;
+                        let currentJumlah = parseNumber($quantityInput.val()) || 0;
                         let newSubtotal = harga_beli * currentJumlah;
-                        
-                        let $subtotalCell = $row.find('td').eq(8); // Kolom subtotal (index 8)
+                        let $subtotalCell = $row.find('td').eq(8);
                         if ($subtotalCell.length) {
                             $subtotalCell.text('Rp. ' + formatUang(newSubtotal));
                         }
-                        
-                        // Hitung ulang total dan update form secara real-time
                         recalculateTotal();
                         loadForm($('#diskon').val());
                     })
@@ -910,18 +906,16 @@
                         alert('Tidak dapat menyimpan data');
                         return;
                     });
-            }, 300); // Delay 300ms untuk debouncing
+            }, 300);
         });
         $(document).on('input', '.expired_date', function () {
-            let id = $(this).data('id');
-	        console.log($(this).data('id'));
-            let id_pembelian_detail = $(this).data('uid');
-            console.log(id_pembelian_detail);
-            let expired_date = $(this).val().toString();
-            console.log(expired_date);
-            let jumlah = parseInt($('.quantity').val());
-            if(expired_date == null) {
-                console.log("cant update");
+            let $input = $(this);
+            let id = $input.data('id');
+            let id_pembelian_detail = $input.data('uid');
+            let expired_date = $input.val().toString();
+            let $row = $input.closest('tr');
+            let jumlah = parseNumber($row.find('.quantity').val()) || 0;
+            if (expired_date == null) {
                 return;
             }
             $.post(`{{ url('/updateExpiredDate') }}/${id}`, {
@@ -930,8 +924,6 @@
                     'expired_date': expired_date,
                 })
                 .done(response => {
-                    // Tidak perlu reload tabel untuk update expired date
-                    console.log('Expired date updated successfully');
                 })
                 .fail(errors => {
                     alert('Tidak dapat menyimpan data');
@@ -939,20 +931,18 @@
                 });
         });
         $(document).on('input', '.batch', function () {
-            let id = $(this).data('id');
-	        console.log($(this).data('id'));
-            let id_pembelian_detail = $(this).data('uid');
-            console.log(id_pembelian_detail);
-            let batch = $(this).val();
-            let jumlah = parseInt($('.quantity').val());
+            let $input = $(this);
+            let id = $input.data('id');
+            let id_pembelian_detail = $input.data('uid');
+            let batch = $input.val();
+            let $row = $input.closest('tr');
+            let jumlah = parseNumber($row.find('.quantity').val()) || 0;
             $.post(`{{ url('/updateBatch') }}/${id}`, {
                     '_token': $('[name=csrf-token]').attr('content'),
                     '_method': 'put',
                     'batch': batch,
                 })
                 .done(response => {
-                    // Tidak perlu reload tabel untuk update batch
-                    console.log('Batch updated successfully');
                 })
                 .fail(errors => {
                     alert('Tidak dapat menyimpan data');
