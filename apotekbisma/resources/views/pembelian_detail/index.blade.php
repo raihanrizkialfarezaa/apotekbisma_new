@@ -109,23 +109,15 @@
             position: relative;
         }
         
-        /* Hide certain columns on mobile */
-        .table-pembelian tbody td:nth-child(2), /* Kode */
-        .table-pembelian tbody td:nth-child(5), /* Harga Jual */
-        .table-pembelian tbody td:nth-child(6), /* Expired Date */
-        .table-pembelian tbody td:nth-child(7)  /* Batch */ {
-            display: none;
-        }
-        
-        /* Style remaining columns as cards */
+        /* Ensure all important columns are visible on small screens and present as compact cards */
         .table-pembelian tbody td:before {
             content: attr(data-label) ": ";
             font-weight: 600;
-            font-size: 11px;
+            font-size: 12px;
             color: #666;
             display: inline-block;
             min-width: 80px;
-            margin-right: 10px;
+            margin-right: 8px;
         }
         
         /* Remove labels for number and action columns */
@@ -153,17 +145,21 @@
             margin: 10px -12px -12px -12px;
         }
         
-        /* Grid layout for main content */
-        .table-pembelian tbody td:nth-child(3),
+        /* Arrange fields in a compact two-column grid when possible */
+        .table-pembelian tbody td:nth-child(2),
         .table-pembelian tbody td:nth-child(4),
+        .table-pembelian tbody td:nth-child(5),
+        .table-pembelian tbody td:nth-child(6),
+        .table-pembelian tbody td:nth-child(7),
         .table-pembelian tbody td:nth-child(8),
         .table-pembelian tbody td:nth-child(9) {
             display: inline-block;
             width: 48%;
             vertical-align: top;
             margin-right: 2%;
+            padding: 4px 0;
         }
-        
+
         /* Full width for product name */
         .table-pembelian tbody td:nth-child(3) {
             width: 100%;

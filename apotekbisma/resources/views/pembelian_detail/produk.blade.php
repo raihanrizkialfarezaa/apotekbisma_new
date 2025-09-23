@@ -1,27 +1,29 @@
 <style>
 @media (max-width: 768px) {
     .modal-produk .modal-dialog {
-        width: 95%;
-        margin: 10px auto;
+        width: 96%;
+        margin: 8px auto;
+        max-width: 720px;
     }
     
     .table-produk-responsive {
         width: 100%;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
-        margin-bottom: 15px;
+        margin-bottom: 10px;
     }
     
     .table-produk {
-        min-width: 700px;
+        min-width: 480px;
         margin-bottom: 0;
+        font-size: 13px;
     }
     
     .table-produk td, 
     .table-produk th {
         white-space: nowrap;
-        padding: 8px 4px;
-        font-size: 12px;
+        padding: 8px 6px;
+        font-size: 13px;
         vertical-align: middle;
     }
     
@@ -29,25 +31,25 @@
     .table-produk th:last-child {
         position: sticky;
         right: 0;
-        background-color: #fff;
-        border-left: 2px solid #ddd;
+        background-color: #ffffff;
+        border-left: 1px solid #e6e6e6;
         z-index: 10;
-        box-shadow: -2px 0 5px rgba(0,0,0,0.1);
     }
     
     .table-produk .btn {
-        font-size: 10px;
-        padding: 4px 8px;
+        font-size: 12px;
+        padding: 6px 10px;
+        border-radius: 4px;
     }
     
     .table-produk .badge {
-        font-size: 10px;
-        padding: 2px 6px;
+        font-size: 12px;
+        padding: 4px 8px;
     }
     
     .table-produk .label {
-        font-size: 10px;
-        padding: 2px 6px;
+        font-size: 12px;
+        padding: 4px 8px;
     }
 }
 </style>
