@@ -6,6 +6,7 @@ use App\Models\Produk;
 use App\Models\RekamanStok;
 use App\Models\Pembelian;
 use App\Models\Penjualan;
+use App\Models\PembelianDetail;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -46,10 +47,12 @@ class KartuStokController extends Controller
         $no = 1;
         $data = array();
         
-        // Get all stock records for this product, ordered by date
-        $stok = RekamanStok::where('id_produk', $id)
-                           ->orderBy('waktu', 'asc')
-                           ->get();
+    // Get all stock records for this product, ordered by date
+    // Eager-load related models to avoid N+1 queries and ensure relations are available
+    $stok = RekamanStok::with(['produk', 'pembelian.supplier', 'penjualan'])
+               ->where('id_produk', $id)
+               ->orderBy('waktu', 'asc')
+               ->get();
 
         foreach ($stok as $item) {
             $row = array();
@@ -84,6 +87,9 @@ class KartuStokController extends Controller
                               ? '<span class="text-danger" title="Kondisi oversold - stok tidak mencukupi pada saat transaksi">' . format_uang($item->stok_awal) . '</span>' 
                               : format_uang($item->stok_awal);
             $row['stok_sisa'] = format_uang($item->stok_sisa);
+            // Ensure these keys always exist for DataTables columns (defaults)
+            $row['expired_date'] = '';
+            $row['supplier'] = '';
             
             // Determine transaction type and add reference with detailed information
             $keterangan = '';
@@ -128,6 +134,32 @@ class KartuStokController extends Controller
             }
             
             $row['keterangan'] = $keterangan;
+            // Populate expired_date and supplier when this record is linked to a pembelian
+            if (!empty($item->id_pembelian)) {
+                try {
+                    // use eager-loaded pembelian when available
+                    $pembelian = $item->pembelian ?? Pembelian::find($item->id_pembelian);
+                    if ($pembelian) {
+                        $row['supplier'] = optional($pembelian->supplier)->nama ?? '';
+                        // Try to find pembelian_detail for this product to get expired_date
+                        $pd = \App\Models\PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)
+                                              ->where('id_produk', $item->id_produk)
+                                              ->first();
+                        if ($pd && !empty($pd->expired_date)) {
+                            // normalize to Y-m-d for consistent client parsing
+                            try {
+                                $row['expired_date'] = \Carbon\Carbon::parse($pd->expired_date)->toDateString();
+                            } catch (\Exception $e) {
+                                $row['expired_date'] = (string) $pd->expired_date;
+                            }
+                        }
+                    }
+                } catch (\Exception $e) {
+                    // Do not break the response if lookup fails
+                    $row['expired_date'] = '';
+                    $row['supplier'] = '';
+                }
+            }
             $data[] = $row;
         }
 
@@ -140,6 +172,9 @@ class KartuStokController extends Controller
                 'stok_keluar' => '',
                 'stok_awal' => '',
                 'stok_sisa' => '<strong>' . format_uang($produk->stok) . '</strong>',
+                // keep keys present even for summary row
+                'expired_date' => '',
+                'supplier' => '',
                 'keterangan' => '<strong>Stok Aktual</strong>',
             ];
         }
@@ -254,8 +289,10 @@ class KartuStokController extends Controller
         $no = 1;
         $data = array();
         
-        // Build query with date filters
-        $query = RekamanStok::where('id_produk', $id);
+    // Build query with date filters
+    // Eager-load related models to avoid N+1 and ensure relations available for lookups
+    $query = RekamanStok::with(['produk', 'pembelian.supplier', 'penjualan'])
+                  ->where('id_produk', $id);
 
         // Apply date filters based on request
         if ($request->has('date_filter') && $request->date_filter) {
@@ -325,6 +362,9 @@ class KartuStokController extends Controller
                               ? '<span class="text-danger" title="Kondisi oversold - stok tidak mencukupi pada saat transaksi">' . format_uang($item->stok_awal) . '</span>' 
                               : format_uang($item->stok_awal);
             $row['stok_sisa'] = format_uang($item->stok_sisa);
+            // ensure new fields exist for every row
+            $row['expired_date'] = '';
+            $row['supplier'] = '';
             
             // Determine transaction type and add reference with styling
             $keterangan = '';
@@ -385,6 +425,44 @@ class KartuStokController extends Controller
             }
             
             $row['keterangan'] = $keterangan;
+            // Populate supplier and expired_date when possible
+            if (!empty($item->id_pembelian)) {
+                try {
+                    // prefer eager-loaded pembelian
+                    $pembelian = $item->pembelian ?? Pembelian::find($item->id_pembelian);
+                    if ($pembelian) {
+                        $row['supplier'] = optional($pembelian->supplier)->nama ?? '';
+                        // Prefer expired_date from pembelian_detail if available, otherwise use product-level expired_date
+                        $pd = \App\Models\PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)
+                                              ->where('id_produk', $item->id_produk)
+                                              ->first();
+                        if ($pd && !empty($pd->expired_date)) {
+                            try {
+                                $row['expired_date'] = \Carbon\Carbon::parse($pd->expired_date)->toDateString();
+                            } catch (\Exception $e) {
+                                $row['expired_date'] = (string) $pd->expired_date;
+                            }
+                        } elseif (!empty($item->id_produk) && $item->produk && !empty($item->produk->expired_date)) {
+                            try {
+                                $row['expired_date'] = \Carbon\Carbon::parse($item->produk->expired_date)->toDateString();
+                            } catch (\Exception $e) {
+                                $row['expired_date'] = (string) $item->produk->expired_date;
+                            }
+                        }
+                    }
+                } catch (\Exception $e) {
+                    // keep defaults if lookup fails
+                }
+            } else {
+                // If not tied to pembelian, still try product-level expired_date
+                if (!empty($item->id_produk) && $item->produk && !empty($item->produk->expired_date)) {
+                    try {
+                        $row['expired_date'] = \Carbon\Carbon::parse($item->produk->expired_date)->toDateString();
+                    } catch (\Exception $e) {
+                        $row['expired_date'] = (string) $item->produk->expired_date;
+                    }
+                }
+            }
             $data[] = $row;
         }
 
@@ -398,6 +476,8 @@ class KartuStokController extends Controller
                     'stok_keluar' => '',
                     'stok_awal' => '',
                     'stok_sisa' => '<strong class="text-primary">' . format_uang($produk->stok) . ' unit</strong>',
+                    'expired_date' => '',
+                    'supplier' => '',
                     'keterangan' => '<strong class="text-primary">Stok Aktual Saat Ini</strong>',
                 ];
             }

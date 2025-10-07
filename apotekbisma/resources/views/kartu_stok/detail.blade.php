@@ -351,8 +351,9 @@
                             <th class="text-center">Tanggal</th>
                             <th class="text-center">Stok Masuk</th>
                             <th class="text-center">Stok Keluar</th>
-                            <th class="text-center">Stok Awal</th>
-                            <th class="text-center">Stok Saat ini</th>
+                            <th class="text-center">Stok Akhir</th>
+                            <th class="text-center">Expired Date</th>
+                            <th class="text-center">Supplier</th>
                             <th class="text-center">Keterangan</th>
                         </tr>
                     </thead>
@@ -401,8 +402,36 @@
                 {data: 'tanggal', className: 'text-center'},
                 {data: 'stok_masuk', className: 'text-center'},
                 {data: 'stok_keluar', className: 'text-center'},
-                {data: 'stok_awal', className: 'text-center'},
                 {data: 'stok_sisa', className: 'text-center'},
+                {
+                    data: 'expired_date',
+                    className: 'text-center',
+                    // ensure DataTables won't complain if the key is missing and display a friendly placeholder
+                    defaultContent: '',
+                    render: function(data, type, row) {
+                        if (!data || data === '') return '-';
+                        // for ordering/searching use raw ISO date, display localized format for humans
+                        if (type === 'display') {
+                            try {
+                                const dt = new Date(data);
+                                if (!isNaN(dt.getTime())) {
+                                    return dt.toLocaleDateString('id-ID');
+                                }
+                            } catch (e) {}
+                            return data;
+                        }
+                        return data;
+                    }
+                },
+                {
+                    data: 'supplier',
+                    className: 'text-left',
+                    defaultContent: '-',
+                    render: function(data, type, row) {
+                        if (!data || data === '') return '-';
+                        return data;
+                    }
+                },
                 {data: 'keterangan', className: 'text-left'}
             ],
             dom: 'Bfrtip',
