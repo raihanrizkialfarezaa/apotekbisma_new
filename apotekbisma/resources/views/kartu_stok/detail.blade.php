@@ -28,6 +28,8 @@
         padding: 15px;
         margin-bottom: 20px;
     }
+    .filter-card { position: relative; z-index: 1200; }
+    .filter-card .btn { position: relative; z-index: 1210; }
     .chart-container {
         position: relative;
         height: 300px;
@@ -99,6 +101,96 @@
             font-size: 12px;
         }
     }
+
+    @media (min-width: 769px) and (max-width: 1366px) and (orientation: landscape) {
+        .box-body.table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .table thead th, .table tbody td {
+            font-size: 13px;
+            padding: 8px 6px;
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        .table td.text-center, .table th.text-center {
+            text-align: center;
+        }
+
+        .table-responsive { 
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .info-box-content { margin-left: 80px; }
+    }
+
+    @media (min-width: 600px) and (max-width: 1024px) {
+        .box-body.table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .table thead th, .table tbody td {
+            font-size: 13px;
+            padding: 7px 5px;
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        .table-responsive { 
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+        }
+    }
+
+    @media (min-width: 1025px) and (max-width: 1440px) and (orientation: landscape) {
+        .table thead th, .table tbody td {
+            font-size: 13px;
+            padding: 8px 6px;
+        }
+    }
+
+    /* Prevent header letters from stacking vertically on narrow tablets */
+    .box-body.table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    #kartu-stok-table { min-width: 900px; }
+    .table thead th { white-space: nowrap !important; word-break: normal !important; writing-mode: horizontal-tb !important; transform: none !important; }
+    .table thead th .dt-control { display: inline-block; }
+
+    /* Extra tablet-focused rules for a wider range of devices */
+    @media (min-width: 600px) and (max-width: 820px) and (orientation: landscape) {
+        .filter-card { padding: 8px; }
+        .btn-group .btn { font-size: 12px; padding: 6px 10px; }
+        .box-body.table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .table thead th, .table tbody td { font-size: 12px; padding: 8px 6px; white-space: normal; word-break: break-word; }
+        .table td, .table th { vertical-align: middle; }
+        .table thead th { white-space: nowrap; }
+        .info-box-content { margin-left: 70px; }
+    }
++
+    @media (min-width: 821px) and (max-width: 1024px) and (orientation: landscape) {
+        .filter-card { padding: 10px; }
+        .btn-group .btn { font-size: 13px; padding: 7px 12px; }
+        .table thead th, .table tbody td { font-size: 13px; padding: 7px 6px; white-space: normal; word-break: break-word; }
+        .box-body.table-responsive { overflow-x: auto; }
+    }
++
+    @media (min-width: 600px) and (max-width: 1024px) and (orientation: portrait) {
+        .btn-group .btn { display: inline-block; margin: 3px 2px; }
+        .table thead th, .table tbody td { font-size: 13px; padding: 8px 6px; }
+        .table-responsive { overflow-x: auto; }
++        .filter-card { z-index: 1200; }
+    }
++
+    /* Ensure touch targets are sufficiently large on tablets */
+    @media (min-width: 600px) and (max-width: 1440px) {
+        .filter-card .btn, .box-tools .btn { min-height: 40px; line-height: 20px; }
++    }
+*** End Patch
 </style>
 @endpush
 
@@ -344,32 +436,112 @@
                     previous: 'Sebelumnya'
                 }
             },
-            order: [[1, 'desc']], // Order by date descending
+            order: [[1, 'asc']], // Order by date ascending (chronological)
             pageLength: 25
         });
+
+            // Fallback presentation sort: if server returns formatted dates that sort incorrectly client-side,
+            // reorder visible rows in the DOM by parsed date (ascending) for better UX on tablets.
+            const monthMap = {
+                'januari': 1,'februari': 2,'maret': 3,'april': 4,'mei': 5,'juni': 6,
+                'juli': 7,'agustus': 8,'september': 9,'oktober': 10,'november': 11,'desember': 12
+            };
+
+            function parseIndoDate(text) {
+                if (!text) return null;
+                text = text.trim().toLowerCase();
+                // Expected formats: '29 Juli 2025', '2025-07-29', or localized variants
+                // Try ISO first
+                const isoMatch = text.match(/^(\d{4})-(\d{2})-(\d{2})/);
+                if (isoMatch) {
+                    return new Date(isoMatch[1], parseInt(isoMatch[2],10)-1, isoMatch[3]);
+                }
+                // Try 'DD Month YYYY'
+                const parts = text.split(/\s+/);
+                if (parts.length >= 3) {
+                    const day = parseInt(parts[0].replace(/[^0-9]/g,''),10);
+                    const monthName = parts[1].replace(/[^a-z]/g,'');
+                    const year = parseInt(parts[2].replace(/[^0-9]/g,''),10);
+                    const month = monthMap[monthName];
+                    if (!isNaN(day) && month && !isNaN(year)) {
+                        return new Date(year, month-1, day);
+                    }
+                }
+                // Fallback: try Date parse
+                const d = new Date(text);
+                return isNaN(d.getTime()) ? null : d;
+            }
+
+            table.on('draw.dt', function() {
+                try {
+                    const $tbody = $('#kartu-stok-table tbody');
+                    const $rows = $tbody.find('tr').get();
+                    const rowsWithDates = $rows.map(r => {
+                        const $r = $(r);
+                        const dateText = $r.find('td').eq(1).text();
+                        const parsed = parseIndoDate(dateText);
+                        return {row: r, date: parsed};
+                    });
+
+                    // If any parsed dates are null, skip reordering to avoid breaking server expectations
+                    if (rowsWithDates.every(rd => rd.date instanceof Date && !isNaN(rd.date.getTime()))) {
+                        rowsWithDates.sort((a,b) => a.date - b.date);
+                        // Re-append rows in sorted order for presentation only
+                        rowsWithDates.forEach(rd => $tbody.append(rd.row));
+                    }
+                } catch (e) {
+                    console.warn('Client-side date fallback sort failed', e);
+                }
+            });
 
         // Initialize Chart
         initStockChart();
 
-        // Filter button handlers
-        $('.filter-btn').click(function() {
-            $('.filter-btn').removeClass('btn-primary').addClass('btn-default');
-            $(this).removeClass('btn-default').addClass('btn-primary');
-            
-            currentFilter = $(this).data('filter');
-            table.ajax.reload();
-        });
-
-        // Custom filter handler
-        $('#apply-custom-filter').click(function() {
-            if ($('#start_date').val() && $('#end_date').val()) {
+        // Filter button handlers (touch-aware delegated)
+        (function() {
+            function handleFilterAction($el) {
                 $('.filter-btn').removeClass('btn-primary').addClass('btn-default');
-                currentFilter = 'custom';
+                $el.removeClass('btn-default').addClass('btn-primary');
+                currentFilter = $el.data('filter');
                 table.ajax.reload();
-            } else {
-                alert('Mohon pilih tanggal mulai dan tanggal akhir');
             }
-        });
+
+            $(document).on('touchstart', '.filter-btn', function(e) {
+                var $this = $(this);
+                $this.data('touched', true);
+                handleFilterAction($this);
+            });
+
+            $(document).on('click', '.filter-btn', function(e) {
+                var $this = $(this);
+                if ($this.data('touched')) { $this.data('touched', false); return; }
+                handleFilterAction($this);
+            });
+
+            // Custom filter (apply) with touch support
+            $(document).on('touchstart', '#apply-custom-filter', function(e) {
+                $(this).data('touched', true);
+                if ($('#start_date').val() && $('#end_date').val()) {
+                    $('.filter-btn').removeClass('btn-primary').addClass('btn-default');
+                    currentFilter = 'custom';
+                    table.ajax.reload();
+                } else {
+                    alert('Mohon pilih tanggal mulai dan tanggal akhir');
+                }
+            });
+
+            $(document).on('click', '#apply-custom-filter', function(e) {
+                var $btn = $(this);
+                if ($btn.data('touched')) { $btn.data('touched', false); return; }
+                if ($('#start_date').val() && $('#end_date').val()) {
+                    $('.filter-btn').removeClass('btn-primary').addClass('btn-default');
+                    currentFilter = 'custom';
+                    table.ajax.reload();
+                } else {
+                    alert('Mohon pilih tanggal mulai dan tanggal akhir');
+                }
+            });
+        })();
 
         $('.datepicker').datepicker({
             format: 'yyyy-mm-dd',
