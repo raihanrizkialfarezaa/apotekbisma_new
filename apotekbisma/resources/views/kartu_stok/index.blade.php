@@ -15,6 +15,12 @@
         <div class="box box-primary">
             <div class="box-header with-border">
                 <h3 class="box-title"><i class="fa fa-archive"></i> Kartu Stok Produk</h3>
+                <div class="box-tools pull-right">
+                    <a href="{{ route('kartu_stok.fix_records') }}" target="_blank" class="btn btn-warning btn-sm btn-flat" 
+                       onclick="return confirm('Apakah Anda yakin ingin memperbaiki semua rekaman stok?\n\nProses ini akan:\n✓ Menghitung ulang stok_awal dan stok_sisa pada semua rekaman stok\n✓ Memperbaiki inkonsistensi perhitungan\n✓ TIDAK MENGUBAH stok realtime produk\n\nProses ini mungkin memakan waktu beberapa menit.')">
+                        <i class="fa fa-wrench"></i> Perbaiki Semua Rekaman Stok
+                    </a>
+                </div>
             </div>
             <div class="box-body">
                 <form class="form-produk">

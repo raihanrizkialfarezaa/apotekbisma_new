@@ -335,6 +335,10 @@
                     <i class="fa fa-history"></i> Riwayat Pergerakan Stok - {{ $nama_barang }}
                 </h3>
                 <div class="box-tools pull-right">
+                    <a href="{{ route('kartu_stok.fix_records') }}" target="_blank" class="btn btn-warning btn-sm btn-flat" 
+                       onclick="return confirm('Apakah Anda yakin ingin memperbaiki semua rekaman stok?\n\nProses ini akan:\n✓ Menghitung ulang stok_awal dan stok_sisa pada semua rekaman stok\n✓ Memperbaiki inkonsistensi perhitungan\n✓ TIDAK MENGUBAH stok realtime produk\n\nProses ini mungkin memakan waktu beberapa menit.')">
+                        <i class="fa fa-wrench"></i> Perbaiki Rekaman Stok
+                    </a>
                     <a href="{{ route('kartu_stok.export_pdf', $produk_id) }}" target="_blank" class="btn btn-success btn-sm btn-flat">
                         <i class="fa fa-file-pdf-o"></i> Export PDF
                     </a>
@@ -501,27 +505,8 @@
                 return isNaN(d.getTime()) ? null : d;
             }
 
-            table.on('draw.dt', function() {
-                try {
-                    const $tbody = $('#kartu-stok-table tbody');
-                    const $rows = $tbody.find('tr').get();
-                    const rowsWithDates = $rows.map(r => {
-                        const $r = $(r);
-                        const dateText = $r.find('td').eq(1).text();
-                        const parsed = parseIndoDate(dateText);
-                        return {row: r, date: parsed};
-                    });
-
-                    // If any parsed dates are null, skip reordering to avoid breaking server expectations
-                    if (rowsWithDates.every(rd => rd.date instanceof Date && !isNaN(rd.date.getTime()))) {
-                        rowsWithDates.sort((a,b) => a.date - b.date);
-                        // Re-append rows in sorted order for presentation only
-                        rowsWithDates.forEach(rd => $tbody.append(rd.row));
-                    }
-                } catch (e) {
-                    console.warn('Client-side date fallback sort failed', e);
-                }
-            });
+            // Removed client-side sorting to maintain server-side chronological order
+            // Data is already sorted by waktu ASC from server for proper stok flow
 
         // Initialize Chart
         initStockChart();

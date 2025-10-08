@@ -52,21 +52,23 @@ class KartuStokController extends Controller
     $stok = RekamanStok::with(['produk', 'pembelian.supplier', 'penjualan'])
                ->where('id_produk', $id)
                ->orderBy('waktu', 'asc')
+               ->orderBy('id_rekaman_stok', 'asc')
                ->get();
 
         foreach ($stok as $item) {
             $row = array();
             $row['DT_RowIndex'] = $no++;
-            // Use transaction time from Penjualan or Pembelian when available so edits to those
-            // transactions reflect here; otherwise fallback to RekamanStok.waktu
+            
+            // Use transaction time from Penjualan or Pembelian when available
+            // to preserve original transaction dates in display
             $tanggal_source = $item->waktu;
             if (!empty($item->id_penjualan)) {
-                $penjualan = Penjualan::find($item->id_penjualan);
+                $penjualan = $item->penjualan ?? Penjualan::find($item->id_penjualan);
                 if ($penjualan && $penjualan->waktu) {
                     $tanggal_source = $penjualan->waktu;
                 }
             } elseif (!empty($item->id_pembelian)) {
-                $pembelian = Pembelian::find($item->id_pembelian);
+                $pembelian = $item->pembelian ?? Pembelian::find($item->id_pembelian);
                 if ($pembelian && $pembelian->waktu) {
                     $tanggal_source = $pembelian->waktu;
                 }
@@ -295,53 +297,105 @@ class KartuStokController extends Controller
                   ->where('id_produk', $id);
 
         // Apply date filters based on request
-        if ($request->has('date_filter') && $request->date_filter) {
+        // Filter considers actual transaction time from penjualan/pembelian tables
+        if ($request->has('date_filter') && $request->date_filter && $request->date_filter != 'all') {
             $filter = $request->date_filter;
             $now = Carbon::now();
             
             switch ($filter) {
                 case 'today':
-                    $query->whereDate('waktu', $now->toDateString());
+                    $query->where(function($q) use ($now) {
+                        $dateStr = $now->toDateString();
+                        $q->whereDate('rekaman_stoks.waktu', $dateStr)
+                          ->orWhereHas('penjualan', function($pq) use ($dateStr) {
+                              $pq->whereDate('waktu', $dateStr);
+                          })
+                          ->orWhereHas('pembelian', function($pq) use ($dateStr) {
+                              $pq->whereDate('waktu', $dateStr);
+                          });
+                    });
                     break;
                 case 'week':
-                    $query->whereBetween('waktu', [
-                        $now->copy()->startOfWeek()->toDateString(),
-                        $now->copy()->endOfWeek()->toDateString()
-                    ]);
+                    $query->where(function($q) use ($now) {
+                        $startDate = $now->copy()->startOfWeek()->toDateString();
+                        $endDate = $now->copy()->endOfWeek()->toDateString();
+                        $q->whereBetween('rekaman_stoks.waktu', [$startDate, $endDate])
+                          ->orWhereHas('penjualan', function($pq) use ($startDate, $endDate) {
+                              $pq->whereBetween('waktu', [$startDate, $endDate]);
+                          })
+                          ->orWhereHas('pembelian', function($pq) use ($startDate, $endDate) {
+                              $pq->whereBetween('waktu', [$startDate, $endDate]);
+                          });
+                    });
                     break;
                 case 'month':
-                    $query->whereMonth('waktu', $now->month)
-                          ->whereYear('waktu', $now->year);
+                    $query->where(function($q) use ($now) {
+                        $month = $now->month;
+                        $year = $now->year;
+                        $q->where(function($qq) use ($month, $year) {
+                            $qq->whereMonth('rekaman_stoks.waktu', $month)
+                               ->whereYear('rekaman_stoks.waktu', $year);
+                          })
+                          ->orWhereHas('penjualan', function($pq) use ($month, $year) {
+                              $pq->whereMonth('waktu', $month)
+                                 ->whereYear('waktu', $year);
+                          })
+                          ->orWhereHas('pembelian', function($pq) use ($month, $year) {
+                              $pq->whereMonth('waktu', $month)
+                                 ->whereYear('waktu', $year);
+                          });
+                    });
                     break;
                 case 'year':
-                    $query->whereYear('waktu', $now->year);
+                    $query->where(function($q) use ($now) {
+                        $year = $now->year;
+                        $q->whereYear('rekaman_stoks.waktu', $year)
+                          ->orWhereHas('penjualan', function($pq) use ($year) {
+                              $pq->whereYear('waktu', $year);
+                          })
+                          ->orWhereHas('pembelian', function($pq) use ($year) {
+                              $pq->whereYear('waktu', $year);
+                          });
+                    });
                     break;
                 case 'custom':
                     if ($request->has('start_date') && $request->has('end_date')) {
-                        $query->whereBetween('waktu', [
-                            $request->start_date . ' 00:00:00',
-                            $request->end_date . ' 23:59:59'
-                        ]);
+                        $query->where(function($q) use ($request) {
+                            $startDate = $request->start_date . ' 00:00:00';
+                            $endDate = $request->end_date . ' 23:59:59';
+                            $q->whereBetween('rekaman_stoks.waktu', [$startDate, $endDate])
+                              ->orWhereHas('penjualan', function($pq) use ($startDate, $endDate) {
+                                  $pq->whereBetween('waktu', [$startDate, $endDate]);
+                              })
+                              ->orWhereHas('pembelian', function($pq) use ($startDate, $endDate) {
+                                  $pq->whereBetween('waktu', [$startDate, $endDate]);
+                              });
+                        });
                     }
                     break;
             }
         }
 
-        $stok = $query->orderBy('waktu', 'desc')->get();
+        // Order by waktu ASC and id ASC for proper chronological display
+        // This ensures stok_awal and stok_sisa flow correctly
+        $stok = $query->orderBy('rekaman_stoks.waktu', 'asc')
+                     ->orderBy('id_rekaman_stok', 'asc')
+                     ->get();
 
         foreach ($stok as $item) {
             $row = array();
             $row['DT_RowIndex'] = $no++;
-            // Use transaction time from Penjualan or Pembelian when available so edits to those
-            // transactions reflect here; otherwise fallback to RekamanStok.waktu
+            
+            // Use transaction time from Penjualan or Pembelian when available
+            // to preserve original transaction dates in display
             $tanggal_source = $item->waktu;
             if (!empty($item->id_penjualan)) {
-                $penjualan = Penjualan::find($item->id_penjualan);
+                $penjualan = $item->penjualan ?? Penjualan::find($item->id_penjualan);
                 if ($penjualan && $penjualan->waktu) {
                     $tanggal_source = $penjualan->waktu;
                 }
             } elseif (!empty($item->id_pembelian)) {
-                $pembelian = Pembelian::find($item->id_pembelian);
+                $pembelian = $item->pembelian ?? Pembelian::find($item->id_pembelian);
                 if ($pembelian && $pembelian->waktu) {
                     $tanggal_source = $pembelian->waktu;
                 }
@@ -505,4 +559,11 @@ class KartuStokController extends Controller
         
         return $pdf->stream('Kartu-Stok-' . $nama_obat . '-' . date('Y-m-d-His') . '.pdf');
     }
+    
+    public function fixRecords()
+    {
+        // Redirect ke script perbaikan
+        return redirect('/perbaiki_rekaman_stok.php');
+    }
+
 }
