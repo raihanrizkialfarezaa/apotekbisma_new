@@ -131,6 +131,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/kartustok/detail/{id}', [KartuStokController::class, 'detail'])->name('kartu_stok.detail');
         Route::get('/kartustok/pdf/{id}', [KartuStokController::class, 'exportPDF'])->name('kartu_stok.export_pdf');
         Route::get('/kartustok/fix-records', [KartuStokController::class, 'fixRecords'])->name('kartu_stok.fix_records');
+        Route::get('/kartustok/fix-records/{id}', [KartuStokController::class, 'fixRecordsForProduct'])->name('kartu_stok.fix_records_product');
 
         Route::get('/user/data', [UserController::class, 'data'])->name('user.data');
         Route::resource('/user', UserController::class);

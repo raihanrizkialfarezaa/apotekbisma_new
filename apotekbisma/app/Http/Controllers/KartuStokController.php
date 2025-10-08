@@ -47,8 +47,8 @@ class KartuStokController extends Controller
         $no = 1;
         $data = array();
         
-    // Get all stock records for this product, ordered by date
-    // Eager-load related models to avoid N+1 queries and ensure relations are available
+    // Get all stock records for this product, ordered by date for chronological display
+    // This ensures audit-friendly display with dates in proper order
     $stok = RekamanStok::with(['produk', 'pembelian.supplier', 'penjualan'])
                ->where('id_produk', $id)
                ->orderBy('waktu', 'asc')
@@ -376,8 +376,8 @@ class KartuStokController extends Controller
             }
         }
 
-        // Order by waktu ASC and id ASC for proper chronological display
-        // This ensures stok_awal and stok_sisa flow correctly
+        // Order by waktu ASC for chronological display (audit-friendly)
+        // This ensures dates appear in proper sequence
         $stok = $query->orderBy('rekaman_stoks.waktu', 'asc')
                      ->orderBy('id_rekaman_stok', 'asc')
                      ->get();
@@ -562,8 +562,14 @@ class KartuStokController extends Controller
     
     public function fixRecords()
     {
-        // Redirect ke script perbaikan
-        return redirect('/perbaiki_rekaman_stok.php');
+        // Redirect ke script perbaikan robust
+        return redirect('/fix_kartu_stok_robust.php');
+    }
+    
+    public function fixRecordsForProduct($id)
+    {
+        // Redirect ke script perbaikan untuk produk tertentu
+        return redirect('/fix_kartu_stok_robust.php?product_id=' . $id);
     }
 
 }

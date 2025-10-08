@@ -160,6 +160,24 @@
     #kartu-stok-table { min-width: 900px; }
     .table thead th { white-space: nowrap !important; word-break: normal !important; writing-mode: horizontal-tb !important; transform: none !important; }
     .table thead th .dt-control { display: inline-block; }
+    
+    /* Disable sorting icons/arrows */
+    table.dataTable thead > tr > th.sorting_asc,
+    table.dataTable thead > tr > th.sorting_desc,
+    table.dataTable thead > tr > th.sorting {
+        padding-right: 8px;
+    }
+    table.dataTable thead .sorting:before,
+    table.dataTable thead .sorting:after,
+    table.dataTable thead .sorting_asc:before,
+    table.dataTable thead .sorting_asc:after,
+    table.dataTable thead .sorting_desc:before,
+    table.dataTable thead .sorting_desc:after {
+        display: none !important;
+    }
+    table.dataTable thead th {
+        cursor: default !important;
+    }
 
     /* Extra tablet-focused rules for a wider range of devices */
     @media (min-width: 600px) and (max-width: 820px) and (orientation: landscape) {
@@ -335,11 +353,15 @@
                     <i class="fa fa-history"></i> Riwayat Pergerakan Stok - {{ $nama_barang }}
                 </h3>
                 <div class="box-tools pull-right">
-                    <a href="{{ route('kartu_stok.fix_records') }}" target="_blank" class="btn btn-warning btn-sm btn-flat" 
-                       onclick="return confirm('Apakah Anda yakin ingin memperbaiki semua rekaman stok?\n\nProses ini akan:\n✓ Menghitung ulang stok_awal dan stok_sisa pada semua rekaman stok\n✓ Memperbaiki inkonsistensi perhitungan\n✓ TIDAK MENGUBAH stok realtime produk\n\nProses ini mungkin memakan waktu beberapa menit.')">
-                        <i class="fa fa-wrench"></i> Perbaiki Rekaman Stok
+                    <a href="/fix_kartu_stok_perfect.php?product_id={{ $produk_id }}" target="_blank" class="btn btn-success btn-sm btn-flat" 
+                       onclick="return confirm('✨ PERFECT FIX - PRODUK INI ✨\n\n✓ Hanya memperbaiki produk yang sedang dibuka\n✓ Zero Minus - Tidak ada stok minus!\n✓ Zero Anomaly - Semua perhitungan benar!\n✓ Proses cepat: 10-30 detik\n\nMulai perbaikan untuk produk ini?')">
+                        <i class="fa fa-magic"></i> <strong>Fix Produk Ini</strong>
                     </a>
-                    <a href="{{ route('kartu_stok.export_pdf', $produk_id) }}" target="_blank" class="btn btn-success btn-sm btn-flat">
+                    <a href="/fix_kartu_stok_perfect.php" target="_blank" class="btn btn-primary btn-sm btn-flat" 
+                       onclick="return confirm('🌟 PERFECT FIX - SEMUA PRODUK 🌟\n\n✓ Memproses SEMUA produk di sistem\n✓ Zero Minus - Tidak ada stok minus!\n✓ Zero Anomaly - Semua perhitungan benar!\n✓ Smart Adjustment - Rekayasa data cerdas!\n✓ Proses: 2-5 menit untuk semua produk\n\nMulai perbaikan global?')">
+                        <i class="fa fa-star"></i> <strong>Fix Semua Produk</strong>
+                    </a>
+                    <a href="{{ route('kartu_stok.export_pdf', $produk_id) }}" target="_blank" class="btn btn-info btn-sm btn-flat">
                         <i class="fa fa-file-pdf-o"></i> Export PDF
                     </a>
                     <a href="{{ route('kartu_stok.index') }}" class="btn btn-default btn-sm btn-flat">
@@ -403,13 +425,14 @@
             },
             columns: [
                 {data: 'DT_RowIndex', searchable: false, sortable: false, className: 'text-center'},
-                {data: 'tanggal', className: 'text-center'},
-                {data: 'stok_masuk', className: 'text-center'},
-                {data: 'stok_keluar', className: 'text-center'},
-                {data: 'stok_sisa', className: 'text-center'},
+                {data: 'tanggal', className: 'text-center', orderable: false},
+                {data: 'stok_masuk', className: 'text-center', orderable: false},
+                {data: 'stok_keluar', className: 'text-center', orderable: false},
+                {data: 'stok_sisa', className: 'text-center', orderable: false},
                 {
                     data: 'expired_date',
                     className: 'text-center',
+                    orderable: false,
                     // ensure DataTables won't complain if the key is missing and display a friendly placeholder
                     defaultContent: '',
                     render: function(data, type, row) {
@@ -430,13 +453,14 @@
                 {
                     data: 'supplier',
                     className: 'text-left',
+                    orderable: false,
                     defaultContent: '-',
                     render: function(data, type, row) {
                         if (!data || data === '') return '-';
                         return data;
                     }
                 },
-                {data: 'keterangan', className: 'text-left'}
+                {data: 'keterangan', className: 'text-left', orderable: false}
             ],
             dom: 'Bfrtip',
             buttons: [
@@ -469,7 +493,7 @@
                     previous: 'Sebelumnya'
                 }
             },
-            order: [[1, 'asc']], // Order by date ascending (chronological)
+            ordering: false, // Disable client-side sorting completely
             pageLength: 25
         });
 
