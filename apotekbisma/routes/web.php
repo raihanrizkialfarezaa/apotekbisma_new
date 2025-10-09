@@ -18,6 +18,7 @@ use App\Http\Controllers\{
 };
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +33,44 @@ use Illuminate\Support\Facades\DB;
 
 Route::get('/', function () {
     return redirect()->route('login');
+});
+
+// Secure proxy route for the standalone fixer script (useful on shared hosting)
+// Usage: https://your-domain.tld/fix-kartu-stok?key=YOUR_FIX_SECRET
+Route::get('/fix-kartu-stok', function (Request $request) {
+    $key = $request->query('key');
+    $secret = env('FIX_SECRET');
+    if (empty($secret) || !$key || !hash_equals((string) $secret, (string) $key)) {
+        abort(403, 'Forbidden');
+    }
+
+    $path = public_path('fix_kartu_stok_perfect.php');
+    if (!file_exists($path)) {
+        abort(404, 'Fix script not found');
+    }
+
+    // Execute the script and return its output
+    return require $path;
+});
+
+// Backwards-compatible proxy so URL like /fix_kartu_stok_perfect.php?product_id=... works
+Route::get('/fix_kartu_stok_perfect.php', [\App\Http\Controllers\FixerController::class, 'perfect']);
+
+// Controller-based secure route (preferred): /fix-kartu-stok-controller?key=FIX_SECRET
+Route::get('/fix-kartu-stok-controller', [\App\Http\Controllers\FixerController::class, 'perfect']);
+
+// Admin-only route: allow logged-in admin (level:1) to run the fixer without FIX_SECRET
+Route::get('/fix-kartu-stok-admin', [\App\Http\Controllers\FixerController::class, 'perfect'])
+    ->middleware(['auth', 'level:1']);
+
+// Lightweight probe to verify Laravel is receiving requests and whether the fixer file exists
+Route::get('/fix-probe', function () {
+    $path = public_path('fix_kartu_stok_perfect.php');
+    return response()->json([
+        'ok' => true,
+        'fix_script_exists' => file_exists($path),
+        'app_env' => env('APP_ENV', 'production'),
+    ]);
 });
 
 
