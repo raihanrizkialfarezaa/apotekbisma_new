@@ -132,6 +132,7 @@
                 <th width="12%">Stok Keluar</th>
                 <th width="12%">Stok Awal</th>
                 <th width="12%">Stok Sisa</th>
+                <th width="12%">Nomor Batch</th>
                 <th width="32%">Keterangan</th>
             </tr>
         </thead>
@@ -144,6 +145,7 @@
                     <td class="number">{{ strip_tags($row['stok_keluar']) }}</td>
                     <td class="number">{{ strip_tags($row['stok_awal']) }}</td>
                     <td class="number">{{ strip_tags($row['stok_sisa']) }}</td>
+                    <td class="number">{{ $produk->batch ? $produk->batch : '-' }}</td>
                     <td class="text-left">{{ strip_tags($row['keterangan']) }}</td>
                 </tr>
             @endforeach

@@ -379,6 +379,7 @@
                             <th class="text-center">Stok Keluar</th>
                             <th class="text-center">Stok Akhir</th>
                             <th class="text-center">Expired Date</th>
+                            <th class="text-center">Nomor Batch</th>
                             <th class="text-center">Supplier</th>
                             <th class="text-center">Keterangan</th>
                         </tr>
@@ -398,6 +399,8 @@
 <script>
     let table;
     let currentFilter = 'month'; // Default filter
+    // Product-level batch number to display in table column without backend changes
+    const produkBatch = @json($produk->batch);
 
     $(function () {
         // Initialize DataTable
@@ -448,6 +451,16 @@
                             return data;
                         }
                         return data;
+                    }
+                },
+                {
+                    data: 'batch',
+                    className: 'text-center',
+                    orderable: false,
+                    defaultContent: '',
+                    render: function(data, type, row) {
+                        if (!produkBatch || produkBatch === '') return '-';
+                        return produkBatch;
                     }
                 },
                 {
