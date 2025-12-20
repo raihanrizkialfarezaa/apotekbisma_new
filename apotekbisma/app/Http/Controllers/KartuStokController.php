@@ -52,6 +52,7 @@ class KartuStokController extends Controller
     $stok = RekamanStok::with(['produk', 'pembelian.supplier', 'penjualan'])
                ->where('id_produk', $id)
                ->orderBy('waktu', 'asc')
+               ->orderBy('created_at', 'asc')
                ->orderBy('id_rekaman_stok', 'asc')
                ->get();
 
@@ -296,91 +297,52 @@ class KartuStokController extends Controller
     $query = RekamanStok::with(['produk', 'pembelian.supplier', 'penjualan'])
                   ->where('id_produk', $id);
 
-        // Apply date filters based on request
-        // Filter considers actual transaction time from penjualan/pembelian tables
+        // Get all records first, then filter based on effective transaction date
+        // This ensures filter matches the displayed date (from penjualan/pembelian.waktu)
+        $stok = $query->orderBy('rekaman_stoks.waktu', 'asc')
+                     ->orderBy('id_rekaman_stok', 'asc')
+                     ->get();
+
+        // Apply date filter based on effective transaction date (display date)
         if ($request->has('date_filter') && $request->date_filter && $request->date_filter != 'all') {
             $filter = $request->date_filter;
             $now = Carbon::now();
             
-            switch ($filter) {
-                case 'today':
-                    $query->where(function($q) use ($now) {
-                        $dateStr = $now->toDateString();
-                        $q->whereDate('rekaman_stoks.waktu', $dateStr)
-                          ->orWhereHas('penjualan', function($pq) use ($dateStr) {
-                              $pq->whereDate('waktu', $dateStr);
-                          })
-                          ->orWhereHas('pembelian', function($pq) use ($dateStr) {
-                              $pq->whereDate('waktu', $dateStr);
-                          });
-                    });
-                    break;
-                case 'week':
-                    $query->where(function($q) use ($now) {
-                        $startDate = $now->copy()->startOfWeek()->toDateString();
-                        $endDate = $now->copy()->endOfWeek()->toDateString();
-                        $q->whereBetween('rekaman_stoks.waktu', [$startDate, $endDate])
-                          ->orWhereHas('penjualan', function($pq) use ($startDate, $endDate) {
-                              $pq->whereBetween('waktu', [$startDate, $endDate]);
-                          })
-                          ->orWhereHas('pembelian', function($pq) use ($startDate, $endDate) {
-                              $pq->whereBetween('waktu', [$startDate, $endDate]);
-                          });
-                    });
-                    break;
-                case 'month':
-                    $query->where(function($q) use ($now) {
-                        $month = $now->month;
-                        $year = $now->year;
-                        $q->where(function($qq) use ($month, $year) {
-                            $qq->whereMonth('rekaman_stoks.waktu', $month)
-                               ->whereYear('rekaman_stoks.waktu', $year);
-                          })
-                          ->orWhereHas('penjualan', function($pq) use ($month, $year) {
-                              $pq->whereMonth('waktu', $month)
-                                 ->whereYear('waktu', $year);
-                          })
-                          ->orWhereHas('pembelian', function($pq) use ($month, $year) {
-                              $pq->whereMonth('waktu', $month)
-                                 ->whereYear('waktu', $year);
-                          });
-                    });
-                    break;
-                case 'year':
-                    $query->where(function($q) use ($now) {
-                        $year = $now->year;
-                        $q->whereYear('rekaman_stoks.waktu', $year)
-                          ->orWhereHas('penjualan', function($pq) use ($year) {
-                              $pq->whereYear('waktu', $year);
-                          })
-                          ->orWhereHas('pembelian', function($pq) use ($year) {
-                              $pq->whereYear('waktu', $year);
-                          });
-                    });
-                    break;
-                case 'custom':
-                    if ($request->has('start_date') && $request->has('end_date')) {
-                        $query->where(function($q) use ($request) {
-                            $startDate = $request->start_date . ' 00:00:00';
-                            $endDate = $request->end_date . ' 23:59:59';
-                            $q->whereBetween('rekaman_stoks.waktu', [$startDate, $endDate])
-                              ->orWhereHas('penjualan', function($pq) use ($startDate, $endDate) {
-                                  $pq->whereBetween('waktu', [$startDate, $endDate]);
-                              })
-                              ->orWhereHas('pembelian', function($pq) use ($startDate, $endDate) {
-                                  $pq->whereBetween('waktu', [$startDate, $endDate]);
-                              });
-                        });
-                    }
-                    break;
-            }
+            $stok = $stok->filter(function($item) use ($filter, $request, $now) {
+                // Get the effective date (same logic as display)
+                $effectiveDate = $item->waktu;
+                if (!empty($item->id_penjualan) && $item->penjualan && $item->penjualan->waktu) {
+                    $effectiveDate = $item->penjualan->waktu;
+                } elseif (!empty($item->id_pembelian) && $item->pembelian && $item->pembelian->waktu) {
+                    $effectiveDate = $item->pembelian->waktu;
+                }
+                
+                $effectiveDate = Carbon::parse($effectiveDate);
+                
+                switch ($filter) {
+                    case 'today':
+                        return $effectiveDate->isSameDay($now);
+                    case 'week':
+                        return $effectiveDate->between(
+                            $now->copy()->startOfWeek(),
+                            $now->copy()->endOfWeek()
+                        );
+                    case 'month':
+                        return $effectiveDate->month === $now->month && $effectiveDate->year === $now->year;
+                    case 'year':
+                        return $effectiveDate->year === $now->year;
+                    case 'custom':
+                        if ($request->start_date && $request->end_date) {
+                            $startDate = Carbon::parse($request->start_date)->startOfDay();
+                            $endDate = Carbon::parse($request->end_date)->endOfDay();
+                            return $effectiveDate->between($startDate, $endDate);
+                        }
+                        return true;
+                    default:
+                        return true;
+                }
+            })->values();
         }
-
-        // Order by waktu ASC for chronological display (audit-friendly)
-        // This ensures dates appear in proper sequence
-        $stok = $query->orderBy('rekaman_stoks.waktu', 'asc')
-                     ->orderBy('id_rekaman_stok', 'asc')
-                     ->get();
 
         foreach ($stok as $item) {
             $row = array();
