@@ -2246,10 +2246,13 @@
             $('#rebuild-progress').addClass('show');
             
             $.ajax({
-                url: '/api_rebuild_stok.php',
+                url: '{{ route("kartu_stok.fix_records") }}',
                 type: 'GET',
                 dataType: 'json',
-                timeout: 300000,
+                timeout: 600000, // 10 minutes timeout for large datasets
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
                 success: function(response) {
                     $('#rebuild-progress').removeClass('show');
                     
@@ -2284,11 +2287,25 @@
                 },
                 error: function(xhr, status, error) {
                     $('#rebuild-progress').removeClass('show');
+                    
+                    let errorMsg = 'Koneksi gagal';
+                    if (status === 'timeout') {
+                        errorMsg = 'Proses timeout - data terlalu besar. Coba lagi atau hubungi administrator.';
+                    } else if (xhr.status === 500) {
+                        errorMsg = 'Server error: ' + (xhr.responseJSON?.error || error);
+                    } else if (xhr.status === 419) {
+                        errorMsg = 'Session expired. Silakan refresh halaman dan coba lagi.';
+                    } else if (xhr.status === 0) {
+                        errorMsg = 'Tidak dapat terhubung ke server. Periksa koneksi internet Anda.';
+                    } else {
+                        errorMsg = 'Error: ' + error + ' (Status: ' + xhr.status + ')';
+                    }
+                    
                     $('#rebuild-result').html(
                         '<div class="rebuild-result error show" style="text-align:center;">' +
                         '<i class="fa fa-times-circle"></i>' +
                         '<h4 style="color:#ef4444;font-size:24px;margin:0 0 10px;">Error!</h4>' +
-                        '<p style="color:#64748b;">Koneksi gagal: ' + error + '</p>' +
+                        '<p style="color:#64748b;">' + errorMsg + '</p>' +
                         '<button type="button" class="rebuild-modal-btn cancel" style="margin-top:20px;" onclick="$(\'#rebuild-modal\').removeClass(\'show\');">Tutup</button>' +
                         '</div>'
                     ).addClass('show');

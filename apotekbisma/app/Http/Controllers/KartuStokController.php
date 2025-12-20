@@ -9,6 +9,7 @@ use App\Models\Penjualan;
 use App\Models\PembelianDetail;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class KartuStokController extends Controller
@@ -522,16 +523,370 @@ class KartuStokController extends Controller
         return $pdf->stream('Kartu-Stok-' . $nama_obat . '-' . date('Y-m-d-His') . '.pdf');
     }
     
-    public function fixRecords()
+    /**
+     * Rebuild all stock records - ROBUST VERSION
+     * Compatible with hosting environments
+     * Returns JSON response for AJAX calls
+     */
+    public function fixRecords(Request $request)
     {
-        // Redirect ke script perbaikan robust
-        return redirect('/fix_kartu_stok_robust.php');
+        // Set execution time and memory for large datasets
+        set_time_limit(600); // 10 minutes
+        ini_set('memory_limit', '512M');
+        
+        $startTime = microtime(true);
+        
+        try {
+            // Disable query log to save memory
+            DB::connection()->disableQueryLog();
+            
+            $result = [
+                'success' => true,
+                'steps' => [],
+                'stats' => []
+            ];
+            
+            $result['steps'][] = 'Mengumpulkan data transaksi...';
+            
+            $allTransactions = [];
+            
+            // Get all penjualan data with chunking for large datasets
+            $totalPenjualan = 0;
+            DB::table('penjualan_detail')
+                ->join('penjualan', 'penjualan_detail.id_penjualan', '=', 'penjualan.id_penjualan')
+                ->select(
+                    'penjualan_detail.id_penjualan_detail',
+                    'penjualan_detail.id_penjualan',
+                    'penjualan_detail.id_produk',
+                    'penjualan.waktu',
+                    'penjualan_detail.jumlah as qty'
+                )
+                ->orderBy('penjualan.waktu', 'asc')
+                ->orderBy('penjualan_detail.id_penjualan', 'asc')
+                ->orderBy('penjualan_detail.id_penjualan_detail', 'asc')
+                ->chunk(1000, function ($records) use (&$allTransactions, &$totalPenjualan) {
+                    foreach ($records as $p) {
+                        $key = $p->id_produk;
+                        if (!isset($allTransactions[$key])) {
+                            $allTransactions[$key] = [];
+                        }
+                        $allTransactions[$key][] = [
+                            'detail_id' => 'P' . $p->id_penjualan_detail,
+                            'waktu' => $p->waktu,
+                            'id_penjualan' => $p->id_penjualan,
+                            'id_pembelian' => null,
+                            'stok_masuk' => 0,
+                            'stok_keluar' => $p->qty,
+                            'keterangan' => 'Penjualan - ID: ' . $p->id_penjualan,
+                            'tipe' => 'penjualan',
+                            'sort_order' => 1
+                        ];
+                        $totalPenjualan++;
+                    }
+                });
+            
+            $result['stats']['penjualan_records'] = $totalPenjualan;
+            
+            // Get all pembelian data with chunking
+            $totalPembelian = 0;
+            DB::table('pembelian_detail')
+                ->join('pembelian', 'pembelian_detail.id_pembelian', '=', 'pembelian.id_pembelian')
+                ->select(
+                    'pembelian_detail.id_pembelian_detail',
+                    'pembelian_detail.id_pembelian',
+                    'pembelian_detail.id_produk',
+                    'pembelian.waktu',
+                    'pembelian_detail.jumlah as qty',
+                    'pembelian.no_faktur'
+                )
+                ->orderBy('pembelian.waktu', 'asc')
+                ->orderBy('pembelian_detail.id_pembelian', 'asc')
+                ->orderBy('pembelian_detail.id_pembelian_detail', 'asc')
+                ->chunk(1000, function ($records) use (&$allTransactions, &$totalPembelian) {
+                    foreach ($records as $b) {
+                        $key = $b->id_produk;
+                        if (!isset($allTransactions[$key])) {
+                            $allTransactions[$key] = [];
+                        }
+                        $allTransactions[$key][] = [
+                            'detail_id' => 'B' . $b->id_pembelian_detail,
+                            'waktu' => $b->waktu,
+                            'id_penjualan' => null,
+                            'id_pembelian' => $b->id_pembelian,
+                            'stok_masuk' => $b->qty,
+                            'stok_keluar' => 0,
+                            'keterangan' => 'Pembelian - Faktur: ' . ($b->no_faktur ?: $b->id_pembelian),
+                            'tipe' => 'pembelian',
+                            'sort_order' => 0
+                        ];
+                        $totalPembelian++;
+                    }
+                });
+            
+            $result['stats']['pembelian_records'] = $totalPembelian;
+            
+            $result['steps'][] = 'Membersihkan data lama...';
+            
+            // Use delete in chunks instead of truncate (more compatible with some hosts)
+            DB::table('rekaman_stoks')->delete();
+            
+            $result['steps'][] = 'Membangun ulang kartu stok...';
+            
+            $totalProducts = count($allTransactions);
+            $totalRecordsCreated = 0;
+            $processedProducts = 0;
+            
+            foreach ($allTransactions as $produkId => $transactions) {
+                // Sort transactions chronologically
+                usort($transactions, function($a, $b) {
+                    $cmp = strcmp($a['waktu'], $b['waktu']);
+                    if ($cmp !== 0) return $cmp;
+                    $cmp = $a['sort_order'] - $b['sort_order'];
+                    if ($cmp !== 0) return $cmp;
+                    return strcmp($a['detail_id'], $b['detail_id']);
+                });
+                
+                // Calculate minimum stock to determine initial stock
+                $simStock = 0;
+                $minStock = 0;
+                
+                foreach ($transactions as $t) {
+                    $simStock = $simStock + $t['stok_masuk'] - $t['stok_keluar'];
+                    if ($simStock < $minStock) {
+                        $minStock = $simStock;
+                    }
+                }
+                
+                $initialStock = ($minStock < 0) ? abs($minStock) : 0;
+                
+                $runningStock = $initialStock;
+                $insertBatch = [];
+                $now = now();
+                
+                foreach ($transactions as $t) {
+                    $stokAwal = $runningStock;
+                    $stokSisa = $runningStock + $t['stok_masuk'] - $t['stok_keluar'];
+                    
+                    $insertBatch[] = [
+                        'id_produk' => $produkId,
+                        'id_penjualan' => $t['id_penjualan'],
+                        'id_pembelian' => $t['id_pembelian'],
+                        'stok_awal' => $stokAwal,
+                        'stok_masuk' => $t['stok_masuk'],
+                        'stok_keluar' => $t['stok_keluar'],
+                        'stok_sisa' => $stokSisa,
+                        'waktu' => $t['waktu'],
+                        'keterangan' => $t['keterangan'],
+                        'created_at' => $now,
+                        'updated_at' => $now
+                    ];
+                    
+                    $runningStock = $stokSisa;
+                }
+                
+                // Insert in batches of 500 records
+                if (!empty($insertBatch)) {
+                    foreach (array_chunk($insertBatch, 500) as $chunk) {
+                        DB::table('rekaman_stoks')->insert($chunk);
+                    }
+                    $totalRecordsCreated += count($insertBatch);
+                }
+                
+                // Update product stock
+                DB::table('produk')
+                    ->where('id_produk', $produkId)
+                    ->update(['stok' => $runningStock]);
+                
+                $processedProducts++;
+                
+                // Free memory periodically
+                if ($processedProducts % 100 === 0) {
+                    gc_collect_cycles();
+                }
+            }
+            
+            $result['steps'][] = 'Memperbarui produk tanpa transaksi...';
+            
+            // Update products without transactions
+            $productsWithoutTrans = DB::table('produk')
+                ->whereNotIn('id_produk', array_keys($allTransactions))
+                ->count();
+            
+            DB::table('produk')
+                ->whereNotIn('id_produk', array_keys($allTransactions))
+                ->update(['stok' => 0]);
+            
+            $endTime = microtime(true);
+            $executionTime = round($endTime - $startTime, 2);
+            
+            $result['stats']['total_products'] = $totalProducts;
+            $result['stats']['total_records_created'] = $totalRecordsCreated;
+            $result['stats']['products_without_transactions'] = $productsWithoutTrans;
+            $result['stats']['execution_time'] = $executionTime . ' detik';
+            $result['steps'][] = 'Selesai!';
+            $result['message'] = "Berhasil memperbaiki kartu stok untuk {$totalProducts} produk dengan {$totalRecordsCreated} record dalam {$executionTime} detik";
+            
+            return response()->json($result);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage(),
+                'file' => basename($e->getFile()),
+                'line' => $e->getLine()
+            ], 500);
+        }
     }
     
+    /**
+     * Rebuild stock records for a specific product - ROBUST VERSION
+     */
     public function fixRecordsForProduct($id)
     {
-        // Redirect ke script perbaikan untuk produk tertentu
-        return redirect('/fix_kartu_stok_robust.php?product_id=' . $id);
+        set_time_limit(120); // 2 minutes for single product
+        
+        $startTime = microtime(true);
+        
+        try {
+            $produk = Produk::find($id);
+            if (!$produk) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Produk tidak ditemukan'
+                ], 404);
+            }
+            
+            $result = [
+                'success' => true,
+                'steps' => [],
+                'stats' => []
+            ];
+            
+            $result['steps'][] = 'Mengumpulkan data transaksi untuk produk ' . $produk->nama_produk . '...';
+            
+            $transactions = [];
+            
+            // Get penjualan data for this product
+            $penjualanData = DB::table('penjualan_detail')
+                ->join('penjualan', 'penjualan_detail.id_penjualan', '=', 'penjualan.id_penjualan')
+                ->where('penjualan_detail.id_produk', $id)
+                ->select('penjualan_detail.*', 'penjualan.waktu')
+                ->orderBy('penjualan.waktu', 'asc')
+                ->get();
+            
+            foreach ($penjualanData as $p) {
+                $transactions[] = [
+                    'waktu' => $p->waktu,
+                    'id_penjualan' => $p->id_penjualan,
+                    'id_pembelian' => null,
+                    'stok_masuk' => 0,
+                    'stok_keluar' => $p->jumlah,
+                    'keterangan' => 'Penjualan - ID: ' . $p->id_penjualan,
+                    'sort_order' => 1
+                ];
+            }
+            
+            // Get pembelian data for this product
+            $pembelianData = DB::table('pembelian_detail')
+                ->join('pembelian', 'pembelian_detail.id_pembelian', '=', 'pembelian.id_pembelian')
+                ->where('pembelian_detail.id_produk', $id)
+                ->select('pembelian_detail.*', 'pembelian.waktu', 'pembelian.no_faktur')
+                ->orderBy('pembelian.waktu', 'asc')
+                ->get();
+            
+            foreach ($pembelianData as $b) {
+                $transactions[] = [
+                    'waktu' => $b->waktu,
+                    'id_penjualan' => null,
+                    'id_pembelian' => $b->id_pembelian,
+                    'stok_masuk' => $b->jumlah,
+                    'stok_keluar' => 0,
+                    'keterangan' => 'Pembelian - Faktur: ' . ($b->no_faktur ?: $b->id_pembelian),
+                    'sort_order' => 0
+                ];
+            }
+            
+            $result['stats']['penjualan_records'] = count($penjualanData);
+            $result['stats']['pembelian_records'] = count($pembelianData);
+            
+            // Sort transactions chronologically
+            usort($transactions, function($a, $b) {
+                $cmp = strcmp($a['waktu'], $b['waktu']);
+                if ($cmp !== 0) return $cmp;
+                return $a['sort_order'] - $b['sort_order'];
+            });
+            
+            // Delete old records for this product
+            $result['steps'][] = 'Membersihkan data lama...';
+            DB::table('rekaman_stoks')->where('id_produk', $id)->delete();
+            
+            // Calculate initial stock
+            $simStock = 0;
+            $minStock = 0;
+            foreach ($transactions as $t) {
+                $simStock = $simStock + $t['stok_masuk'] - $t['stok_keluar'];
+                if ($simStock < $minStock) {
+                    $minStock = $simStock;
+                }
+            }
+            $initialStock = ($minStock < 0) ? abs($minStock) : 0;
+            
+            // Rebuild stock records
+            $result['steps'][] = 'Membangun ulang kartu stok...';
+            $runningStock = $initialStock;
+            $now = now();
+            $insertBatch = [];
+            
+            foreach ($transactions as $t) {
+                $stokAwal = $runningStock;
+                $stokSisa = $runningStock + $t['stok_masuk'] - $t['stok_keluar'];
+                
+                $insertBatch[] = [
+                    'id_produk' => $id,
+                    'id_penjualan' => $t['id_penjualan'],
+                    'id_pembelian' => $t['id_pembelian'],
+                    'stok_awal' => $stokAwal,
+                    'stok_masuk' => $t['stok_masuk'],
+                    'stok_keluar' => $t['stok_keluar'],
+                    'stok_sisa' => $stokSisa,
+                    'waktu' => $t['waktu'],
+                    'keterangan' => $t['keterangan'],
+                    'created_at' => $now,
+                    'updated_at' => $now
+                ];
+                
+                $runningStock = $stokSisa;
+            }
+            
+            // Batch insert
+            if (!empty($insertBatch)) {
+                foreach (array_chunk($insertBatch, 500) as $chunk) {
+                    DB::table('rekaman_stoks')->insert($chunk);
+                }
+            }
+            
+            // Update product stock
+            DB::table('produk')->where('id_produk', $id)->update(['stok' => $runningStock]);
+            
+            $endTime = microtime(true);
+            $executionTime = round($endTime - $startTime, 2);
+            
+            $result['stats']['total_records_created'] = count($transactions);
+            $result['stats']['final_stock'] = $runningStock;
+            $result['stats']['execution_time'] = $executionTime . ' detik';
+            $result['steps'][] = 'Selesai!';
+            $result['message'] = "Berhasil memperbaiki kartu stok untuk {$produk->nama_produk} dengan " . count($transactions) . " record dalam {$executionTime} detik";
+            
+            return response()->json($result);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage(),
+                'file' => basename($e->getFile()),
+                'line' => $e->getLine()
+            ], 500);
+        }
     }
 
 }
