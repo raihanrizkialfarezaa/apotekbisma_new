@@ -409,24 +409,18 @@ class PembelianController extends Controller
                 return response()->json(['success' => false, 'message' => 'Pembelian tidak ditemukan'], 404);
             }
 
-            // Ambil detail pembelian untuk mengembalikan stok
             $detail = PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)->get();
+            $affectedProductIds = [];
             
-            // Proses pengembalian stok untuk setiap item
             foreach ($detail as $item) {
-                $produk = Produk::find($item->id_produk);
+                $produk = Produk::lockForUpdate()->find($item->id_produk);
                 if ($produk) {
-                    // Catat stok sebelum perubahan
+                    $affectedProductIds[] = $produk->id_produk;
                     $stokSebelum = $produk->stok;
-                    
-                    // Kurangi stok sesuai jumlah yang pernah ditambahkan
                     $stokBaru = $stokSebelum - $item->jumlah;
-                    
-                    // Update stok produk (biarkan negatif untuk audit)
                     $produk->stok = $stokBaru;
                     $produk->save();
                     
-                    // Buat rekaman audit untuk pengurangan stok
                     RekamanStok::create([
                         'id_produk' => $item->id_produk,
                         'waktu' => now(),
@@ -437,15 +431,16 @@ class PembelianController extends Controller
                     ]);
                 }
                 
-                // Hapus detail pembelian
                 $item->delete();
             }
 
-            // Hapus semua rekaman stok yang terkait dengan pembelian ini
             RekamanStok::where('id_pembelian', $pembelian->id_pembelian)->delete();
 
-            // Hapus pembelian
             $pembelian->delete();
+
+            foreach (array_unique($affectedProductIds) as $produkId) {
+                RekamanStok::recalculateStock($produkId);
+            }
 
             DB::commit();
             

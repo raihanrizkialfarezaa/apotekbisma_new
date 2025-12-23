@@ -19,13 +19,9 @@
         font-size: 13px;
         font-weight: bold;
     }
-    .btn-group .btn-xs {
-        padding: 3px 8px;
-        font-size: 11px;
-        margin-right: 2px;
-    }
+    
     #filter_stok {
-        height: 30px;
+        height: 34px;
         font-size: 13px;
         border-radius: 4px;
         padding: 5px 10px;
@@ -34,63 +30,27 @@
         margin-top: -2px;
     }
     
-    /* Improved button styling */
-    .btn-group .btn-xs.btn-success {
-        background-color: #28a745;
-        border-color: #28a745;
-        color: white;
+    .btn-group-xs > .btn, .btn-group .btn-xs {
+        padding: 4px 8px;
+        font-size: 12px;
+        line-height: 1.4;
+        border-radius: 3px;
     }
-    .btn-group .btn-xs.btn-success:hover {
-        background-color: #218838;
-        border-color: #1e7e34;
+    .btn-group-xs > .btn {
+        padding: 5px 10px;
     }
-    .btn-group .btn-xs.btn-info {
-        background-color: #17a2b8;
-        border-color: #17a2b8;
+    .btn-group-xs > .btn i {
+        font-size: 12px;
     }
-    .btn-group .btn-xs.btn-warning {
-        background-color: #ffc107;
-        border-color: #ffc107;
-        color: #212529;
+    .btn-group-xs > .btn:hover {
+        opacity: 0.85;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.15);
     }
-    .btn-group .btn-xs.btn-danger {
-        background-color: #dc3545;
-        border-color: #dc3545;
+    .btn-group-xs {
+        white-space: nowrap;
     }
     
-    /* Style untuk modal update stok */
-    #modal-update-stok .modal-header {
-        background-color: #f8f9fa;
-        border-bottom: 2px solid #dee2e6;
-    }
-    #modal-update-stok .modal-title {
-        font-size: 18px;
-        font-weight: 600;
-        color: #495057;
-    }
-    #modal-update-stok .alert-info {
-        margin-bottom: 20px;
-        border-left: 4px solid #5bc0de;
-        background-color: #d1ecf1;
-        border-color: #bee5eb;
-    }
-    #modal-update-stok .form-control-static {
-        padding-top: 7px;
-        padding-bottom: 7px;
-        margin-bottom: 0;
-        font-weight: bold;
-        font-size: 14px;
-    }
-    #modal-update-stok .form-control {
-        font-size: 14px;
-        padding: 8px 12px;
-    }
-    #modal-update-stok .btn {
-        font-size: 14px;
-        padding: 8px 16px;
-    }
-    
-    /* Improved table styling */
     .table-striped > tbody > tr:nth-of-type(odd) {
         background-color: #f8f9fa;
     }
@@ -100,21 +60,10 @@
         border-bottom: 2px solid #dee2e6;
     }
     
-    /* Better visibility for stock status */
-    .text-danger {
-        font-weight: bold;
-        font-size: 14px;
-    }
-    .text-warning {
-        font-weight: bold;
-        font-size: 14px;
-    }
-    .text-success {
-        font-weight: bold;
-        font-size: 14px;
-    }
+    .text-danger { font-weight: bold; }
+    .text-warning { font-weight: bold; }
+    .text-success { font-weight: bold; }
     
-    /* Header button improvements */
     .box-header .btn {
         font-size: 13px;
         padding: 6px 12px;
@@ -595,8 +544,7 @@
 
 @includeIf('produk.form')
 
-{{-- Modal untuk Update Stok Manual --}}
-<div class="modal fade" id="modal-update-stok" tabindex="-1" role="dialog" aria-labelledby="modal-update-stok">
+<div class="modal fade" id="modal-update-stok" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <form id="form-update-stok" action="" method="post">
             @csrf
@@ -604,136 +552,46 @@
             
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h4 class="modal-title">
-                        <i class="fa fa-refresh"></i> Update Stok Manual
-                    </h4>
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    <h4 class="modal-title"><i class="fa fa-cubes"></i> Update Stok Manual</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="alert alert-info">
-                        <i class="fa fa-info-circle"></i>
-                        <strong>Perhatian:</strong> Fitur ini untuk penyesuaian stok dengan kondisi fisik barang. 
-                        Semua perubahan akan tercatat dalam sistem dengan format keterangan: <br>
-                        <em>"Perubahan Stok Manual"</em> atau <em>"Perubahan Stok Manual: [keterangan Anda]"</em>
+                    <div class="well well-sm" style="margin-bottom: 15px; background: #f5f5f5;">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <strong>Produk:</strong><br>
+                                <span id="produk_info" class="text-primary"></span>
+                            </div>
+                            <div class="col-sm-3 text-center">
+                                <strong>Stok Lama</strong><br>
+                                <span id="stok_saat_ini" class="label label-default" style="font-size: 14px;"></span>
+                            </div>
+                            <div class="col-sm-3 text-center">
+                                <strong>Selisih</strong><br>
+                                <span id="selisih_stok" class="label label-default" style="font-size: 14px;">0</span>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="form-group">
-                        <label><strong>Produk:</strong></label>
-                        <p id="produk_info" class="form-control-static text-primary"></p>
+                        <label>Stok Baru <span class="text-danger">*</span></label>
+                        <input type="number" name="stok" id="stok_baru" class="form-control input-lg" required min="0" style="text-align: center; font-size: 20px; font-weight: bold;">
                     </div>
                     
                     <div class="form-group">
-                        <label><strong>Stok Saat Ini:</strong></label>
-                        <p id="stok_saat_ini" class="form-control-static text-info"></p>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="stok_baru">Stok Baru <span class="text-danger">*</span></label>
-                        <input type="number" name="stok" id="stok_baru" class="form-control" required min="0" 
-                               placeholder="Masukkan jumlah stok sesuai kondisi fisik barang">
-                        <small class="help-block">Masukkan jumlah stok yang sesuai dengan kondisi fisik barang di apotek</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="keterangan_stok">Keterangan/Alasan Perubahan (Opsional)</label>
-                        <textarea name="keterangan" id="keterangan_stok" class="form-control" rows="3"
-                                  placeholder="Contoh: Stok opname bulanan, barang rusak/expired, penyesuaian fisik, dll."></textarea>
-                        <small class="help-block">
-                            <strong>Opsional:</strong> Jika diisi, akan muncul di kartu stok sebagai: <br>
-                            <code>"Perubahan Stok Manual: [keterangan Anda]"</code><br>
-                            Jika kosong, akan tercatat sebagai: <code>"Perubahan Stok Manual"</code>
-                        </small>
-                    </div>
-                    
-                    <div class="alert alert-warning">
-                        <i class="fa fa-exclamation-triangle"></i>
-                        <strong>Catatan:</strong> 
-                        <ul class="mb-0" style="margin-bottom: 0; padding-left: 20px;">
-                            <li>Untuk penambahan stok hasil pembelian, gunakan menu <strong>Pembelian</strong></li>
-                            <li>Perubahan ini akan tercatat di kartu stok untuk audit</li>
-                            <li>Pastikan jumlah stok sesuai dengan kondisi fisik barang</li>
-                        </ul>
+                        <label>Keterangan <small class="text-muted">(Opsional)</small></label>
+                        <textarea name="keterangan" id="keterangan_stok" class="form-control" rows="2" placeholder="Contoh: Stok opname, barang rusak, dll."></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fa fa-save"></i> Update Stok
-                    </button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">
-                        <i class="fa fa-times"></i> Batal
-                    </button>
+                    <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Update Stok</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
 @endsection
-
-{{-- Modal Update Stok Manual --}}
-<div class="modal fade" id="modal-update-stok" tabindex="-1" role="dialog" aria-labelledby="modal-update-stok">
-    <div class="modal-dialog" role="document">
-        <form id="form-update-stok" method="post" class="form-horizontal">
-            @csrf
-            @method('put')
-
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h4 class="modal-title">Update Stok Manual</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="alert alert-warning">
-                        <i class="fa fa-warning"></i> <strong>Perhatian!</strong><br>
-                        Fitur ini akan mengubah stok produk secara langsung dan membuat rekaman stok untuk tracking. 
-                        Gunakan hanya untuk penyesuaian stok dengan kondisi fisik barang di toko.
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="produk_info" class="col-lg-3 control-label">Produk</label>
-                        <div class="col-lg-9">
-                            <p id="produk_info" class="form-control-static"><strong></strong></p>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="stok_saat_ini" class="col-lg-3 control-label">Stok Saat Ini</label>
-                        <div class="col-lg-9">
-                            <p id="stok_saat_ini" class="form-control-static badge badge-info"></p>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="stok_baru" class="col-lg-3 control-label">Stok Baru</label>
-                        <div class="col-lg-9">
-                            <input type="number" name="stok" id="stok_baru" class="form-control" min="0" required>
-                            <span class="help-block">Masukkan jumlah stok yang sesuai dengan kondisi fisik barang</span>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="keterangan_stok" class="col-lg-3 control-label">Keterangan</label>
-                        <div class="col-lg-9">
-                            <textarea name="keterangan" id="keterangan_stok" class="form-control" rows="3" 
-                                placeholder="Opsional: Alasan penyesuaian stok (contoh: Stok opname, barang rusak, dll)"></textarea>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fa fa-save"></i> Update Stok
-                    </button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">
-                        <i class="fa fa-times"></i> Batal
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
 
 @push('scripts')
 <script>
@@ -941,19 +799,44 @@
         }
     }
 
+    var currentStokSaatIni = 0;
+    
     function updateStokManual(id, namaProduk, stokSaatIni) {
+        currentStokSaatIni = parseInt(stokSaatIni);
         $('#modal-update-stok').modal('show');
         $('#form-update-stok').attr('action', '{{ route("produk.update_stok_manual", ":id") }}'.replace(':id', id));
-        $('#produk_info').html('<strong>' + namaProduk + '</strong>');
-        $('#stok_saat_ini').text(stokSaatIni + ' unit');
+        $('#produk_info').text(namaProduk);
+        $('#stok_saat_ini').text(stokSaatIni);
         $('#stok_baru').val(stokSaatIni);
         $('#keterangan_stok').val('');
+        updateSelisihDisplay(stokSaatIni);
         
-        // Focus pada input stok baru
         setTimeout(function() {
             $('#stok_baru').focus().select();
         }, 500);
     }
+    
+    function updateSelisihDisplay(stokBaru) {
+        var selisih = parseInt(stokBaru) - currentStokSaatIni;
+        var selisihEl = $('#selisih_stok');
+        
+        if (isNaN(selisih)) {
+            selisihEl.text('-').removeClass('label-success label-danger label-warning').addClass('label-default');
+            return;
+        }
+        
+        if (selisih > 0) {
+            selisihEl.text('+' + selisih).removeClass('label-default label-danger label-warning').addClass('label-success');
+        } else if (selisih < 0) {
+            selisihEl.text(selisih).removeClass('label-default label-success label-warning').addClass('label-danger');
+        } else {
+            selisihEl.text('0').removeClass('label-success label-danger label-default').addClass('label-warning');
+        }
+    }
+    
+    $('#stok_baru').on('input', function() {
+        updateSelisihDisplay($(this).val());
+    });
 
     // Handle form submit untuk update stok manual
     $('#form-update-stok').on('submit', function(e) {

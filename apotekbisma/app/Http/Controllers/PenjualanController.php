@@ -319,7 +319,6 @@ class PenjualanController extends Controller
         try {
             Log::info('PenjualanController@destroy called', ['id' => $id, 'user_id' => auth()->id()]);
         } catch (\Exception $e) {
-            // ignore logging failures
         }
         DB::beginTransaction();
         
@@ -331,20 +330,17 @@ class PenjualanController extends Controller
                 return response()->json(['success' => false, 'message' => 'Transaksi tidak ditemukan'], 404);
             }
 
-            // Ambil detail transaksi untuk mengembalikan stok
             $detail = PenjualanDetail::where('id_penjualan', $penjualan->id_penjualan)->get();
+            $affectedProductIds = [];
             
             foreach ($detail as $item) {
-                $produk = Produk::find($item->id_produk);
+                $produk = Produk::lockForUpdate()->find($item->id_produk);
                 if ($produk) {
-                    // Catat stok sebelum perubahan
+                    $affectedProductIds[] = $produk->id_produk;
                     $stokSebelum = $produk->stok;
-                    
-                    // Kembalikan stok produk sesuai jumlah yang dijual
                     $produk->stok = $stokSebelum + $item->jumlah;
                     $produk->save();
                     
-                    // Buat rekaman audit untuk pengembalian stok
                     \App\Models\RekamanStok::create([
                         'id_produk' => $item->id_produk,
                         'waktu' => now(),
@@ -355,15 +351,16 @@ class PenjualanController extends Controller
                     ]);
                 }
                 
-                // Hapus detail transaksi
                 $item->delete();
             }
 
-            // Hapus semua rekaman stok yang terkait dengan transaksi ini
             \App\Models\RekamanStok::where('id_penjualan', $penjualan->id_penjualan)->delete();
 
-            // Hapus transaksi
             $penjualan->delete();
+
+            foreach (array_unique($affectedProductIds) as $produkId) {
+                \App\Models\RekamanStok::recalculateStock($produkId);
+            }
 
             DB::commit();
             

@@ -398,7 +398,6 @@ class PenjualanDetailController extends Controller
         try {
             Log::info('PenjualanDetailController@destroy called', ['id' => $id, 'user_id' => auth()->id()]);
         } catch (\Exception $e) {
-            // ignore logging failures
         }
         DB::beginTransaction();
         
@@ -406,22 +405,18 @@ class PenjualanDetailController extends Controller
             $detail = PenjualanDetail::find($id);
             
             if ($detail) {
-                // Catat stok sebelum perubahan
-                $produk = Produk::find($detail->id_produk);
+                $produk = Produk::lockForUpdate()->find($detail->id_produk);
+                $produkId = $detail->id_produk;
+                
                 if ($produk) {
                     $stokSebelum = $produk->stok;
-                    
-                    // Kembalikan stok produk
                     $produk->stok = $stokSebelum + $detail->jumlah;
                     $produk->save();
                     
-                    // Hapus rekaman stok yang terkait
                     RekamanStok::where('id_penjualan', $detail->id_penjualan)
                                ->where('id_produk', $detail->id_produk)
-                               ->where('stok_keluar', $detail->jumlah)
                                ->delete();
                     
-                    // Buat rekaman audit untuk pengembalian stok
                     RekamanStok::create([
                         'id_produk' => $produk->id_produk,
                         'waktu' => now(),
@@ -433,6 +428,10 @@ class PenjualanDetailController extends Controller
                 }
                 
                 $detail->delete();
+                
+                if ($produkId) {
+                    RekamanStok::recalculateStock($produkId);
+                }
             }
             
             DB::commit();

@@ -482,7 +482,6 @@ class PembelianDetailController extends Controller
         try {
             Log::info('PembelianDetailController@destroy called', ['id' => $id, 'user_id' => auth()->id()]);
         } catch (\Exception $e) {
-            // ignore logging failures
         }
         DB::beginTransaction();
         
@@ -494,19 +493,16 @@ class PembelianDetailController extends Controller
                 return response()->json(['success' => false, 'message' => 'Detail tidak ditemukan'], 404);
             }
             
-            $produk = Produk::find($detail->id_produk);
+            $produkId = $detail->id_produk;
+            $produk = Produk::lockForUpdate()->find($detail->id_produk);
+            
             if ($produk) {
-                // Catat stok sebelum perubahan
                 $stokSebelum = $produk->stok;
-                
-                // Kurangi stok berdasarkan jumlah yang ada di detail
                 $produk->stok = $stokSebelum - $detail->jumlah;
                 $produk->save();
                 
-                // Hapus rekaman stok yang terkait (yang merepresentasikan penambahan)
                 RekamanStok::where('id_pembelian', $detail->id_pembelian)
                            ->where('id_produk', $detail->id_produk)
-                           ->where('stok_masuk', $detail->jumlah)
                            ->delete();
 
                 $pembelian = \App\Models\Pembelian::find($detail->id_pembelian);
@@ -522,6 +518,10 @@ class PembelianDetailController extends Controller
             }
             
             $detail->delete();
+            
+            if ($produkId) {
+                RekamanStok::recalculateStock($produkId);
+            }
             
             DB::commit();
         } catch (\Exception $e) {

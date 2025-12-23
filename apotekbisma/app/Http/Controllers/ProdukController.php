@@ -164,21 +164,18 @@ class ProdukController extends Controller
                 
             })
             ->addColumn('aksi', function ($produk) {
-                $buttons = '<div class="btn-group" role="group">';
+                $buttons = '<div class="btn-group btn-group-xs" role="group">';
                 
-                $buttons .= '<button type="button" onclick="editForm(`'. route('produk.update', $produk->id_produk) .'`)" class="btn btn-xs btn-info btn-flat" title="Edit Produk" data-toggle="tooltip"><i class="fa fa-pencil"></i> Edit</button>';
+                $buttons .= '<button type="button" onclick="editForm(`'. route('produk.update', $produk->id_produk) .'`)" class="btn btn-info" title="Edit Produk"><i class="fa fa-pencil"></i></button>';
                 
-                // Tambahkan button "Update Stok Manual" 
-                $buttons .= '<button type="button" onclick="updateStokManual('. $produk->id_produk .', \''. addslashes($produk->nama_produk) .'\', '. $produk->stok .')" class="btn btn-xs btn-success btn-flat" title="Update Stok Manual" data-toggle="tooltip"><i class="fa fa-refresh"></i> Stok</button>';
+                $buttons .= '<button type="button" onclick="updateStokManual('. $produk->id_produk .', \''. addslashes($produk->nama_produk) .'\', '. $produk->stok .')" class="btn btn-success" title="Update Stok"><i class="fa fa-cubes"></i></button>';
                 
-                // Tambahkan button "Kartu Stok"
-                $buttons .= '<a href="'. route('kartu_stok.detail', $produk->id_produk) .'" class="btn btn-xs btn-primary btn-flat" title="Lihat Kartu Stok" data-toggle="tooltip" target="_blank"><i class="fa fa-file-text-o"></i> Kartu Stok</a>';
+                $buttons .= '<a href="'. route('kartu_stok.detail', $produk->id_produk) .'" class="btn btn-primary" title="Kartu Stok" target="_blank"><i class="fa fa-list-alt"></i></a>';
                 
-                $buttons .= '<button type="button" onclick="deleteData(`'. route('produk.destroy', $produk->id_produk) .'`)" class="btn btn-xs btn-danger btn-flat" title="Hapus Produk" data-toggle="tooltip"><i class="fa fa-trash"></i></button>';
+                $buttons .= '<button type="button" onclick="deleteData(`'. route('produk.destroy', $produk->id_produk) .'`)" class="btn btn-danger" title="Hapus"><i class="fa fa-trash"></i></button>';
                 
-                // Tambahkan button "Beli Sekarang" untuk produk dengan stok <= 1
                 if ($produk->stok <= 1) {
-                    $buttons .= '<button type="button" onclick="beliProduk('. $produk->id_produk .')" class="btn btn-xs btn-warning btn-flat" title="Beli Sekarang!" data-toggle="tooltip"><i class="fa fa-shopping-cart"></i> Beli</button>';
+                    $buttons .= '<button type="button" onclick="beliProduk('. $produk->id_produk .')" class="btn btn-warning" title="Beli Sekarang"><i class="fa fa-cart-plus"></i></button>';
                 }
                 
                 $buttons .= '</div>';
@@ -251,7 +248,19 @@ class ProdukController extends Controller
     {
         $produk = Produk::find($id);
         
+        if (!$produk) {
+            return response()->json('Produk tidak ditemukan', 404);
+        }
+
+        $stok_lama = $produk->stok;
+        $stok_baru = isset($request->stok) ? intval($request->stok) : $stok_lama;
+
         $produk->update($request->all());
+
+        if ($stok_baru !== $stok_lama) {
+            $this->ensureProdukHasRekamanStok($produk);
+            $this->sinkronisasiStokProduk($produk, 'Perubahan Stok Manual via Edit Produk');
+        }
 
         return response()->json('Data berhasil disimpan', 200);
     }
@@ -285,7 +294,12 @@ class ProdukController extends Controller
         $produk->stok = $stok_baru;
         $produk->save();
 
-        $this->sinkronisasiStokProduk($produk, $request->keterangan ?? 'Update stok manual');
+        $keteranganFinal = 'Perubahan Stok Manual';
+        if (!empty($request->keterangan)) {
+            $keteranganFinal = 'Perubahan Stok Manual: ' . $request->keterangan;
+        }
+
+        $this->sinkronisasiStokProduk($produk, $keteranganFinal);
 
         return response()->json([
             'success' => true,
