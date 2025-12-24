@@ -9,7 +9,7 @@ use App\Observers\ProdukObserver;
 use App\Observers\RekamanStokObserver;
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\URL;
+// use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -42,7 +42,7 @@ class AppServiceProvider extends ServiceProvider
         Carbon::setLocale('id');
         date_default_timezone_set('Asia/Jakarta');
 
-        URL::forceScheme('https');
+        // URL::forceScheme('https');
         
         // Daftarkan observer untuk memastikan stok tidak pernah minus
         Produk::observe(ProdukObserver::class);

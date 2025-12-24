@@ -372,7 +372,15 @@
     }
 
     function tambahProduk() {
-        // Pastikan tanggal terisi sebelum menambah produk
+        var idProduk = $('#id_produk').val();
+        var kodeProduk = $('#kode_produk').val();
+        console.log('[tambahProduk] called, id_produk:', idProduk, 'kode_produk:', kodeProduk);
+        
+        if (!idProduk || idProduk === '') {
+            alert('Silakan pilih produk terlebih dahulu');
+            return;
+        }
+        
         const waktuInput = document.getElementById('waktu_transaksi');
         if (waktuInput && (!waktuInput.value || waktuInput.value === '')) {
             const today = new Date();
@@ -384,15 +392,31 @@
         
         $.post('{{ route('transaksi.store') }}', $('.form-produk').serialize())
             .done(response => {
+                console.log('[tambahProduk] success:', response);
+                $('#kode_produk').val('');
+                $('#id_produk').val('');
                 $('#kode_produk').focus();
                 userEditedDiterima = false;
                 table.ajax.reload(null, false);
                 computeTotalsInDetail();
                 loadForm($('#diskon').val(), parseFloat($('#total').val()) || 0, parseFloat($('#diterima').val()) || 0);
             })
-            .fail(errors => {
-                alert('Tidak dapat menyimpan data');
-                return;
+            .fail(xhr => {
+                console.error('[tambahProduk] error:', xhr.status, xhr.responseText);
+                var errorMsg = 'Tidak dapat menyimpan data';
+                try {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.message) {
+                        errorMsg = response.message;
+                    } else if (typeof response === 'string') {
+                        errorMsg = response;
+                    }
+                } catch(e) {
+                    if (xhr.responseText) {
+                        errorMsg = xhr.responseText.substring(0, 200);
+                    }
+                }
+                alert(errorMsg);
             });
     }
 
