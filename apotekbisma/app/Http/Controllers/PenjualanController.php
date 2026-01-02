@@ -320,6 +320,7 @@ class PenjualanController extends Controller
             Log::info('PenjualanController@destroy called', ['id' => $id, 'user_id' => auth()->id()]);
         } catch (\Exception $e) {
         }
+        
         DB::beginTransaction();
         
         try {
@@ -333,36 +334,32 @@ class PenjualanController extends Controller
             $detail = PenjualanDetail::where('id_penjualan', $penjualan->id_penjualan)->get();
             $affectedProductIds = [];
             
+            DB::table('rekaman_stoks')->where('id_penjualan', $penjualan->id_penjualan)->delete();
+            
             foreach ($detail as $item) {
                 $produk = Produk::lockForUpdate()->find($item->id_produk);
                 if ($produk) {
                     $affectedProductIds[] = $produk->id_produk;
-                    $stokSebelum = $produk->stok;
-                    $produk->stok = $stokSebelum + $item->jumlah;
-                    $produk->save();
+                    $stokSebelum = intval($produk->stok);
+                    $stokBaru = $stokSebelum + intval($item->jumlah);
                     
-                    \App\Models\RekamanStok::create([
-                        'id_produk' => $item->id_produk,
-                        'waktu' => now(),
-                        'stok_masuk' => $item->jumlah,
-                        'stok_awal' => $stokSebelum,
-                        'stok_sisa' => $produk->stok,
-                        'keterangan' => 'Penghapusan transaksi penjualan: Pengembalian stok'
-                    ]);
+                    DB::table('produk')->where('id_produk', $produk->id_produk)->update(['stok' => $stokBaru]);
                 }
                 
                 $item->delete();
             }
 
-            \App\Models\RekamanStok::where('id_penjualan', $penjualan->id_penjualan)->delete();
-
             $penjualan->delete();
 
-            foreach (array_unique($affectedProductIds) as $produkId) {
-                \App\Models\RekamanStok::recalculateStock($produkId);
-            }
-
             DB::commit();
+            
+            foreach (array_unique($affectedProductIds) as $produkId) {
+                try {
+                    RekamanStok::recalculateStock($produkId);
+                } catch (\Exception $e) {
+                    Log::warning('Recalculate stock after delete warning: ' . $e->getMessage());
+                }
+            }
             
             return response()->json(['success' => true, 'message' => 'Transaksi berhasil dihapus dan stok dikembalikan'], 200);
             

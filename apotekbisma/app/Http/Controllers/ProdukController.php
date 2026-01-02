@@ -266,7 +266,7 @@ class ProdukController extends Controller
     }
 
     /**
-     * Update stok produk secara manual dengan rekaman yang proper
+     * Update stok produk secara manual dengan rekaman yang proper (Stock Opname)
      */
     public function updateStokManual(Request $request, $id)
     {
@@ -280,36 +280,82 @@ class ProdukController extends Controller
             'keterangan.max' => 'Keterangan maksimal 500 karakter'
         ]);
 
-        $produk = Produk::find($id);
-        if (!$produk) {
-            return response()->json('Produk tidak ditemukan', 404);
+        DB::beginTransaction();
+        
+        try {
+            $produk = Produk::where('id_produk', $id)->lockForUpdate()->first();
+            if (!$produk) {
+                DB::rollBack();
+                return response()->json('Produk tidak ditemukan', 404);
+            }
+
+            $stok_lama = intval($produk->stok);
+            $stok_baru = intval($request->stok);
+            $selisih_stok = $stok_baru - $stok_lama;
+
+            if ($selisih_stok == 0) {
+                DB::commit();
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Stok tidak berubah',
+                    'data' => [
+                        'stok_lama' => $stok_lama,
+                        'stok_baru' => $stok_baru,
+                        'selisih' => 0
+                    ]
+                ], 200);
+            }
+
+            DB::table('produk')->where('id_produk', $id)->update(['stok' => $stok_baru]);
+
+            $keteranganFinal = 'Stock Opname (Penyesuaian Stok Manual)';
+            if (!empty($request->keterangan)) {
+                $keteranganFinal = 'Stock Opname: ' . $request->keterangan;
+            }
+
+            $this->createStockOpnameRecord($produk->id_produk, $stok_lama, $stok_baru, $keteranganFinal);
+            
+            DB::commit();
+
+            try {
+                RekamanStok::recalculateStock($produk->id_produk);
+            } catch (\Exception $e) {
+                Log::warning('Recalculate stock warning after stock opname: ' . $e->getMessage());
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Stok berhasil diperbarui dan disinkronkan',
+                'data' => [
+                    'stok_lama' => $stok_lama,
+                    'stok_baru' => $stok_baru,
+                    'selisih' => $selisih_stok
+                ]
+            ], 200);
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error updateStokManual: ' . $e->getMessage());
+            return response()->json(['error' => true, 'message' => 'Terjadi kesalahan: ' . $e->getMessage()], 500);
         }
+    }
 
-        $this->ensureProdukHasRekamanStok($produk);
-
-        $stok_lama = $produk->stok;
-        $stok_baru = $request->stok;
-        $selisih_stok = $stok_baru - $stok_lama;
-
-        $produk->stok = $stok_baru;
-        $produk->save();
-
-        $keteranganFinal = 'Perubahan Stok Manual';
-        if (!empty($request->keterangan)) {
-            $keteranganFinal = 'Perubahan Stok Manual: ' . $request->keterangan;
-        }
-
-        $this->sinkronisasiStokProduk($produk, $keteranganFinal);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Stok berhasil diperbarui dan disinkronkan',
-            'data' => [
-                'stok_lama' => $stok_lama,
-                'stok_baru' => $stok_baru,
-                'selisih' => $selisih_stok
-            ]
-        ], 200);
+    private function createStockOpnameRecord($idProduk, $stokLama, $stokBaru, $keterangan)
+    {
+        $currentTime = Carbon::now();
+        $selisih = $stokBaru - $stokLama;
+        
+        DB::table('rekaman_stoks')->insert([
+            'id_produk' => $idProduk,
+            'waktu' => $currentTime,
+            'stok_awal' => $stokLama,
+            'stok_masuk' => $selisih > 0 ? $selisih : 0,
+            'stok_keluar' => $selisih < 0 ? abs($selisih) : 0,
+            'stok_sisa' => $stokBaru,
+            'keterangan' => $keterangan,
+            'created_at' => $currentTime,
+            'updated_at' => $currentTime
+        ]);
     }
 
     private function sinkronisasiStokProduk($produk, $keterangan = 'Update stok manual')
@@ -317,7 +363,6 @@ class ProdukController extends Controller
         try {
             $currentTime = Carbon::now();
             
-            // Ambil rekaman stok terakhir untuk produk ini
             $latestRekaman = DB::table('rekaman_stoks')
                 ->where('id_produk', $produk->id_produk)
                 ->orderBy('waktu', 'desc')
@@ -327,7 +372,6 @@ class ProdukController extends Controller
             $stokProduk = intval($produk->stok);
             $stokSisaTerakhir = $latestRekaman ? intval($latestRekaman->stok_sisa) : 0;
             
-            // Hanya buat rekaman baru jika ada perbedaan stok
             if ($stokProduk !== $stokSisaTerakhir) {
                 $selisih = $stokProduk - $stokSisaTerakhir;
                 
@@ -342,6 +386,12 @@ class ProdukController extends Controller
                     'created_at' => $currentTime,
                     'updated_at' => $currentTime
                 ]);
+                
+                try {
+                    RekamanStok::recalculateStock($produk->id_produk);
+                } catch (\Exception $e) {
+                    Log::warning('Recalculate stock warning: ' . $e->getMessage());
+                }
             }
         } catch (\Exception $e) {
             Log::error('Error sinkronisasi stok produk: ' . $e->getMessage());

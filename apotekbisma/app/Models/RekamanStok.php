@@ -18,59 +18,45 @@ class RekamanStok extends Model
     protected $dates = ['waktu'];
     
     public static $skipMutators = false;
+    public static $preventRecalculation = false;
 
     protected static function boot()
     {
         parent::boot();
         
-        static::created(function ($rekamanStok) {
-            // Check if there are records chronologically AFTER this one.
-            // If so, we must recalculate to ensure consistency.
-            $laterRecords = self::where('id_produk', $rekamanStok->id_produk)
-                ->where(function($q) use ($rekamanStok) {
-                    $q->where('waktu', '>', $rekamanStok->waktu)
-                      ->orWhere(function($q2) use ($rekamanStok) {
-                          $q2->where('waktu', '=', $rekamanStok->waktu)
-                             ->where('id_rekaman_stok', '>', $rekamanStok->id_rekaman_stok);
-                      });
-                })
-                ->exists();
-
-            if ($laterRecords) {
-                self::recalculateStock($rekamanStok->id_produk);
-            }
-        });
-        
         static::creating(function ($rekamanStok) {
-            // Validate consistency before creating
-            $calculatedSisa = $rekamanStok->stok_awal + $rekamanStok->stok_masuk - $rekamanStok->stok_keluar;
-            if ($rekamanStok->stok_sisa !== null && $rekamanStok->stok_sisa != $calculatedSisa) {
-                Log::warning('Inconsistent stock record being created', [
+            $calculatedSisa = intval($rekamanStok->stok_awal) + intval($rekamanStok->stok_masuk) - intval($rekamanStok->stok_keluar);
+            if ($rekamanStok->stok_sisa !== null && intval($rekamanStok->stok_sisa) != $calculatedSisa) {
+                Log::warning('RekamanStok: Auto-correcting stok_sisa on create', [
                     'id_produk' => $rekamanStok->id_produk,
                     'stok_awal' => $rekamanStok->stok_awal,
                     'stok_masuk' => $rekamanStok->stok_masuk,
                     'stok_keluar' => $rekamanStok->stok_keluar,
-                    'stok_sisa_provided' => $rekamanStok->stok_sisa,
-                    'stok_sisa_calculated' => $calculatedSisa,
-                    'keterangan' => $rekamanStok->keterangan
+                    'provided_sisa' => $rekamanStok->stok_sisa,
+                    'calculated_sisa' => $calculatedSisa,
                 ]);
+                $rekamanStok->stok_sisa = $calculatedSisa;
+            }
+            
+            if ($rekamanStok->stok_sisa < 0) {
+                $rekamanStok->stok_sisa = 0;
             }
         });
         
         static::updating(function ($rekamanStok) {
-            // Validate consistency before updating
-            $calculatedSisa = $rekamanStok->stok_awal + $rekamanStok->stok_masuk - $rekamanStok->stok_keluar;
-            if ($rekamanStok->stok_sisa !== null && $rekamanStok->stok_sisa != $calculatedSisa) {
-                Log::warning('Inconsistent stock record being updated', [
+            $calculatedSisa = intval($rekamanStok->stok_awal) + intval($rekamanStok->stok_masuk) - intval($rekamanStok->stok_keluar);
+            if ($rekamanStok->stok_sisa !== null && intval($rekamanStok->stok_sisa) != $calculatedSisa) {
+                Log::warning('RekamanStok: Auto-correcting stok_sisa on update', [
                     'id_rekaman_stok' => $rekamanStok->id_rekaman_stok,
                     'id_produk' => $rekamanStok->id_produk,
-                    'stok_awal' => $rekamanStok->stok_awal,
-                    'stok_masuk' => $rekamanStok->stok_masuk,
-                    'stok_keluar' => $rekamanStok->stok_keluar,
-                    'stok_sisa_provided' => $rekamanStok->stok_sisa,
-                    'stok_sisa_calculated' => $calculatedSisa,
-                    'keterangan' => $rekamanStok->keterangan
+                    'provided_sisa' => $rekamanStok->stok_sisa,
+                    'calculated_sisa' => $calculatedSisa,
                 ]);
+                $rekamanStok->stok_sisa = $calculatedSisa;
+            }
+            
+            if ($rekamanStok->stok_sisa < 0) {
+                $rekamanStok->stok_sisa = 0;
             }
         });
     }
@@ -126,56 +112,113 @@ class RekamanStok extends Model
 
     public static function recalculateStock($productId)
     {
-        $stokRecords = self::where('id_produk', $productId)
+        if (static::$preventRecalculation) {
+            return;
+        }
+        
+        try {
+            static::$preventRecalculation = true;
+            
+            $stokRecords = DB::table('rekaman_stoks')
+                ->where('id_produk', $productId)
+                ->orderBy('waktu', 'asc')
+                ->orderBy('created_at', 'asc')
+                ->orderBy('id_rekaman_stok', 'asc')
+                ->get();
+
+            if ($stokRecords->isEmpty()) {
+                static::$preventRecalculation = false;
+                return;
+            }
+
+            $runningStock = 0;
+            $isFirst = true;
+            $updates = [];
+
+            foreach ($stokRecords as $record) {
+                $needsUpdate = false;
+                $updateData = [];
+
+                if ($isFirst) {
+                    $runningStock = intval($record->stok_awal);
+                    $isFirst = false;
+                } else {
+                    if (intval($record->stok_awal) != $runningStock) {
+                        $updateData['stok_awal'] = $runningStock;
+                        $needsUpdate = true;
+                    }
+                }
+
+                $calculatedSisa = $runningStock + intval($record->stok_masuk) - intval($record->stok_keluar);
+
+                if (intval($record->stok_sisa) != $calculatedSisa) {
+                    $updateData['stok_sisa'] = $calculatedSisa;
+                    $needsUpdate = true;
+                }
+
+                if ($needsUpdate) {
+                    $updates[$record->id_rekaman_stok] = $updateData;
+                }
+
+                $runningStock = $calculatedSisa;
+            }
+
+            foreach ($updates as $recordId => $updateData) {
+                DB::table('rekaman_stoks')
+                    ->where('id_rekaman_stok', $recordId)
+                    ->update($updateData);
+            }
+            
+            DB::table('produk')
+                ->where('id_produk', $productId)
+                ->update(['stok' => max(0, $runningStock)]);
+                
+            static::$preventRecalculation = false;
+            
+        } catch (\Exception $e) {
+            static::$preventRecalculation = false;
+            Log::error('RekamanStok::recalculateStock error: ' . $e->getMessage());
+            throw $e;
+        }
+    }
+    
+    public static function getCalculatedStock($productId)
+    {
+        $stokRecords = DB::table('rekaman_stoks')
+            ->where('id_produk', $productId)
             ->orderBy('waktu', 'asc')
             ->orderBy('created_at', 'asc')
             ->orderBy('id_rekaman_stok', 'asc')
             ->get();
 
         if ($stokRecords->isEmpty()) {
-            return;
+            return 0;
         }
 
-        $runningStock = 0;
-        $isFirst = true;
+        $runningStock = intval($stokRecords->first()->stok_awal);
 
         foreach ($stokRecords as $record) {
-            $needsUpdate = false;
+            $runningStock = $runningStock + intval($record->stok_masuk) - intval($record->stok_keluar);
+        }
 
-            if ($isFirst) {
-                $runningStock = $record->stok_awal;
-                $isFirst = false;
-            } else {
-                if ($record->stok_awal != $runningStock) {
-                    $record->stok_awal = $runningStock;
-                    $needsUpdate = true;
-                }
-            }
-
-            $calculatedSisa = $runningStock + $record->stok_masuk - $record->stok_keluar;
-
-            if ($record->stok_sisa != $calculatedSisa) {
-                $record->stok_sisa = $calculatedSisa;
-                $needsUpdate = true;
-            }
-
-            if ($needsUpdate) {
-                DB::table('rekaman_stoks')
-                    ->where('id_rekaman_stok', $record->id_rekaman_stok)
-                    ->update([
-                        'stok_awal' => $record->stok_awal,
-                        'stok_sisa' => $record->stok_sisa
-                    ]);
-            }
-
-            $runningStock = $calculatedSisa;
+        return max(0, $runningStock);
+    }
+    
+    public static function verifyIntegrity($productId)
+    {
+        $produk = Produk::find($productId);
+        if (!$produk) {
+            return ['valid' => false, 'error' => 'Product not found'];
         }
         
-        // Update Product Master Stock
-        $produk = Produk::find($productId);
-        if ($produk && $produk->stok != $runningStock) {
-            $produk->stok = $runningStock;
-            $produk->save();
-        }
+        $calculatedStock = self::getCalculatedStock($productId);
+        $productStock = intval($produk->stok);
+        
+        return [
+            'valid' => $productStock === $calculatedStock,
+            'product_stock' => $productStock,
+            'calculated_stock' => $calculatedStock,
+            'difference' => $productStock - $calculatedStock
+        ];
     }
 }

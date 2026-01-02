@@ -17,17 +17,6 @@ class PenjualanDetailController extends Controller
 {
     public function __construct()
     {
-        // Normalisasi stok minus menjadi 0 saat controller diinisialisasi
-        $this->normalizeNegativeStock();
-    }
-
-    /**
-     * Normalisasi stok produk yang minus menjadi 0
-     */
-    private function normalizeNegativeStock()
-    {
-        // Update semua produk yang memiliki stok negatif menjadi 0
-        Produk::where('stok', '<', 0)->update(['stok' => 0]);
     }
 
     public function index()
@@ -36,7 +25,6 @@ class PenjualanDetailController extends Controller
         $member = Member::orderBy('nama')->get();
         $diskon = Setting::first()->diskon ?? 0;
 
-        // Cek apakah ada transaksi yang sedang berjalan
         if ($id_penjualan = session('id_penjualan')) {
             $penjualan = Penjualan::find($id_penjualan);
             $memberSelected = $penjualan->member ?? new Member();
@@ -101,8 +89,6 @@ class PenjualanDetailController extends Controller
 
     public function store(Request $request)
     {
-        $produkIdForRecalc = null;
-        
         DB::beginTransaction();
         
         try {
@@ -117,10 +103,6 @@ class PenjualanDetailController extends Controller
                 DB::rollBack();
                 return response()->json(['error' => true, 'message' => 'Data produk tidak ditemukan'], 400);
             }
-
-            $produkIdForRecalc = $produk->id_produk;
-
-            $this->ensureProdukHasRekamanStok($produk);
 
             $stokSaatIni = intval($produk->stok);
             if ($stokSaatIni <= 0) {
@@ -162,12 +144,12 @@ class PenjualanDetailController extends Controller
                     DB::rollBack();
                     return response()->json(['error' => true, 'message' => 'Transaksi tidak ditemukan'], 400);
                 }
-                
                 $this->ensurePenjualanHasWaktu($penjualan);
             }
 
             $stok_sebelum = $stokSaatIni;
 
+            // 1. Always create a NEW PenjualanDetail row (Requirement: "barangnya bertambah dan dikelompokkan" as separate rows)
             $detail = new PenjualanDetail();
             $detail->id_penjualan = $id_penjualan;
             $detail->id_produk = $produk->id_produk;
@@ -177,6 +159,7 @@ class PenjualanDetailController extends Controller
             $detail->subtotal = ($produk->harga_jual ?? 0) - (($produk->diskon ?? 0) / 100 * ($produk->harga_jual ?? 0));
             $detail->save();
 
+            // 2. Deduct Stock from Product
             $stok_baru = $stok_sebelum - $jumlah_tambahan;
             if ($stok_baru < 0) {
                 $stok_baru = 0;
@@ -184,35 +167,32 @@ class PenjualanDetailController extends Controller
             
             DB::table('produk')->where('id_produk', $produk->id_produk)->update(['stok' => $stok_baru]);
 
-            $waktuTransaksi = $penjualan->waktu ?? date('Y-m-d H:i:s');
-            if ($waktuTransaksi instanceof \Carbon\Carbon) {
-                $waktuTransaksi = $waktuTransaksi->format('Y-m-d H:i:s');
-            } elseif (!is_string($waktuTransaksi)) {
-                $waktuTransaksi = date('Y-m-d H:i:s');
-            }
-
-            DB::table('rekaman_stoks')->insert([
-                'id_produk' => $produk->id_produk,
-                'id_penjualan' => $id_penjualan,
-                'waktu' => $waktuTransaksi,
-                'stok_masuk' => 0,
-                'stok_keluar' => $jumlah_tambahan,
-                'stok_awal' => $stok_sebelum,
-                'stok_sisa' => $stok_baru,
-                'keterangan' => 'Penjualan: Transaksi penjualan produk',
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
-
-            DB::commit();
+            // 3. Update OR Create RekamanStok (Aggregated)
+            // We must find the existing record for this (Transaction + Product) and increment the outgoing stock.
+            $existingRekaman = DB::table('rekaman_stoks')
+                ->where('id_penjualan', $id_penjualan)
+                ->where('id_produk', $produk->id_produk)
+                ->first();
             
-            if ($produkIdForRecalc) {
-                try {
-                    RekamanStok::recalculateStock($produkIdForRecalc);
-                } catch (\Exception $e) {
-                    Log::warning('Recalculate stock warning after store: ' . $e->getMessage());
-                }
+            if ($existingRekaman) {
+                $newStokKeluar = intval($existingRekaman->stok_keluar) + $jumlah_tambahan;
+                $originalStokAwal = intval($existingRekaman->stok_awal); // Keep original stock start
+                $newStokSisa = $originalStokAwal - $newStokKeluar;
+                if ($newStokSisa < 0) $newStokSisa = 0; // Prevent negative
+                
+                DB::table('rekaman_stoks')
+                    ->where('id_rekaman_stok', $existingRekaman->id_rekaman_stok)
+                    ->update([
+                        'stok_keluar' => $newStokKeluar,
+                        'stok_sisa' => $newStokSisa,
+                        'updated_at' => now()
+                    ]);
+            } else {
+                // First time for this product in this transaction
+                $this->createRekamanStokPenjualan($produk->id_produk, $id_penjualan, $stok_sebelum, $jumlah_tambahan, $penjualan->waktu);
             }
+            
+            DB::commit();
             
             return response()->json([
                 'success' => true,
@@ -234,8 +214,6 @@ class PenjualanDetailController extends Controller
 
     public function update(Request $request, $id)
     {
-        $produkIdForRecalc = null;
-        
         DB::beginTransaction();
         
         try {
@@ -253,68 +231,53 @@ class PenjualanDetailController extends Controller
                 return response()->json(['message' => 'Produk tidak ditemukan'], 404);
             }
             
-            $produkIdForRecalc = $produk->id_produk;
-            
-            $new_jumlah = (int) $request->jumlah;
-            if ($new_jumlah < 1) {
+            $new_jumlah_row = (int) $request->jumlah;
+            if ($new_jumlah_row < 1) {
                 DB::rollBack();
                 return response()->json(['message' => 'Jumlah harus minimal 1'], 400);
             }
             
-            if ($new_jumlah > 10000) {
-                DB::rollBack();
-                return response()->json(['message' => 'Jumlah tidak boleh lebih dari 10000'], 400);
-            }
+            $old_jumlah_row = intval($detail->jumlah);
+            $selisih_row = $new_jumlah_row - $old_jumlah_row;
             
-            $old_jumlah = intval($detail->jumlah);
-            $selisih = $new_jumlah - $old_jumlah;
+            $stok_sekarang = intval($produk->stok);
             
-            $stok_sebelum = intval($produk->stok);
-            
-            $total_lain_di_keranjang = DB::table('penjualan_detail')
-                                         ->where('id_penjualan', $detail->id_penjualan)
-                                         ->where('id_produk', $produk->id_produk)
-                                         ->where('id_penjualan_detail', '!=', $detail->id_penjualan_detail)
-                                         ->sum('jumlah');
-            
-            $stok_tersedia = $stok_sebelum + $old_jumlah;
-            
-            $total_dibutuhkan = $new_jumlah + $total_lain_di_keranjang;
-            
-            if ($total_dibutuhkan > $stok_tersedia) {
+            if ($selisih_row > 0 && $stok_sekarang < $selisih_row) {
                 DB::rollBack();
                 return response()->json([
-                    'message' => 'Tidak dapat mengubah jumlah! ' . 
-                                'Stok tersedia: ' . $stok_tersedia . ', ' .
-                                'Item lain di keranjang: ' . $total_lain_di_keranjang . ', ' .
-                                'Maksimal untuk item ini: ' . max(0, $stok_tersedia - $total_lain_di_keranjang)
+                    'message' => 'Tidak dapat mengubah jumlah! Stok tersedia: ' . $stok_sekarang . ', dibutuhkan: ' . $selisih_row
                 ], 400);
             }
             
-            $stok_baru = $stok_sebelum - $selisih;
+            // 1. Update Product Stock
+            $stok_baru = $stok_sekarang - $selisih_row;
             if ($stok_baru < 0) {
                 $stok_baru = 0;
             }
-            
             DB::table('produk')->where('id_produk', $produk->id_produk)->update(['stok' => $stok_baru]);
             
+            // 2. Update Detail Row
             $hargaJual = floatval($detail->harga_jual);
             $diskon = floatval($detail->diskon);
-            $subtotal = $hargaJual * $new_jumlah - (($diskon * $new_jumlah) / 100 * $hargaJual);
+            $subtotal = $hargaJual * $new_jumlah_row - (($diskon * $new_jumlah_row) / 100 * $hargaJual);
             
             DB::table('penjualan_detail')
                 ->where('id_penjualan_detail', $detail->id_penjualan_detail)
                 ->update([
-                    'jumlah' => $new_jumlah,
+                    'jumlah' => $new_jumlah_row,
                     'subtotal' => $subtotal,
                     'updated_at' => now()
                 ]);
             
+            // 3. Update RekamanStok (Aggregated)
+            // Calculate TOTAL quantity for this product in this transaction across ALL rows
+            $totalQtyInTransaction = DB::table('penjualan_detail')
+                ->where('id_penjualan', $detail->id_penjualan)
+                ->where('id_produk', $produk->id_produk)
+                ->sum('jumlah');
+
             $penjualan = Penjualan::find($detail->id_penjualan);
             $waktu_transaksi = $penjualan && $penjualan->waktu ? $penjualan->waktu : date('Y-m-d H:i:s');
-            if ($waktu_transaksi instanceof \Carbon\Carbon) {
-                $waktu_transaksi = $waktu_transaksi->format('Y-m-d H:i:s');
-            }
             
             $existingRekaman = DB::table('rekaman_stoks')
                                  ->where('id_penjualan', $detail->id_penjualan)
@@ -322,45 +285,32 @@ class PenjualanDetailController extends Controller
                                  ->first();
             
             if ($existingRekaman) {
+                $originalStokAwal = intval($existingRekaman->stok_awal);
+                $newStokSisa = $originalStokAwal - $totalQtyInTransaction;
+                if ($newStokSisa < 0) $newStokSisa = 0;
+                
                 DB::table('rekaman_stoks')
                     ->where('id_rekaman_stok', $existingRekaman->id_rekaman_stok)
                     ->update([
                         'waktu' => $waktu_transaksi,
-                        'stok_keluar' => $new_jumlah,
-                        'stok_awal' => $stok_sebelum + $old_jumlah,
-                        'stok_sisa' => $stok_baru,
-                        'keterangan' => 'Penjualan: Update jumlah transaksi',
+                        'stok_keluar' => $totalQtyInTransaction, // Set to Aggregated Total
+                        'stok_sisa' => $newStokSisa,
                         'updated_at' => now()
                     ]);
             } else {
-                DB::table('rekaman_stoks')->insert([
-                    'id_produk' => $produk->id_produk,
-                    'id_penjualan' => $detail->id_penjualan,
-                    'waktu' => $waktu_transaksi,
-                    'stok_masuk' => 0,
-                    'stok_keluar' => $new_jumlah,
-                    'stok_awal' => $stok_sebelum + $old_jumlah,
-                    'stok_sisa' => $stok_baru,
-                    'keterangan' => 'Penjualan: Update jumlah transaksi',
-                    'created_at' => now(),
-                    'updated_at' => now()
-                ]);
+                // Should not happen usually in update, but for safety
+                $stokAwalRekaman = $stok_baru + $totalQtyInTransaction;
+                $this->createRekamanStokPenjualan($produk->id_produk, $detail->id_penjualan, $stokAwalRekaman, $totalQtyInTransaction, $waktu_transaksi);
             }
             
             DB::commit();
             
-            if ($produkIdForRecalc) {
-                try {
-                    RekamanStok::recalculateStock($produkIdForRecalc);
-                } catch (\Exception $e) {
-                    Log::warning('Recalculate stock warning after update: ' . $e->getMessage());
-                }
-            }
+            $this->safeRecalculateStock($produk->id_produk);
             
             return response()->json([
                 'message' => 'Jumlah berhasil diperbarui. Stok tersisa: ' . $stok_baru,
                 'data' => [
-                    'jumlah' => $new_jumlah,
+                    'jumlah' => $new_jumlah_row,
                     'subtotal' => $subtotal,
                     'stok_tersisa' => $stok_baru
                 ]
@@ -375,117 +325,12 @@ class PenjualanDetailController extends Controller
 
     public function updateEdit(Request $request, $id)
     {
-        $produkIdForRecalc = null;
-        
-        DB::beginTransaction();
-        
-        try {
-            $detail = DB::table('penjualan_detail')->where('id_penjualan_detail', $id)->first();
-            
-            if (!$detail) {
-                DB::rollBack();
-                return response()->json(['error' => true, 'message' => 'Detail transaksi tidak ditemukan'], 404);
-            }
-            
-            $penjualan = DB::table('penjualan')->where('id_penjualan', $detail->id_penjualan)->first();
-            $produk = Produk::where('id_produk', $detail->id_produk)->lockForUpdate()->first();
-            
-            if (!$produk) {
-                DB::rollBack();
-                return response()->json(['error' => true, 'message' => 'Produk tidak ditemukan'], 404);
-            }
-            
-            $produkIdForRecalc = $produk->id_produk;
-            
-            $old_jumlah = intval($detail->jumlah);
-            $new_jumlah = intval($request->jumlah);
-            $selisih = $new_jumlah - $old_jumlah;
-            
-            $stok_sekarang = intval($produk->stok);
-            if ($selisih > 0 && $stok_sekarang < $selisih) {
-                DB::rollBack();
-                return response()->json(['error' => true, 'message' => 'Stok tidak cukup. Stok tersedia: ' . $stok_sekarang], 400);
-            }
-            
-            $stok_sebelum_perubahan = $stok_sekarang;
-            $stok_baru = $stok_sekarang - $selisih;
-            if ($stok_baru < 0) {
-                $stok_baru = 0;
-            }
-            
-            DB::table('produk')->where('id_produk', $produk->id_produk)->update(['stok' => $stok_baru]);
-            
-            $hargaJual = floatval($detail->harga_jual);
-            $diskon = floatval($detail->diskon);
-            $subtotal = $hargaJual * $new_jumlah - (($diskon * $new_jumlah) / 100 * $hargaJual);
-            
-            DB::table('penjualan_detail')
-                ->where('id_penjualan_detail', $id)
-                ->update([
-                    'jumlah' => $new_jumlah,
-                    'subtotal' => $subtotal,
-                    'updated_at' => now()
-                ]);
-            
-            $waktu_transaksi = $penjualan && $penjualan->waktu ? $penjualan->waktu : date('Y-m-d H:i:s');
-            if ($waktu_transaksi instanceof \Carbon\Carbon) {
-                $waktu_transaksi = $waktu_transaksi->format('Y-m-d H:i:s');
-            }
-            
-            $existing_rekaman = DB::table('rekaman_stoks')
-                                  ->where('id_penjualan', $detail->id_penjualan)
-                                  ->where('id_produk', $detail->id_produk)
-                                  ->first();
-            
-            if ($existing_rekaman) {
-                DB::table('rekaman_stoks')
-                    ->where('id_rekaman_stok', $existing_rekaman->id_rekaman_stok)
-                    ->update([
-                        'waktu' => $waktu_transaksi,
-                        'stok_keluar' => $new_jumlah,
-                        'stok_awal' => $stok_sebelum_perubahan + $old_jumlah,
-                        'stok_sisa' => $stok_baru,
-                        'keterangan' => 'Penjualan: Edit transaksi - Update jumlah produk',
-                        'updated_at' => now()
-                    ]);
-            } else {
-                DB::table('rekaman_stoks')->insert([
-                    'id_produk' => $produk->id_produk,
-                    'id_penjualan' => $detail->id_penjualan,
-                    'waktu' => $waktu_transaksi,
-                    'stok_masuk' => 0,
-                    'stok_keluar' => $new_jumlah,
-                    'stok_awal' => $stok_sebelum_perubahan + $old_jumlah,
-                    'stok_sisa' => $stok_baru,
-                    'keterangan' => 'Penjualan: Edit transaksi - Update jumlah produk',
-                    'created_at' => now(),
-                    'updated_at' => now()
-                ]);
-            }
-            
-            DB::commit();
-            
-            if ($produkIdForRecalc) {
-                try {
-                    RekamanStok::recalculateStock($produkIdForRecalc);
-                } catch (\Exception $e) {
-                    Log::warning('Recalculate stock warning after updateEdit: ' . $e->getMessage());
-                }
-            }
-            
-            return response()->json(['success' => true, 'message' => 'Data berhasil diperbarui'], 200);
-            
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('Error in updateEdit: ' . $e->getMessage());
-            return response()->json(['error' => true, 'message' => 'Terjadi kesalahan: ' . $e->getMessage()], 500);
-        }
+         // Redirect to standard update logic as they are now robust enough
+         return $this->update($request, $id);
     }
 
     public function destroy($id)
     {
-        $produkIdForRecalc = null;
-        
         DB::beginTransaction();
         
         try {
@@ -495,45 +340,64 @@ class PenjualanDetailController extends Controller
                 $produk = Produk::lockForUpdate()->find($detail->id_produk);
                 $produkId = $detail->id_produk;
                 $idPenjualan = $detail->id_penjualan;
-                $jumlah = intval($detail->jumlah);
-                
-                $produkIdForRecalc = $produkId;
+                $jumlahDeleted = intval($detail->jumlah);
                 
                 if ($produk) {
+                    // 1. Return Stock
                     $stokSebelum = intval($produk->stok);
-                    $stokBaru = $stokSebelum + $jumlah;
+                    $stokBaru = $stokSebelum + $jumlahDeleted;
                     
                     DB::table('produk')->where('id_produk', $produkId)->update(['stok' => $stokBaru]);
                     
-                    DB::table('rekaman_stoks')
+                    // 2. Delete Detail Row
+                    DB::table('penjualan_detail')->where('id_penjualan_detail', $id)->delete();
+                    
+                    // 3. Update or Delete RekamanStok
+                    // Check if other rows exist
+                    $remainingQty = DB::table('penjualan_detail')
                         ->where('id_penjualan', $idPenjualan)
                         ->where('id_produk', $produkId)
-                        ->delete();
+                        ->sum('jumlah');
                     
-                    DB::table('rekaman_stoks')->insert([
-                        'id_produk' => $produkId,
-                        'waktu' => now(),
-                        'stok_masuk' => $jumlah,
-                        'stok_keluar' => 0,
-                        'stok_awal' => $stokSebelum,
-                        'stok_sisa' => $stokBaru,
-                        'keterangan' => 'Penghapusan detail penjualan: Pengembalian stok',
-                        'created_at' => now(),
-                        'updated_at' => now()
-                    ]);
+                    if ($remainingQty > 0) {
+                        // Update Rekaman to reflect remaining quantity
+                        $existingRekaman = DB::table('rekaman_stoks')
+                            ->where('id_penjualan', $idPenjualan)
+                            ->where('id_produk', $produkId)
+                            ->first();
+
+                        if ($existingRekaman) {
+                             $originalStokAwal = intval($existingRekaman->stok_awal);
+                             $newStokSisa = $originalStokAwal - $remainingQty;
+                             if ($newStokSisa < 0) $newStokSisa = 0;
+                             
+                             DB::table('rekaman_stoks')
+                                ->where('id_rekaman_stok', $existingRekaman->id_rekaman_stok)
+                                ->update([
+                                    'stok_keluar' => $remainingQty,
+                                    'stok_sisa' => $newStokSisa,
+                                    'updated_at' => now()
+                                ]);
+                        }
+                    } else {
+                        // No rows left for this product in this transaction, delete rekaman completely
+                        DB::table('rekaman_stoks')
+                            ->where('id_penjualan', $idPenjualan)
+                            ->where('id_produk', $produkId)
+                            ->delete();
+                    }
+                } else {
+                     // Just delete detail if product not found (edge case)
+                     DB::table('penjualan_detail')->where('id_penjualan_detail', $id)->delete();
                 }
                 
-                DB::table('penjualan_detail')->where('id_penjualan_detail', $id)->delete();
-            }
-            
-            DB::commit();
-            
-            if ($produkIdForRecalc) {
-                try {
-                    RekamanStok::recalculateStock($produkIdForRecalc);
-                } catch (\Exception $e) {
-                    Log::warning('Recalculate stock warning after destroy: ' . $e->getMessage());
+                DB::commit();
+                
+                if ($produkId) {
+                    $this->safeRecalculateStock($produkId);
                 }
+            } else {
+                DB::commit();
             }
         } catch (\Exception $e) {
             DB::rollBack();
@@ -587,13 +451,8 @@ class PenjualanDetailController extends Controller
                ->header('Expires', '0');
     }
 
-    /**
-     * Method untuk menrecalculate stok produk berdasarkan transaksi yang ada
-     * Gunakan ini jika terjadi ketidakselarasan stok
-     */
     public function recalculateStock()
     {
-        // Ambil semua produk
         $produk_list = Produk::all();
         
         foreach ($produk_list as $produk) {
@@ -606,23 +465,32 @@ class PenjualanDetailController extends Controller
         return response()->json('Recalculate completed');
     }
 
-    private function ensureProdukHasRekamanStok($produk)
+    private function createRekamanStokPenjualan($idProduk, $idPenjualan, $stokSebelum, $jumlahKeluar, $waktu)
     {
-        $hasRekaman = DB::table('rekaman_stoks')->where('id_produk', $produk->id_produk)->exists();
-        
-        if (!$hasRekaman) {
-            DB::table('rekaman_stoks')->insert([
-                'id_produk' => $produk->id_produk,
-                'waktu' => Carbon::now(),
-                'stok_masuk' => intval($produk->stok),
-                'stok_keluar' => 0,
-                'stok_awal' => 0,
-                'stok_sisa' => intval($produk->stok),
-                'keterangan' => 'Auto-created: Rekaman stok awal produk',
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
+        $waktuTransaksi = $waktu ?? date('Y-m-d H:i:s');
+        if ($waktuTransaksi instanceof \Carbon\Carbon) {
+            $waktuTransaksi = $waktuTransaksi->format('Y-m-d H:i:s');
+        } elseif (!is_string($waktuTransaksi)) {
+            $waktuTransaksi = date('Y-m-d H:i:s');
         }
+        
+        $stokSisa = $stokSebelum - $jumlahKeluar;
+        if ($stokSisa < 0) {
+            $stokSisa = 0;
+        }
+        
+        DB::table('rekaman_stoks')->insert([
+            'id_produk' => $idProduk,
+            'id_penjualan' => $idPenjualan,
+            'waktu' => $waktuTransaksi,
+            'stok_masuk' => 0,
+            'stok_keluar' => $jumlahKeluar,
+            'stok_awal' => $stokSebelum,
+            'stok_sisa' => $stokSisa,
+            'keterangan' => 'Penjualan: Transaksi penjualan produk',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
     }
 
     private function ensurePenjualanHasWaktu($penjualan)
@@ -630,6 +498,15 @@ class PenjualanDetailController extends Controller
         if (!$penjualan->waktu) {
             $penjualan->waktu = $penjualan->created_at ?? Carbon::today();
             $penjualan->save();
+        }
+    }
+    
+    private function safeRecalculateStock($produkId)
+    {
+        try {
+            RekamanStok::recalculateStock($produkId);
+        } catch (\Exception $e) {
+            Log::warning('Recalculate stock warning: ' . $e->getMessage());
         }
     }
 }
