@@ -1,0 +1,34 @@
+=== STRESS TEST 2026-01-04 11:28:17 ===
+
+TEST 1: Stok Negatif
+[PASS] Tidak ada stok negatif
+
+TEST 2: Sinkronisasi Stok vs Kartu Stok Terakhir
+[PASS] Semua stok sinkron dengan kartu stok
+
+TEST 3: Formula Kartu Stok (stok_awal + masuk - keluar = sisa)
+[PASS] Semua formula kartu stok benar
+
+TEST 4: Duplikasi Rekaman Penjualan
+[PASS] Tidak ada duplikasi
+
+TEST 5: Duplikasi Rekaman Pembelian
+[PASS] Tidak ada duplikasi
+
+TEST 6: Konsistensi Qty Penjualan vs Kartu
+[PASS] Semua qty penjualan cocok
+
+TEST 7: Konsistensi Qty Pembelian vs Kartu
+[PASS] Semua qty pembelian cocok
+
+TEST 8: Orphan Records
+[PASS] Tidak ada rekaman orphan
+
+=== RINGKASAN ===
+PASS: 8
+WARNING: 0
+ERROR: 0
+
+STATUS: SISTEM 100% ROBUST
+
+Selesai: 2026-01-04 11:29:22

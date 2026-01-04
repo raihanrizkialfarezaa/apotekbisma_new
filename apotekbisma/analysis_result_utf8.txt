@@ -1,0 +1,434 @@
+﻿=======================================================
+   ANALYSIS: STOCK DISCREPANCY REPORT 2026
+   Tanggal: 2026-01-04 10:07:27
+=======================================================
+
+PARAMETER:
+  - Cutoff Date: 2025-12-31 23:59:59
+  - End Date: 2026-01-04 23:59:59
+
+=======================================================
+   1. STATISTIK REKAMAN STOK
+=======================================================
+
+Total rekaman stok: 29771
+Rekaman sebelum/= cutoff: 12476
+Rekaman setelah cutoff: 17295
+
+Rekaman opname pada 30-31 Des 2025: 356
+
+=======================================================
+   2. STATISTIK TRANSAKSI 2026
+=======================================================
+
+Transaksi penjualan: 7
+Detail penjualan: 226
+Total item keluar: 1446
+
+Transaksi pembelian: 0
+Detail pembelian: 0
+Total item masuk: 0
+
+=======================================================
+   3. ANALISIS DISCREPANCY PER PRODUK
+=======================================================
+
+RINGKASAN:
+  - Total produk: 993
+  - Produk SYNC (selisih=0): 634
+  - Produk BERMASALAH: 359
+
+=======================================================
+   DAFTAR PRODUK BERMASALAH (sorted by selisih terbesar)
+=======================================================
+
+------------------------------------------------------------------------------------------------------------------------
+ID    | NAMA PRODUK                         | SOURCE     | STOK AWL |  MASUK | KELUAR | SEHARUSNYA |   SEKARANG |  SELISIH
+------------------------------------------------------------------------------------------------------------------------
+388   | KALMETASON                          | LAST_RECORD |     1790 |      0 |     20 |       1770 |        220 |    -1550
+63    | ASAM MEFENAMAT 500mg                | NO_RECORD  |        0 |      0 |     70 |          0 |       1310 |    +1310
+755   | PIROXICAM 20MG                      | LAST_RECORD |     1340 |      0 |     30 |       1310 |        221 |    -1089
+33    | AMLODIPIN 10mg                      | LAST_RECORD |      950 |      0 |     30 |        920 |        310 |     -610
+905   | NATRIUM DICLOFENAC                  | LAST_RECORD |      719 |      0 |     20 |        699 |         90 |     -609
+994   | AMOXICILIN 500mg HJ                 | NO_RECORD  |        0 |      0 |     70 |          0 |        570 |     +570
+220   | DICLOFENAC POTASIUM                 | LAST_RECORD |      710 |      0 |     20 |        690 |        140 |     -550
+537   | MOLACORT 0,75                       | LAST_RECORD |      580 |      0 |     10 |        570 |         60 |     -510
+634   | PARACETAMOL TAB                     | LAST_RECORD |      740 |      0 |     30 |        710 |       1210 |     +500
+402   | KETOCONAZOLE TAB                    | LAST_RECORD |      610 |      0 |     30 |        580 |        100 |     -480
+512   | METHYLPREDNISOLON 8mg               | LAST_RECORD |      150 |      0 |      0 |        150 |        610 |     +460
+335   | GRATAZONE                           | LAST_RECORD |      500 |      0 |      0 |        500 |         70 |     -430
+511   | METHYLPREDNISOLON 4mg               | LAST_RECORD |      460 |      0 |     20 |        440 |        870 |     +430
+214   | DEXTEEM PLUS                        | LAST_RECORD |      560 |      0 |     60 |        500 |         72 |     -428
+524   | MIXALGIN                            | LAST_RECORD |      470 |      0 |      0 |        470 |         50 |     -420
+757   | SIMVASTATIN 20                      | NO_RECORD  |        0 |      0 |     10 |          0 |        420 |     +420
+161   | CETIRIZIN                           | LAST_RECORD |     1100 |      0 |     20 |       1080 |        670 |     -410
+204   | DEMACOLIN TAB                       | NO_RECORD  |        0 |      0 |     30 |          0 |        390 |     +390
+253   | ERPHAFLAM                           | LAST_RECORD |      410 |      0 |      0 |        410 |         50 |     -360
+717   | SAMCOFENAC                          | LAST_RECORD |       80 |      0 |      0 |         80 |        401 |     +321
+694   | RENABETIC                           | NO_RECORD  |        0 |      0 |      0 |          0 |        310 |     +310
+366   | IBUPROFEN                           | LAST_RECORD |      570 |      0 |      0 |        570 |        310 |     -260
+567   | NEUROSANBE PLUS                     | LAST_RECORD |      370 |      0 |      0 |        370 |        110 |     -260
+985   | GENXICAM 15MG                       | LAST_RECORD |      260 |      0 |     10 |        250 |          0 |     -250
+196   | DANASONE                            | LAST_RECORD |      330 |      0 |      0 |        330 |         90 |     -240
+24    | ALLOPURINOL 300mg                   | LAST_RECORD |      460 |      0 |      0 |        460 |        230 |     -230
+365   | HYSTIGO                             | LAST_RECORD |      353 |      0 |     10 |        343 |        120 |     -223
+23    | ALLOPURINOL 100mg                   | LAST_RECORD |     1360 |      0 |     60 |       1300 |       1081 |     -219
+334   | GRANTUSIF                           | LAST_RECORD |      290 |      0 |      0 |        290 |         80 |     -210
+381   | ISDN                                | LAST_RECORD |        0 |      0 |      0 |          0 |        210 |     +210
+610   | OMELLEGAR                           | LAST_RECORD |      300 |      0 |      0 |        300 |         90 |     -210
+147   | CAVIPLEX TAB                        | LAST_RECORD |      370 |      0 |     10 |        360 |        160 |     -200
+209   | DEXAMETHASONE 0,5                   | LAST_RECORD |      720 |      0 |     40 |        680 |        480 |     -200
+320   | GLIMEPIRID 2mg                      | LAST_RECORD |      310 |      0 |      0 |        310 |        110 |     -200
+506   | MELOXICAM 15mg                      | LAST_RECORD |      120 |      0 |      0 |        120 |        320 |     +200
+612   | OMEPRASOL                           | LAST_RECORD |      500 |      0 |     10 |        490 |        290 |     -200
+695   | RENADINAC                           | LAST_RECORD |      500 |      0 |      0 |        500 |        300 |     -200
+796   | TERA F                              | LAST_RECORD |      280 |      0 |     10 |        270 |         71 |     -199
+860   | VOLTADEX                            | LAST_RECORD |      729 |      0 |     40 |        689 |        490 |     -199
+498   | MADURASA                            | NO_RECORD  |        0 |      0 |     15 |          0 |        189 |     +189
+609   | OMEGZOLE                            | LAST_RECORD |      261 |      0 |     10 |        251 |         70 |     -181
+379   | INTERHISTIN                         | LAST_RECORD |      250 |      0 |     10 |        240 |         60 |     -180
+570   | NIFEDIPIN                           | LAST_RECORD |        0 |      0 |      0 |          0 |        180 |     +180
+689   | RANITIDINE                          | LAST_RECORD |      401 |      0 |     30 |        371 |        200 |     -171
+210   | DEXAMETHASONE 0,75                  | NO_RECORD  |        0 |      0 |     40 |          0 |        170 |     +170
+239   | EMTURNAS                            | LAST_RECORD |      250 |      0 |      0 |        250 |         80 |     -170
+143   | CARBIDU 0,75                        | LAST_RECORD |       50 |      0 |      0 |         50 |        210 |     +160
+152   | CEFADROXIL 500mg                    | LAST_RECORD |      230 |      0 |      0 |        230 |         70 |     -160
+510   | METHYLPREDNISOLON 16mg              | LAST_RECORD |       30 |      0 |      0 |         30 |        190 |     +160
+619   | OMETILSON                           | LAST_RECORD |      360 |      0 |     10 |        350 |        190 |     -160
+290   | FLUTAMOL                            | LAST_RECORD |      250 |      0 |      0 |        250 |        110 |     -140
+385   | KADITIC                             | LAST_RECORD |      240 |      0 |      0 |        240 |        370 |     +130
+756   | SIMVASTATIN 10                      | LAST_RECORD |      780 |      0 |     10 |        770 |        640 |     -130
+563   | NEURODEX                            | LAST_RECORD |      240 |      0 |      0 |        240 |        120 |     -120
+504   | MEFINAL                             | LAST_RECORD |      325 |      0 |     30 |        295 |        180 |     -115
+374   | INAMID                              | LAST_RECORD |      160 |      0 |      0 |        160 |         50 |     -110
+509   | METFORMIN 500 mg                    | LAST_RECORD |      410 |      0 |      0 |        410 |        300 |     -110
+623   | ORPHEN                              | LAST_RECORD |      270 |      0 |      0 |        270 |        160 |     -110
+121   | BUFACARYL                           | LAST_RECORD |      250 |      0 |      0 |        250 |        150 |     -100
+142   | CARBIDU 0,5                         | LAST_RECORD |      230 |      0 |      0 |        230 |        130 |     -100
+318   | GLIBENCLAMIDE                       | LAST_RECORD |      110 |      0 |     20 |         90 |        190 |     +100
+718   | SAMTACID                            | LAST_RECORD |        0 |      0 |      0 |          0 |        100 |     +100
+808   | TOLAK ANGIN DEWASA                  | NO_RECORD  |        0 |      0 |      0 |          0 |         96 |      +96
+227   | DRAMAMIN                            | LAST_RECORD |      134 |      0 |      0 |        134 |         41 |      -93
+45    | ANASTAN                             | LAST_RECORD |      220 |      0 |      0 |        220 |        130 |      -90
+330   | GRAFACHLOR                          | LAST_RECORD |      130 |      0 |     20 |        110 |        200 |      +90
+954   | GUAFINESIN                          | LAST_RECORD |       90 |      0 |      0 |         90 |        180 |      +90
+444   | LICOKALK                            | LAST_RECORD |      250 |      0 |      0 |        250 |        160 |      -90
+166   | OCCUSON                             | NO_RECORD  |        0 |      0 |     10 |          0 |         90 |      +90
+820   | TRIOCID TAB                         | LAST_RECORD |      260 |      0 |     20 |        240 |        150 |      -90
+883   | ZORALIN                             | LAST_RECORD |        0 |      0 |     10 |          0 |         90 |      +90
+34    | AMLODIPIN 5mg                       | LAST_RECORD |      650 |      0 |      0 |        650 |        731 |      +81
+136   | CALORTUSIN                          | LAST_RECORD |      160 |      0 |      0 |        160 |        240 |      +80
+331   | GRAFADON                            | LAST_RECORD |      110 |      0 |      0 |        110 |         30 |      -80
+442   | LERZIN TAB                          | LAST_RECORD |      120 |      0 |      0 |        120 |         40 |      -80
+458   | LORATADIN                           | LAST_RECORD |      400 |      0 |     20 |        380 |        300 |      -80
+460   | LOSTACEF TAB                        | LAST_RECORD |       20 |      0 |      0 |         20 |        100 |      +80
+607   | OMEDRINAT                           | LAST_RECORD |       80 |      0 |      0 |         80 |          0 |      -80
+618   | OMEROXOL TAB                        | LAST_RECORD |      210 |      0 |      0 |        210 |        130 |      -80
+692   | RHEMAFAR                            | LAST_RECORD |      470 |      0 |      0 |        470 |        390 |      -80
+776   | SULFADIASIN                         | LAST_RECORD |       80 |      0 |     10 |         70 |        150 |      +80
+286   | FLUCADEX                            | LAST_RECORD |      100 |      0 |      0 |        100 |        170 |      +70
+428   | LANSOPRAZOLE                        | LAST_RECORD |       20 |      0 |     30 |          0 |         70 |      +70
+578   | NOVAGESIC TAB                       | LAST_RECORD |        0 |      0 |      0 |          0 |         70 |      +70
+608   | OMEGESIC                            | LAST_RECORD |       70 |      0 |     10 |         60 |        130 |      +70
+865   | ONDANSETRON 8MG                     | LAST_RECORD |        0 |      0 |      0 |          0 |         70 |      +70
+664   | PONSTELAX                           | LAST_RECORD |        0 |      0 |      0 |          0 |         70 |      +70
+421   | LACTO-B                             | LAST_RECORD |       77 |      0 |      2 |         75 |          9 |      -66
+67    | ATORVASTATIN                        | LAST_RECORD |       20 |      0 |      0 |         20 |         80 |      +60
+225   | DOLOLICOBION                        | LAST_RECORD |       90 |      0 |     20 |         70 |         10 |      -60
+501   | MECOBALAMIN                         | LAST_RECORD |      140 |      0 |      0 |        140 |         80 |      -60
+584   | NOVAPYRON                           | LAST_RECORD |      140 |      0 |      0 |        140 |        200 |      +60
+1001  | PARAVEN TAB                         | LAST_RECORD |      200 |      0 |      0 |        200 |        140 |      -60
+669   | PRIMADEX FORTE                      | LAST_RECORD |        0 |      0 |      0 |          0 |         60 |      +60
+275   | FAXIDEN                             | LAST_RECORD |      230 |      0 |      0 |        230 |        180 |      -50
+362   | HUFAMAG TAB                         | LAST_RECORD |       90 |      0 |      0 |         90 |        140 |      +50
+457   | LOPAMID                             | LAST_RECORD |      130 |      0 |      0 |        130 |        180 |      +50
+581   | NOVAMAG TAB                         | LAST_RECORD |        0 |      0 |      0 |          0 |         50 |      +50
+900   | SELVIM 10MG                         | LAST_RECORD |      100 |      0 |      0 |        100 |        150 |      +50
+741   | SELVIM 20                           | LAST_RECORD |      140 |      0 |     10 |        130 |         80 |      -50
+560   | NEURALGIN                           | LAST_RECORD |      290 |      0 |     50 |        240 |        191 |      -49
+825   | ULTRAFLU                            | LAST_RECORD |       64 |      0 |      2 |         62 |         14 |      -48
+278   | FG TROCHES                          | LAST_RECORD |       54 |      0 |      0 |         54 |          7 |      -47
+59    | ANTIMO TAB                          | NO_RECORD  |        0 |      0 |      7 |          0 |         43 |      +43
+371   | IMODIUM                             | LAST_RECORD |       29 |      0 |      0 |         29 |         72 |      +43
+522   | MIXAGRIP                            | LAST_RECORD |       67 |      0 |      0 |         67 |        109 |      +42
+215   | DEXTRAL                             | LAST_RECORD |      170 |      0 |     10 |        160 |        200 |      +40
+893   | FARGETIX                            | LAST_RECORD |        0 |      0 |      0 |          0 |         40 |      +40
+270   | FARSIFEN PLUS                       | LAST_RECORD |       40 |      0 |      0 |         40 |          0 |      -40
+303   | GASTRUCID TAB                       | LAST_RECORD |       70 |      0 |      0 |         70 |         30 |      -40
+323   | GLUCOSAMIN MPL                      | LAST_RECORD |      150 |      0 |     10 |        140 |        100 |      -40
+445   | LICOSTAN                            | LAST_RECORD |      150 |      0 |      0 |        150 |        110 |      -40
+507   | MELOXICAM 7.5mg                     | LAST_RECORD |      230 |      0 |      0 |        230 |        190 |      -40
+593   | NUFADOL TAB                         | LAST_RECORD |        0 |      0 |      0 |          0 |         40 |      +40
+615   | OMERIC 100                          | LAST_RECORD |      100 |      0 |      0 |        100 |         60 |      -40
+616   | OMERIC 300                          | LAST_RECORD |       40 |      0 |      0 |         40 |         80 |      +40
+620   | ONDANSETRON 4mg                     | LAST_RECORD |        0 |      0 |     10 |          0 |         40 |      +40
+663   | PONSTAN                             | LAST_RECORD |      143 |      0 |      0 |        143 |        103 |      -40
+523   | MIXAGRIP FB                         | LAST_RECORD |       81 |      0 |      3 |         78 |        117 |      +39
+677   | PRONICY                             | LAST_RECORD |      139 |      0 |      0 |        139 |        100 |      -39
+635   | PARAMEX                             | LAST_RECORD |       82 |      0 |      1 |         81 |        117 |      +36
+980   | KASSA BIASA                         | LAST_RECORD |       69 |      0 |      3 |         66 |         31 |      -35
+241   | ENERVON C                           | LAST_RECORD |       51 |      0 |      0 |         51 |         18 |      -33
+624   | OSKADON                             | LAST_RECORD |       68 |      0 |      0 |         68 |         36 |      -32
+922   | FARSIFEN TAB                        | LAST_RECORD |      190 |      0 |      0 |        190 |        220 |      +30
+285   | FLOXIGRA                            | LAST_RECORD |       50 |      0 |      0 |         50 |         80 |      +30
+324   | GLUDEPATIC                          | LAST_RECORD |       70 |      0 |     10 |         60 |         30 |      -30
+333   | GRAFAZOL                            | LAST_RECORD |       60 |      0 |      0 |         60 |         30 |      -30
+403   | KETOPROFEN                          | LAST_RECORD |        0 |      0 |      0 |          0 |         30 |      +30
+410   | KONIDIN OBH                         | OPNAME     |        1 |      0 |      0 |          1 |         31 |      +30
+586   | NOVASTAN TAB                        | LAST_RECORD |      160 |      0 |      0 |        160 |        130 |      -30
+611   | OMEMOX                              | LAST_RECORD |       80 |      0 |      0 |         80 |         50 |      -30
+767   | SPASMINAL                           | LAST_RECORD |      180 |      0 |      0 |        180 |        150 |      -30
+110   | BODREX FB ALL VAR                   | LAST_RECORD |       53 |      0 |      1 |         52 |         24 |      -28
+778   | SUPERTETRA                          | LAST_RECORD |       28 |      0 |      2 |         26 |         51 |      +25
+408   | KOMIX KID ALL                       | LAST_RECORD |       41 |      0 |      0 |         41 |         64 |      +23
+723   | SANGOBION S'10                      | NO_RECORD  |        0 |      0 |      1 |          0 |         23 |      +23
+862   | VOLTAREN 50mg                       | LAST_RECORD |       60 |      0 |      0 |         60 |         37 |      -23
+108   | BODREX                              | LAST_RECORD |       30 |      0 |      2 |         28 |          7 |      -21
+296   | FRESH CARE ALL                      | LAST_RECORD |       70 |      0 |      2 |         68 |         47 |      -21
+55    | ANTASIDA DOEN                       | LAST_RECORD |      480 |      0 |      0 |        480 |        460 |      -20
+118   | BROADAMOX                           | LAST_RECORD |       80 |      0 |     10 |         70 |         90 |      +20
+216   | DEXYCOL                             | LAST_RECORD |        0 |      0 |      0 |          0 |         20 |      +20
+221   | DIONICOL                            | LAST_RECORD |      100 |      0 |      0 |        100 |         80 |      -20
+236   | ELKANA TAB                          | LAST_RECORD |       80 |      0 |     10 |         70 |         90 |      +20
+238   | EMTURNAS FORTE                      | LAST_RECORD |      170 |      0 |      0 |        170 |        150 |      -20
+260   | ETABION                             | LAST_RECORD |      120 |      0 |      0 |        120 |        140 |      +20
+277   | FENAMIN                             | LAST_RECORD |       80 |      0 |      0 |         80 |        100 |      +20
+280   | FIMESTAN                            | LAST_RECORD |       90 |      0 |      0 |         90 |         70 |      -20
+964   | FLOXIFAR                            | LAST_RECORD |      120 |      0 |      0 |        120 |        100 |      -20
+289   | FLUNARISIN 5mg                      | LAST_RECORD |       20 |      0 |      0 |         20 |         40 |      +20
+293   | FOLAVIT                             | LAST_RECORD |      110 |      0 |      0 |        110 |        130 |      +20
+27    | HUFADEXTA-M                         | NO_RECORD  |        0 |      0 |      0 |          0 |         20 |      +20
+973   | HUFRALGIN                           | LAST_RECORD |      200 |      0 |     10 |        190 |        170 |      -20
+376   | INFALGIN                            | LAST_RECORD |       60 |      0 |     10 |         50 |         70 |      +20
+10    | JESSCOLL                            | LAST_RECORD |        2 |      0 |      0 |          2 |         22 |      +20
+430   | LAPISTAN                            | LAST_RECORD |        0 |      0 |      0 |          0 |         20 |      +20
+454   | LODECON FORTE                       | LAST_RECORD |      110 |      0 |      0 |        110 |        130 |      +20
+514   | METRONIDAZOL                        | LAST_RECORD |       60 |      0 |      0 |         60 |         40 |      -20
+614   | OMEPROXIL                           | LAST_RECORD |       90 |      0 |      0 |         90 |         70 |      -20
+853   | VITACIMIN                           | LAST_RECORD |       16 |      0 |      2 |         14 |         34 |      +20
+861   | WINATIN                             | LAST_RECORD |        0 |      0 |      0 |          0 |         20 |      +20
+363   | HYDROCORTISON                       | LAST_RECORD |       19 |      0 |      0 |         19 |          0 |      -19
+915   | LARUTAN BOTOL B                     | LAST_RECORD |       23 |      0 |      0 |         23 |          4 |      -19
+816   | OM TEST                             | LAST_RECORD |       44 |      0 |      3 |         41 |         22 |      -19
+884   | ZYLORIC 100mg                       | LAST_RECORD |       36 |      0 |      0 |         36 |         17 |      -19
+557   | NEO RHEUMACYL                       | LAST_RECORD |       40 |      0 |      2 |         38 |         20 |      -18
+200   | DECOLGEN                            | LAST_RECORD |       31 |      0 |      0 |         31 |         14 |      -17
+406   | KOMIX ALL VAR                       | LAST_RECORD |      158 |      0 |      0 |        158 |        141 |      -17
+412   | KOOLFEVER ANAK                      | LAST_RECORD |       28 |      0 |      0 |         28 |         11 |      -17
+543   | MYCORAL TAB                         | LAST_RECORD |       47 |      0 |      0 |         47 |         64 |      +17
+547   | NAPACIN                             | LAST_RECORD |       23 |      0 |      0 |         23 |          6 |      -17
+598   | OBH COMBI ANAK ALL VAR              | LAST_RECORD |       37 |      0 |      2 |         35 |         18 |      -17
+639   | PARATUSIN                           | LAST_RECORD |       32 |      0 |      1 |         31 |         14 |      -17
+715   | SALONPAS KOYO ALL VAR               | LAST_RECORD |       24 |      0 |      0 |         24 |         41 |      +17
+51    | ANTANGIN CAIR                       | LAST_RECORD |      164 |      0 |      3 |        161 |        177 |      +16
+202   | DEGIROL S'10                        | LAST_RECORD |       18 |      0 |      1 |         17 |          1 |      -16
+358   | HUFAGRIP KUNING                     | LAST_RECORD |       30 |      0 |      0 |         30 |         14 |      -16
+375   | INCIDAL                             | LAST_RECORD |       50 |      0 |      0 |         50 |         34 |      -16
+561   | NEUROBION                           | LAST_RECORD |        4 |      0 |      0 |          4 |         20 |      +16
+321   | GLIMEPIRID 3mg                      | LAST_RECORD |      245 |      0 |      0 |        245 |        260 |      +15
+48    | ANDALAN                             | NO_RECORD  |        0 |      0 |      6 |          0 |         14 |      +14
+188   | CTM PIM                             | LAST_RECORD |       36 |      0 |      1 |         35 |         21 |      -14
+240   | ENBATIC                             | LAST_RECORD |       34 |      0 |      0 |         34 |         20 |      -14
+356   | HOT IN 60GR ALL VAR                 | NO_RECORD  |        0 |      0 |      0 |          0 |         14 |      +14
+357   | HUFAGRIP BP IJO                     | LAST_RECORD |       10 |      0 |      0 |         10 |         24 |      +14
+674   | PROMAG SCH                          | LAST_RECORD |        5 |      0 |      0 |          5 |         19 |      +14
+676   | PROMAG TAB                          | LAST_RECORD |       70 |      0 |      2 |         68 |         54 |      -14
+276   | FEMINAX                             | LAST_RECORD |       17 |      0 |      0 |         17 |          4 |      -13
+952   | FUFANG                              | NO_RECORD  |        0 |      0 |      0 |          0 |         13 |      +13
+64    | ASEPSO ALL VAR                      | OPNAME     |        6 |      0 |      1 |          5 |         17 |      +12
+145   | CATAFLAM 50mg                       | LAST_RECORD |       33 |      0 |      2 |         31 |         43 |      +12
+724   | SANGOBION S'4                       | LAST_RECORD |       14 |      0 |      1 |         13 |          1 |      -12
+784   | SUTRA MERAH S'12                    | LAST_RECORD |       13 |      0 |      0 |         13 |          1 |      -12
+104   | VENTOLIN NEBUL                      | LAST_RECORD |       19 |      0 |      0 |         19 |          7 |      -12
+843   | VICKS VAP 10g                       | OPNAME     |        4 |      0 |      1 |          3 |         15 |      +12
+341   | HANSAPLAST ROLL 5m                  | LAST_RECORD |       14 |      0 |      1 |         13 |          2 |      -11
+601   | OBH COMBI PLUS 60ml                 | LAST_RECORD |       15 |      0 |      0 |         15 |          4 |      -11
+832   | VEGETA HERBAL                       | LAST_RECORD |       30 |      0 |      0 |         30 |         19 |      -11
+953   | VICKS IN HALER                      | LAST_RECORD |       15 |      0 |      0 |         15 |          4 |      -11
+113   | BODREXIN                            | LAST_RECORD |       15 |      0 |      0 |         15 |          5 |      -10
+955   | EPERISONE                           | LAST_RECORD |       90 |      0 |      0 |         90 |         80 |      -10
+264   | ETAMOX                              | LAST_RECORD |       40 |      0 |      0 |         40 |         30 |      -10
+284   | FLAMAR                              | LAST_RECORD |       70 |      0 |      0 |         70 |         60 |      -10
+890   | GASELA                              | LAST_RECORD |      110 |      0 |     10 |        100 |        110 |      +10
+336   | GRATEOS                             | LAST_RECORD |       90 |      0 |     10 |         80 |         70 |      -10
+951   | HISTAPAN                            | LAST_RECORD |        0 |      0 |      0 |          0 |         10 |      +10
+958   | HUFAGRIP PAMOL TAB                  | LAST_RECORD |       60 |      0 |      0 |         60 |         70 |      +10
+880   | HUFARIZINE TAB                      | LAST_RECORD |       70 |      0 |      0 |         70 |         60 |      -10
+923   | INFLASON                            | LAST_RECORD |       80 |      0 |      0 |         80 |         90 |      +10
+439   | L-BIO                               | LAST_RECORD |       11 |      0 |      0 |         11 |         21 |      +10
+565   | NEUROSANBE                          | LAST_RECORD |       60 |      0 |      0 |         60 |         50 |      -10
+706   | SALBUTAMOL 2mg                      | LAST_RECORD |      130 |      0 |      0 |        130 |        140 |      +10
+846   | SAMCODIN                            | LAST_RECORD |      140 |      0 |      0 |        140 |        130 |      -10
+795   | TEOSAL                              | LAST_RECORD |     1060 |      0 |      0 |       1060 |       1050 |      -10
+814   | TRANSAMIN                           | LAST_RECORD |       90 |      0 |     10 |         80 |         90 |      +10
+28    | XYLERGY                             | LAST_RECORD |        0 |      0 |      0 |          0 |         10 |      +10
+195   | DAKTARIN                            | LAST_RECORD |       10 |      0 |      0 |         10 |          1 |       -9
+699   | RIVANOL 100mL                       | LAST_RECORD |       14 |      0 |      1 |         13 |          4 |       -9
+764   | SOLDEXTAM                           | LAST_RECORD |      131 |      0 |      0 |        131 |        140 |       +9
+818   | TRINOLDIOL                          | LAST_RECORD |        6 |      0 |      0 |          6 |         15 |       +9
+191   | CURCUMA PLUS SHARPY ALL VAR         | LAST_RECORD |       13 |      0 |      0 |         13 |          5 |       -8
+231   | DUMIN 500mg                         | LAST_RECORD |       14 |      0 |      1 |         13 |         21 |       +8
+345   | HEMAVITON STAMINA                   | LAST_RECORD |       20 |      0 |      1 |         19 |         11 |       -8
+407   | KOMIX HERBAL                        | OPNAME     |        9 |      0 |      0 |          9 |          1 |       -8
+711   | SALICYL MENTOL                      | LAST_RECORD |       12 |      0 |      3 |          9 |          1 |       -8
+859   | VITAMIN C IPI                       | LAST_RECORD |        9 |      0 |      0 |          9 |          1 |       -8
+44    | ANAKONIDIN OBH 60mL                 | LAST_RECORD |       13 |      0 |      1 |         12 |          5 |       -7
+516   | MICROGYNON                          | LAST_RECORD |       24 |      0 |      2 |         22 |         15 |       -7
+908   | MYLANTA TAB                         | LAST_RECORD |       11 |      0 |      0 |         11 |          4 |       -7
+562   | NEUROBION 5000                      | LAST_RECORD |        9 |      0 |      1 |          8 |         15 |       +7
+666   | POSTINOR                            | LAST_RECORD |        4 |      0 |      4 |          0 |          7 |       +7
+984   | SRITI SALP                          | LAST_RECORD |       15 |      0 |      0 |         15 |          8 |       -7
+873   | XON-CE                              | LAST_RECORD |       50 |      0 |      4 |         46 |         39 |       -7
+125   | BYE FEVER ANAK                      | LAST_RECORD |       11 |      0 |      0 |         11 |         17 |       +6
+999   | HOT IN DCL 120 GR                   | OPNAME     |        2 |      0 |      0 |          2 |          8 |       +6
+998   | HOT IN DCL 60GR                     | OPNAME     |        3 |      0 |      0 |          3 |          9 |       +6
+175   | INSTO COOL                          | OPNAME     |        2 |      0 |      2 |          0 |          6 |       +6
+455   | LODIA                               | LAST_RECORD |       94 |      0 |      0 |         94 |        100 |       +6
+461   | M.KAPAK 10mL                        | LAST_RECORD |        7 |      0 |      0 |          7 |         13 |       +6
+473   | M.TAWON CC                          | LAST_RECORD |        9 |      0 |      0 |          9 |         15 |       +6
+494   | MADU TJ JOYBEE ALL VAR              | OPNAME     |        5 |      0 |      0 |          5 |         11 |       +6
+533   | MKP LANG 15mL                       | LAST_RECORD |       11 |      0 |      0 |         11 |          5 |       -6
+558   | NEOZEP                              | LAST_RECORD |       18 |      0 |      2 |         16 |         10 |       -6
+906   | PIKANG SUANG                        | LAST_RECORD |       12 |      0 |      1 |         11 |          5 |       -6
+656   | PLOSA ALL VAR                       | OPNAME     |       16 |      0 |      0 |         16 |         22 |       +6
+708   | SALEP 88                            | LAST_RECORD |       16 |      0 |      0 |         16 |         10 |       -6
+842   | VICKS F 44 27ml                     | LAST_RECORD |        4 |      0 |      0 |          4 |         10 |       +6
+968   | VIGEL 30gr                          | LAST_RECORD |        0 |      0 |      0 |          0 |          6 |       +6
+13    | AKURAT                              | NO_RECORD  |        0 |      0 |      1 |          0 |          5 |       +5
+40    | ANACETIN                            | LAST_RECORD |        6 |      0 |      0 |          6 |          1 |       -5
+35    | CESSA BABY                          | LAST_RECORD |       11 |      0 |      1 |         10 |          5 |       -5
+194   | CYCLOGYNON                          | OPNAME     |        3 |      0 |      1 |          2 |          7 |       +5
+237   | EM KAPSUL                           | LAST_RECORD |        6 |      0 |      0 |          6 |          1 |       -5
+246   | ENTROSTOP ANAK                      | LAST_RECORD |        8 |      0 |      0 |          8 |          3 |       -5
+310   | GENALTEN                            | LAST_RECORD |        7 |      0 |      0 |          7 |         12 |       +5
+314   | GENTAMICIN SLP                      | LAST_RECORD |        7 |      0 |      0 |          7 |         12 |       +5
+396   | KAPSIDA                             | LAST_RECORD |       10 |      0 |      1 |          9 |          4 |       -5
+415   | KOYO CABE                           | LAST_RECORD |       11 |      0 |      0 |         11 |         16 |       +5
+427   | LANCAR ASI                          | OPNAME     |        6 |      0 |      0 |          6 |          1 |       -5
+592   | NUFACORT                            | NO_RECORD  |        0 |      0 |      0 |          0 |          5 |       +5
+599   | OBH COMBI DAHAK                     | LAST_RECORD |       14 |      0 |      0 |         14 |          9 |       -5
+745   | SILADEX ALL VAR 30ml                | LAST_RECORD |       11 |      0 |      0 |         11 |          6 |       -5
+785   | SUTRA MERAH S'3                     | LAST_RECORD |       20 |      0 |      2 |         18 |         13 |       -5
+881   | VICKS F 44 54ML                     | LAST_RECORD |       10 |      0 |      0 |         10 |          5 |       -5
+29    | AMBEVEN                             | LAST_RECORD |        8 |      0 |      0 |          8 |         12 |       +4
+94    | BETADINE SOL 5mL                    | NO_RECORD  |        0 |      0 |      1 |          0 |          4 |       +4
+282   | FLAGYSTATIN SUPP                    | LAST_RECORD |       10 |      0 |      0 |         10 |          6 |       -4
+350   | HEROCYN 50mg                        | LAST_RECORD |        2 |      0 |      0 |          2 |          6 |       +4
+355   | HOT IN 120GR ALL VAR                | LAST_RECORD |        8 |      0 |      1 |          7 |         11 |       +4
+377   | INSTO                               | LAST_RECORD |       11 |      0 |      0 |         11 |          7 |       -4
+527   | MKP GAJAH 60mL                      | LAST_RECORD |        6 |      0 |      0 |          6 |          2 |       -4
+535   | MKP LANG 60mL                       | LAST_RECORD |       15 |      0 |      0 |         15 |         11 |       -4
+709   | SALEP KEMBANG BULAN                 | LAST_RECORD |        0 |      0 |      0 |          0 |          4 |       +4
+809   | TOLAK LINU                          | OPNAME     |       20 |      0 |      0 |         20 |         16 |       -4
+826   | ULTRASILIN                          | LAST_RECORD |        0 |      0 |      0 |          0 |          4 |       +4
+871   | WOOD'S PERMEN ALL                   | LAST_RECORD |        9 |      0 |      0 |          9 |          5 |       -4
+42    | ANAKONIDIN 60mL                     | OPNAME     |        1 |      0 |      0 |          1 |          4 |       +3
+58    | ANTIMO ANAK ALL                     | NO_RECORD  |        0 |      0 |      0 |          0 |          3 |       +3
+97    | BETASON-N                           | LAST_RECORD |        8 |      0 |      0 |          8 |         11 |       +3
+109   | BODREX EXTRA                        | LAST_RECORD |       17 |      0 |      0 |         17 |         14 |       -3
+122   | BUFACOMB IOB                        | LAST_RECORD |        6 |      0 |      0 |          6 |          3 |       -3
+126   | BYE FEVER BABY                      | LAST_RECORD |        8 |      0 |      0 |          8 |         11 |       +3
+172   | COMBANTRIN SYR                      | LAST_RECORD |        3 |      0 |      1 |          2 |          5 |       +3
+830   | FLAMAR GEL                          | LAST_RECORD |        0 |      0 |      0 |          0 |          3 |       +3
+298   | FUNGIDREM K                         | LAST_RECORD |        2 |      0 |      0 |          2 |          5 |       +3
+340   | HANSAPLAST ROLL 1m                  | LAST_RECORD |       21 |      0 |      1 |         20 |         17 |       -3
+926   | INERSON                             | LAST_RECORD |        6 |      0 |      0 |          6 |          3 |       -3
+386   | KAKAK TUA                           | OPNAME     |        1 |      0 |      0 |          1 |          4 |       +3
+389   | KALPANAX CREAM                      | LAST_RECORD |       13 |      0 |      0 |         13 |         10 |       -3
+399   | KEJIBELING PLUS GINGSENG            | LAST_RECORD |        6 |      0 |      1 |          5 |          2 |       -3
+467   | M. IKAN S'100                       | LAST_RECORD |        0 |      0 |      0 |          0 |          3 |       +3
+546   | NACL                                | LAST_RECORD |       15 |      0 |      0 |         15 |         12 |       -3
+596   | OB HERBAL 60mL                      | LAST_RECORD |       10 |      0 |      0 |         10 |          7 |       -3
+640   | PARATUSIN SYR                       | LAST_RECORD |        5 |      0 |      0 |          5 |          2 |       -3
+1005  | PERMETHRIN                          | LAST_RECORD |        0 |      0 |      0 |          0 |          3 |       +3
+649   | PIMTRAKOL ALL VAR                   | LAST_RECORD |       25 |      0 |      0 |         25 |         22 |       -3
+572   | PREGNACHEK                          | LAST_RECORD |        9 |      0 |      0 |          9 |          6 |       -3
+705   | SAKA ABC ALL VAR                    | LAST_RECORD |        7 |      0 |      1 |          6 |          9 |       +3
+712   | SALICYL PINK                        | LAST_RECORD |        3 |      0 |      1 |          2 |          5 |       +3
+710   | SALICYL SPIRITUS                    | LAST_RECORD |        6 |      0 |      1 |          5 |          2 |       -3
+728   | SANMOL SYR                          | LAST_RECORD |        8 |      0 |      1 |          7 |         10 |       +3
+805   | TISU MAGIC ALL                      | LAST_RECORD |       22 |      0 |      0 |         22 |         25 |       +3
+868   | WOOD'S ATT 60ML                     | OPNAME     |        2 |      0 |      0 |          2 |          5 |       +3
+8     | ACTIFED ALL VAR                     | LAST_RECORD |        2 |      0 |      0 |          2 |          0 |       -2
+98    | BEVALEX                             | LAST_RECORD |        4 |      0 |      0 |          4 |          2 |       -2
+135   | CALLUSOL                            | LAST_RECORD |        2 |      0 |      0 |          2 |          4 |       +2
+178   | COOLING 5 SPRAY                     | LAST_RECORD |        2 |      0 |      0 |          2 |          4 |       +2
+199   | DECADRYL 60mg                       | LAST_RECORD |        4 |      0 |      0 |          4 |          2 |       -2
+219   | DIAPET NR                           | OPNAME     |       12 |      0 |      0 |         12 |         10 |       -2
+230   | DULCOLAX SUPP                       | LAST_RECORD |        0 |      0 |      0 |          0 |          2 |       +2
+903   | ERLAMICETIN TT                      | LAST_RECORD |        4 |      0 |      0 |          4 |          6 |       +2
+117   | FOLAMIL GENIO                       | LAST_RECORD |        0 |      0 |      0 |          0 |          2 |       +2
+306   | GELIGA BALSEM 20g                   | LAST_RECORD |        5 |      0 |      0 |          5 |          7 |       +2
+468   | M. IKAN S'50                        | LAST_RECORD |        0 |      0 |      0 |          0 |          2 |       +2
+901   | MICONAZOLE                          | LAST_RECORD |       22 |      0 |      1 |         21 |         23 |       +2
+534   | MKP LANG 30mL                       | LAST_RECORD |        9 |      0 |      0 |          9 |         11 |       +2
+602   | OBH ITRASAL                         | LAST_RECORD |        5 |      0 |      0 |          5 |          7 |       +2
+18    | POLYCROL FORTE                      | LAST_RECORD |        8 |      0 |      0 |          8 |         10 |       +2
+693   | REDOXON                             | LAST_RECORD |        3 |      0 |      0 |          3 |          1 |       -2
+701   | ROOHTO                              | LAST_RECORD |        5 |      0 |      0 |          5 |          3 |       -2
+702   | ROOHTO COOL                         | LAST_RECORD |        3 |      0 |      0 |          3 |          5 |       +2
+729   | SANMOL TAB                          | LAST_RECORD |       38 |      0 |      0 |         38 |         40 |       +2
+765   | SOLINFEC CR                         | LAST_RECORD |        6 |      0 |      0 |          6 |          4 |       -2
+804   | THROMBOPOB GEL                      | LAST_RECORD |        4 |      0 |      0 |          4 |          2 |       -2
+812   | TONIKUM BAYER K                     | LAST_RECORD |        2 |      0 |      0 |          2 |          0 |       -2
+813   | TOP CORT                            | LAST_RECORD |        0 |      0 |      0 |          0 |          2 |       +2
+878   | YUSIMOX SYR                         | LAST_RECORD |        9 |      0 |      0 |          9 |          7 |       -2
+3     | ACETON                              | LAST_RECORD |        0 |      0 |      0 |          0 |          1 |       +1
+6     | ACNOL                               | LAST_RECORD |        2 |      0 |      0 |          2 |          3 |       +1
+9     | ACYCLOVIR CREAM                     | LAST_RECORD |       12 |      0 |      1 |         11 |         12 |       +1
+138   | CANESTEN                            | LAST_RECORD |        5 |      0 |      0 |          5 |          4 |       -1
+155   | CENDO CATARLENT 15ml                | LAST_RECORD |        4 |      0 |      1 |          3 |          2 |       -1
+898   | CENDO LYTERS                        | LAST_RECORD |        5 |      0 |      0 |          5 |          4 |       -1
+157   | CENDO XITROL                        | LAST_RECORD |        4 |      0 |      0 |          4 |          5 |       +1
+182   | COUNTERPAIN 120g                    | OPNAME     |        1 |      0 |      0 |          1 |          0 |       -1
+273   | FATIGON PUTIH                       | LAST_RECORD |        6 |      0 |      1 |          5 |          4 |       -1
+294   | FORMYCO CR                          | LAST_RECORD |        6 |      0 |      0 |          6 |          5 |       -1
+297   | FUNGIDREM B                         | LAST_RECORD |        2 |      0 |      0 |          2 |          1 |       -1
+392   | KANDISTATIN                         | LAST_RECORD |        2 |      0 |      0 |          2 |          3 |       +1
+400   | KETOCONAZOLE CR DEXA                | LAST_RECORD |        8 |      0 |      0 |          8 |          7 |       -1
+496   | MADU TJ ORI 150ML                   | LAST_RECORD |        4 |      0 |      1 |          3 |          4 |       +1
+989   | MEBO                                | LAST_RECORD |        0 |      0 |      0 |          0 |          1 |       +1
+502   | MEDIKLIN                            | LAST_RECORD |        0 |      0 |      0 |          0 |          1 |       +1
+16    | MOMETASON CR                        | LAST_RECORD |        0 |      0 |      0 |          0 |          1 |       +1
+542   | MYCORAL CREAM                       | LAST_RECORD |        2 |      0 |      0 |          2 |          1 |       -1
+576   | NOSIB                               | LAST_RECORD |        0 |      0 |      0 |          0 |          1 |       +1
+600   | OBH COMBI PLUS 100ml                | LAST_RECORD |        7 |      0 |      1 |          6 |          5 |       -1
+628   | PAGODA SALEP                        | LAST_RECORD |        7 |      0 |      0 |          7 |          8 |       +1
+727   | SANMOL DROP                         | LAST_RECORD |        6 |      0 |      0 |          6 |          5 |       -1
+930   | SANTADEX TT                         | LAST_RECORD |        2 |      0 |      0 |          2 |          1 |       -1
+746   | SILADEX ALL VAR 60ml                | LAST_RECORD |       14 |      0 |      2 |         12 |         11 |       -1
+38    | SILADEX UNGU 60ML                   | LAST_RECORD |        5 |      0 |      0 |          5 |          6 |       +1
+7     | SUTRA BIRU S'12                     | LAST_RECORD |        3 |      0 |      0 |          3 |          4 |       +1
+786   | SYNALTEN                            | LAST_RECORD |        8 |      0 |      0 |          8 |          7 |       -1
+803   | THROMBO GEL                         | LAST_RECORD |        2 |      0 |      0 |          2 |          3 |       +1
+840   | VERIL ACNE GEL                      | LAST_RECORD |        0 |      0 |      0 |          0 |          1 |       +1
+354   | VICKS BABY BALM                     | LAST_RECORD |        1 |      0 |      0 |          1 |          0 |       -1
+897   | VICKS F 44 ANAK 54ML                | LAST_RECORD |        3 |      0 |      0 |          3 |          4 |       +1
+------------------------------------------------------------------------------------------------------------------------
+
+RINGKASAN SELISIH:
+  - Total stok LEBIH: +9276
+  - Total stok KURANG: -15889
+
+=======================================================
+   4. ANALISIS KARTU STOK (REKAMAN_STOKS)
+=======================================================
+
+Produk dengan kartu stok tidak sinkron: 0
+
+
+=======================================================
+   5. REKOMENDASI
+=======================================================
+
+TINDAKAN YANG DIPERLUKAN:
+1. Jalankan script recovery: php stock_recovery_2026.php
+2. Script akan meminta konfirmasi sebelum melakukan update.
+3. Backup database terlebih dahulu sebelum menjalankan recovery.
+
+COMMAND BACKUP (MySQL):
+  mysqldump -u [user] -p [database] > backup_20260104_100920.sql
+
+=======================================================
+   ANALISIS SELESAI
+=======================================================

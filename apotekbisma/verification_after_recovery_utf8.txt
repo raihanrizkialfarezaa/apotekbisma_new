@@ -1,0 +1,58 @@
+﻿=======================================================
+   ANALYSIS: STOCK DISCREPANCY REPORT 2026
+   Tanggal: 2026-01-04 10:26:21
+=======================================================
+
+PARAMETER:
+  - Cutoff Date: 2025-12-31 23:59:59
+  - End Date: 2026-01-04 23:59:59
+
+=======================================================
+   1. STATISTIK REKAMAN STOK
+=======================================================
+
+Total rekaman stok: 13170
+Rekaman sebelum/= cutoff: 12476
+Rekaman setelah cutoff: 694
+
+Rekaman opname pada 30-31 Des 2025: 356
+
+=======================================================
+   2. STATISTIK TRANSAKSI 2026
+=======================================================
+
+Transaksi penjualan: 7
+Detail penjualan: 226
+Total item keluar: 1446
+
+Transaksi pembelian: 0
+Detail pembelian: 0
+Total item masuk: 0
+
+=======================================================
+   3. ANALISIS DISCREPANCY PER PRODUK
+=======================================================
+
+RINGKASAN:
+  - Total produk: 993
+  - Produk SYNC (selisih=0): 993
+  - Produk BERMASALAH: 0
+
+
+=======================================================
+   4. ANALISIS KARTU STOK (REKAMAN_STOKS)
+=======================================================
+
+Produk dengan kartu stok tidak sinkron: 0
+
+
+=======================================================
+   5. REKOMENDASI
+=======================================================
+
+TIDAK ADA TINDAKAN DIPERLUKAN.
+Semua stok sudah sesuai perhitungan.
+
+=======================================================
+   ANALISIS SELESAI
+=======================================================
