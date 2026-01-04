@@ -30,8 +30,9 @@ try {
     ");
     
     foreach ($mismatch as $m) {
-        DB::table('produk')->where('id_produk', $m->id_produk)->update(['stok' => $m->stok_kartu]);
-        fwrite($f, "   Fixed: {$m->nama_produk}: {$m->stok_produk} -> {$m->stok_kartu}\n");
+        $newStok = max(0, intval($m->stok_kartu));
+        DB::table('produk')->where('id_produk', $m->id_produk)->update(['stok' => $newStok]);
+        fwrite($f, "   Fixed: {$m->nama_produk}: {$m->stok_produk} -> {$newStok}\n");
     }
     fwrite($f, "   Total fixed: " . count($mismatch) . "\n\n");
 
