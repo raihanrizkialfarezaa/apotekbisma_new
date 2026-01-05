@@ -1,0 +1,185 @@
+================================================================
+   VERIFIKASI KELENGKAPAN STOCK OPNAME - 31 DESEMBER 2025
+   Waktu Analisis: 2026-01-05 15:16:55
+================================================================
+
+HIPOTESIS YANG AKAN DIUJI:
+1. Apakah klien benar-benar melakukan stock opname untuk SEMUA produk?
+2. Apakah ada bug di kode yang menyebabkan rekaman tidak tercatat?
+
+================================================================
+   BAGIAN 1: STATISTIK REKAMAN STOCK OPNAME
+================================================================
+
+Total Produk di Database: 993
+Produk dengan rekaman pada 31 Des 2025: 350
+Produk TANPA rekaman pada 31 Des 2025: 643
+
+Total rekaman stok pada 31 Des 2025: 379
+Rekaman MANUAL (stock opname) pada 31 Des 2025: 379
+
+================================================================
+   BAGIAN 2: ANALISIS WAKTU REKAMAN
+================================================================
+
+Distribusi rekaman per jam pada 31 Des 2025:
+  Jam 18:00 - 18:59 : 36 rekaman
+  Jam 19:00 - 19:59 : 79 rekaman
+  Jam 20:00 - 20:59 : 88 rekaman
+  Jam 21:00 - 21:59 : 81 rekaman
+  Jam 22:00 - 22:59 : 44 rekaman
+  Jam 23:00 - 23:59 : 51 rekaman
+
+================================================================
+   BAGIAN 3: CEK PRODUK AMLODIPIN SECARA DETAIL
+================================================================
+
+PRODUK: AMLODIPIN 10mg (ID: 33)
+  Stok Saat Ini: 920
+  Rekaman pada 31 Des 2025: 0
+    *** TIDAK ADA REKAMAN PADA TANGGAL INI! ***
+    Rekaman terakhir: 2026-01-01 07:00:00, stok_sisa=920
+
+PRODUK: AMLODIPIN 5mg (ID: 34)
+  Stok Saat Ini: 650
+  Rekaman pada 31 Des 2025: 0
+    *** TIDAK ADA REKAMAN PADA TANGGAL INI! ***
+    Rekaman terakhir: 2025-01-14 00:00:00, stok_sisa=650
+
+================================================================
+   BAGIAN 4: PRODUK DENGAN STOK > 0 TAPI TIDAK DI-OPNAME
+================================================================
+
+50 Produk dengan stok > 0 yang TIDAK memiliki rekaman pada 31 Des 2025:
+(Diurutkan berdasarkan stok terbesar)
+
+1. KALMETASON
+   ID: 388 | Stok: 1770 | Rekaman terakhir: 2026-01-02 07:00:00
+2. PIROXICAM 20MG
+   ID: 755 | Stok: 1310 | Rekaman terakhir: 2026-01-02 07:00:00
+3. ALLOPURINOL 100mg
+   ID: 23 | Stok: 1300 | Rekaman terakhir: 2026-01-02 07:00:00
+4. CETIRIZIN
+   ID: 161 | Stok: 1080 | Rekaman terakhir: 2026-01-02 07:00:00
+5. TEOSAL
+   ID: 795 | Stok: 1060 | Rekaman terakhir: 2024-08-27 00:00:00
+6. KENALOG IOB
+   ID: 716 | Stok: 1000 | Rekaman terakhir: 2025-08-26 00:00:00
+7. AMLODIPIN 10mg
+   ID: 33 | Stok: 920 | Rekaman terakhir: 2026-01-01 07:00:00
+8. SIMVASTATIN 10
+   ID: 756 | Stok: 770 | Rekaman terakhir: 2026-01-01 07:00:00
+9. PARACETAMOL TAB
+   ID: 634 | Stok: 710 | Rekaman terakhir: 2026-01-02 07:00:00
+10. NATRIUM DICLOFENAC
+   ID: 905 | Stok: 699 | Rekaman terakhir: 2026-01-02 07:00:00
+11. DICLOFENAC POTASIUM
+   ID: 220 | Stok: 690 | Rekaman terakhir: 2026-01-01 07:00:00
+12. VOLTADEX
+   ID: 860 | Stok: 689 | Rekaman terakhir: 2026-01-02 07:00:00
+13. DEXAMETHASONE 0,5
+   ID: 209 | Stok: 680 | Rekaman terakhir: 2026-01-02 07:00:00
+14. AMLODIPIN 5mg
+   ID: 34 | Stok: 650 | Rekaman terakhir: 2025-01-14 00:00:00
+15. KETOCONAZOLE TAB
+   ID: 402 | Stok: 580 | Rekaman terakhir: 2026-01-02 07:00:00
+16. MOLACORT 0,75
+   ID: 537 | Stok: 570 | Rekaman terakhir: 2026-01-02 07:00:00
+17. IBUPROFEN
+   ID: 366 | Stok: 570 | Rekaman terakhir: 2024-08-21 00:00:00
+18. GRATAZONE
+   ID: 335 | Stok: 500 | Rekaman terakhir: 2024-08-23 00:00:00
+19. RENADINAC
+   ID: 695 | Stok: 500 | Rekaman terakhir: 2024-08-24 00:00:00
+20. DEXTEEM PLUS
+   ID: 214 | Stok: 500 | Rekaman terakhir: 2026-01-02 07:00:00
+21. OMEPRASOL
+   ID: 612 | Stok: 490 | Rekaman terakhir: 2026-01-02 07:00:00
+22. ANTASIDA DOEN
+   ID: 55 | Stok: 480 | Rekaman terakhir: 2025-01-22 00:00:00
+23. RHEMAFAR
+   ID: 692 | Stok: 470 | Rekaman terakhir: 2025-12-26 07:00:00
+24. MIXALGIN
+   ID: 524 | Stok: 470 | Rekaman terakhir: 2025-01-08 00:00:00
+25. ALLOPURINOL 300mg
+   ID: 24 | Stok: 460 | Rekaman terakhir: 2024-05-07 00:00:00
+26. METHYLPREDNISOLON 4mg
+   ID: 511 | Stok: 440 | Rekaman terakhir: 2026-01-02 07:00:00
+27. METFORMIN 500 mg
+   ID: 509 | Stok: 410 | Rekaman terakhir: 2025-07-08 00:00:00
+28. ERPHAFLAM
+   ID: 253 | Stok: 410 | Rekaman terakhir: 2024-12-24 00:00:00
+29. LORATADIN
+   ID: 458 | Stok: 380 | Rekaman terakhir: 2026-01-02 07:00:00
+30. RANITIDINE
+   ID: 689 | Stok: 371 | Rekaman terakhir: 2026-01-02 07:00:00
+31. NEUROSANBE PLUS
+   ID: 567 | Stok: 370 | Rekaman terakhir: 2025-10-15 07:00:00
+32. CAVIPLEX TAB
+   ID: 147 | Stok: 360 | Rekaman terakhir: 2026-01-02 07:00:00
+33. OMETILSON
+   ID: 619 | Stok: 350 | Rekaman terakhir: 2026-01-02 07:00:00
+34. HYSTIGO
+   ID: 365 | Stok: 343 | Rekaman terakhir: 2026-01-01 07:00:00
+35. DANASONE
+   ID: 196 | Stok: 330 | Rekaman terakhir: 2025-07-30 00:00:00
+36. GLIMEPIRID 2mg
+   ID: 320 | Stok: 310 | Rekaman terakhir: 2024-12-26 00:00:00
+37. OMELLEGAR
+   ID: 610 | Stok: 300 | Rekaman terakhir: 2025-10-24 07:00:00
+38. MEFINAL
+   ID: 504 | Stok: 295 | Rekaman terakhir: 2026-01-02 07:00:00
+39. GRANTUSIF
+   ID: 334 | Stok: 290 | Rekaman terakhir: 2025-10-29 07:00:00
+40. TERA F
+   ID: 796 | Stok: 270 | Rekaman terakhir: 2026-01-01 07:00:00
+41. ORPHEN
+   ID: 623 | Stok: 270 | Rekaman terakhir: 2025-12-25 07:00:00
+42. OMEGZOLE
+   ID: 609 | Stok: 251 | Rekaman terakhir: 2026-01-02 07:00:00
+43. FLUTAMOL
+   ID: 290 | Stok: 250 | Rekaman terakhir: 2025-10-04 07:00:00
+44. EMTURNAS
+   ID: 239 | Stok: 250 | Rekaman terakhir: 2025-10-30 07:00:00
+45. BUFACARYL
+   ID: 121 | Stok: 250 | Rekaman terakhir: 2024-12-26 00:00:00
+46. GENXICAM 15MG
+   ID: 985 | Stok: 250 | Rekaman terakhir: 2026-01-02 07:00:00
+47. LICOKALK
+   ID: 444 | Stok: 250 | Rekaman terakhir: 2024-08-31 00:00:00
+48. GLIMEPIRID 3mg
+   ID: 321 | Stok: 245 | Rekaman terakhir: 2024-08-28 00:00:00
+49. KADITIC
+   ID: 385 | Stok: 240 | Rekaman terakhir: 2025-08-14 00:00:00
+50. INTERHISTIN
+   ID: 379 | Stok: 240 | Rekaman terakhir: 2026-01-01 07:00:00
+
+Total produk dengan stok > 0 yang TIDAK di-opname: 443
+
+================================================================
+   BAGIAN 5: CEK KETERANGAN REKAMAN STOCK OPNAME
+================================================================
+
+Keterangan unik pada rekaman 31 Des 2025:
+  [352x] Perubahan Stok Manual: SO
+  [23x] Auto-created: Rekaman stok awal produk
+  [2x] Perubahan Stok Manual via Edit Produk
+  [1x] Perubahan Stok Manual
+  [1x] Perubahan Stok Manual: S0
+
+================================================================
+   BAGIAN 6: KESIMPULAN
+================================================================
+
+KESIMPULAN: HANYA 350 dari 993 produk (35.25%)
+yang memiliki rekaman pada 31 Des 2025.
+
+KEMUNGKINAN PENYEBAB:
+1. Klien TIDAK melakukan stock opname untuk semua produk
+2. Ada bug pada sistem yang menyebabkan rekaman tidak tercatat
+
+REKOMENDASI:
+- Verifikasi dengan klien apakah benar-benar melakukan stock opname untuk SEMUA produk
+- Periksa log Laravel untuk error pada tanggal 31 Des 2025
+
+================================================================

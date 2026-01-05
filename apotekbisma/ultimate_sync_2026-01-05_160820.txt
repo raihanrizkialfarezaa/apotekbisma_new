@@ -1,0 +1,54 @@
+================================================================
+   ULTIMATE STOCK SYNC - ALL PRODUCTS
+   Waktu: 2026-01-05 16:07:43
+================================================================
+
+MODE: EXECUTE
+
+Total produk: 993
+
+Produk sudah OK: 908
+Produk perlu sinkronisasi: 24
+
+DAFTAR PRODUK MISMATCH:
+  ACTIFED ALL VAR: produk=2, rekaman=0
+  ALLOPURINOL 100mg: produk=1090, rekaman=720
+  AMLODIPIN 10mg: produk=329, rekaman=440
+  ANTANGIN CAIR: produk=199, rekaman=89
+  BROADAMOX: produk=90, rekaman=70
+  BYE FEVER ANAK: produk=17, rekaman=7
+  CETIRIZIN: produk=709, rekaman=611
+  OCCUSON: produk=90, rekaman=-10
+  COOLING 5 SPRAY: produk=4, rekaman=1
+  DEMACOLIN TAB: produk=408, rekaman=1040
+  DEXAMETHASONE 0,5: produk=489, rekaman=290
+  DEXTEEM PLUS: produk=146, rekaman=778
+  ERLAMICETIN SM: produk=1, rekaman=0
+  GRAFACHLOR: produk=200, rekaman=110
+  KETOCONAZOLE TAB: produk=109, rekaman=600
+  METHYLPREDNISOLON 4mg: produk=889, rekaman=720
+  MIXAGRIP FB: produk=117, rekaman=-3
+  NEURALGIN: produk=229, rekaman=509
+  PROMAG SCH: produk=19, rekaman=1
+  PIROXICAM 20MG: produk=230, rekaman=760
+  SUPERTETRA: produk=51, rekaman=6
+  TONIKUM BAYER K: produk=0, rekaman=1
+  ZORALIN: produk=90, rekaman=-10
+  AMOXICILIN 500mg HJ: produk=630, rekaman=1440
+
+MELAKUKAN SINKRONISASI...
+
+Produk disinkronkan: 24
+Errors: 0
+
+================================================================
+   RINGKASAN
+================================================================
+
+Produk sudah OK: 908
+Produk disinkronkan: 24
+Errors: 0
+
+SINKRONISASI SELESAI!
+
+================================================================

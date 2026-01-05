@@ -1,0 +1,41 @@
+================================================================
+   STOCK HEALTH CHECK - APOTEK BISMA
+   Waktu: 2026-01-05 16:12:43
+================================================================
+
+1. CEK MISMATCH STOK PRODUK vs REKAMAN TERAKHIR
+--------------------------------------------------
+❌ Ditemukan 1 produk dengan mismatch!
+   - VOLTADEX: produk=0, rekaman=-10
+
+2. CEK DUPLIKAT REKAMAN STOK
+--------------------------------------------------
+✅ Tidak ada duplikat rekaman ditemukan.
+
+3. CEK FORMULA REKAMAN STOK
+--------------------------------------------------
+✅ Semua rekaman memiliki formula yang valid.
+
+4. CEK TRANSAKSI TANPA REKAMAN (7 HARI TERAKHIR)
+--------------------------------------------------
+❌ Ditemukan 21 transaksi tanpa rekaman!
+   Penjualan: 0
+   Pembelian: 21
+
+5. STATISTIK UMUM
+--------------------------------------------------
+Total Produk: 993
+Produk Stok Negatif: 0
+Total Rekaman Stok: 29744
+Rekaman Hari Ini: 130
+
+================================================================
+   RINGKASAN
+================================================================
+
+❌ DITEMUKAN 22 MASALAH!
+
+REKOMENDASI:
+- Jalankan: php robust_recalculate_from_opname.php --execute
+
+================================================================

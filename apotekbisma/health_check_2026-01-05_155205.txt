@@ -1,0 +1,54 @@
+================================================================
+   STOCK HEALTH CHECK - APOTEK BISMA
+   Waktu: 2026-01-05 15:51:26
+================================================================
+
+1. CEK MISMATCH STOK PRODUK vs REKAMAN TERAKHIR
+--------------------------------------------------
+❌ Ditemukan 25 produk dengan mismatch!
+   - ACTIFED ALL VAR: produk=2, rekaman=0
+   - ALLOPURINOL 100mg: produk=1090, rekaman=720
+   - AMLODIPIN 10mg: produk=329, rekaman=440
+   - ANTANGIN CAIR: produk=199, rekaman=89
+   - BETASON-N: produk=11, rekaman=7
+   - BROADAMOX: produk=90, rekaman=70
+   - BYE FEVER ANAK: produk=17, rekaman=7
+   - CETIRIZIN: produk=709, rekaman=611
+   - OCCUSON: produk=90, rekaman=-10
+   - COOLING 5 SPRAY: produk=4, rekaman=1
+   ... dan 15 lainnya
+
+2. CEK DUPLIKAT REKAMAN STOK
+--------------------------------------------------
+❌ Ditemukan 1307 grup duplikat!
+   Duplikat Penjualan: 1307
+   Duplikat Pembelian: 0
+
+3. CEK FORMULA REKAMAN STOK
+--------------------------------------------------
+✅ Semua rekaman memiliki formula yang valid.
+
+4. CEK TRANSAKSI TANPA REKAMAN (7 HARI TERAKHIR)
+--------------------------------------------------
+❌ Ditemukan 21 transaksi tanpa rekaman!
+   Penjualan: 0
+   Pembelian: 21
+
+5. STATISTIK UMUM
+--------------------------------------------------
+Total Produk: 993
+Produk Stok Negatif: 0
+Total Rekaman Stok: 31217
+Rekaman Hari Ini: 1
+
+================================================================
+   RINGKASAN
+================================================================
+
+❌ DITEMUKAN 1353 MASALAH!
+
+REKOMENDASI:
+- Jalankan: php robust_recalculate_from_opname.php --execute
+- Jalankan: php fix_duplicates.php
+
+================================================================

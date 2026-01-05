@@ -1,0 +1,152 @@
+================================================================
+   ROBUST STOCK RECALCULATION - APOTEK BISMA
+   Waktu Eksekusi: 2026-01-05 15:39:09
+   Cutoff Opname: 2025-12-31 23:59:59
+   Transaksi Mulai: 2026-01-01 00:00:00
+================================================================
+
+MODE: DRY RUN (simulasi, tidak ada perubahan database)
+Untuk eksekusi: php robust_recalculate_from_opname.php --execute
+
+================================================================
+   FASE 1: IDENTIFIKASI PRODUK DENGAN STOCK OPNAME
+================================================================
+
+Produk dengan stock opname pada 31 Des 2025: 494
+
+================================================================
+   FASE 2: RECALCULATE STOK BERDASARKAN TRANSAKSI
+================================================================
+
+Hasil Recalculation:
+  - Produk sudah OK: 468
+  - Produk diperbaiki: 26
+  - Error: 0
+
+================================================================
+   FASE 3: DETAIL PRODUK YANG DIPERBAIKI
+================================================================
+
+ASAM MEFENAMAT 500mg (ID:63)
+  Stok Opname: 380 | +Beli: 0 | -Jual: 70
+  Stok Lama: 1329 -> Stok Baru: 310 (selisih: +1019)
+
+PARACETAMOL TAB (ID:634)
+  Stok Opname: 240 | +Beli: 0 | -Jual: 30
+  Stok Lama: 1210 -> Stok Baru: 210 (selisih: +1000)
+
+VOLTADEX (ID:860)
+  Stok Opname: 30 | +Beli: 0 | -Jual: 40
+  Stok Lama: 490 -> Stok Baru: 0 (selisih: +490)
+
+PROMAG TAB (ID:676)
+  Stok Opname: 20 | +Beli: 0 | -Jual: 2
+  Stok Lama: 54 -> Stok Baru: 18 (selisih: +36)
+
+KONIDIN OBH (ID:410)
+  Stok Opname: 1 | +Beli: 0 | -Jual: 0
+  Stok Lama: 31 -> Stok Baru: 1 (selisih: +30)
+
+HOT IN 60GR ALL VAR (ID:356)
+  Stok Opname: 2 | +Beli: 0 | -Jual: 0
+  Stok Lama: 14 -> Stok Baru: 2 (selisih: +12)
+
+ASEPSO ALL VAR (ID:64)
+  Stok Opname: 6 | +Beli: 0 | -Jual: 1
+  Stok Lama: 17 -> Stok Baru: 5 (selisih: +12)
+
+VICKS VAP 10g (ID:843)
+  Stok Opname: 4 | +Beli: 0 | -Jual: 1
+  Stok Lama: 15 -> Stok Baru: 3 (selisih: +12)
+
+M.TAWON CC (ID:473)
+  Stok Opname: 3 | +Beli: 0 | -Jual: 0
+  Stok Lama: 15 -> Stok Baru: 3 (selisih: +12)
+
+HUFAGRIP KUNING (ID:358)
+  Stok Opname: 4 | +Beli: 0 | -Jual: 0
+  Stok Lama: 14 -> Stok Baru: 4 (selisih: +10)
+
+PLOSA ALL VAR (ID:656)
+  Stok Opname: 16 | +Beli: 0 | -Jual: 0
+  Stok Lama: 22 -> Stok Baru: 16 (selisih: +6)
+
+MADU TJ JOYBEE ALL VAR (ID:494)
+  Stok Opname: 5 | +Beli: 0 | -Jual: 0
+  Stok Lama: 11 -> Stok Baru: 5 (selisih: +6)
+
+HOT IN DCL 120 GR (ID:999)
+  Stok Opname: 2 | +Beli: 0 | -Jual: 0
+  Stok Lama: 8 -> Stok Baru: 2 (selisih: +6)
+
+HOT IN DCL 60GR (ID:998)
+  Stok Opname: 3 | +Beli: 0 | -Jual: 0
+  Stok Lama: 9 -> Stok Baru: 3 (selisih: +6)
+
+HOT IN 120GR ALL VAR (ID:355)
+  Stok Opname: 6 | +Beli: 0 | -Jual: 1
+  Stok Lama: 11 -> Stok Baru: 5 (selisih: +6)
+
+INSTO COOL (ID:175)
+  Stok Opname: 2 | +Beli: 0 | -Jual: 2
+  Stok Lama: 6 -> Stok Baru: 0 (selisih: +6)
+
+LANCAR ASI (ID:427)
+  Stok Opname: 6 | +Beli: 0 | -Jual: 0
+  Stok Lama: 1 -> Stok Baru: 6 (selisih: -5)
+
+CYCLOGYNON (ID:194)
+  Stok Opname: 3 | +Beli: 0 | -Jual: 1
+  Stok Lama: 7 -> Stok Baru: 2 (selisih: +5)
+
+SANMOL DROP (ID:727)
+  Stok Opname: 2 | +Beli: 0 | -Jual: 0
+  Stok Lama: 5 -> Stok Baru: 2 (selisih: +3)
+
+ANAKONIDIN 60mL (ID:42)
+  Stok Opname: 1 | +Beli: 0 | -Jual: 0
+  Stok Lama: 4 -> Stok Baru: 1 (selisih: +3)
+
+WOOD'S ATT 60ML (ID:868)
+  Stok Opname: 2 | +Beli: 0 | -Jual: 0
+  Stok Lama: 5 -> Stok Baru: 2 (selisih: +3)
+
+SILADEX ALL VAR 60ml (ID:746)
+  Stok Opname: 10 | +Beli: 0 | -Jual: 2
+  Stok Lama: 11 -> Stok Baru: 8 (selisih: +3)
+
+KAKAK TUA (ID:386)
+  Stok Opname: 1 | +Beli: 0 | -Jual: 0
+  Stok Lama: 4 -> Stok Baru: 1 (selisih: +3)
+
+ACYCLOVIR CREAM (ID:9)
+  Stok Opname: 11 | +Beli: 0 | -Jual: 1
+  Stok Lama: 12 -> Stok Baru: 10 (selisih: +2)
+
+ANTIMO TAB (ID:59)
+  Stok Opname: 50 | +Beli: 0 | -Jual: 7
+  Stok Lama: 44 -> Stok Baru: 43 (selisih: +1)
+
+COUNTERPAIN 120g (ID:182)
+  Stok Opname: 1 | +Beli: 0 | -Jual: 0
+  Stok Lama: 0 -> Stok Baru: 1 (selisih: -1)
+
+================================================================
+   FASE 4: VERIFIKASI AKHIR
+================================================================
+
+Verifikasi dilewati (dry run atau tidak ada perubahan)
+
+================================================================
+   RINGKASAN AKHIR
+================================================================
+
+Total produk diproses: 494
+Produk sudah OK: 468
+Produk diperbaiki: 26
+Errors: 0
+
+UNTUK MENERAPKAN PERBAIKAN:
+php robust_recalculate_from_opname.php --execute
+
+================================================================

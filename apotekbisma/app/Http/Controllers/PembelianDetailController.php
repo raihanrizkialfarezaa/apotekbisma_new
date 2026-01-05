@@ -620,8 +620,46 @@ class PembelianDetailController extends Controller
     {
         try {
             RekamanStok::recalculateStock($produkId);
+            
+            $this->validateAndFixStockSync($produkId);
         } catch (\Exception $e) {
             Log::warning('Recalculate stock warning: ' . $e->getMessage());
+        }
+    }
+    
+    private function validateAndFixStockSync($produkId)
+    {
+        try {
+            $produk = DB::table('produk')->where('id_produk', $produkId)->first();
+            if (!$produk) return;
+            
+            $stokProduk = intval($produk->stok);
+            
+            $lastRekaman = DB::table('rekaman_stoks')
+                ->where('id_produk', $produkId)
+                ->orderBy('waktu', 'desc')
+                ->orderBy('id_rekaman_stok', 'desc')
+                ->first();
+            
+            if (!$lastRekaman) return;
+            
+            $stokRekaman = intval($lastRekaman->stok_sisa);
+            
+            if ($stokProduk !== $stokRekaman) {
+                Log::warning('Stock mismatch detected and auto-fixed (Pembelian)', [
+                    'id_produk' => $produkId,
+                    'nama_produk' => $produk->nama_produk ?? 'Unknown',
+                    'stok_produk' => $stokProduk,
+                    'stok_rekaman' => $stokRekaman,
+                    'action' => 'auto_sync_to_rekaman'
+                ]);
+                
+                DB::table('produk')
+                    ->where('id_produk', $produkId)
+                    ->update(['stok' => $stokRekaman]);
+            }
+        } catch (\Exception $e) {
+            Log::error('validateAndFixStockSync error (Pembelian): ' . $e->getMessage());
         }
     }
     

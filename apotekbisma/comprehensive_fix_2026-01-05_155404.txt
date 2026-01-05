@@ -1,0 +1,47 @@
+================================================================
+   COMPREHENSIVE STOCK FIX - APOTEK BISMA
+   Waktu: 2026-01-05 15:54:04
+================================================================
+
+MODE: DRY RUN (simulasi)
+Untuk eksekusi: php comprehensive_stock_fix.php --execute
+
+================================================================
+   FASE 1: HAPUS DUPLIKAT REKAMAN PENJUALAN
+================================================================
+
+Duplikat grup ditemukan: 1307
+(Dry run - tidak ada perubahan)
+
+================================================================
+   FASE 2: BUAT REKAMAN UNTUK PEMBELIAN YANG HILANG
+================================================================
+
+Pembelian tanpa rekaman: 0
+
+================================================================
+   FASE 3: RECALCULATE SEMUA PRODUK DARI OPNAME
+================================================================
+
+Produk dengan opname: 494
+(Dry run - tidak ada perubahan)
+
+================================================================
+   FASE 4: REBUILD REKAMAN STOK SETELAH OPNAME
+================================================================
+
+(Dry run - tidak ada perubahan)
+
+================================================================
+   RINGKASAN
+================================================================
+
+Duplikat dihapus: 0
+Rekaman hilang dibuat: 0
+Produk diproses: 0
+Produk diperbaiki: 0
+Errors: 0
+
+UNTUK MENERAPKAN: php comprehensive_stock_fix.php --execute
+
+================================================================
