@@ -1,0 +1,7 @@
+﻿Records for Product 63 on 30 Dec 2025:
+No records found.
+
+Checking id_pembelian 048659 (Faktur from screenshot):
+Pembelian not found.
+
+All rekaman_stoks linked to pembelian 48659:

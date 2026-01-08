@@ -1,0 +1,144 @@
+﻿=======================================================
+  AUDIT & FIX STOCK ANOMALIES - ALL PRODUCTS
+  2026-01-08 21:43:36
+=======================================================
+
+*** MODE: AUDIT ONLY (tambahkan --fix untuk memperbaiki) ***
+
+=======================================================
+  SUMMARY
+=======================================================
+Total Products Checked: 993
+Products with Anomalies: 878
+Total Anomalies Found: 30616
+
+=======================================================
+  DETAILED ANOMALY REPORT (Max 10 products shown)
+=======================================================
+
+Product ID: 2
+Name: ACETHYLESISTEIN 200mg
+Current Stock (DB): 20
+Calculated Final Stock: -122
+Anomalies (43):
+  - ID 161934 | 2024-06-13 12:20:08 | +0 -15 | Expected: -15 | Actual: 127 | Diff: 142
+  - ID 161935 | 2024-06-15 00:00:01 | +0 -10 | Expected: -25 | Actual: 117 | Diff: 142
+  - ID 161936 | 2024-06-15 00:00:02 | +0 -10 | Expected: -35 | Actual: 107 | Diff: 142
+  - ID 161937 | 2024-06-15 00:00:03 | +0 -10 | Expected: -45 | Actual: 97 | Diff: 142
+  - ID 161938 | 2024-06-15 10:55:03 | +0 -10 | Expected: -55 | Actual: 87 | Diff: 142
+  ... and 38 more anomalies for this product.
+
+Product ID: 3
+Name: ACETON
+Current Stock (DB): 1
+Calculated Final Stock: -11
+Anomalies (5):
+  - ID 161972 | 2024-06-15 00:00:04 | +0 -1 | Expected: -1 | Actual: 11 | Diff: 12
+  - ID 161973 | 2024-06-15 00:00:05 | +0 -1 | Expected: -2 | Actual: 10 | Diff: 12
+  - ID 161974 | 2024-06-18 00:00:01 | +0 -9 | Expected: -11 | Actual: 1 | Diff: 12
+  - ID 161975 | 2025-09-09 07:01:25 | +0 -1 | Expected: -12 | Actual: 0 | Diff: 12
+  - ID 175700 | 2026-01-01 22:59:30 | +1 -0 | Expected: -11 | Actual: 1 | Diff: 12
+
+Product ID: 4
+Name: ACIFAR CREAM
+Current Stock (DB): 1
+Calculated Final Stock: -15
+Anomalies (10):
+  - ID 161988 | 2024-06-18 00:00:02 | +0 -7 | Expected: -7 | Actual: 9 | Diff: 16
+  - ID 161989 | 2024-08-20 00:00:49 | +0 -1 | Expected: -8 | Actual: 8 | Diff: 16
+  - ID 161990 | 2024-12-25 00:01:19 | +0 -1 | Expected: -9 | Actual: 7 | Diff: 16
+  - ID 161991 | 2025-01-17 00:01:22 | +0 -1 | Expected: -10 | Actual: 6 | Diff: 16
+  - ID 161992 | 2025-07-07 00:01:47 | +0 -1 | Expected: -11 | Actual: 5 | Diff: 16
+  ... and 5 more anomalies for this product.
+
+Product ID: 5
+Name: ACIFAR TAB
+Current Stock (DB): 60
+Calculated Final Stock: 20
+Anomalies (12):
+  - ID 161976 | 2024-06-15 10:55:04 | +0 -10 | Expected: -10 | Actual: 30 | Diff: 40
+  - ID 161977 | 2025-01-25 00:01:28 | +0 -10 | Expected: -20 | Actual: 20 | Diff: 40
+  - ID 161978 | 2025-07-22 00:02:02 | +0 -10 | Expected: -30 | Actual: 10 | Diff: 40
+  - ID 161979 | 2025-07-25 00:01:13 | +0 -10 | Expected: -40 | Actual: 0 | Diff: 40
+  - ID 161980 | 2025-07-30 00:01:45 | +60 -0 | Expected: 20 | Actual: 60 | Diff: 40
+  ... and 7 more anomalies for this product.
+
+Product ID: 6
+Name: ACNOL
+Current Stock (DB): 3
+Calculated Final Stock: -2
+Anomalies (10):
+  - ID 168684 | 2024-12-09 00:02:01 | +0 -1 | Expected: -1 | Actual: 3 | Diff: 4
+  - ID 168685 | 2025-01-24 00:02:58 | +0 -1 | Expected: -2 | Actual: 2 | Diff: 4
+  - ID 168686 | 2025-07-04 00:02:59 | +0 -1 | Expected: -3 | Actual: 1 | Diff: 4
+  - ID 168687 | 2025-09-08 07:03:30 | +0 -1 | Expected: -4 | Actual: 0 | Diff: 4
+  - ID 168688 | 2025-09-10 07:00:58 | +3 -0 | Expected: -1 | Actual: 3 | Diff: 4
+  ... and 5 more anomalies for this product.
+
+Product ID: 7
+Name: SUTRA BIRU S'12
+Current Stock (DB): 4
+Calculated Final Stock: 0
+Anomalies (8):
+  - ID 167661 | 2024-09-03 00:01:22 | +0 -1 | Expected: -1 | Actual: 3 | Diff: 4
+  - ID 167662 | 2025-07-11 00:03:02 | +0 -1 | Expected: -2 | Actual: 2 | Diff: 4
+  - ID 167663 | 2025-07-11 00:03:03 | +0 -1 | Expected: -3 | Actual: 1 | Diff: 4
+  - ID 167664 | 2025-07-18 00:02:15 | +0 -1 | Expected: -4 | Actual: 0 | Diff: 4
+  - ID 167665 | 2025-09-02 07:02:35 | +3 -0 | Expected: -1 | Actual: 3 | Diff: 4
+  ... and 3 more anomalies for this product.
+
+Product ID: 8
+Name: ACTIFED ALL VAR
+Current Stock (DB): 2
+Calculated Final Stock: -4
+Anomalies (26):
+  - ID 160016 | 2024-05-28 15:10:54 | +0 -1 | Expected: -1 | Actual: 5 | Diff: 6
+  - ID 160017 | 2024-08-28 00:00:30 | +0 -1 | Expected: -2 | Actual: 4 | Diff: 6
+  - ID 160018 | 2024-08-29 00:00:18 | +0 -1 | Expected: -3 | Actual: 3 | Diff: 6
+  - ID 160019 | 2025-07-05 00:02:14 | +0 -1 | Expected: -4 | Actual: 2 | Diff: 6
+  - ID 160020 | 2025-07-08 00:01:50 | +0 -1 | Expected: -5 | Actual: 1 | Diff: 6
+  ... and 21 more anomalies for this product.
+
+Product ID: 9
+Name: ACYCLOVIR CREAM
+Current Stock (DB): 10
+Calculated Final Stock: -30
+Anomalies (97):
+  - ID 154288 | 2024-05-07 00:02:53 | +0 -2 | Expected: -2 | Actual: 38 | Diff: 40
+  - ID 154289 | 2024-05-07 00:02:54 | +0 -1 | Expected: -3 | Actual: 37 | Diff: 40
+  - ID 154290 | 2024-08-20 00:00:28 | +0 -1 | Expected: -4 | Actual: 36 | Diff: 40
+  - ID 154291 | 2024-08-24 00:00:11 | +0 -1 | Expected: -5 | Actual: 35 | Diff: 40
+  - ID 154292 | 2024-08-28 00:00:19 | +0 -2 | Expected: -7 | Actual: 33 | Diff: 40
+  ... and 92 more anomalies for this product.
+
+Product ID: 10
+Name: JESSCOLL
+Current Stock (DB): 22
+Calculated Final Stock: 11
+Anomalies (13):
+  - ID 146072 | 2024-05-07 00:00:28 | +0 -1 | Expected: -1 | Actual: 10 | Diff: 11
+  - ID 146073 | 2024-05-29 12:41:32 | +0 -4 | Expected: -5 | Actual: 6 | Diff: 11
+  - ID 146074 | 2025-01-13 00:00:07 | +0 -2 | Expected: -7 | Actual: 4 | Diff: 11
+  - ID 146075 | 2025-07-04 00:00:09 | +0 -2 | Expected: -9 | Actual: 2 | Diff: 11
+  - ID 146076 | 2025-07-08 00:00:12 | +0 -2 | Expected: -11 | Actual: 0 | Diff: 11
+  ... and 8 more anomalies for this product.
+
+Product ID: 11
+Name: ADEM SARI
+Current Stock (DB): 11
+Calculated Final Stock: -63
+Anomalies (39):
+  - ID 163234 | 2024-08-21 00:01:14 | +0 -2 | Expected: -2 | Actual: 72 | Diff: 74
+  - ID 163235 | 2024-08-21 00:01:15 | +0 -2 | Expected: -4 | Actual: 70 | Diff: 74
+  - ID 163236 | 2024-08-28 00:00:39 | +0 -3 | Expected: -7 | Actual: 67 | Diff: 74
+  - ID 163237 | 2024-08-30 00:00:57 | +0 -2 | Expected: -9 | Actual: 65 | Diff: 74
+  - ID 163238 | 2024-08-31 00:00:34 | +0 -2 | Expected: -11 | Actual: 63 | Diff: 74
+  ... and 34 more anomalies for this product.
+
+... and 868 more products with anomalies.
+=======================================================
+  TO FIX ALL ANOMALIES, RUN:
+  php fix_stock_anomalies.php --fix
+=======================================================
+
+Done.

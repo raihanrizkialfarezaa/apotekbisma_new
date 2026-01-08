@@ -1,0 +1,42 @@
+﻿=== Checking records and their transaction sources ===
+
+Row 435 | ID: 149477
+  rekaman_stoks.waktu: 2025-12-19 07:00:30
+  penjualan.waktu: 2025-12-19 07:00:00 *** USED FOR DISPLAY
+  DISPLAY DATE: 2025-12-19 07:00:00
+
+Row 436 | ID: 149478
+  rekaman_stoks.waktu: 2025-12-19 07:00:31
+  penjualan.waktu: 2025-12-19 07:00:00 *** USED FOR DISPLAY
+  DISPLAY DATE: 2025-12-19 07:00:00
+
+Row 437 | ID: 175533
+  rekaman_stoks.waktu: 2025-12-31 23:29:08
+  No linked transaction - using rekaman_stoks.waktu
+  DISPLAY DATE: 2025-12-31 23:29:08
+
+Row 438 | ID: 176069
+  rekaman_stoks.waktu: 2026-01-02 01:35:56
+  pembelian.waktu: 2025-12-30 07:00:00 *** USED FOR DISPLAY
+  DISPLAY DATE: 2025-12-30 07:00:00
+
+Row 439 | ID: 176070
+  rekaman_stoks.waktu: 2026-01-02 15:56:10
+  penjualan.waktu: 2026-01-01 07:00:00 *** USED FOR DISPLAY
+  DISPLAY DATE: 2026-01-01 07:00:00
+
+Row 440 | ID: 176071
+  rekaman_stoks.waktu: 2026-01-02 23:47:38
+  penjualan.waktu: 2026-01-02 07:00:00 *** USED FOR DISPLAY
+  DISPLAY DATE: 2026-01-02 07:00:00
+
+Row 441 | ID: 176072
+  rekaman_stoks.waktu: 2026-01-03 01:28:33
+  penjualan.waktu: 2026-01-02 07:00:00 *** USED FOR DISPLAY
+  DISPLAY DATE: 2026-01-02 07:00:00
+
+Row 442 | ID: 176073
+  rekaman_stoks.waktu: 2026-01-03 02:16:05
+  penjualan.waktu: 2026-01-02 07:00:00 *** USED FOR DISPLAY
+  DISPLAY DATE: 2026-01-02 07:00:00
+

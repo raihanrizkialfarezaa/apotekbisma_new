@@ -35,7 +35,18 @@ class KartuStokController extends Controller
         // Data untuk grafik dan ringkasan
         $stok_data = $this->getStockData($id);
         
-        return view('kartu_stok.detail', compact('produk_id', 'nama_barang', 'produk', 'stok_data'));
+        // Get ALL transaction data upfront for robust client-side DataTables
+        $dummyRequest = new \Illuminate\Http\Request(['date_filter' => 'all']);
+        $dataStokLengkap = $this->getDataFiltered($id, $dummyRequest);
+        
+        // SORT BY DATE DESCENDING (newest first) - Backend sorting is 100% reliable
+        usort($dataStokLengkap, function($a, $b) {
+            $timeA = strtotime($a['waktu_raw'] ?? '1970-01-01');
+            $timeB = strtotime($b['waktu_raw'] ?? '1970-01-01');
+            return $timeB - $timeA; // Descending
+        });
+
+        return view('kartu_stok.detail', compact('produk_id', 'nama_barang', 'produk', 'stok_data', 'dataStokLengkap'));
     }
     
     public function getData($id)
@@ -276,7 +287,8 @@ class KartuStokController extends Controller
     public function data($id, Request $request)
     {
         $data = $this->getDataFiltered($id, $request);
-
+        
+        // Return all data to client side
         return datatables()
             ->of($data)
             ->rawColumns(['tanggal', 'stok_sisa', 'keterangan'])
@@ -364,7 +376,11 @@ class KartuStokController extends Controller
                 }
             }
 
+
             $row['tanggal'] = tanggal_indonesia($tanggal_source, false);
+            // Use rekaman_stoks.waktu for sorting (system timestamp)
+            // This ensures correct chronological order based on when stock movement was recorded
+            $row['waktu_raw'] = $item->waktu;
             
             // Format stock movements
             $row['stok_masuk'] = ($item->stok_masuk != NULL && $item->stok_masuk > 0) 
@@ -486,9 +502,10 @@ class KartuStokController extends Controller
         // Add current stock summary as last row if not filtered
         if (!$request->has('date_filter') || !$request->date_filter) {
             if (!empty($data)) {
-                $data[] = [
+            $data[] = [
                     'DT_RowIndex' => '',
                     'tanggal' => '<strong class="text-primary">STOK SAAT INI</strong>',
+                    'waktu_raw' => '',
                     'stok_masuk' => '',
                     'stok_keluar' => '',
                     'stok_awal' => '',

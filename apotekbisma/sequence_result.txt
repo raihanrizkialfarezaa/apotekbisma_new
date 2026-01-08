@@ -1,0 +1,14 @@
+﻿=== Full sequence check for Product 63 ===
+
+Getting ALL records sorted by waktu ASC (how backend assigns row numbers):
+
+Row 435 | ID: 149477 | Date: 19 Dec 2025 07:00
+Row 436 | ID: 149478 | Date: 19 Dec 2025 07:00
+Row 437 | ID: 175533 | Date: 31 Dec 2025 23:29
+  *** DEC 31 FOUND AT ROW 437 ***
+Row 438 | ID: 176069 | Date: 02 Jan 2026 01:35
+Row 439 | ID: 176070 | Date: 02 Jan 2026 15:56
+Row 440 | ID: 176071 | Date: 02 Jan 2026 23:47
+
+Total records: 442
+Dec 31 found: YES

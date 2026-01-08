@@ -1,0 +1,76 @@
+﻿=======================================================
+  ANALYZE STOCK MANUAL ADJUSTMENTS - DETECT ANOMALIES
+  2026-01-08 21:54:26
+=======================================================
+
+Found 236 manual stock adjustments.
+
+=======================================================
+  ANOMALIES FOUND: 5
+=======================================================
+
+Product ID: 301
+Product: GANDAPURA 60mL
+Adjustment ID: 175314
+Adjustment Time: 2025-12-31 21:19:33
+Adjustment Masuk: 2 -> Stok Sisa: 5
+Previous: 2025-12-04 07:02:25 (Stok: 3)
+Next: 2026-01-02 18:53:26 (Expected: 4, Actual: 5)
+Issue: Calculation mismatch with next transaction
+---
+
+Product ID: 300
+Product: GANDAPURA 30mL
+Adjustment ID: 175313
+Adjustment Time: 2025-12-31 21:19:20
+Adjustment Masuk: 1 -> Stok Sisa: 6
+Previous: 2025-12-30 13:32:05 (Stok: 5)
+Next: 2026-01-02 23:47:54 (Expected: 5, Actual: 4)
+Issue: Calculation mismatch with next transaction
+---
+
+Product ID: 281
+Product: FITKOM ALL VAR
+Adjustment ID: 175120
+Adjustment Time: 2025-12-31 19:35:40
+Adjustment Masuk: 5 -> Stok Sisa: 5
+Previous: 2025-12-12 07:02:42 (Stok: 0)
+Next: 2026-01-02 15:56:04 (Expected: 4, Actual: 3)
+Issue: Calculation mismatch with next transaction
+---
+
+Product ID: 204
+Product: DEMACOLIN TAB
+Adjustment ID: 174774
+Adjustment Time: 2025-12-29 19:08:30
+Adjustment Masuk: 10 -> Stok Sisa: 1050
+Previous: 2025-12-29 07:01:08 (Stok: 1040)
+Next: 2026-01-02 23:47:55 (Expected: 1030, Actual: 430)
+Issue: Calculation mismatch with next transaction
+---
+
+Product ID: 214
+Product: DEXTEEM PLUS
+Adjustment ID: 173699
+Adjustment Time: 2025-12-24 18:52:26
+Adjustment Masuk: 1 -> Stok Sisa: 788
+Previous: 2025-12-24 18:52:25 (Stok: 787)
+Next: 2026-01-02 18:53:07 (Expected: 778, Actual: 340)
+Issue: Calculation mismatch with next transaction
+---
+
+
+=======================================================
+  SPECIFIC CHECK FOR PRODUCT 63
+=======================================================
+
+Records for Product 63 (29 Dec 2025 - 02 Jan 2026):
+
+ID           Waktu                     Masuk      Keluar     Stok Awal    Stok Sisa    Type
+----------------------------------------------------------------------------------------------------
+175533       2025-12-31 23:29:08       380        -          0            380          Manual
+176069       2026-01-02 01:35:56       1000       -          380          1380         Pembelian
+176070       2026-01-02 15:56:10       -          20         1380         1360         Penjualan
+176071       2026-01-02 23:47:38       -          10         1360         1350         Penjualan
+
+Done.

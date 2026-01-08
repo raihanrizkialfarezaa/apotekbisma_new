@@ -1586,13 +1586,7 @@
                     <!-- Quick Actions -->
                     <div class="quick-actions">
                         <button type="button" class="action-btn info" id="reset-filters" title="Reset semua filter">
-                            <i class="fa fa-refresh"></i> Reset
-                        </button>
-                        <button type="button" class="action-btn success" id="export-excel" title="Export ke Excel">
-                            <i class="fa fa-file-excel-o"></i> Excel
-                        </button>
-                        <button type="button" class="action-btn primary" id="print-table" title="Cetak tabel">
-                            <i class="fa fa-print"></i> Print
+                            <i class="fa fa-refresh"></i> Reset Filter
                         </button>
                     </div>
                 </div>
@@ -1655,8 +1649,8 @@
                             <th width="5%" class="text-center" data-column="0" data-sort="none">
                                 No
                             </th>
-                            <th class="text-center" data-column="1" data-sort="none">
-                                Tanggal
+                            <th class="text-center" data-column="1" data-sort="desc" style="min-width: 150px;">
+                                Tanggal & Waktu
                                 <span class="sort-icon">
                                     <i class="fa fa-caret-up"></i>
                                     <i class="fa fa-caret-down"></i>
@@ -1758,46 +1752,79 @@
         $('#table-loading').show();
 
         // Initialize DataTable with enhanced configuration
+        // Initial Load Data Direct from Controller (Robust & Fast)
+        const initialData = @json($dataStokLengkap);
+
         table = $('#kartu-stok-table').DataTable({
+            destroy: true, // Ensure fresh init
             responsive: {
                 details: {
                     type: 'column',
                     target: 'tr'
                 }
             },
+            data: initialData, // Use direct data for instant load
             processing: true,
-            serverSide: true,
+            serverSide: false, // Client-side processing is key
             autoWidth: false,
-            scrollX: false, // Disable DataTables scrollX since we use our own wrapper
+            scrollX: false,
             scrollCollapse: true,
+            // Keep AJAX config for reloads (Reset/Filter)
             ajax: {
                 url: '{{ route('kartu_stok.data', $produk_id) }}',
+                type: 'GET',
+                dataSrc: 'data',
                 data: function(d) {
-                    d.date_filter = currentFilter;
-                    if (currentFilter === 'custom') {
+                    d.date_filter = typeof currentFilter !== 'undefined' ? currentFilter : 'all';
+                    if (d.date_filter === 'custom') {
                         d.start_date = $('#start_date').val();
                         d.end_date = $('#end_date').val();
                     }
-                    // Add column filters
-                    d.column_filters = {};
-                    $('.column-filter').each(function() {
-                        const col = $(this).data('column');
-                        const val = $(this).val();
-                        if (val) {
-                            d.column_filters[col] = val;
-                        }
-                    });
                 },
-                beforeSend: function() {
-                    $('#table-loading').show();
-                },
-                complete: function() {
-                    $('#table-loading').hide();
-                }
+                beforeSend: function() { $('#table-loading').show(); },
+                complete: function() { $('#table-loading').hide(); },
+                error: function() { $('#table-loading').hide(); }
             },
+            stateSave: false, // Disable state saving to fix sorting issues
+            order: [[1, 'desc']], // Force desc sorting
+            columnDefs: [ {
+                "searchable": false,
+                "orderable": false,
+                "targets": 0
+            } ],
             columns: [
-                {data: 'DT_RowIndex', searchable: false, sortable: false, className: 'text-center'},
-                {data: 'tanggal', className: 'text-center', orderable: true},
+                {
+                    data: null, 
+                    searchable: false, 
+                    sortable: false, 
+                    className: 'text-center',
+                    // Use standard render, but we will overwrite it with event listener
+                    render: function (data, type, row, meta) {
+                        return meta.settings._iDisplayStart + meta.row + 1;
+                    }
+                },
+                {
+                    data: 'waktu_raw',
+                    name: 'waktu_raw',
+                    className: 'text-center',
+                    orderable: true,
+                    type: 'string', 
+                    render: function(data, type, row) {
+                        if (type === 'sort' || type === 'type') {
+                            return data;
+                        }
+                        if (!data) return '-';
+                        try {
+                            const dt = new Date(data);
+                            if (!isNaN(dt.getTime())) {
+                                const dateStr = dt.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+                                const timeStr = dt.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                                return '<div style="line-height: 1.4;"><strong>' + dateStr + '</strong><br><small style="color: #6b7280;">' + timeStr + '</small></div>';
+                            }
+                        } catch (e) {}
+                        return row.tanggal || data;
+                    }
+                },
                 {data: 'stok_masuk', className: 'text-center', orderable: true},
                 {data: 'stok_keluar', className: 'text-center', orderable: true},
                 {data: 'stok_sisa', className: 'text-center', orderable: true},
@@ -1868,8 +1895,8 @@
                     previous: 'Sebelumnya'
                 }
             },
-            ordering: true,
-            order: [[1, 'desc']], // Default sorting: Tanggal column descending (terbaru di atas)
+            ordering: false, // Disabled - data is pre-sorted by backend
+            order: [], // No default order needed
             pageLength: 25,
             drawCallback: function(settings) {
                 updateCustomPagination(settings);
@@ -1877,6 +1904,13 @@
                 highlightSearchResults();
             }
         });
+        
+        // Force sequential numbering regardless of sorting
+        table.on('order.dt search.dt', function () {
+            table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        }).draw();
 
         // ============================================
         // ENHANCED SEARCH FUNCTIONALITY
@@ -2007,22 +2041,6 @@
             table.ajax.reload(function() {
                 showNotification('✨ Semua filter telah direset!', 'success');
             });
-        });
-
-        // ============================================
-        // EXPORT EXCEL
-        // ============================================
-        $('#export-excel').on('click', function() {
-            // Trigger DataTables Excel export
-            table.button('.buttons-excel').trigger();
-            showNotification('Mengunduh file Excel...', 'success');
-        });
-
-        // ============================================
-        // PRINT TABLE
-        // ============================================
-        $('#print-table').on('click', function() {
-            table.button('.buttons-print').trigger();
         });
 
         // ============================================
@@ -2169,7 +2187,8 @@
 
     // Update custom pagination
     function updateCustomPagination(settings) {
-        const info = table.page.info();
+        const dt = new $.fn.dataTable.Api(settings);
+        const info = dt.page.info();
         const start = info.start + 1;
         const end = info.end;
         const total = info.recordsTotal;
@@ -2224,22 +2243,23 @@
         $('#pagination-controls').html(paginationHtml);
 
         // Bind click events
-        $('#pagination-controls .page-btn').on('click', function() {
+        $('#pagination-controls').off('click', '.page-btn').on('click', '.page-btn', function() {
             const page = $(this).data('page');
             if (page === 'prev') {
-                table.page('previous').draw('page');
+                dt.page('previous').draw('page');
             } else if (page === 'next') {
-                table.page('next').draw('page');
+                dt.page('next').draw('page');
             } else {
-                table.page(page - 1).draw('page');
+                dt.page(page - 1).draw('page');
             }
         });
     }
 
     // Update stats summary
     function updateStatsSummary(settings) {
-        const info = table.page.info();
-        const data = table.rows({search: 'applied'}).data();
+        const dt = new $.fn.dataTable.Api(settings);
+        const info = dt.page.info();
+        const data = dt.rows({search: 'applied'}).data();
         
         let totalMasuk = 0;
         let totalKeluar = 0;

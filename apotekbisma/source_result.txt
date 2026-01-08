@@ -1,0 +1,10 @@
+﻿=== Checking Dec 31 record source dates ===
+
+Rekaman Stok ID: 175533
+- waktu (rekaman_stoks): 2025-12-31 23:29:08
+- id_pembelian: NULL
+- id_penjualan: NULL
+
+=== This explains the issue ===
+The UI uses Pembelian.waktu (if exists) instead of rekaman_stoks.waktu
+If Pembelian.waktu is different from rekaman_stoks.waktu, dates will mismatch!

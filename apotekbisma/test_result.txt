@@ -1,0 +1,29 @@
+﻿=== Testing data() endpoint ===
+
+recordsTotal: 442
+recordsFiltered: 442
+data count: 442
+
+First 10 rows:
+1. DT_RowIndex: 1 | waktu_raw: 2026-01-02 07:00:00
+2. DT_RowIndex: 2 | waktu_raw: 2026-01-02 07:00:00
+3. DT_RowIndex: 3 | waktu_raw: 2026-01-02 07:00:00
+4. DT_RowIndex: 4 | waktu_raw: 2026-01-01 07:00:00
+
+   ErrorException 
+
+  Array to string conversion
+
+  at C:\laragon\www\apotekbisma\apotekbisma\test_endpoint.php:30
+     26Γûò echo "data count: " . count($json['data']) . "\n\n";
+     27Γûò 
+     28Γûò echo "First 10 rows:\n";
+     29Γûò foreach ($json['data'] as $i => $row) {
+  Γ₧£  30Γûò     echo ($i+1) . ". DT_RowIndex: " . $row['DT_RowIndex'] . " | waktu_raw: " . $row['waktu_raw'] . "\n";
+     31Γûò }
+     32Γûò 
+     33Γûò echo "\n=== Looking for Dec 31 ===\n";
+     34Γûò $found = false;
+
+  1   C:\laragon\www\apotekbisma\apotekbisma\test_endpoint.php:30
+      Illuminate\Foundation\Bootstrap\HandleExceptions::handleError("Array to string conversion", "C:\laragon\www\apotekbisma\apotekbisma\test_endpoint.php")

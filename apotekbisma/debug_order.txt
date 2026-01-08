@@ -1,0 +1,11 @@
+﻿=== FIRST 10 ROWS AFTER DESC SORT ===
+Row 1 | Date: 02 Januari 2026 | WaktuRaw: 2026-01-02 07:00:00 | Ket:  PenjualanID Transaksi: 1060
+Row 2 | Date: 02 Januari 2026 | WaktuRaw: 2026-01-02 07:00:00 | Ket:  PenjualanID Transaksi: 1062
+Row 3 | Date: 02 Januari 2026 | WaktuRaw: 2026-01-02 07:00:00 | Ket:  PenjualanID Transaksi: 1063
+Row 4 | Date: 01 Januari 2026 | WaktuRaw: 2026-01-01 07:00:00 | Ket:  PenjualanID Transaksi: 1056
+Row 5 | Date: 31 Desember 2025 | WaktuRaw: 2025-12-31 23:29:08 | Ket:  Perubahan Stok Manual: SO
+Row 6 | Date: 30 Desember 2025 | WaktuRaw: 2025-12-30 07:00:00 | Ket:  PembelianFaktur: 048659
+Row 7 | Date: 19 Desember 2025 | WaktuRaw: 2025-12-19 07:00:00 | Ket:  Penjualan - ID: 989ID Transaksi: 989
+Row 8 | Date: 19 Desember 2025 | WaktuRaw: 2025-12-19 07:00:00 | Ket:  Penjualan - ID: 991ID Transaksi: 991
+Row 9 | Date: 18 Desember 2025 | WaktuRaw: 2025-12-18 07:00:00 | Ket:  Penjualan - ID: 986ID Transaksi: 986
+Row 10 | Date: 18 Desember 2025 | WaktuRaw: 2025-12-18 07:00:00 | Ket:  Penjualan - ID: 987ID Transaksi: 987

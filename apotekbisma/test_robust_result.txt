@@ -1,0 +1,29 @@
+﻿=== Testing data() endpoint with MANUAL PAGINATION ===
+
+recordsTotal: 442
+recordsFiltered: 442
+data count: 10
+
+First 10 rows:
+1. DT_RowIndex: 440 | waktu_raw: 2026-01-02 07:00:00
+2. DT_RowIndex: 441 | waktu_raw: 2026-01-02 07:00:00
+3. DT_RowIndex: 442 | waktu_raw: 2026-01-02 07:00:00
+4. DT_RowIndex: 439 | waktu_raw: 2026-01-01 07:00:00
+
+   ErrorException 
+
+  Array to string conversion
+
+  at C:\laragon\www\apotekbisma\apotekbisma\test_endpoint_robust.php:31
+     27Γûò 
+     28Γûò echo "First 10 rows:\n";
+     29Γûò foreach ($json['data'] as $i => $row) {
+     30Γûò     if (is_array($row)) {
+  Γ₧£  31Γûò         echo ($i+1) . ". DT_RowIndex: " . ($row['DT_RowIndex'] ?? 'N/A') . " | waktu_raw: " . ($row['waktu_raw'] ?? 'N/A') . "\n";
+     32Γûò     } else {
+     33Γûò         echo ($i+1) . ". Object row\n";
+     34Γûò     }
+     35Γûò }
+
+  1   C:\laragon\www\apotekbisma\apotekbisma\test_endpoint_robust.php:31
+      Illuminate\Foundation\Bootstrap\HandleExceptions::handleError("Array to string conversion", "C:\laragon\www\apotekbisma\apotekbisma\test_endpoint_robust.php")
