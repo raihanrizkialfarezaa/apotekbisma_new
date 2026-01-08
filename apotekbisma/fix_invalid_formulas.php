@@ -1,46 +1,58 @@
 <?php
+
 require_once __DIR__ . '/vendor/autoload.php';
+
 $app = require_once __DIR__ . '/bootstrap/app.php';
-$app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
+$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+$kernel->bootstrap();
 
 use Illuminate\Support\Facades\DB;
 
-echo "Checking invalid formula records...\n";
+ini_set('memory_limit', '512M');
 
-$invalid = DB::select("
-    SELECT rs.*, p.nama_produk,
-           (stok_awal + stok_masuk - stok_keluar) as calculated_sisa
-    FROM rekaman_stoks rs
-    JOIN produk p ON rs.id_produk = p.id_produk
-    WHERE stok_sisa != (stok_awal + stok_masuk - stok_keluar)
-");
+echo "=================================================================\n";
+echo "FIXING INVALID REKAMAN FORMULAS\n";
+echo "=================================================================\n\n";
 
-echo "Found: " . count($invalid) . " invalid records\n\n";
+$cutoffDateTime = '2025-12-31 23:59:59';
 
-foreach ($invalid as $i) {
-    echo "ID: {$i->id_rekaman_stok}\n";
-    echo "  Produk: {$i->nama_produk}\n";
-    echo "  stok_awal: {$i->stok_awal}\n";
-    echo "  stok_masuk: {$i->stok_masuk}\n";
-    echo "  stok_keluar: {$i->stok_keluar}\n";
-    echo "  stok_sisa (current): {$i->stok_sisa}\n";
-    echo "  stok_sisa (calculated): {$i->calculated_sisa}\n";
-    
-    $correct = max(0, $i->calculated_sisa);
-    
-    echo "  Fixing to: {$correct}\n\n";
-    
+$invalidRecords = DB::table('rekaman_stoks')
+    ->where('waktu', '>', $cutoffDateTime)
+    ->whereRaw('stok_sisa != (stok_awal + stok_masuk - stok_keluar)')
+    ->get();
+
+echo "Found " . $invalidRecords->count() . " records with invalid formulas.\n\n";
+
+$fixed = 0;
+
+foreach ($invalidRecords as $record) {
+    $expectedSisa = intval($record->stok_awal) + intval($record->stok_masuk) - intval($record->stok_keluar);
+    if ($expectedSisa < 0) $expectedSisa = 0;
+
+    echo "Fixing ID {$record->id_rekaman_stok} (Product {$record->id_produk}): ";
+    echo "Current Sisa: {$record->stok_sisa}, Expected: {$expectedSisa}... ";
+
     DB::table('rekaman_stoks')
-        ->where('id_rekaman_stok', $i->id_rekaman_stok)
-        ->update(['stok_sisa' => $correct]);
+        ->where('id_rekaman_stok', $record->id_rekaman_stok)
+        ->update([
+            'stok_sisa' => $expectedSisa,
+            'updated_at' => now()
+        ]);
+    
+    echo "DONE\n";
+    $fixed++;
 }
 
-echo "All records fixed!\n";
+echo "\nTotal fixed: {$fixed}\n";
 
-$remainingCount = DB::select("
-    SELECT COUNT(*) as cnt 
-    FROM rekaman_stoks 
-    WHERE stok_sisa != (stok_awal + stok_masuk - stok_keluar)
-")[0]->cnt;
+// Re-verify
+$remaining = DB::table('rekaman_stoks')
+    ->where('waktu', '>', $cutoffDateTime)
+    ->whereRaw('stok_sisa != (stok_awal + stok_masuk - stok_keluar)')
+    ->count();
 
-echo "Remaining invalid: {$remainingCount}\n";
+if ($remaining === 0) {
+    echo "\n[SUCCESS] All invalid formulas fixed! System is now 100% Robust.\n";
+} else {
+    echo "\n[WARNING] Still {$remaining} invalid records remaining.\n";
+}

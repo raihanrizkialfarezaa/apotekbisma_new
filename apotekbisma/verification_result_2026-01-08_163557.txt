@@ -1,0 +1,1004 @@
+STOCK VERIFICATION RESULTS
+==========================
+Executed: 2026-01-08 16:35:57
+
+Total Products: 993
+Products with Issues: 406
+Negative Stock: 0
+Orphaned Sales: 0
+Orphaned Purchases: 0
+Duplicate Sales: 0
+Duplicate Purchases: 0
+
+Status: ISSUES FOUND
+
+DETAILED ISSUES:
+Product 2:
+  - Record 176428: stok_awal mismatch (expected 71, got 20)
+  - Record 176428: stok_sisa mismatch (expected 61, got 10)
+Product 3:
+  - Product stock (1) != last rekaman stok_sisa (0)
+Product 6:
+  - Product stock (3) != last rekaman stok_sisa (2)
+Product 7:
+  - Product stock (4) != last rekaman stok_sisa (2)
+Product 8:
+  - Record 176429: stok_awal mismatch (expected 2, got 0)
+  - Record 176429: stok_sisa mismatch (expected 5, got 3)
+Product 9:
+  - Record 176430: stok_awal mismatch (expected 11, got 10)
+  - Record 176430: stok_sisa mismatch (expected 10, got 9)
+Product 10:
+  - Record 176431: stok_awal mismatch (expected 2, got 22)
+  - Record 176431: stok_sisa mismatch (expected 22, got 42)
+Product 13:
+  - Record 176432: stok_awal mismatch (expected 21, got 5)
+  - Record 176432: stok_sisa mismatch (expected 20, got 4)
+Product 16:
+  - Product stock (1) != last rekaman stok_sisa (0)
+Product 18:
+  - Product stock (10) != last rekaman stok_sisa (7)
+Product 19:
+  - Product stock (3) != last rekaman stok_sisa (8)
+Product 20:
+  - Record 176433: stok_awal mismatch (expected 6, got 4)
+  - Record 176433: stok_sisa mismatch (expected 5, got 3)
+Product 22:
+  - Record 176434: stok_awal mismatch (expected 200, got 160)
+  - Record 176434: stok_sisa mismatch (expected 190, got 150)
+Product 23:
+  - Record 176435: stok_awal mismatch (expected 1350, got 720)
+  - Record 176435: stok_sisa mismatch (expected 2350, got 1720)
+Product 24:
+  - Product stock (230) != last rekaman stok_sisa (450)
+Product 25:
+  - Record 176440: stok_awal mismatch (expected 150, got 130)
+  - Record 176440: stok_sisa mismatch (expected 140, got 120)
+Product 27:
+  - Product stock (20) != last rekaman stok_sisa (290)
+Product 28:
+  - Record 176443: stok_awal mismatch (expected 0, got 10)
+  - Record 176443: stok_sisa mismatch (expected 10, got 20)
+Product 29:
+  - Product stock (12) != last rekaman stok_sisa (7)
+Product 30:
+  - Record 176444: stok_awal mismatch (expected 330, got 120)
+  - Record 176444: stok_sisa mismatch (expected 320, got 110)
+Product 33:
+  - Record 176445: stok_awal mismatch (expected 940, got 440)
+  - Record 176445: stok_sisa mismatch (expected 910, got 410)
+Product 34:
+  - Product stock (740) != last rekaman stok_sisa (630)
+Product 35:
+  - Record 176446: stok_awal mismatch (expected 11, got 5)
+  - Record 176446: stok_sisa mismatch (expected 10, got 4)
+Product 37:
+  - Record 176447: stok_awal mismatch (expected 150, got 130)
+  - Record 176447: stok_sisa mismatch (expected 140, got 120)
+Product 38:
+  - Product stock (6) != last rekaman stok_sisa (4)
+Product 40:
+  - Product stock (1) != last rekaman stok_sisa (5)
+Product 42:
+  - Record 176448: stok_awal mismatch (expected 2, got 3)
+  - Record 176448: stok_sisa mismatch (expected 5, got 6)
+Product 44:
+  - Record 176449: stok_awal mismatch (expected 12, got 5)
+  - Record 176449: stok_sisa mismatch (expected 11, got 4)
+Product 45:
+  - Product stock (130) != last rekaman stok_sisa (210)
+Product 48:
+  - Record 176450: stok_awal mismatch (expected 70, got 14)
+  - Record 176450: stok_sisa mismatch (expected 69, got 13)
+Product 51:
+  - Record 176454: stok_awal mismatch (expected 159, got 89)
+  - Record 176454: stok_sisa mismatch (expected 158, got 88)
+Product 52:
+  - Record 176456: stok_awal mismatch (expected 46, got 31)
+  - Record 176456: stok_sisa mismatch (expected 45, got 30)
+Product 55:
+  - Product stock (460) != last rekaman stok_sisa (470)
+Product 58:
+  - Product stock (3) != last rekaman stok_sisa (52)
+Product 59:
+  - Record 176458: stok_awal mismatch (expected 106, got 43)
+  - Record 176458: stok_sisa mismatch (expected 105, got 42)
+Product 63:
+  - Record 176462: stok_awal mismatch (expected 1450, got 1000)
+  - Record 176462: stok_sisa mismatch (expected 2450, got 2000)
+Product 64:
+  - Record 176467: stok_awal mismatch (expected 9, got 12)
+  - Record 176467: stok_sisa mismatch (expected 21, got 24)
+Product 67:
+  - Product stock (80) != last rekaman stok_sisa (19)
+Product 85:
+  - Record 176469: stok_awal mismatch (expected 4, got 2)
+  - Record 176469: stok_sisa mismatch (expected 3, got 1)
+Product 94:
+  - Record 176470: stok_awal mismatch (expected 24, got 10)
+  - Record 176470: stok_sisa mismatch (expected 23, got 9)
+Product 96:
+  - Product stock (8) != last rekaman stok_sisa (7)
+Product 97:
+  - Product stock (11) != last rekaman stok_sisa (8)
+Product 98:
+  - Product stock (2) != last rekaman stok_sisa (4)
+Product 103:
+  - Record 176471: stok_awal mismatch (expected 7, got 1)
+  - Record 176471: stok_sisa mismatch (expected 6, got 0)
+  - Record 176472: stok_sisa mismatch (expected -1, got 0)
+Product 104:
+  - Product stock (7) != last rekaman stok_sisa (17)
+Product 108:
+  - Record 176473: stok_awal mismatch (expected 29, got 7)
+  - Record 176473: stok_sisa mismatch (expected 27, got 5)
+Product 109:
+  - Product stock (14) != last rekaman stok_sisa (16)
+Product 110:
+  - Record 176474: stok_awal mismatch (expected 52, got 24)
+  - Record 176474: stok_sisa mismatch (expected 51, got 23)
+Product 113:
+  - Product stock (5) != last rekaman stok_sisa (14)
+Product 117:
+  - Record 176475: stok_awal mismatch (expected 0, got 2)
+  - Record 176475: stok_sisa mismatch (expected 2, got 4)
+Product 118:
+  - Record 176476: stok_awal mismatch (expected 80, got 70)
+  - Record 176476: stok_sisa mismatch (expected 70, got 60)
+Product 119:
+  - Product stock (6) != last rekaman stok_sisa (5)
+Product 121:
+  - Product stock (150) != last rekaman stok_sisa (240)
+Product 122:
+  - Product stock (3) != last rekaman stok_sisa (5)
+Product 125:
+  - Product stock (7) != last rekaman stok_sisa (10)
+Product 126:
+  - Product stock (11) != last rekaman stok_sisa (6)
+Product 130:
+  - Record 176477: stok_awal mismatch (expected 7, got 3)
+  - Record 176477: stok_sisa mismatch (expected 6, got 2)
+Product 134:
+  - Record 176478: stok_awal mismatch (expected 2, got 4)
+  - Record 176478: stok_sisa mismatch (expected 0, got 2)
+Product 135:
+  - Record 176479: stok_awal mismatch (expected 2, got 4)
+  - Record 176479: stok_sisa mismatch (expected 5, got 7)
+Product 136:
+  - Product stock (240) != last rekaman stok_sisa (150)
+Product 138:
+  - Product stock (4) != last rekaman stok_sisa (5)
+Product 142:
+  - Product stock (130) != last rekaman stok_sisa (220)
+Product 143:
+  - Product stock (210) != last rekaman stok_sisa (40)
+Product 145:
+  - Record 176480: stok_awal mismatch (expected 32, got 43)
+  - Record 176480: stok_sisa mismatch (expected 30, got 41)
+Product 147:
+  - Record 176481: stok_awal mismatch (expected 360, got 160)
+  - Record 176481: stok_sisa mismatch (expected 350, got 150)
+Product 152:
+  - Product stock (70) != last rekaman stok_sisa (220)
+Product 154:
+  - Record 176482: stok_awal mismatch (expected 30, got 20)
+  - Record 176482: stok_sisa mismatch (expected 20, got 10)
+Product 155:
+  - Record 176483: stok_awal mismatch (expected 4, got 2)
+  - Record 176483: stok_sisa mismatch (expected 3, got 1)
+Product 157:
+  - Product stock (5) != last rekaman stok_sisa (3)
+Product 159:
+  - Record 176484: stok_awal mismatch (expected 9, got 3)
+  - Record 176484: stok_sisa mismatch (expected 8, got 2)
+Product 161:
+  - Record 176485: stok_awal mismatch (expected 1290, got 611)
+  - Record 176485: stok_sisa mismatch (expected 1280, got 601)
+Product 165:
+  - Record 176487: stok_awal mismatch (expected 0, got 100)
+  - Record 176487: stok_sisa mismatch (expected -20, got 80)
+Product 166:
+  - Record 176488: stok_awal mismatch (expected 0, got 90)
+  - Record 176488: stok_sisa mismatch (expected 100, got 190)
+Product 172:
+  - Record 176490: stok_awal mismatch (expected 2, got 5)
+  - Record 176490: stok_sisa mismatch (expected 1, got 4)
+Product 175:
+  - Record 176491: stok_awal mismatch (expected 10, got 6)
+  - Record 176491: stok_sisa mismatch (expected 16, got 12)
+Product 178:
+  - Product stock (1) != last rekaman stok_sisa (2)
+Product 180:
+  - Record 176494: stok_awal mismatch (expected 1, got 0)
+Product 188:
+  - Record 176495: stok_awal mismatch (expected 26, got 21)
+  - Record 176495: stok_sisa mismatch (expected 25, got 20)
+Product 191:
+  - Product stock (5) != last rekaman stok_sisa (12)
+Product 194:
+  - Record 176496: stok_awal mismatch (expected 6, got 2)
+  - Record 176496: stok_sisa mismatch (expected 5, got 1)
+Product 195:
+  - Product stock (1) != last rekaman stok_sisa (9)
+Product 196:
+  - Product stock (90) != last rekaman stok_sisa (320)
+Product 198:
+  - Product stock (2) != last rekaman stok_sisa (1)
+Product 199:
+  - Product stock (2) != last rekaman stok_sisa (3)
+Product 200:
+  - Product stock (14) != last rekaman stok_sisa (30)
+Product 202:
+  - Record 176498: stok_awal mismatch (expected 17, got 1)
+  - Record 176498: stok_sisa mismatch (expected 16, got 0)
+Product 204:
+  - Record 176499: stok_awal mismatch (expected 570, got 1040)
+  - Record 176499: stok_sisa mismatch (expected 550, got 1020)
+Product 209:
+  - Record 176501: stok_awal mismatch (expected 710, got 290)
+  - Record 176501: stok_sisa mismatch (expected 690, got 270)
+Product 210:
+  - Record 176503: stok_awal mismatch (expected 680, got 170)
+  - Record 176503: stok_sisa mismatch (expected 670, got 160)
+Product 214:
+  - Record 176506: stok_awal mismatch (expected 530, got 778)
+  - Record 176506: stok_sisa mismatch (expected 520, got 768)
+Product 215:
+  - Record 176510: stok_awal mismatch (expected 160, got 200)
+  - Record 176510: stok_sisa mismatch (expected 150, got 190)
+Product 216:
+  - Product stock (20) != last rekaman stok_sisa (0)
+Product 219:
+  - Product stock (12) != last rekaman stok_sisa (14)
+Product 220:
+  - Record 176511: stok_awal mismatch (expected 700, got 140)
+  - Record 176511: stok_sisa mismatch (expected 680, got 120)
+Product 221:
+  - Product stock (80) != last rekaman stok_sisa (100)
+Product 223:
+  - Record 176512: stok_awal mismatch (expected 80, got 30)
+  - Record 176512: stok_sisa mismatch (expected 60, got 10)
+Product 225:
+  - Record 176513: stok_awal mismatch (expected 80, got 10)
+  - Record 176513: stok_sisa mismatch (expected 60, got 0)
+Product 227:
+  - Product stock (41) != last rekaman stok_sisa (131)
+Product 230:
+  - Product stock (2) != last rekaman stok_sisa (0)
+Product 231:
+  - Record 176514: stok_awal mismatch (expected 13, got 21)
+  - Record 176514: stok_sisa mismatch (expected 12, got 20)
+Product 236:
+  - Record 176515: stok_awal mismatch (expected 70, got 90)
+  - Record 176515: stok_sisa mismatch (expected 170, got 190)
+Product 237:
+  - Product stock (1) != last rekaman stok_sisa (5)
+Product 238:
+  - Product stock (150) != last rekaman stok_sisa (170)
+Product 239:
+  - Product stock (80) != last rekaman stok_sisa (240)
+Product 240:
+  - Product stock (20) != last rekaman stok_sisa (32)
+Product 241:
+  - Product stock (18) != last rekaman stok_sisa (50)
+Product 245:
+  - Record 176517: stok_awal mismatch (expected 30, got 11)
+  - Record 176517: stok_sisa mismatch (expected 29, got 10)
+Product 246:
+  - Product stock (8) != last rekaman stok_sisa (18)
+Product 249:
+  - Record 176518: stok_awal mismatch (expected 2, got 0)
+  - Record 176518: stok_sisa mismatch (expected 1, got 0)
+Product 251:
+  - Record 176519: stok_awal mismatch (expected 1, got 0)
+Product 253:
+  - Product stock (50) != last rekaman stok_sisa (400)
+Product 260:
+  - Product stock (140) != last rekaman stok_sisa (100)
+Product 264:
+  - Product stock (30) != last rekaman stok_sisa (40)
+Product 270:
+  - Product stock (0) != last rekaman stok_sisa (20)
+Product 272:
+  - Record 176521: stok_awal mismatch (expected 16, got 7)
+  - Record 176521: stok_sisa mismatch (expected 15, got 6)
+Product 273:
+  - Record 176522: stok_awal mismatch (expected 5, got 4)
+  - Record 176522: stok_sisa mismatch (expected 4, got 3)
+Product 275:
+  - Product stock (180) != last rekaman stok_sisa (230)
+Product 276:
+  - Product stock (4) != last rekaman stok_sisa (16)
+Product 277:
+  - Product stock (100) != last rekaman stok_sisa (80)
+Product 278:
+  - Product stock (7) != last rekaman stok_sisa (53)
+Product 280:
+  - Product stock (70) != last rekaman stok_sisa (90)
+Product 281:
+  - Record 176523: stok_awal mismatch (expected 0, got 4)
+  - Record 176523: stok_sisa mismatch (expected -1, got 3)
+Product 282:
+  - Product stock (6) != last rekaman stok_sisa (10)
+Product 284:
+  - Product stock (60) != last rekaman stok_sisa (70)
+Product 285:
+  - Product stock (80) != last rekaman stok_sisa (50)
+Product 286:
+  - Product stock (170) != last rekaman stok_sisa (90)
+Product 289:
+  - Product stock (40) != last rekaman stok_sisa (20)
+Product 290:
+  - Product stock (110) != last rekaman stok_sisa (240)
+Product 293:
+  - Record 176524: stok_awal mismatch (expected 100, got 130)
+  - Record 176524: stok_sisa mismatch (expected 200, got 230)
+Product 294:
+  - Product stock (5) != last rekaman stok_sisa (6)
+Product 296:
+  - Record 176525: stok_awal mismatch (expected 69, got 47)
+  - Record 176525: stok_sisa mismatch (expected 68, got 46)
+Product 297:
+  - Product stock (1) != last rekaman stok_sisa (2)
+Product 298:
+  - Record 176527: stok_awal mismatch (expected 2, got 5)
+  - Record 176527: stok_sisa mismatch (expected 5, got 8)
+Product 301:
+  - Record 176529: stok_awal mismatch (expected 3, got 4)
+  - Record 176529: stok_sisa mismatch (expected 2, got 3)
+Product 303:
+  - Product stock (30) != last rekaman stok_sisa (70)
+Product 306:
+  - Product stock (7) != last rekaman stok_sisa (4)
+Product 310:
+  - Record 176531: stok_awal mismatch (expected 6, got 12)
+  - Record 176531: stok_sisa mismatch (expected 16, got 22)
+Product 312:
+  - Record 176532: stok_awal mismatch (expected 4, got 1)
+  - Record 176532: stok_sisa mismatch (expected 3, got 0)
+Product 314:
+  - Product stock (12) != last rekaman stok_sisa (6)
+Product 318:
+  - Record 176533: stok_awal mismatch (expected 80, got 190)
+  - Record 176533: stok_sisa mismatch (expected 60, got 170)
+Product 320:
+  - Product stock (110) != last rekaman stok_sisa (300)
+Product 321:
+  - Product stock (260) != last rekaman stok_sisa (235)
+Product 323:
+  - Record 176534: stok_awal mismatch (expected 140, got 100)
+  - Record 176534: stok_sisa mismatch (expected 240, got 200)
+Product 324:
+  - Record 176536: stok_awal mismatch (expected 70, got 30)
+  - Record 176536: stok_sisa mismatch (expected 60, got 20)
+Product 325:
+  - Record 176537: stok_awal mismatch (expected 4, got 7)
+  - Record 176537: stok_sisa mismatch (expected 3, got 6)
+Product 330:
+  - Record 176538: stok_awal mismatch (expected 130, got 110)
+  - Record 176538: stok_sisa mismatch (expected 110, got 90)
+Product 331:
+  - Product stock (30) != last rekaman stok_sisa (100)
+Product 333:
+  - Product stock (30) != last rekaman stok_sisa (50)
+Product 334:
+  - Product stock (80) != last rekaman stok_sisa (280)
+Product 335:
+  - Product stock (80) != last rekaman stok_sisa (490)
+Product 336:
+  - Record 176539: stok_awal mismatch (expected 90, got 70)
+  - Record 176539: stok_sisa mismatch (expected 80, got 60)
+Product 340:
+  - Record 176540: stok_awal mismatch (expected 20, got 17)
+  - Record 176540: stok_sisa mismatch (expected 19, got 16)
+Product 341:
+  - Record 176541: stok_awal mismatch (expected 13, got 2)
+  - Record 176541: stok_sisa mismatch (expected 12, got 1)
+Product 345:
+  - Record 176542: stok_awal mismatch (expected 19, got 11)
+  - Record 176542: stok_sisa mismatch (expected 18, got 10)
+Product 350:
+  - Product stock (6) != last rekaman stok_sisa (1)
+Product 352:
+  - Product stock (3) != last rekaman stok_sisa (4)
+Product 354:
+  - Product stock (0) != last rekaman stok_sisa (1)
+Product 355:
+  - Record 176543: stok_awal mismatch (expected 7, got 6)
+  - Record 176543: stok_sisa mismatch (expected 13, got 12)
+Product 356:
+  - Record 176545: stok_awal mismatch (expected 24, got 12)
+  - Record 176545: stok_sisa mismatch (expected 36, got 24)
+Product 357:
+  - Product stock (0) != last rekaman stok_sisa (9)
+Product 358:
+  - Record 176546: stok_awal mismatch (expected 29, got 10)
+  - Record 176546: stok_sisa mismatch (expected 39, got 20)
+Product 362:
+  - Product stock (140) != last rekaman stok_sisa (80)
+Product 363:
+  - Product stock (3) != last rekaman stok_sisa (14)
+Product 365:
+  - Record 176547: stok_awal mismatch (expected 343, got 120)
+  - Record 176547: stok_sisa mismatch (expected 333, got 110)
+Product 366:
+  - Product stock (310) != last rekaman stok_sisa (560)
+Product 371:
+  - Product stock (72) != last rekaman stok_sisa (27)
+Product 374:
+  - Product stock (50) != last rekaman stok_sisa (160)
+Product 375:
+  - Product stock (34) != last rekaman stok_sisa (48)
+Product 376:
+  - Record 176548: stok_awal mismatch (expected 60, got 70)
+  - Record 176548: stok_sisa mismatch (expected 50, got 60)
+Product 377:
+  - Product stock (7) != last rekaman stok_sisa (10)
+Product 379:
+  - Record 176549: stok_awal mismatch (expected 240, got 60)
+  - Record 176549: stok_sisa mismatch (expected 230, got 50)
+Product 380:
+  - Record 176550: stok_awal mismatch (expected 25, got 23)
+  - Record 176550: stok_sisa mismatch (expected 23, got 21)
+Product 381:
+  - Product stock (210) != last rekaman stok_sisa (0)
+Product 383:
+  - Record 176551: stok_awal mismatch (expected 2, got 0)
+  - Record 176551: stok_sisa mismatch (expected 1, got 0)
+Product 385:
+  - Product stock (370) != last rekaman stok_sisa (230)
+Product 386:
+  - Record 176552: stok_awal mismatch (expected 0, got 3)
+  - Record 176552: stok_sisa mismatch (expected 3, got 6)
+Product 388:
+  - Record 176553: stok_awal mismatch (expected 1780, got 220)
+  - Record 176553: stok_sisa mismatch (expected 1770, got 210)
+Product 389:
+  - Product stock (12) != last rekaman stok_sisa (13)
+Product 392:
+  - Product stock (3) != last rekaman stok_sisa (1)
+Product 396:
+  - Record 176555: stok_awal mismatch (expected 9, got 4)
+  - Record 176555: stok_sisa mismatch (expected 8, got 3)
+Product 397:
+  - Record 176556: stok_awal mismatch (expected 20, got 19)
+  - Record 176556: stok_sisa mismatch (expected 19, got 18)
+Product 399:
+  - Record 176557: stok_awal mismatch (expected 5, got 2)
+  - Record 176557: stok_sisa mismatch (expected 4, got 1)
+Product 400:
+  - Product stock (7) != last rekaman stok_sisa (8)
+Product 402:
+  - Record 176558: stok_awal mismatch (expected 610, got 600)
+  - Record 176558: stok_sisa mismatch (expected 590, got 580)
+Product 403:
+  - Product stock (30) != last rekaman stok_sisa (0)
+Product 406:
+  - Product stock (141) != last rekaman stok_sisa (153)
+Product 407:
+  - Product stock (9) != last rekaman stok_sisa (24)
+Product 408:
+  - Product stock (64) != last rekaman stok_sisa (37)
+Product 410:
+  - Record 176560: stok_awal mismatch (expected 0, got 30)
+  - Record 176560: stok_sisa mismatch (expected 30, got 60)
+Product 412:
+  - Product stock (11) != last rekaman stok_sisa (27)
+Product 413:
+  - Record 176561: stok_awal mismatch (expected 24, got 20)
+  - Record 176561: stok_sisa mismatch (expected 20, got 16)
+Product 415:
+  - Product stock (16) != last rekaman stok_sisa (10)
+Product 421:
+  - Record 176562: stok_awal mismatch (expected 75, got 9)
+  - Record 176562: stok_sisa mismatch (expected 73, got 7)
+Product 428:
+  - Record 176563: stok_awal mismatch (expected 20, got 70)
+  - Record 176563: stok_sisa mismatch (expected 10, got 60)
+Product 430:
+  - Product stock (20) != last rekaman stok_sisa (0)
+Product 434:
+  - Record 176565: stok_awal mismatch (expected 12, got 7)
+  - Record 176565: stok_sisa mismatch (expected 11, got 6)
+Product 439:
+  - Product stock (21) != last rekaman stok_sisa (8)
+Product 442:
+  - Product stock (40) != last rekaman stok_sisa (110)
+Product 444:
+  - Product stock (160) != last rekaman stok_sisa (240)
+Product 445:
+  - Product stock (110) != last rekaman stok_sisa (140)
+Product 454:
+  - Product stock (130) != last rekaman stok_sisa (100)
+Product 455:
+  - Product stock (100) != last rekaman stok_sisa (84)
+Product 457:
+  - Product stock (180) != last rekaman stok_sisa (130)
+Product 458:
+  - Record 176566: stok_awal mismatch (expected 400, got 300)
+  - Record 176566: stok_sisa mismatch (expected 380, got 280)
+Product 460:
+  - Product stock (100) != last rekaman stok_sisa (10)
+Product 461:
+  - Product stock (13) != last rekaman stok_sisa (6)
+Product 467:
+  - Product stock (3) != last rekaman stok_sisa (0)
+Product 468:
+  - Product stock (2) != last rekaman stok_sisa (0)
+Product 473:
+  - Record 176567: stok_awal mismatch (expected 8, got 12)
+  - Record 176567: stok_sisa mismatch (expected 20, got 24)
+Product 494:
+  - Record 176568: stok_awal mismatch (expected 3, got 6)
+  - Record 176568: stok_sisa mismatch (expected 9, got 12)
+Product 496:
+  - Record 176569: stok_awal mismatch (expected 3, got 4)
+  - Record 176569: stok_sisa mismatch (expected 2, got 3)
+Product 498:
+  - Record 176570: stok_awal mismatch (expected 59, got 189)
+  - Record 176570: stok_sisa mismatch (expected 58, got 188)
+Product 501:
+  - Product stock (80) != last rekaman stok_sisa (140)
+Product 502:
+  - Product stock (1) != last rekaman stok_sisa (0)
+Product 504:
+  - Record 176573: stok_awal mismatch (expected 324, got 180)
+  - Record 176573: stok_sisa mismatch (expected 314, got 170)
+Product 506:
+  - Product stock (320) != last rekaman stok_sisa (110)
+Product 507:
+  - Product stock (190) != last rekaman stok_sisa (220)
+Product 509:
+  - Product stock (300) != last rekaman stok_sisa (400)
+Product 510:
+  - Product stock (90) != last rekaman stok_sisa (30)
+Product 511:
+  - Record 176575: stok_awal mismatch (expected 450, got 720)
+  - Record 176575: stok_sisa mismatch (expected 430, got 700)
+Product 512:
+  - Product stock (320) != last rekaman stok_sisa (140)
+Product 514:
+  - Product stock (40) != last rekaman stok_sisa (60)
+Product 516:
+  - Record 176576: stok_awal mismatch (expected 23, got 15)
+  - Record 176576: stok_sisa mismatch (expected 21, got 13)
+Product 522:
+  - Product stock (109) != last rekaman stok_sisa (66)
+Product 523:
+  - Record 176578: stok_awal mismatch (expected 79, got 141)
+  - Record 176578: stok_sisa mismatch (expected 76, got 138)
+Product 524:
+  - Product stock (130) != last rekaman stok_sisa (460)
+Product 527:
+  - Product stock (2) != last rekaman stok_sisa (5)
+Product 533:
+  - Product stock (5) != last rekaman stok_sisa (10)
+Product 534:
+  - Product stock (11) != last rekaman stok_sisa (8)
+Product 535:
+  - Product stock (11) != last rekaman stok_sisa (14)
+Product 537:
+  - Record 176579: stok_awal mismatch (expected 570, got 60)
+  - Record 176579: stok_sisa mismatch (expected 560, got 50)
+Product 538:
+  - Record 176580: stok_awal mismatch (expected 0, got 4)
+  - Record 176580: stok_sisa mismatch (expected -1, got 3)
+Product 542:
+  - Product stock (1) != last rekaman stok_sisa (2)
+Product 543:
+  - Product stock (64) != last rekaman stok_sisa (43)
+Product 546:
+  - Product stock (12) != last rekaman stok_sisa (14)
+Product 547:
+  - Product stock (6) != last rekaman stok_sisa (22)
+Product 557:
+  - Record 176582: stok_awal mismatch (expected 39, got 20)
+  - Record 176582: stok_sisa mismatch (expected 38, got 19)
+Product 558:
+  - Record 176584: stok_awal mismatch (expected 15, got 10)
+  - Record 176584: stok_sisa mismatch (expected 13, got 8)
+Product 560:
+  - Record 176585: stok_awal mismatch (expected 280, got 509)
+  - Record 176585: stok_sisa mismatch (expected 250, got 479)
+Product 561:
+  - Product stock (15) != last rekaman stok_sisa (4)
+Product 562:
+  - Record 176588: stok_awal mismatch (expected 8, got 15)
+  - Record 176588: stok_sisa mismatch (expected 7, got 14)
+Product 563:
+  - Product stock (120) != last rekaman stok_sisa (220)
+Product 565:
+  - Product stock (50) != last rekaman stok_sisa (60)
+Product 567:
+  - Product stock (110) != last rekaman stok_sisa (360)
+Product 570:
+  - Product stock (180) != last rekaman stok_sisa (0)
+Product 571:
+  - Record 176589: stok_awal mismatch (expected 3, got 4)
+  - Record 176589: stok_sisa mismatch (expected 2, got 3)
+Product 572:
+  - Product stock (9) != last rekaman stok_sisa (6)
+Product 576:
+  - Product stock (1) != last rekaman stok_sisa (0)
+Product 578:
+  - Product stock (70) != last rekaman stok_sisa (0)
+Product 581:
+  - Product stock (50) != last rekaman stok_sisa (0)
+Product 584:
+  - Product stock (200) != last rekaman stok_sisa (130)
+Product 586:
+  - Product stock (130) != last rekaman stok_sisa (140)
+Product 593:
+  - Product stock (40) != last rekaman stok_sisa (0)
+Product 596:
+  - Product stock (7) != last rekaman stok_sisa (9)
+Product 597:
+  - Record 176590: stok_awal mismatch (expected 7, got 1)
+  - Record 176590: stok_sisa mismatch (expected 6, got 0)
+Product 598:
+  - Record 176591: stok_awal mismatch (expected 36, got 18)
+  - Record 176591: stok_sisa mismatch (expected 35, got 17)
+Product 599:
+  - Product stock (9) != last rekaman stok_sisa (13)
+Product 600:
+  - Record 176593: stok_awal mismatch (expected 6, got 5)
+  - Record 176593: stok_sisa mismatch (expected 5, got 4)
+Product 601:
+  - Product stock (4) != last rekaman stok_sisa (14)
+Product 602:
+  - Record 174354: stok_awal mismatch (expected 4, got 13)
+  - Record 174354: stok_sisa mismatch (expected 14, got 23)
+Product 605:
+  - Record 176594: stok_awal mismatch (expected 6, got 5)
+  - Record 176594: stok_sisa mismatch (expected 5, got 4)
+Product 607:
+  - Product stock (0) != last rekaman stok_sisa (70)
+Product 608:
+  - Record 176595: stok_awal mismatch (expected 60, got 130)
+  - Record 176595: stok_sisa mismatch (expected 50, got 120)
+Product 609:
+  - Record 176596: stok_awal mismatch (expected 241, got 70)
+  - Record 176596: stok_sisa mismatch (expected 231, got 60)
+Product 610:
+  - Product stock (90) != last rekaman stok_sisa (270)
+Product 611:
+  - Product stock (50) != last rekaman stok_sisa (70)
+Product 612:
+  - Record 176597: stok_awal mismatch (expected 480, got 290)
+  - Record 176597: stok_sisa mismatch (expected 470, got 280)
+Product 614:
+  - Product stock (70) != last rekaman stok_sisa (90)
+Product 615:
+  - Product stock (80) != last rekaman stok_sisa (70)
+Product 616:
+  - Product stock (80) != last rekaman stok_sisa (40)
+Product 618:
+  - Product stock (130) != last rekaman stok_sisa (210)
+Product 619:
+  - Record 176598: stok_awal mismatch (expected 350, got 190)
+  - Record 176598: stok_sisa mismatch (expected 340, got 180)
+Product 620:
+  - Record 176599: stok_awal mismatch (expected 0, got 40)
+  - Record 176599: stok_sisa mismatch (expected -10, got 30)
+Product 623:
+  - Product stock (160) != last rekaman stok_sisa (270)
+Product 624:
+  - Product stock (15) != last rekaman stok_sisa (67)
+Product 625:
+  - Record 176600: stok_awal mismatch (expected 19, got 12)
+  - Record 176600: stok_sisa mismatch (expected 18, got 11)
+Product 628:
+  - Product stock (8) != last rekaman stok_sisa (7)
+Product 629:
+  - Record 176601: stok_awal mismatch (expected 8, got 7)
+  - Record 176601: stok_sisa mismatch (expected 7, got 6)
+Product 634:
+  - Record 176602: stok_awal mismatch (expected 730, got 1000)
+  - Record 176602: stok_sisa mismatch (expected 1730, got 2000)
+Product 635:
+  - Record 176605: stok_awal mismatch (expected 81, got 117)
+  - Record 176605: stok_sisa mismatch (expected 80, got 116)
+Product 639:
+  - Record 176606: stok_awal mismatch (expected 31, got 14)
+  - Record 176606: stok_sisa mismatch (expected 30, got 13)
+Product 640:
+  - Product stock (2) != last rekaman stok_sisa (4)
+Product 649:
+  - Product stock (22) != last rekaman stok_sisa (24)
+Product 655:
+  - Record 176607: stok_awal mismatch (expected 2, got 1)
+Product 656:
+  - Record 176608: stok_awal mismatch (expected 17, got 16)
+  - Record 176608: stok_sisa mismatch (expected 23, got 22)
+Product 657:
+  - Record 176609: stok_awal mismatch (expected 41, got 16)
+  - Record 176609: stok_sisa mismatch (expected 40, got 15)
+Product 663:
+  - Product stock (103) != last rekaman stok_sisa (141)
+Product 664:
+  - Product stock (70) != last rekaman stok_sisa (0)
+Product 666:
+  - Record 176610: stok_awal mismatch (expected 3, got 8)
+  - Record 176610: stok_sisa mismatch (expected 2, got 7)
+Product 669:
+  - Product stock (60) != last rekaman stok_sisa (0)
+Product 674:
+  - Product stock (1) != last rekaman stok_sisa (5)
+Product 676:
+  - Record 176612: stok_awal mismatch (expected 69, got 20)
+  - Record 176612: stok_sisa mismatch (expected 105, got 56)
+Product 677:
+  - Product stock (100) != last rekaman stok_sisa (139)
+Product 689:
+  - Record 176615: stok_awal mismatch (expected 391, got 200)
+  - Record 176615: stok_sisa mismatch (expected 371, got 180)
+Product 692:
+  - Product stock (390) != last rekaman stok_sisa (470)
+Product 693:
+  - Product stock (3) != last rekaman stok_sisa (4)
+Product 694:
+  - Product stock (310) != last rekaman stok_sisa (300)
+Product 695:
+  - Record 176617: stok_awal mismatch (expected 490, got 300)
+  - Record 176617: stok_sisa mismatch (expected 790, got 600)
+Product 699:
+  - Record 176618: stok_awal mismatch (expected 13, got 4)
+  - Record 176618: stok_sisa mismatch (expected 12, got 3)
+Product 701:
+  - Product stock (5) != last rekaman stok_sisa (4)
+Product 702:
+  - Product stock (5) != last rekaman stok_sisa (2)
+Product 704:
+  - Record 176619: stok_awal mismatch (expected 8, got 3)
+  - Record 176619: stok_sisa mismatch (expected 7, got 2)
+Product 705:
+  - Record 176620: stok_awal mismatch (expected 6, got 9)
+  - Record 176620: stok_sisa mismatch (expected 5, got 8)
+Product 706:
+  - Product stock (140) != last rekaman stok_sisa (110)
+Product 708:
+  - Product stock (10) != last rekaman stok_sisa (15)
+Product 709:
+  - Product stock (4) != last rekaman stok_sisa (0)
+Product 710:
+  - Record 176621: stok_awal mismatch (expected 6, got 2)
+  - Record 176621: stok_sisa mismatch (expected 5, got 1)
+Product 711:
+  - Record 176622: stok_awal mismatch (expected 11, got 1)
+  - Record 176622: stok_sisa mismatch (expected 8, got 0)
+Product 712:
+  - Record 176623: stok_awal mismatch (expected 2, got 5)
+  - Record 176623: stok_sisa mismatch (expected 1, got 4)
+Product 715:
+  - Product stock (41) != last rekaman stok_sisa (23)
+Product 717:
+  - Product stock (430) != last rekaman stok_sisa (70)
+Product 718:
+  - Product stock (100) != last rekaman stok_sisa (0)
+Product 723:
+  - Record 176624: stok_awal mismatch (expected 31, got 23)
+  - Record 176624: stok_sisa mismatch (expected 30, got 22)
+Product 724:
+  - Record 176625: stok_awal mismatch (expected 13, got 1)
+  - Record 176625: stok_sisa mismatch (expected 12, got 0)
+Product 727:
+  - Record 176626: stok_awal mismatch (expected 5, got 3)
+  - Record 176626: stok_sisa mismatch (expected 8, got 6)
+Product 728:
+  - Record 176627: stok_awal mismatch (expected 7, got 10)
+  - Record 176627: stok_sisa mismatch (expected 6, got 9)
+Product 729:
+  - Product stock (40) != last rekaman stok_sisa (36)
+Product 741:
+  - Record 176628: stok_awal mismatch (expected 140, got 80)
+  - Record 176628: stok_sisa mismatch (expected 130, got 70)
+Product 745:
+  - Product stock (6) != last rekaman stok_sisa (10)
+Product 746:
+  - Record 176629: stok_awal mismatch (expected 13, got 8)
+  - Record 176629: stok_sisa mismatch (expected 16, got 11)
+Product 755:
+  - Record 176632: stok_awal mismatch (expected 1320, got 760)
+  - Record 176632: stok_sisa mismatch (expected 1520, got 960)
+Product 756:
+  - Record 176636: stok_awal mismatch (expected 770, got 640)
+  - Record 176636: stok_sisa mismatch (expected 760, got 630)
+Product 757:
+  - Record 176637: stok_awal mismatch (expected 500, got 420)
+  - Record 176637: stok_sisa mismatch (expected 490, got 410)
+Product 764:
+  - Product stock (140) != last rekaman stok_sisa (121)
+Product 767:
+  - Product stock (150) != last rekaman stok_sisa (180)
+Product 774:
+  - Product stock (14) != last rekaman stok_sisa (13)
+Product 775:
+  - Record 176638: stok_awal mismatch (expected 2, got 3)
+  - Record 176638: stok_sisa mismatch (expected 1, got 2)
+Product 776:
+  - Record 176639: stok_awal mismatch (expected 70, got 150)
+  - Record 176639: stok_sisa mismatch (expected 60, got 140)
+Product 778:
+  - Record 176640: stok_awal mismatch (expected 27, got 6)
+  - Record 176640: stok_sisa mismatch (expected 47, got 26)
+Product 782:
+  - Record 176642: stok_awal mismatch (expected 0, got 1)
+  - Record 176642: stok_sisa mismatch (expected -1, got 0)
+Product 784:
+  - Product stock (1) != last rekaman stok_sisa (12)
+Product 785:
+  - Record 176643: stok_awal mismatch (expected 19, got 13)
+  - Record 176643: stok_sisa mismatch (expected 18, got 12)
+Product 786:
+  - Product stock (7) != last rekaman stok_sisa (8)
+Product 788:
+  - Product stock (2) != last rekaman stok_sisa (1)
+Product 795:
+  - Product stock (550) != last rekaman stok_sisa (1050)
+Product 796:
+  - Record 176645: stok_awal mismatch (expected 270, got 100)
+  - Record 176645: stok_sisa mismatch (expected 260, got 90)
+Product 800:
+  - Product stock (3) != last rekaman stok_sisa (2)
+Product 803:
+  - Product stock (3) != last rekaman stok_sisa (2)
+Product 804:
+  - Product stock (2) != last rekaman stok_sisa (3)
+Product 805:
+  - Product stock (25) != last rekaman stok_sisa (21)
+Product 808:
+  - Product stock (47) != last rekaman stok_sisa (135)
+Product 809:
+  - Product stock (20) != last rekaman stok_sisa (21)
+Product 813:
+  - Product stock (2) != last rekaman stok_sisa (0)
+Product 816:
+  - Record 176647: stok_awal mismatch (expected 51, got 27)
+  - Record 176647: stok_sisa mismatch (expected 49, got 25)
+Product 818:
+  - Product stock (15) != last rekaman stok_sisa (5)
+Product 820:
+  - Record 176649: stok_awal mismatch (expected 260, got 150)
+  - Record 176649: stok_sisa mismatch (expected 240, got 130)
+Product 825:
+  - Record 176650: stok_awal mismatch (expected 62, got 14)
+  - Record 176650: stok_sisa mismatch (expected 60, got 12)
+Product 826:
+  - Product stock (4) != last rekaman stok_sisa (0)
+Product 830:
+  - Product stock (3) != last rekaman stok_sisa (0)
+Product 832:
+  - Product stock (19) != last rekaman stok_sisa (24)
+Product 833:
+  - Product stock (11) != last rekaman stok_sisa (5)
+Product 839:
+  - Product stock (30) != last rekaman stok_sisa (0)
+Product 840:
+  - Product stock (1) != last rekaman stok_sisa (0)
+Product 842:
+  - Record 176651: stok_awal mismatch (expected 4, got 10)
+  - Record 176651: stok_sisa mismatch (expected 10, got 16)
+Product 843:
+  - Record 176652: stok_awal mismatch (expected 11, got 12)
+  - Record 176652: stok_sisa mismatch (expected 23, got 24)
+Product 853:
+  - Record 176654: stok_awal mismatch (expected 14, got 34)
+  - Record 176654: stok_sisa mismatch (expected 12, got 32)
+Product 859:
+  - Product stock (1) != last rekaman stok_sisa (8)
+Product 860:
+  - Record 176655: stok_awal mismatch (expected 709, got 500)
+  - Record 176655: stok_sisa mismatch (expected 1209, got 1000)
+Product 861:
+  - Product stock (20) != last rekaman stok_sisa (0)
+Product 862:
+  - Product stock (37) != last rekaman stok_sisa (59)
+Product 865:
+  - Product stock (70) != last rekaman stok_sisa (0)
+Product 871:
+  - Product stock (5) != last rekaman stok_sisa (7)
+Product 873:
+  - Record 176660: stok_awal mismatch (expected 48, got 39)
+  - Record 176660: stok_sisa mismatch (expected 44, got 35)
+Product 878:
+  - Product stock (7) != last rekaman stok_sisa (8)
+Product 880:
+  - Product stock (60) != last rekaman stok_sisa (70)
+Product 881:
+  - Product stock (5) != last rekaman stok_sisa (9)
+Product 883:
+  - Record 176661: stok_awal mismatch (expected 0, got 90)
+  - Record 176661: stok_sisa mismatch (expected 100, got 190)
+Product 884:
+  - Product stock (17) != last rekaman stok_sisa (31)
+Product 886:
+  - Product stock (240) != last rekaman stok_sisa (220)
+Product 893:
+  - Product stock (40) != last rekaman stok_sisa (0)
+Product 897:
+  - Product stock (4) != last rekaman stok_sisa (2)
+Product 898:
+  - Product stock (4) != last rekaman stok_sisa (5)
+Product 900:
+  - Product stock (150) != last rekaman stok_sisa (100)
+Product 901:
+  - Record 176664: stok_awal mismatch (expected 21, got 23)
+  - Record 176664: stok_sisa mismatch (expected 20, got 22)
+Product 903:
+  - Record 176665: stok_awal mismatch (expected 3, got 6)
+  - Record 176665: stok_sisa mismatch (expected 9, got 12)
+Product 905:
+  - Record 176666: stok_awal mismatch (expected 700, got 90)
+  - Record 176666: stok_sisa mismatch (expected 690, got 80)
+Product 906:
+  - Record 176668: stok_awal mismatch (expected 12, got 5)
+  - Record 176668: stok_sisa mismatch (expected 11, got 4)
+Product 908:
+  - Product stock (4) != last rekaman stok_sisa (9)
+Product 914:
+  - Record 176669: stok_awal mismatch (expected 8, got 5)
+  - Record 176669: stok_sisa mismatch (expected 7, got 4)
+Product 915:
+  - Product stock (4) != last rekaman stok_sisa (22)
+Product 921:
+  - Record 176671: stok_awal mismatch (expected 120, got 50)
+  - Record 176671: stok_sisa mismatch (expected 110, got 40)
+Product 922:
+  - Product stock (220) != last rekaman stok_sisa (170)
+Product 923:
+  - Product stock (90) != last rekaman stok_sisa (80)
+Product 926:
+  - Product stock (3) != last rekaman stok_sisa (6)
+Product 930:
+  - Product stock (1) != last rekaman stok_sisa (2)
+Product 951:
+  - Product stock (10) != last rekaman stok_sisa (0)
+Product 953:
+  - Product stock (4) != last rekaman stok_sisa (14)
+Product 954:
+  - Product stock (180) != last rekaman stok_sisa (80)
+Product 955:
+  - Product stock (80) != last rekaman stok_sisa (90)
+Product 956:
+  - Record 176673: stok_awal mismatch (expected 50, got 20)
+  - Record 176673: stok_sisa mismatch (expected 40, got 10)
+Product 958:
+  - Product stock (70) != last rekaman stok_sisa (60)
+Product 964:
+  - Product stock (100) != last rekaman stok_sisa (120)
+Product 968:
+  - Record 176675: stok_awal mismatch (expected 0, got 6)
+  - Record 176675: stok_sisa mismatch (expected 6, got 12)
+Product 973:
+  - Record 176676: stok_awal mismatch (expected 90, got 190)
+  - Record 176676: stok_sisa mismatch (expected 80, got 180)
+Product 980:
+  - Record 176677: stok_awal mismatch (expected 68, got 31)
+  - Record 176677: stok_sisa mismatch (expected 67, got 30)
+Product 984:
+  - Product stock (8) != last rekaman stok_sisa (15)
+Product 985:
+  - Record 176679: stok_awal mismatch (expected 250, got 220)
+  - Record 176679: stok_sisa mismatch (expected 240, got 210)
+Product 989:
+  - Product stock (1) != last rekaman stok_sisa (0)
+Product 994:
+  - Record 176680: stok_awal mismatch (expected 2089, got 1440)
+  - Record 176680: stok_sisa mismatch (expected 2689, got 2040)
+Product 995:
+  - Product stock (4) != last rekaman stok_sisa (3)
+Product 998:
+  - Record 176685: stok_awal mismatch (expected 7, got 6)
+  - Record 176685: stok_sisa mismatch (expected 13, got 12)
+Product 999:
+  - Record 176686: stok_awal mismatch (expected 4, got 6)
+  - Record 176686: stok_sisa mismatch (expected 10, got 12)
+Product 1001:
+  - Product stock (140) != last rekaman stok_sisa (200)
+Product 1003:
+  - Product stock (12) != last rekaman stok_sisa (10)
+Product 1004:
+  - Record 176687: stok_awal mismatch (expected 0, got 2)
+  - Record 176687: stok_sisa mismatch (expected -1, got 1)
+Product 1005:
+  - Product stock (3) != last rekaman stok_sisa (0)
