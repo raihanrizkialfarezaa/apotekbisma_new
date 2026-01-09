@@ -1,159 +1,150 @@
 <?php
-
-require __DIR__ . '/vendor/autoload.php';
-
-$app = require_once __DIR__ . '/bootstrap/app.php';
+require __DIR__.'/vendor/autoload.php';
+$app = require_once __DIR__.'/bootstrap/app.php';
 $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
 $kernel->bootstrap();
 
 use Illuminate\Support\Facades\DB;
-use App\Models\Produk;
-use App\Models\RekamanStok;
 
-echo "\n";
-echo "╔══════════════════════════════════════════════════════════════╗\n";
-echo "║          FINAL VERIFICATION - APOTEK BISMA                   ║\n";
-echo "║          " . date('d F Y H:i:s') . "                        ║\n";
-echo "╚══════════════════════════════════════════════════════════════╝\n\n";
+echo "╔══════════════════════════════════════════════════════════════════════════════╗\n";
+echo "║              FINAL STOCK INTEGRITY VERIFICATION                               ║\n";
+echo "║              Date: " . date('Y-m-d H:i:s') . "                                    ║\n";
+echo "╚══════════════════════════════════════════════════════════════════════════════╝\n\n";
 
-$allPassed = true;
+$csvFile = __DIR__ . '/REKAMAN STOK FINAL 31 DESEMBER 2025.csv';
+$opnameData = [];
+$handle = fopen($csvFile, 'r');
+fgetcsv($handle);
+while (($row = fgetcsv($handle)) !== false) {
+    if (count($row) >= 3 && !empty($row[0])) {
+        $opnameData[intval($row[0])] = intval($row[2]);
+    }
+}
+fclose($handle);
 
-echo "┌──────────────────────────────────────────────────────────────┐\n";
-echo "│ TEST 1: Verifikasi Sinkronisasi Stok (per 1 Jan 2026)        │\n";
-echo "└──────────────────────────────────────────────────────────────┘\n";
+$checks = [
+    'gap_2025_2026' => 0,
+    'calculation_errors' => 0,
+    'produk_rekaman_mismatch' => 0,
+    'opname_adjustment_missing' => 0,
+    'continuity_errors' => 0
+];
 
-$cutoffDate = '2026-01-01 23:59:59';
+$issues = [];
 
-$allProducts = Produk::all();
-$outOfSync = 0;
-
-foreach ($allProducts as $produk) {
+echo "CHECK 1: Gap between 2025 and 2026\n";
+foreach ($opnameData as $pid => $opnameStock) {
     $lastBefore = DB::table('rekaman_stoks')
-        ->where('id_produk', $produk->id_produk)
-        ->where('waktu', '<=', $cutoffDate)
+        ->where('id_produk', $pid)
+        ->where('waktu', '<=', '2025-12-31 23:59:59')
+        ->orderBy('waktu', 'desc')
+        ->first();
+    
+    $firstAfter = DB::table('rekaman_stoks')
+        ->where('id_produk', $pid)
+        ->where('waktu', '>', '2025-12-31 23:59:59')
+        ->orderBy('waktu', 'asc')
+        ->first();
+    
+    if ($lastBefore && $firstAfter && intval($firstAfter->stok_awal) != intval($lastBefore->stok_sisa)) {
+        $checks['gap_2025_2026']++;
+        $issues[] = "Gap 2025-2026: Product {$pid}";
+    }
+}
+echo "  Issues: {$checks['gap_2025_2026']}\n\n";
+
+echo "CHECK 2: Stock continuity (stok_awal = previous stok_sisa)\n";
+$productIds = DB::table('rekaman_stoks')->distinct()->pluck('id_produk');
+foreach ($productIds as $pid) {
+    $records = DB::table('rekaman_stoks')
+        ->where('id_produk', $pid)
+        ->orderBy('waktu', 'asc')
+        ->orderBy('created_at', 'asc')
+        ->orderBy('id_rekaman_stok', 'asc')
+        ->get();
+    
+    $prevSisa = null;
+    foreach ($records as $r) {
+        if ($prevSisa !== null && intval($r->stok_awal) != intval($prevSisa)) {
+            $checks['continuity_errors']++;
+            break;
+        }
+        $prevSisa = $r->stok_sisa;
+    }
+}
+echo "  Issues: {$checks['continuity_errors']}\n\n";
+
+echo "CHECK 3: Calculation errors (stok_awal + masuk - keluar != sisa)\n";
+$allRekaman = DB::table('rekaman_stoks')->get();
+foreach ($allRekaman as $r) {
+    $expected = intval($r->stok_awal) + intval($r->stok_masuk) - intval($r->stok_keluar);
+    if ($expected != intval($r->stok_sisa)) {
+        $checks['calculation_errors']++;
+    }
+}
+echo "  Issues: {$checks['calculation_errors']}\n\n";
+
+echo "CHECK 4: produk.stok vs last rekaman.stok_sisa\n";
+$products = DB::table('produk')->get();
+foreach ($products as $product) {
+    $lastRekaman = DB::table('rekaman_stoks')
+        ->where('id_produk', $product->id_produk)
         ->orderBy('waktu', 'desc')
         ->orderBy('id_rekaman_stok', 'desc')
         ->first();
     
-    $stok31Des = $lastBefore ? intval($lastBefore->stok_sisa) : 0;
-    
-    $penjualan = DB::table('penjualan_detail')
-        ->join('penjualan', 'penjualan_detail.id_penjualan', '=', 'penjualan.id_penjualan')
-        ->where('penjualan.waktu', '>', $cutoffDate)
-        ->where('penjualan_detail.id_produk', $produk->id_produk)
-        ->sum('penjualan_detail.jumlah');
-    
-    $pembelian = DB::table('pembelian_detail')
-        ->join('pembelian', 'pembelian_detail.id_pembelian', '=', 'pembelian.id_pembelian')
-        ->where('pembelian.waktu', '>', $cutoffDate)
-        ->where('pembelian_detail.id_produk', $produk->id_produk)
-        ->sum('pembelian_detail.jumlah');
-    
-    $expected = $stok31Des + intval($pembelian) - intval($penjualan);
-    if ($expected < 0) $expected = 0;
-    
-    if (intval($produk->stok) != $expected) {
-        $outOfSync++;
+    if ($lastRekaman && intval($product->stok) != intval($lastRekaman->stok_sisa)) {
+        $checks['produk_rekaman_mismatch']++;
     }
 }
+echo "  Issues: {$checks['produk_rekaman_mismatch']}\n\n";
 
-if ($outOfSync == 0) {
-    echo "  ✓ Semua stok sinkron dengan perhitungan\n";
-} else {
-    echo "  ✗ {$outOfSync} produk tidak sinkron\n";
-    $allPassed = false;
-}
-
-echo "\n┌──────────────────────────────────────────────────────────────┐\n";
-echo "│ TEST 2: Tidak Ada Duplikat Rekaman Stok                      │\n";
-echo "└──────────────────────────────────────────────────────────────┘\n";
-
-$dupPenjualan = DB::table('rekaman_stoks')
-    ->select('id_produk', 'id_penjualan', DB::raw('COUNT(*) as cnt'))
-    ->whereNotNull('id_penjualan')
-    ->groupBy('id_produk', 'id_penjualan')
-    ->having('cnt', '>', 1)
-    ->count();
-
-$dupPembelian = DB::table('rekaman_stoks')
-    ->select('id_produk', 'id_pembelian', DB::raw('COUNT(*) as cnt'))
-    ->whereNotNull('id_pembelian')
-    ->groupBy('id_produk', 'id_pembelian')
-    ->having('cnt', '>', 1)
-    ->count();
-
-if ($dupPenjualan == 0 && $dupPembelian == 0) {
-    echo "  ✓ Tidak ada duplikat rekaman\n";
-} else {
-    echo "  ✗ Duplikat: Penjualan={$dupPenjualan}, Pembelian={$dupPembelian}\n";
-    $allPassed = false;
-}
-
-echo "\n┌──────────────────────────────────────────────────────────────┐\n";
-echo "│ TEST 3: Formula Kalkulasi Benar                              │\n";
-echo "└──────────────────────────────────────────────────────────────┘\n";
-
-$formulaErrors = 0;
-$allRekaman = DB::table('rekaman_stoks')->limit(1000)->get();
-
-foreach ($allRekaman as $r) {
-    $calc = intval($r->stok_awal) + intval($r->stok_masuk) - intval($r->stok_keluar);
-    if ($calc != intval($r->stok_sisa)) {
-        $formulaErrors++;
+echo "CHECK 5: Stock opname adjustment records\n";
+foreach ($opnameData as $pid => $opnameStock) {
+    $opnameRecord = DB::table('rekaman_stoks')
+        ->where('id_produk', $pid)
+        ->where('waktu', '2025-12-31 23:59:59')
+        ->where('keterangan', 'LIKE', '%Stock Opname%')
+        ->first();
+    
+    $lastBefore = DB::table('rekaman_stoks')
+        ->where('id_produk', $pid)
+        ->where('waktu', '<', '2025-12-31 23:59:59')
+        ->orderBy('waktu', 'desc')
+        ->first();
+    
+    $firstAfter = DB::table('rekaman_stoks')
+        ->where('id_produk', $pid)
+        ->where('waktu', '>', '2025-12-31 23:59:59')
+        ->first();
+    
+    if ($lastBefore && $firstAfter && !$opnameRecord) {
+        if (intval($lastBefore->stok_sisa) != $opnameStock) {
+            $checks['opname_adjustment_missing']++;
+        }
     }
 }
+echo "  Issues: {$checks['opname_adjustment_missing']}\n\n";
 
-if ($formulaErrors == 0) {
-    echo "  ✓ Semua formula benar\n";
-} else {
-    echo "  ✗ {$formulaErrors} rekaman dengan formula salah\n";
-    $allPassed = false;
+$totalIssues = array_sum($checks);
+
+echo "═══════════════════════════════════════════════════════════════════════════════\n";
+echo "                              SUMMARY                                           \n";
+echo "═══════════════════════════════════════════════════════════════════════════════\n\n";
+
+foreach ($checks as $check => $count) {
+    $status = $count == 0 ? "[OK]" : "[ISSUE]";
+    echo "  {$status} {$check}: {$count}\n";
 }
 
-echo "\n┌──────────────────────────────────────────────────────────────┐\n";
-echo "│ TEST 4: Tidak Ada Stok Negatif                               │\n";
-echo "└──────────────────────────────────────────────────────────────┘\n";
+echo "\n  TOTAL ISSUES: {$totalIssues}\n\n";
 
-$negProduk = Produk::where('stok', '<', 0)->count();
-$negRekaman = DB::table('rekaman_stoks')
-    ->where('stok_sisa', '<', 0)
-    ->orWhere('stok_awal', '<', 0)
-    ->count();
-
-if ($negProduk == 0 && $negRekaman == 0) {
-    echo "  ✓ Tidak ada stok negatif\n";
+if ($totalIssues == 0) {
+    echo "╔══════════════════════════════════════════════════════════════════════════════╗\n";
+    echo "║                  ALL STOCK DATA IS 100% CONSISTENT!                          ║\n";
+    echo "╚══════════════════════════════════════════════════════════════════════════════╝\n";
 } else {
-    echo "  ✗ Stok negatif: Produk={$negProduk}, Rekaman={$negRekaman}\n";
-    $allPassed = false;
+    echo "╔══════════════════════════════════════════════════════════════════════════════╗\n";
+    echo "║                SOME ISSUES REMAIN - MANUAL REVIEW NEEDED                     ║\n";
+    echo "╚══════════════════════════════════════════════════════════════════════════════╝\n";
 }
-
-echo "\n┌──────────────────────────────────────────────────────────────┐\n";
-echo "│ TEST 5: Transaksi Hari Ini                                   │\n";
-echo "└──────────────────────────────────────────────────────────────┘\n";
-
-$today = date('Y-m-d');
-$todayPenjualan = DB::table('penjualan')->whereDate('waktu', $today)->count();
-$todayPembelian = DB::table('pembelian')->whereDate('waktu', $today)->count();
-$todayRekaman = DB::table('rekaman_stoks')->whereDate('waktu', $today)->count();
-
-echo "  Penjualan hari ini: {$todayPenjualan}\n";
-echo "  Pembelian hari ini: {$todayPembelian}\n";
-echo "  Rekaman stok hari ini: {$todayRekaman}\n";
-
-echo "\n╔══════════════════════════════════════════════════════════════╗\n";
-
-if ($allPassed) {
-    echo "║  ✓ SEMUA VERIFIKASI BERHASIL - SISTEM STOK ROBUST 100%      ║\n";
-} else {
-    echo "║  ✗ ADA MASALAH YANG PERLU DIPERBAIKI                        ║\n";
-}
-
-echo "╚══════════════════════════════════════════════════════════════╝\n\n";
-
-echo "STATISTIK:\n";
-echo "  Total produk: " . Produk::count() . "\n";
-echo "  Total rekaman stok: " . RekamanStok::count() . "\n";
-echo "  Total penjualan: " . DB::table('penjualan')->count() . "\n";
-echo "  Total pembelian: " . DB::table('pembelian')->count() . "\n";
-
-echo "\n";

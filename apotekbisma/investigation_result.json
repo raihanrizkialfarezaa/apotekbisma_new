@@ -1,0 +1,81 @@
+{
+    "demacolin": {
+        "id": 204,
+        "records": [
+            {
+                "id": 174616,
+                "waktu": "2025-12-28 07:00:03",
+                "created_at": "2025-12-28 16:24:52",
+                "stok_awal": 1080,
+                "stok_masuk": 0,
+                "stok_keluar": 20,
+                "stok_sisa": 1060,
+                "id_penjualan": 1046,
+                "id_pembelian": null,
+                "keterangan": "Penjualan: Update jumlah transaksi"
+            },
+            {
+                "id": 174728,
+                "waktu": "2025-12-29 07:01:08",
+                "created_at": "2025-12-30 01:43:16",
+                "stok_awal": 1060,
+                "stok_masuk": 0,
+                "stok_keluar": 20,
+                "stok_sisa": 1040,
+                "id_penjualan": 1048,
+                "id_pembelian": null,
+                "keterangan": "Penjualan: Update jumlah transaksi"
+            },
+            {
+                "id": 174774,
+                "waktu": "2025-12-29 19:08:30",
+                "created_at": "2025-12-30 02:08:30",
+                "stok_awal": 1040,
+                "stok_masuk": 10,
+                "stok_keluar": 0,
+                "stok_sisa": 1050,
+                "id_penjualan": null,
+                "id_pembelian": null,
+                "keterangan": "Penghapusan detail penjualan: Pengembalian stok"
+            },
+            {
+                "id": 176277,
+                "waktu": "2025-12-31 23:59:59",
+                "created_at": "2026-01-09 18:08:55",
+                "stok_awal": 1050,
+                "stok_masuk": 0,
+                "stok_keluar": 600,
+                "stok_sisa": 450,
+                "id_penjualan": null,
+                "id_pembelian": null,
+                "keterangan": "Stock Opname 31 Desember 2025: Penyesuaian dari 1050 ke 450"
+            },
+            {
+                "id": 176215,
+                "waktu": "2026-01-02 23:47:55",
+                "created_at": "2026-01-08 18:56:48",
+                "stok_awal": 450,
+                "stok_masuk": 0,
+                "stok_keluar": 20,
+                "stok_sisa": 430,
+                "id_penjualan": 1060,
+                "id_pembelian": null,
+                "keterangan": "Penjualan"
+            },
+            {
+                "id": 176216,
+                "waktu": "2026-01-03 01:29:00",
+                "created_at": "2026-01-08 18:56:48",
+                "stok_awal": 430,
+                "stok_masuk": 0,
+                "stok_keluar": 10,
+                "stok_sisa": 420,
+                "id_penjualan": 1062,
+                "id_pembelian": null,
+                "keterangan": "Penjualan"
+            }
+        ]
+    },
+    "problems_count": 0,
+    "problems": []
+}

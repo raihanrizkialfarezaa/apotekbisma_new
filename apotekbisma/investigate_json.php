@@ -6,10 +6,13 @@ $kernel->bootstrap();
 
 use Illuminate\Support\Facades\DB;
 
-$productId = 204;
+$result = [];
 
-echo "DEMACOLIN TAB (ID: 204) - Critical Records\n";
-echo str_repeat("=", 60) . "\n\n";
+$productId = 204;
+$result['demacolin'] = [
+    'id' => $productId,
+    'records' => []
+];
 
 $records = DB::table('rekaman_stoks')
     ->where('id_produk', $productId)
@@ -19,18 +22,19 @@ $records = DB::table('rekaman_stoks')
     ->get();
 
 foreach ($records as $r) {
-    echo "ID: {$r->id_rekaman_stok}\n";
-    echo "Waktu: {$r->waktu}\n";
-    echo "Created: {$r->created_at}\n";
-    echo "Stok: {$r->stok_awal} + {$r->stok_masuk} - {$r->stok_keluar} = {$r->stok_sisa}\n";
-    echo "Penjualan ID: " . ($r->id_penjualan ?: 'NULL') . "\n";
-    echo "Pembelian ID: " . ($r->id_pembelian ?: 'NULL') . "\n";
-    echo "Keterangan: {$r->keterangan}\n";
-    echo str_repeat("-", 60) . "\n";
+    $result['demacolin']['records'][] = [
+        'id' => $r->id_rekaman_stok,
+        'waktu' => $r->waktu,
+        'created_at' => $r->created_at,
+        'stok_awal' => $r->stok_awal,
+        'stok_masuk' => $r->stok_masuk,
+        'stok_keluar' => $r->stok_keluar,
+        'stok_sisa' => $r->stok_sisa,
+        'id_penjualan' => $r->id_penjualan,
+        'id_pembelian' => $r->id_pembelian,
+        'keterangan' => $r->keterangan
+    ];
 }
-
-echo "\n\nSEMUA PRODUK DENGAN GAP 2025-2026:\n";
-echo str_repeat("=", 60) . "\n\n";
 
 $csvFile = __DIR__ . '/REKAMAN STOK FINAL 31 DESEMBER 2025.csv';
 $opnameData = [];
@@ -58,22 +62,22 @@ foreach ($opnameData as $pid => $opnameStock) {
         ->first();
     
     if ($lastBefore && $firstAfter && intval($firstAfter->stok_awal) != intval($lastBefore->stok_sisa)) {
+        $prod = DB::table('produk')->where('id_produk', $pid)->first();
         $problems[] = [
             'id' => $pid,
+            'nama' => $prod ? $prod->nama_produk : 'Unknown',
             'opname' => $opnameStock,
-            'last_sisa' => $lastBefore->stok_sisa,
-            'first_awal' => $firstAfter->stok_awal,
+            'last_sisa' => intval($lastBefore->stok_sisa),
+            'first_awal' => intval($firstAfter->stok_awal),
             'gap' => intval($firstAfter->stok_awal) - intval($lastBefore->stok_sisa)
         ];
     }
 }
 
-echo "Total: " . count($problems) . " produk\n\n";
-
 usort($problems, function($a, $b) { return abs($b['gap']) - abs($a['gap']); });
+$result['problems_count'] = count($problems);
+$result['problems'] = array_slice($problems, 0, 20);
 
-foreach (array_slice($problems, 0, 15) as $p) {
-    $prod = DB::table('produk')->where('id_produk', $p['id'])->first();
-    echo "[{$p['id']}] " . ($prod ? $prod->nama_produk : 'Unknown') . "\n";
-    echo "  Opname: {$p['opname']}, LastSisa: {$p['last_sisa']}, FirstAwal: {$p['first_awal']}, Gap: {$p['gap']}\n\n";
-}
+file_put_contents(__DIR__ . '/investigation_result.json', json_encode($result, JSON_PRETTY_PRINT));
+echo "Saved to investigation_result.json\n";
+echo "Problems found: " . count($problems) . "\n";
