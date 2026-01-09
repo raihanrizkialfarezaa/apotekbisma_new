@@ -1,0 +1,24 @@
+[
+    {
+        "id": 602,
+        "nama": "OBH ITRASAL",
+        "last_waktu": "2025-12-26 07:03:46",
+        "last_sisa": 13,
+        "last_id": 174310,
+        "first_waktu": "2026-01-09 19:54:54",
+        "first_awal": 12,
+        "first_id": 174354,
+        "gap": -1
+    },
+    {
+        "id": 335,
+        "nama": "GRATAZONE",
+        "last_waktu": "2025-12-29 07:01:15",
+        "last_sisa": 70,
+        "last_id": 174735,
+        "first_waktu": "2026-01-09 19:54:50",
+        "first_awal": 69,
+        "first_id": 174948,
+        "gap": -1
+    }
+]

@@ -344,6 +344,8 @@ foreach ($products as $product) {
     $lastRekaman = DB::table('rekaman_stoks')
         ->where('id_produk', $product->id_produk)
         ->orderBy('waktu', 'desc')
+        ->orderBy('created_at', 'desc')
+        ->orderBy('id_rekaman_stok', 'desc')
         ->first();
     
     if ($lastRekaman && intval($product->stok) != intval($lastRekaman->stok_sisa)) {

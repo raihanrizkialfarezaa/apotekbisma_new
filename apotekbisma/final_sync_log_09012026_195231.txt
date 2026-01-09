@@ -1,0 +1,11 @@
+LAPORAN FINAL CSV RECOVERY
+==========================================
+Tanggal     : 09 Jan 2026 19:52:31
+Durasi      : 62.64s
+CSV Source  : REKAMAN STOK FINAL 31 DESEMBER 2025.csv
+
+HASIL:
+- Produk: 790
+- Update: 0
+- Valid : 790
+- Error : 0

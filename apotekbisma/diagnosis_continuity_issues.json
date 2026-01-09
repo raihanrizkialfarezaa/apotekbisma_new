@@ -1,0 +1,24 @@
+[
+    {
+        "product_id": 335,
+        "product_name": "GRATAZONE",
+        "prev_id": 174735,
+        "prev_waktu": "2025-12-29 07:01:15",
+        "prev_sisa": 70,
+        "curr_id": 174948,
+        "curr_waktu": "2026-01-09 19:54:50",
+        "curr_awal": 69,
+        "difference": -1
+    },
+    {
+        "product_id": 602,
+        "product_name": "OBH ITRASAL",
+        "prev_id": 174310,
+        "prev_waktu": "2025-12-26 07:03:46",
+        "prev_sisa": 13,
+        "curr_id": 174354,
+        "curr_waktu": "2026-01-09 19:54:54",
+        "curr_awal": 12,
+        "difference": -1
+    }
+]
