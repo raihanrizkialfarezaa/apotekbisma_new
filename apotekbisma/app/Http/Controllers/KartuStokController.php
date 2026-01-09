@@ -72,22 +72,18 @@ class KartuStokController extends Controller
             $row = array();
             $row['DT_RowIndex'] = $no++;
             
-            // Use transaction time from Penjualan or Pembelian when available
-            // to preserve original transaction dates in display
+            // AUDIT-COMPLIANT: Always use rekaman_stoks.waktu for display
+            // This ensures chronological order matches the actual stock movement sequence
             $tanggal_source = $item->waktu;
-            if (!empty($item->id_penjualan)) {
-                $penjualan = $item->penjualan ?? Penjualan::find($item->id_penjualan);
-                if ($penjualan && $penjualan->waktu) {
-                    $tanggal_source = $penjualan->waktu;
-                }
-            } elseif (!empty($item->id_pembelian)) {
-                $pembelian = $item->pembelian ?? Pembelian::find($item->id_pembelian);
-                if ($pembelian && $pembelian->waktu) {
-                    $tanggal_source = $pembelian->waktu;
-                }
-            }
 
             $row['tanggal'] = tanggal_indonesia($tanggal_source, false);
+            // Keep the same key used by the DataTables view for consistent sorting/rendering
+            // (even if this method isn't the primary data source).
+            try {
+                $row['waktu_raw'] = Carbon::parse($item->waktu)->toIso8601String();
+            } catch (\Exception $e) {
+                $row['waktu_raw'] = (string) $item->waktu;
+            }
             
             // Format stock movements
             $row['stok_masuk'] = ($item->stok_masuk != NULL && $item->stok_masuk > 0) 
@@ -316,21 +312,14 @@ class KartuStokController extends Controller
                      ->orderBy('id_rekaman_stok', 'asc')
                      ->get();
 
-        // Apply date filter based on effective transaction date (display date)
+        // Apply date filter based on rekaman_stoks.waktu (audit-compliant)
+        // This keeps filtering consistent with sorting and with Stock Opname placement.
         if ($request->has('date_filter') && $request->date_filter && $request->date_filter != 'all') {
             $filter = $request->date_filter;
             $now = Carbon::now();
             
             $stok = $stok->filter(function($item) use ($filter, $request, $now) {
-                // Get the effective date (same logic as display)
-                $effectiveDate = $item->waktu;
-                if (!empty($item->id_penjualan) && $item->penjualan && $item->penjualan->waktu) {
-                    $effectiveDate = $item->penjualan->waktu;
-                } elseif (!empty($item->id_pembelian) && $item->pembelian && $item->pembelian->waktu) {
-                    $effectiveDate = $item->pembelian->waktu;
-                }
-                
-                $effectiveDate = Carbon::parse($effectiveDate);
+                $effectiveDate = Carbon::parse($item->waktu);
                 
                 switch ($filter) {
                     case 'today':
@@ -361,26 +350,22 @@ class KartuStokController extends Controller
             $row = array();
             $row['DT_RowIndex'] = $no++;
             
-            // Use transaction time from Penjualan or Pembelian when available
-            // to preserve original transaction dates in display
+            // AUDIT-COMPLIANT: Always use rekaman_stoks.waktu for display
+            // This ensures chronological order matches the actual stock movement sequence
+            // Important for audit trail - stock movements must be shown in order they occurred
             $tanggal_source = $item->waktu;
-            if (!empty($item->id_penjualan)) {
-                $penjualan = $item->penjualan ?? Penjualan::find($item->id_penjualan);
-                if ($penjualan && $penjualan->waktu) {
-                    $tanggal_source = $penjualan->waktu;
-                }
-            } elseif (!empty($item->id_pembelian)) {
-                $pembelian = $item->pembelian ?? Pembelian::find($item->id_pembelian);
-                if ($pembelian && $pembelian->waktu) {
-                    $tanggal_source = $pembelian->waktu;
-                }
-            }
+            // NOTE: We no longer override with pembelian/penjualan.waktu to ensure
+            // Stock Opname records appear in correct position relative to transactions
 
 
             $row['tanggal'] = tanggal_indonesia($tanggal_source, false);
             // Use rekaman_stoks.waktu for sorting (system timestamp)
             // This ensures correct chronological order based on when stock movement was recorded
-            $row['waktu_raw'] = $item->waktu;
+            try {
+                $row['waktu_raw'] = Carbon::parse($item->waktu)->toIso8601String();
+            } catch (\Exception $e) {
+                $row['waktu_raw'] = (string) $item->waktu;
+            }
             
             // Format stock movements
             $row['stok_masuk'] = ($item->stok_masuk != NULL && $item->stok_masuk > 0) 
