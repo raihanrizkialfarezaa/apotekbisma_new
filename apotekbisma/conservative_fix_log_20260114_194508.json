@@ -1,0 +1,12 @@
+{
+    "timestamp": "2026-01-14 19:45:08",
+    "mode": "EXECUTE",
+    "stats": {
+        "opname_fixed": 0,
+        "opname_inserted": 790,
+        "after_cutoff_fixed": 789,
+        "produk_synced": 190,
+        "duplicate_sales_fixed": 1452,
+        "duplicate_purchases_fixed": 0
+    }
+}
