@@ -13,6 +13,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 class ProdukController extends Controller
 {
@@ -270,6 +271,14 @@ class ProdukController extends Controller
      */
     public function updateStokManual(Request $request, $id)
     {
+        $idempotencyKey = 'stok_manual_' . $id . '_' . auth()->id();
+        
+        if (Cache::has($idempotencyKey)) {
+            return response()->json(['error' => true, 'message' => 'Request sedang diproses, mohon tunggu...'], 429);
+        }
+        
+        Cache::put($idempotencyKey, true, 10);
+        
         $request->validate([
             'stok' => 'required|integer|min:0',
             'keterangan' => 'nullable|string|max:500'
@@ -286,6 +295,7 @@ class ProdukController extends Controller
             $produk = Produk::where('id_produk', $id)->lockForUpdate()->first();
             if (!$produk) {
                 DB::rollBack();
+                Cache::forget($idempotencyKey);
                 return response()->json('Produk tidak ditemukan', 404);
             }
 
@@ -295,6 +305,7 @@ class ProdukController extends Controller
 
             if ($selisih_stok == 0) {
                 DB::commit();
+                Cache::forget($idempotencyKey);
                 return response()->json([
                     'success' => true,
                     'message' => 'Stok tidak berubah',
@@ -316,6 +327,8 @@ class ProdukController extends Controller
             $this->createStockOpnameRecord($produk->id_produk, $stok_lama, $stok_baru, $keteranganFinal);
             
             DB::commit();
+            
+            Cache::forget($idempotencyKey);
 
             try {
                 RekamanStok::recalculateStock($produk->id_produk);
@@ -335,6 +348,7 @@ class ProdukController extends Controller
             
         } catch (\Exception $e) {
             DB::rollBack();
+            Cache::forget($idempotencyKey);
             Log::error('Error updateStokManual: ' . $e->getMessage());
             return response()->json(['error' => true, 'message' => 'Terjadi kesalahan: ' . $e->getMessage()], 500);
         }
@@ -343,11 +357,12 @@ class ProdukController extends Controller
     private function createStockOpnameRecord($idProduk, $stokLama, $stokBaru, $keterangan)
     {
         $currentTime = Carbon::now();
+        $waktuWithMicro = $currentTime->format('Y-m-d H:i:s.u');
         $selisih = $stokBaru - $stokLama;
         
         DB::table('rekaman_stoks')->insert([
             'id_produk' => $idProduk,
-            'waktu' => $currentTime,
+            'waktu' => $waktuWithMicro,
             'stok_awal' => $stokLama,
             'stok_masuk' => $selisih > 0 ? $selisih : 0,
             'stok_keluar' => $selisih < 0 ? abs($selisih) : 0,

@@ -1,0 +1,517 @@
+=== DIAGNOSA STOK PRODUK ID 48 ===
+Produk: ANDALAN
+Stok saat ini (di tabel produk): 1008
+
+--- REKAMAN STOK (Urut Waktu) ---
+ID: 178275 | Time: 2024-05-07 00:00:00 | Awal: 71 | Masuk: 0 | Keluar: 1 | Sisa: 70 | Ket: Penjualan - ID: 23 | Status: GAP (71) | MATH OK
+ID: 178276 | Time: 2024-05-07 00:00:00 | Awal: 70 | Masuk: 0 | Keluar: 1 | Sisa: 69 | Ket: Penjualan - ID: 23 | Status: OK | MATH OK
+ID: 178277 | Time: 2024-05-07 00:00:00 | Awal: 69 | Masuk: 0 | Keluar: 1 | Sisa: 68 | Ket: Penjualan - ID: 24 | Status: OK | MATH OK
+ID: 178278 | Time: 2024-05-07 00:00:00 | Awal: 68 | Masuk: 0 | Keluar: 1 | Sisa: 67 | Ket: Penjualan - ID: 24 | Status: OK | MATH OK
+ID: 178279 | Time: 2024-05-07 00:00:00 | Awal: 67 | Masuk: 0 | Keluar: 1 | Sisa: 66 | Ket: Penjualan - ID: 26 | Status: OK | MATH OK
+ID: 178280 | Time: 2024-05-29 12:41:31 | Awal: 66 | Masuk: 0 | Keluar: 2 | Sisa: 64 | Ket: Penjualan - ID: 14 | Status: OK | MATH OK
+ID: 178281 | Time: 2024-05-29 14:11:28 | Awal: 64 | Masuk: 0 | Keluar: 1 | Sisa: 63 | Ket: Penjualan - ID: 16 | Status: OK | MATH OK
+ID: 178282 | Time: 2024-05-29 14:38:34 | Awal: 63 | Masuk: 0 | Keluar: 1 | Sisa: 62 | Ket: Penjualan - ID: 17 | Status: OK | MATH OK
+ID: 178283 | Time: 2024-05-29 14:38:34 | Awal: 62 | Masuk: 0 | Keluar: 2 | Sisa: 60 | Ket: Penjualan - ID: 17 | Status: OK | MATH OK
+ID: 178284 | Time: 2024-12-05 00:00:00 | Awal: 60 | Masuk: 0 | Keluar: 1 | Sisa: 59 | Ket: Penjualan - ID: 49 | Status: OK | MATH OK
+ID: 178285 | Time: 2024-12-09 00:00:00 | Awal: 59 | Masuk: 0 | Keluar: 1 | Sisa: 58 | Ket: Penjualan - ID: 54 | Status: OK | MATH OK
+ID: 178286 | Time: 2024-12-20 00:00:00 | Awal: 58 | Masuk: 0 | Keluar: 2 | Sisa: 56 | Ket: Penjualan - ID: 69 | Status: OK | MATH OK
+ID: 178287 | Time: 2024-12-20 00:00:00 | Awal: 56 | Masuk: 0 | Keluar: 2 | Sisa: 54 | Ket: Penjualan - ID: 72 | Status: OK | MATH OK
+ID: 178288 | Time: 2024-12-20 00:00:00 | Awal: 54 | Masuk: 0 | Keluar: 1 | Sisa: 53 | Ket: Penjualan - ID: 72 | Status: OK | MATH OK
+ID: 178289 | Time: 2024-12-25 00:00:00 | Awal: 53 | Masuk: 0 | Keluar: 1 | Sisa: 52 | Ket: Penjualan - ID: 83 | Status: OK | MATH OK
+ID: 178290 | Time: 2024-12-26 00:00:00 | Awal: 52 | Masuk: 0 | Keluar: 1 | Sisa: 51 | Ket: Penjualan - ID: 84 | Status: OK | MATH OK
+ID: 178291 | Time: 2024-12-26 00:00:00 | Awal: 51 | Masuk: 0 | Keluar: 2 | Sisa: 49 | Ket: Penjualan - ID: 87 | Status: OK | MATH OK
+ID: 178292 | Time: 2024-12-26 00:00:00 | Awal: 49 | Masuk: 0 | Keluar: 0 | Sisa: 49 | Ket: Penjualan - ID: 88 | Status: OK | MATH OK
+ID: 178293 | Time: 2024-12-26 00:00:00 | Awal: 49 | Masuk: 0 | Keluar: 1 | Sisa: 48 | Ket: Penjualan - ID: 89 | Status: OK | MATH OK
+ID: 178294 | Time: 2024-12-26 00:00:00 | Awal: 48 | Masuk: 0 | Keluar: 1 | Sisa: 47 | Ket: Penjualan - ID: 89 | Status: OK | MATH OK
+ID: 178295 | Time: 2024-12-26 00:00:00 | Awal: 47 | Masuk: 0 | Keluar: 1 | Sisa: 46 | Ket: Penjualan - ID: 89 | Status: OK | MATH OK
+ID: 178296 | Time: 2025-01-14 00:00:00 | Awal: 46 | Masuk: 0 | Keluar: 1 | Sisa: 45 | Ket: Penjualan - ID: 102 | Status: OK | MATH OK
+ID: 178297 | Time: 2025-01-14 00:00:00 | Awal: 45 | Masuk: 0 | Keluar: 1 | Sisa: 44 | Ket: Penjualan - ID: 103 | Status: OK | MATH OK
+ID: 178298 | Time: 2025-01-15 17:34:23 | Awal: 44 | Masuk: 0 | Keluar: 0 | Sisa: 44 | Ket: Penjualan - ID: 110 | Status: OK | MATH OK
+ID: 178299 | Time: 2025-01-17 00:00:00 | Awal: 44 | Masuk: 0 | Keluar: 1 | Sisa: 43 | Ket: Penjualan - ID: 111 | Status: OK | MATH OK
+ID: 178300 | Time: 2025-01-17 00:00:00 | Awal: 43 | Masuk: 0 | Keluar: 1 | Sisa: 42 | Ket: Penjualan - ID: 112 | Status: OK | MATH OK
+ID: 178301 | Time: 2025-01-17 00:00:00 | Awal: 42 | Masuk: 0 | Keluar: 2 | Sisa: 40 | Ket: Penjualan - ID: 113 | Status: OK | MATH OK
+ID: 178302 | Time: 2025-01-17 00:00:00 | Awal: 40 | Masuk: 0 | Keluar: 1 | Sisa: 39 | Ket: Penjualan - ID: 113 | Status: OK | MATH OK
+ID: 178303 | Time: 2025-01-20 00:00:00 | Awal: 39 | Masuk: 0 | Keluar: 1 | Sisa: 38 | Ket: Penjualan - ID: 116 | Status: OK | MATH OK
+ID: 178304 | Time: 2025-01-20 00:00:00 | Awal: 38 | Masuk: 0 | Keluar: 1 | Sisa: 37 | Ket: Penjualan - ID: 120 | Status: OK | MATH OK
+ID: 178305 | Time: 2025-01-21 00:00:00 | Awal: 37 | Masuk: 0 | Keluar: 1 | Sisa: 36 | Ket: Penjualan - ID: 121 | Status: OK | MATH OK
+ID: 178306 | Time: 2025-01-22 00:00:00 | Awal: 36 | Masuk: 0 | Keluar: 1 | Sisa: 35 | Ket: Penjualan - ID: 122 | Status: OK | MATH OK
+ID: 178307 | Time: 2025-01-22 00:00:00 | Awal: 35 | Masuk: 0 | Keluar: 1 | Sisa: 34 | Ket: Penjualan - ID: 123 | Status: OK | MATH OK
+ID: 178308 | Time: 2025-01-23 00:00:00 | Awal: 34 | Masuk: 0 | Keluar: 2 | Sisa: 32 | Ket: Penjualan - ID: 127 | Status: OK | MATH OK
+ID: 178309 | Time: 2025-01-24 00:00:00 | Awal: 32 | Masuk: 0 | Keluar: 1 | Sisa: 31 | Ket: Penjualan - ID: 128 | Status: OK | MATH OK
+ID: 178310 | Time: 2025-01-24 00:00:00 | Awal: 31 | Masuk: 0 | Keluar: 1 | Sisa: 30 | Ket: Penjualan - ID: 128 | Status: OK | MATH OK
+ID: 178311 | Time: 2025-01-24 00:00:00 | Awal: 30 | Masuk: 0 | Keluar: 1 | Sisa: 29 | Ket: Penjualan - ID: 129 | Status: OK | MATH OK
+ID: 178312 | Time: 2025-01-25 00:00:00 | Awal: 29 | Masuk: 0 | Keluar: 2 | Sisa: 27 | Ket: Penjualan - ID: 130 | Status: OK | MATH OK
+ID: 178313 | Time: 2025-01-28 00:00:00 | Awal: 27 | Masuk: 0 | Keluar: 1 | Sisa: 26 | Ket: Penjualan - ID: 131 | Status: OK | MATH OK
+ID: 178314 | Time: 2025-01-28 00:00:00 | Awal: 26 | Masuk: 0 | Keluar: 1 | Sisa: 25 | Ket: Penjualan - ID: 131 | Status: OK | MATH OK
+ID: 178315 | Time: 2025-01-28 00:00:00 | Awal: 25 | Masuk: 0 | Keluar: 1 | Sisa: 24 | Ket: Penjualan - ID: 131 | Status: OK | MATH OK
+ID: 178316 | Time: 2025-01-28 00:00:00 | Awal: 24 | Masuk: 0 | Keluar: 1 | Sisa: 23 | Ket: Penjualan - ID: 131 | Status: OK | MATH OK
+ID: 178317 | Time: 2025-07-04 00:00:00 | Awal: 23 | Masuk: 0 | Keluar: 1 | Sisa: 22 | Ket: Penjualan - ID: 224 | Status: OK | MATH OK
+ID: 178318 | Time: 2025-07-04 00:00:00 | Awal: 22 | Masuk: 0 | Keluar: 1 | Sisa: 21 | Ket: Penjualan - ID: 226 | Status: OK | MATH OK
+ID: 178319 | Time: 2025-07-05 00:00:00 | Awal: 21 | Masuk: 0 | Keluar: 1 | Sisa: 20 | Ket: Penjualan - ID: 230 | Status: OK | MATH OK
+ID: 178320 | Time: 2025-07-05 00:00:00 | Awal: 20 | Masuk: 0 | Keluar: 1 | Sisa: 19 | Ket: Penjualan - ID: 231 | Status: OK | MATH OK
+ID: 178321 | Time: 2025-07-05 00:00:00 | Awal: 19 | Masuk: 0 | Keluar: 1 | Sisa: 18 | Ket: Penjualan - ID: 231 | Status: OK | MATH OK
+ID: 178322 | Time: 2025-07-05 00:00:00 | Awal: 18 | Masuk: 0 | Keluar: 1 | Sisa: 17 | Ket: Penjualan - ID: 232 | Status: OK | MATH OK
+ID: 178323 | Time: 2025-07-05 00:00:00 | Awal: 17 | Masuk: 0 | Keluar: 1 | Sisa: 16 | Ket: Penjualan - ID: 232 | Status: OK | MATH OK
+ID: 178324 | Time: 2025-07-07 00:00:00 | Awal: 16 | Masuk: 0 | Keluar: 1 | Sisa: 15 | Ket: Penjualan - ID: 239 | Status: OK | MATH OK
+ID: 178325 | Time: 2025-07-08 00:00:00 | Awal: 15 | Masuk: 0 | Keluar: 2 | Sisa: 13 | Ket: Penjualan - ID: 244 | Status: OK | MATH OK
+ID: 178326 | Time: 2025-07-08 00:00:00 | Awal: 13 | Masuk: 0 | Keluar: 1 | Sisa: 12 | Ket: Penjualan - ID: 246 | Status: OK | MATH OK
+ID: 178327 | Time: 2025-07-09 00:00:00 | Awal: 12 | Masuk: 0 | Keluar: 1 | Sisa: 11 | Ket: Penjualan - ID: 248 | Status: OK | MATH OK
+ID: 178328 | Time: 2025-07-12 00:00:00 | Awal: 11 | Masuk: 0 | Keluar: 1 | Sisa: 10 | Ket: Penjualan - ID: 266 | Status: OK | MATH OK
+ID: 178329 | Time: 2025-07-12 00:00:00 | Awal: 10 | Masuk: 0 | Keluar: 2 | Sisa: 8 | Ket: Penjualan - ID: 267 | Status: OK | MATH OK
+ID: 178330 | Time: 2025-07-12 00:00:00 | Awal: 8 | Masuk: 0 | Keluar: 2 | Sisa: 6 | Ket: Penjualan - ID: 268 | Status: OK | MATH OK
+ID: 178331 | Time: 2025-07-12 00:00:00 | Awal: 6 | Masuk: 0 | Keluar: 1 | Sisa: 5 | Ket: Penjualan - ID: 268 | Status: OK | MATH OK
+ID: 178332 | Time: 2025-07-14 00:00:00 | Awal: 5 | Masuk: 0 | Keluar: 1 | Sisa: 4 | Ket: Penjualan - ID: 269 | Status: OK | MATH OK
+ID: 178333 | Time: 2025-07-14 00:00:00 | Awal: 4 | Masuk: 0 | Keluar: 2 | Sisa: 2 | Ket: Penjualan - ID: 271 | Status: OK | MATH OK
+ID: 178334 | Time: 2025-07-15 00:00:00 | Awal: 2 | Masuk: 20 | Keluar: 0 | Sisa: 22 | Ket: Pembelian - Faktur: 376627 | Status: OK | MATH OK
+ID: 178335 | Time: 2025-07-17 00:00:00 | Awal: 22 | Masuk: 30 | Keluar: 0 | Sisa: 52 | Ket: Pembelian - Faktur: 1678 | Status: OK | MATH OK
+ID: 178336 | Time: 2025-07-17 00:00:00 | Awal: 52 | Masuk: 0 | Keluar: 3 | Sisa: 49 | Ket: Penjualan - ID: 296 | Status: OK | MATH OK
+ID: 178337 | Time: 2025-07-18 00:00:00 | Awal: 49 | Masuk: 0 | Keluar: 2 | Sisa: 47 | Ket: Penjualan - ID: 279 | Status: OK | MATH OK
+ID: 178338 | Time: 2025-07-18 00:00:00 | Awal: 47 | Masuk: 0 | Keluar: 2 | Sisa: 45 | Ket: Penjualan - ID: 281 | Status: OK | MATH OK
+ID: 178339 | Time: 2025-07-19 00:00:00 | Awal: 45 | Masuk: 0 | Keluar: 1 | Sisa: 44 | Ket: Penjualan - ID: 302 | Status: OK | MATH OK
+ID: 178340 | Time: 2025-07-19 00:00:00 | Awal: 44 | Masuk: 0 | Keluar: 1 | Sisa: 43 | Ket: Penjualan - ID: 303 | Status: OK | MATH OK
+ID: 178341 | Time: 2025-07-19 00:00:00 | Awal: 43 | Masuk: 0 | Keluar: 2 | Sisa: 41 | Ket: Penjualan - ID: 304 | Status: OK | MATH OK
+ID: 178342 | Time: 2025-07-22 00:00:00 | Awal: 41 | Masuk: 0 | Keluar: 1 | Sisa: 40 | Ket: Penjualan - ID: 319 | Status: OK | MATH OK
+ID: 178343 | Time: 2025-07-23 00:00:00 | Awal: 40 | Masuk: 0 | Keluar: 2 | Sisa: 38 | Ket: Penjualan - ID: 322 | Status: OK | MATH OK
+ID: 178344 | Time: 2025-07-26 00:00:00 | Awal: 38 | Masuk: 0 | Keluar: 1 | Sisa: 37 | Ket: Penjualan - ID: 335 | Status: OK | MATH OK
+ID: 178345 | Time: 2025-07-26 00:00:00 | Awal: 37 | Masuk: 0 | Keluar: 3 | Sisa: 34 | Ket: Penjualan - ID: 336 | Status: OK | MATH OK
+ID: 178346 | Time: 2025-07-26 00:00:00 | Awal: 34 | Masuk: 0 | Keluar: 1 | Sisa: 33 | Ket: Penjualan - ID: 337 | Status: OK | MATH OK
+ID: 178347 | Time: 2025-07-28 00:00:00 | Awal: 33 | Masuk: 0 | Keluar: 1 | Sisa: 32 | Ket: Penjualan - ID: 341 | Status: OK | MATH OK
+ID: 178348 | Time: 2025-07-28 00:00:00 | Awal: 32 | Masuk: 0 | Keluar: 2 | Sisa: 30 | Ket: Penjualan - ID: 342 | Status: OK | MATH OK
+ID: 178349 | Time: 2025-07-28 00:00:00 | Awal: 30 | Masuk: 0 | Keluar: 2 | Sisa: 28 | Ket: Penjualan - ID: 344 | Status: OK | MATH OK
+ID: 178350 | Time: 2025-07-29 00:00:00 | Awal: 28 | Masuk: 0 | Keluar: 1 | Sisa: 27 | Ket: Penjualan - ID: 345 | Status: OK | MATH OK
+ID: 178351 | Time: 2025-07-29 00:00:00 | Awal: 27 | Masuk: 0 | Keluar: 1 | Sisa: 26 | Ket: Penjualan - ID: 346 | Status: OK | MATH OK
+ID: 178352 | Time: 2025-07-29 00:00:00 | Awal: 26 | Masuk: 0 | Keluar: 5 | Sisa: 21 | Ket: Penjualan - ID: 349 | Status: OK | MATH OK
+ID: 178353 | Time: 2025-07-30 00:00:00 | Awal: 21 | Masuk: 0 | Keluar: 2 | Sisa: 19 | Ket: Penjualan - ID: 354 | Status: OK | MATH OK
+ID: 178354 | Time: 2025-08-01 00:00:00 | Awal: 19 | Masuk: 0 | Keluar: 1 | Sisa: 18 | Ket: Penjualan - ID: 365 | Status: OK | MATH OK
+ID: 178355 | Time: 2025-08-02 00:00:00 | Awal: 18 | Masuk: 0 | Keluar: 2 | Sisa: 16 | Ket: Penjualan - ID: 371 | Status: OK | MATH OK
+ID: 178356 | Time: 2025-08-02 00:00:00 | Awal: 16 | Masuk: 0 | Keluar: 1 | Sisa: 15 | Ket: Penjualan - ID: 372 | Status: OK | MATH OK
+ID: 178357 | Time: 2025-08-02 00:00:00 | Awal: 15 | Masuk: 0 | Keluar: 2 | Sisa: 13 | Ket: Penjualan - ID: 374 | Status: OK | MATH OK
+ID: 178358 | Time: 2025-08-02 00:00:00 | Awal: 13 | Masuk: 0 | Keluar: 1 | Sisa: 12 | Ket: Penjualan - ID: 374 | Status: OK | MATH OK
+ID: 178359 | Time: 2025-08-04 00:00:00 | Awal: 12 | Masuk: 0 | Keluar: 2 | Sisa: 10 | Ket: Penjualan - ID: 376 | Status: OK | MATH OK
+ID: 178360 | Time: 2025-08-04 00:00:00 | Awal: 10 | Masuk: 0 | Keluar: 1 | Sisa: 9 | Ket: Penjualan - ID: 377 | Status: OK | MATH OK
+ID: 178361 | Time: 2025-08-04 00:00:00 | Awal: 9 | Masuk: 0 | Keluar: 2 | Sisa: 7 | Ket: Penjualan - ID: 380 | Status: OK | MATH OK
+ID: 178362 | Time: 2025-08-04 00:00:00 | Awal: 7 | Masuk: 0 | Keluar: 1 | Sisa: 6 | Ket: Penjualan - ID: 381 | Status: OK | MATH OK
+ID: 178363 | Time: 2025-08-04 00:00:00 | Awal: 6 | Masuk: 0 | Keluar: 2 | Sisa: 4 | Ket: Penjualan - ID: 381 | Status: OK | MATH OK
+ID: 178364 | Time: 2025-08-05 00:00:00 | Awal: 4 | Masuk: 0 | Keluar: 1 | Sisa: 3 | Ket: Penjualan - ID: 383 | Status: OK | MATH OK
+ID: 178365 | Time: 2025-08-06 00:00:00 | Awal: 3 | Masuk: 0 | Keluar: 2 | Sisa: 1 | Ket: Penjualan - ID: 390 | Status: OK | MATH OK
+ID: 178366 | Time: 2025-08-07 00:00:00 | Awal: 1 | Masuk: 0 | Keluar: 1 | Sisa: 0 | Ket: Penjualan - ID: 394 | Status: OK | MATH OK
+ID: 178367 | Time: 2025-08-08 00:00:00 | Awal: 0 | Masuk: 12 | Keluar: 0 | Sisa: 12 | Ket: Pembelian - Faktur: 1812385 | Status: OK | MATH OK
+ID: 178368 | Time: 2025-08-08 00:00:00 | Awal: 12 | Masuk: 0 | Keluar: 1 | Sisa: 11 | Ket: Penjualan - ID: 400 | Status: OK | MATH OK
+ID: 178369 | Time: 2025-08-08 00:00:00 | Awal: 11 | Masuk: 0 | Keluar: 1 | Sisa: 10 | Ket: Penjualan - ID: 401 | Status: OK | MATH OK
+ID: 178370 | Time: 2025-08-09 00:00:00 | Awal: 10 | Masuk: 30 | Keluar: 0 | Sisa: 40 | Ket: Pembelian - Faktur: 00820 | Status: OK | MATH OK
+ID: 178371 | Time: 2025-08-09 00:00:00 | Awal: 40 | Masuk: 0 | Keluar: 2 | Sisa: 38 | Ket: Penjualan - ID: 402 | Status: OK | MATH OK
+ID: 178372 | Time: 2025-08-09 00:00:00 | Awal: 38 | Masuk: 0 | Keluar: 2 | Sisa: 36 | Ket: Penjualan - ID: 402 | Status: OK | MATH OK
+ID: 178373 | Time: 2025-08-09 00:00:00 | Awal: 36 | Masuk: 0 | Keluar: 1 | Sisa: 35 | Ket: Penjualan - ID: 404 | Status: OK | MATH OK
+ID: 178374 | Time: 2025-08-11 00:00:00 | Awal: 35 | Masuk: 0 | Keluar: 1 | Sisa: 34 | Ket: Penjualan - ID: 409 | Status: OK | MATH OK
+ID: 178375 | Time: 2025-08-11 00:00:00 | Awal: 34 | Masuk: 0 | Keluar: 1 | Sisa: 33 | Ket: Penjualan - ID: 413 | Status: OK | MATH OK
+ID: 178376 | Time: 2025-08-12 00:00:00 | Awal: 33 | Masuk: 0 | Keluar: 1 | Sisa: 32 | Ket: Penjualan - ID: 414 | Status: OK | MATH OK
+ID: 178377 | Time: 2025-08-12 00:00:00 | Awal: 32 | Masuk: 0 | Keluar: 1 | Sisa: 31 | Ket: Penjualan - ID: 415 | Status: OK | MATH OK
+ID: 178378 | Time: 2025-08-12 00:00:00 | Awal: 31 | Masuk: 0 | Keluar: 1 | Sisa: 30 | Ket: Penjualan - ID: 416 | Status: OK | MATH OK
+ID: 178379 | Time: 2025-08-13 00:00:00 | Awal: 30 | Masuk: 0 | Keluar: 1 | Sisa: 29 | Ket: Penjualan - ID: 420 | Status: OK | MATH OK
+ID: 178380 | Time: 2025-08-13 00:00:00 | Awal: 29 | Masuk: 0 | Keluar: 1 | Sisa: 28 | Ket: Penjualan - ID: 421 | Status: OK | MATH OK
+ID: 178381 | Time: 2025-08-16 00:00:00 | Awal: 28 | Masuk: 0 | Keluar: 1 | Sisa: 27 | Ket: Penjualan - ID: 433 | Status: OK | MATH OK
+ID: 178382 | Time: 2025-08-16 00:00:00 | Awal: 27 | Masuk: 0 | Keluar: 2 | Sisa: 25 | Ket: Penjualan - ID: 434 | Status: OK | MATH OK
+ID: 178383 | Time: 2025-08-18 00:00:00 | Awal: 25 | Masuk: 0 | Keluar: 1 | Sisa: 24 | Ket: Penjualan - ID: 438 | Status: OK | MATH OK
+ID: 178384 | Time: 2025-08-18 00:00:00 | Awal: 24 | Masuk: 0 | Keluar: 2 | Sisa: 22 | Ket: Penjualan - ID: 441 | Status: OK | MATH OK
+ID: 178385 | Time: 2025-08-19 00:00:00 | Awal: 22 | Masuk: 0 | Keluar: 1 | Sisa: 21 | Ket: Penjualan - ID: 450 | Status: OK | MATH OK
+ID: 178386 | Time: 2025-08-22 00:00:00 | Awal: 21 | Masuk: 0 | Keluar: 1 | Sisa: 20 | Ket: Penjualan - ID: 491 | Status: OK | MATH OK
+ID: 178387 | Time: 2025-08-22 00:00:00 | Awal: 20 | Masuk: 0 | Keluar: 1 | Sisa: 19 | Ket: Penjualan - ID: 493 | Status: OK | MATH OK
+ID: 178388 | Time: 2025-08-23 00:00:00 | Awal: 19 | Masuk: 0 | Keluar: 1 | Sisa: 18 | Ket: Penjualan - ID: 509 | Status: OK | MATH OK
+ID: 178389 | Time: 2025-08-25 00:00:00 | Awal: 18 | Masuk: 0 | Keluar: 2 | Sisa: 16 | Ket: Penjualan - ID: 530 | Status: OK | MATH OK
+ID: 178390 | Time: 2025-08-26 00:00:00 | Awal: 16 | Masuk: 1000 | Keluar: 0 | Sisa: 1016 | Ket: Pembelian - Faktur: 02525 | Status: OK | MATH OK
+ID: 178391 | Time: 2025-08-27 00:00:00 | Awal: 1016 | Masuk: 0 | Keluar: 1 | Sisa: 1015 | Ket: Penjualan - ID: 549 | Status: OK | MATH OK
+ID: 178392 | Time: 2025-08-27 00:00:00 | Awal: 1015 | Masuk: 0 | Keluar: 1 | Sisa: 1014 | Ket: Penjualan - ID: 554 | Status: OK | MATH OK
+ID: 178393 | Time: 2025-08-28 00:00:00 | Awal: 1014 | Masuk: 0 | Keluar: 2 | Sisa: 1012 | Ket: Penjualan - ID: 566 | Status: OK | MATH OK
+ID: 178394 | Time: 2025-08-29 00:00:00 | Awal: 1012 | Masuk: 0 | Keluar: 1 | Sisa: 1011 | Ket: Penjualan - ID: 570 | Status: OK | MATH OK
+ID: 178395 | Time: 2025-08-29 00:00:00 | Awal: 1011 | Masuk: 0 | Keluar: 1 | Sisa: 1010 | Ket: Penjualan - ID: 573 | Status: OK | MATH OK
+ID: 178396 | Time: 2025-08-29 00:00:00 | Awal: 1010 | Masuk: 0 | Keluar: 1 | Sisa: 1009 | Ket: Penjualan - ID: 576 | Status: OK | MATH OK
+ID: 178397 | Time: 2025-08-30 07:00:00 | Awal: 1009 | Masuk: 0 | Keluar: 1 | Sisa: 1008 | Ket: Penjualan - ID: 579 | Status: OK | MATH OK
+ID: 178398 | Time: 2025-08-30 07:00:00 | Awal: 1008 | Masuk: 0 | Keluar: 1 | Sisa: 1007 | Ket: Penjualan - ID: 589 | Status: OK | MATH OK
+ID: 178399 | Time: 2025-09-01 07:00:00 | Awal: 1007 | Masuk: 0 | Keluar: 1 | Sisa: 1006 | Ket: Penjualan - ID: 602 | Status: OK | MATH OK
+ID: 178400 | Time: 2025-09-05 07:00:00 | Awal: 1006 | Masuk: 0 | Keluar: 1 | Sisa: 1005 | Ket: Penjualan - ID: 638 | Status: OK | MATH OK
+ID: 178401 | Time: 2025-09-06 07:00:00 | Awal: 1005 | Masuk: 0 | Keluar: 1 | Sisa: 1004 | Ket: Penjualan - ID: 642 | Status: OK | MATH OK
+ID: 178402 | Time: 2025-09-06 07:00:00 | Awal: 1004 | Masuk: 0 | Keluar: 1 | Sisa: 1003 | Ket: Penjualan - ID: 646 | Status: OK | MATH OK
+ID: 178403 | Time: 2025-09-09 07:00:00 | Awal: 1003 | Masuk: 0 | Keluar: 2 | Sisa: 1001 | Ket: Penjualan - ID: 668 | Status: OK | MATH OK
+ID: 178404 | Time: 2025-09-16 07:00:00 | Awal: 1001 | Masuk: 0 | Keluar: 1 | Sisa: 1000 | Ket: Penjualan - ID: 680 | Status: OK | MATH OK
+ID: 178405 | Time: 2025-09-16 07:00:00 | Awal: 1000 | Masuk: 0 | Keluar: 2 | Sisa: 998 | Ket: Penjualan - ID: 684 | Status: OK | MATH OK
+ID: 178406 | Time: 2025-09-16 07:00:00 | Awal: 998 | Masuk: 0 | Keluar: 1 | Sisa: 997 | Ket: Penjualan - ID: 685 | Status: OK | MATH OK
+ID: 178407 | Time: 2025-09-17 07:00:00 | Awal: 997 | Masuk: 0 | Keluar: 1 | Sisa: 996 | Ket: Penjualan - ID: 689 | Status: OK | MATH OK
+ID: 178408 | Time: 2025-09-18 07:00:00 | Awal: 996 | Masuk: 0 | Keluar: 1 | Sisa: 995 | Ket: Penjualan - ID: 696 | Status: OK | MATH OK
+ID: 178409 | Time: 2025-09-19 07:00:00 | Awal: 995 | Masuk: 0 | Keluar: 5 | Sisa: 990 | Ket: Penjualan - ID: 698 | Status: OK | MATH OK
+ID: 178410 | Time: 2025-09-22 07:00:00 | Awal: 990 | Masuk: 0 | Keluar: 2 | Sisa: 988 | Ket: Penjualan - ID: 701 | Status: OK | MATH OK
+ID: 178411 | Time: 2025-09-22 07:00:00 | Awal: 988 | Masuk: 0 | Keluar: 1 | Sisa: 987 | Ket: Penjualan - ID: 702 | Status: OK | MATH OK
+ID: 178412 | Time: 2025-09-22 07:00:00 | Awal: 987 | Masuk: 0 | Keluar: 1 | Sisa: 986 | Ket: Penjualan - ID: 703 | Status: OK | MATH OK
+ID: 178413 | Time: 2025-09-24 07:00:00 | Awal: 986 | Masuk: 0 | Keluar: 1 | Sisa: 985 | Ket: Penjualan - ID: 713 | Status: OK | MATH OK
+ID: 178414 | Time: 2025-09-25 07:00:00 | Awal: 985 | Masuk: 0 | Keluar: 2 | Sisa: 983 | Ket: Penjualan - ID: 717 | Status: OK | MATH OK
+ID: 178415 | Time: 2025-09-26 07:00:00 | Awal: 983 | Masuk: 0 | Keluar: 1 | Sisa: 982 | Ket: Penjualan - ID: 719 | Status: OK | MATH OK
+ID: 178416 | Time: 2025-09-26 07:00:00 | Awal: 982 | Masuk: 0 | Keluar: 1 | Sisa: 981 | Ket: Penjualan - ID: 720 | Status: OK | MATH OK
+ID: 178417 | Time: 2025-09-27 07:00:00 | Awal: 981 | Masuk: 0 | Keluar: 1 | Sisa: 980 | Ket: Penjualan - ID: 722 | Status: OK | MATH OK
+ID: 178418 | Time: 2025-10-01 07:00:00 | Awal: 980 | Masuk: 0 | Keluar: 1 | Sisa: 979 | Ket: Penjualan - ID: 727 | Status: OK | MATH OK
+ID: 178419 | Time: 2025-10-02 07:00:00 | Awal: 979 | Masuk: 0 | Keluar: 1 | Sisa: 978 | Ket: Penjualan - ID: 728 | Status: OK | MATH OK
+ID: 178420 | Time: 2025-10-02 07:00:00 | Awal: 978 | Masuk: 0 | Keluar: 1 | Sisa: 977 | Ket: Penjualan - ID: 730 | Status: OK | MATH OK
+ID: 178421 | Time: 2025-10-04 07:00:00 | Awal: 977 | Masuk: 0 | Keluar: 2 | Sisa: 975 | Ket: Penjualan - ID: 735 | Status: OK | MATH OK
+ID: 178422 | Time: 2025-10-04 07:00:00 | Awal: 975 | Masuk: 0 | Keluar: 1 | Sisa: 974 | Ket: Penjualan - ID: 735 | Status: OK | MATH OK
+ID: 178423 | Time: 2025-10-06 07:00:00 | Awal: 974 | Masuk: 0 | Keluar: 1 | Sisa: 973 | Ket: Penjualan - ID: 739 | Status: OK | MATH OK
+ID: 178424 | Time: 2025-10-06 07:00:00 | Awal: 973 | Masuk: 0 | Keluar: 2 | Sisa: 971 | Ket: Penjualan - ID: 740 | Status: OK | MATH OK
+ID: 178425 | Time: 2025-10-06 07:00:00 | Awal: 971 | Masuk: 0 | Keluar: 1 | Sisa: 970 | Ket: Penjualan - ID: 742 | Status: OK | MATH OK
+ID: 178426 | Time: 2025-10-08 07:00:00 | Awal: 970 | Masuk: 0 | Keluar: 2 | Sisa: 968 | Ket: Penjualan - ID: 750 | Status: OK | MATH OK
+ID: 178427 | Time: 2025-10-11 07:00:00 | Awal: 968 | Masuk: 30 | Keluar: 0 | Sisa: 998 | Ket: Pembelian - Faktur: 01124 | Status: OK | MATH OK
+ID: 178428 | Time: 2025-10-20 07:00:00 | Awal: 998 | Masuk: 0 | Keluar: 4 | Sisa: 994 | Ket: Penjualan - ID: 788 | Status: OK | MATH OK
+ID: 178429 | Time: 2025-10-20 07:00:00 | Awal: 994 | Masuk: 0 | Keluar: 2 | Sisa: 992 | Ket: Penjualan - ID: 789 | Status: OK | MATH OK
+ID: 178430 | Time: 2025-10-22 07:00:00 | Awal: 992 | Masuk: 0 | Keluar: 1 | Sisa: 991 | Ket: Penjualan - ID: 795 | Status: OK | MATH OK
+ID: 178431 | Time: 2025-10-22 07:00:00 | Awal: 991 | Masuk: 0 | Keluar: 1 | Sisa: 990 | Ket: Penjualan - ID: 796 | Status: OK | MATH OK
+ID: 178432 | Time: 2025-10-23 07:00:00 | Awal: 990 | Masuk: 0 | Keluar: 1 | Sisa: 989 | Ket: Penjualan - ID: 799 | Status: OK | MATH OK
+ID: 178433 | Time: 2025-10-24 07:00:00 | Awal: 989 | Masuk: 0 | Keluar: 2 | Sisa: 987 | Ket: Penjualan - ID: 802 | Status: OK | MATH OK
+ID: 178434 | Time: 2025-10-25 07:00:00 | Awal: 987 | Masuk: 30 | Keluar: 0 | Sisa: 1017 | Ket: Pembelian - Faktur: 02618 | Status: OK | MATH OK
+ID: 178435 | Time: 2025-10-25 07:00:00 | Awal: 1017 | Masuk: 0 | Keluar: 2 | Sisa: 1015 | Ket: Penjualan - ID: 807 | Status: OK | MATH OK
+ID: 178436 | Time: 2025-10-27 07:00:00 | Awal: 1015 | Masuk: 0 | Keluar: 1 | Sisa: 1014 | Ket: Penjualan - ID: 810 | Status: OK | MATH OK
+ID: 178437 | Time: 2025-10-28 07:00:00 | Awal: 1014 | Masuk: 0 | Keluar: 2 | Sisa: 1012 | Ket: Penjualan - ID: 813 | Status: OK | MATH OK
+ID: 178438 | Time: 2025-10-29 07:00:00 | Awal: 1012 | Masuk: 0 | Keluar: 2 | Sisa: 1010 | Ket: Penjualan - ID: 820 | Status: OK | MATH OK
+ID: 178439 | Time: 2025-10-29 07:00:00 | Awal: 1010 | Masuk: 0 | Keluar: 1 | Sisa: 1009 | Ket: Penjualan - ID: 821 | Status: OK | MATH OK
+ID: 178440 | Time: 2025-10-30 07:00:00 | Awal: 1009 | Masuk: 0 | Keluar: 1 | Sisa: 1008 | Ket: Penjualan - ID: 824 | Status: OK | MATH OK
+ID: 178441 | Time: 2025-10-31 07:00:00 | Awal: 1008 | Masuk: 0 | Keluar: 1 | Sisa: 1007 | Ket: Penjualan - ID: 828 | Status: OK | MATH OK
+ID: 178442 | Time: 2025-11-01 07:00:00 | Awal: 1007 | Masuk: 0 | Keluar: 1 | Sisa: 1006 | Ket: Penjualan - ID: 829 | Status: OK | MATH OK
+ID: 178443 | Time: 2025-11-01 07:00:00 | Awal: 1006 | Masuk: 0 | Keluar: 1 | Sisa: 1005 | Ket: Penjualan - ID: 830 | Status: OK | MATH OK
+ID: 178444 | Time: 2025-11-01 07:00:00 | Awal: 1005 | Masuk: 0 | Keluar: 2 | Sisa: 1003 | Ket: Penjualan - ID: 831 | Status: OK | MATH OK
+ID: 178445 | Time: 2025-11-03 07:00:00 | Awal: 1003 | Masuk: 0 | Keluar: 2 | Sisa: 1001 | Ket: Penjualan - ID: 833 | Status: OK | MATH OK
+ID: 178446 | Time: 2025-11-03 07:00:00 | Awal: 1001 | Masuk: 0 | Keluar: 1 | Sisa: 1000 | Ket: Penjualan - ID: 833 | Status: OK | MATH OK
+ID: 178447 | Time: 2025-11-03 07:00:00 | Awal: 1000 | Masuk: 0 | Keluar: 2 | Sisa: 998 | Ket: Penjualan - ID: 835 | Status: OK | MATH OK
+ID: 178448 | Time: 2025-11-05 07:00:00 | Awal: 998 | Masuk: 0 | Keluar: 1 | Sisa: 997 | Ket: Penjualan - ID: 842 | Status: OK | MATH OK
+ID: 178449 | Time: 2025-11-06 07:00:00 | Awal: 997 | Masuk: 0 | Keluar: 2 | Sisa: 995 | Ket: Penjualan - ID: 847 | Status: OK | MATH OK
+ID: 178450 | Time: 2025-11-08 07:00:00 | Awal: 995 | Masuk: 0 | Keluar: 2 | Sisa: 993 | Ket: Penjualan - ID: 855 | Status: OK | MATH OK
+ID: 178451 | Time: 2025-11-08 07:00:00 | Awal: 993 | Masuk: 0 | Keluar: 1 | Sisa: 992 | Ket: Penjualan - ID: 856 | Status: OK | MATH OK
+ID: 178452 | Time: 2025-11-11 07:00:00 | Awal: 992 | Masuk: 0 | Keluar: 1 | Sisa: 991 | Ket: Penjualan - ID: 862 | Status: OK | MATH OK
+ID: 178453 | Time: 2025-11-12 07:00:00 | Awal: 991 | Masuk: 0 | Keluar: 1 | Sisa: 990 | Ket: Penjualan - ID: 866 | Status: OK | MATH OK
+ID: 178454 | Time: 2025-11-13 07:00:00 | Awal: 990 | Masuk: 0 | Keluar: 1 | Sisa: 989 | Ket: Penjualan - ID: 869 | Status: OK | MATH OK
+ID: 178455 | Time: 2025-11-14 07:00:00 | Awal: 989 | Masuk: 0 | Keluar: 1 | Sisa: 988 | Ket: Penjualan - ID: 875 | Status: OK | MATH OK
+ID: 178456 | Time: 2025-11-15 07:00:00 | Awal: 988 | Masuk: 0 | Keluar: 1 | Sisa: 987 | Ket: Penjualan - ID: 877 | Status: OK | MATH OK
+ID: 178457 | Time: 2025-11-18 07:00:00 | Awal: 987 | Masuk: 0 | Keluar: 1 | Sisa: 986 | Ket: Penjualan - ID: 883 | Status: OK | MATH OK
+ID: 178458 | Time: 2025-11-18 07:00:00 | Awal: 986 | Masuk: 0 | Keluar: 1 | Sisa: 985 | Ket: Penjualan - ID: 885 | Status: OK | MATH OK
+ID: 178459 | Time: 2025-11-20 07:00:00 | Awal: 985 | Masuk: 30 | Keluar: 0 | Sisa: 1015 | Ket: Pembelian - Faktur: 02129 | Status: OK | MATH OK
+ID: 178460 | Time: 2025-11-20 07:00:00 | Awal: 1015 | Masuk: 0 | Keluar: 1 | Sisa: 1014 | Ket: Penjualan - ID: 893 | Status: OK | MATH OK
+ID: 178461 | Time: 2025-11-21 07:00:00 | Awal: 1014 | Masuk: 0 | Keluar: 1 | Sisa: 1013 | Ket: Penjualan - ID: 897 | Status: OK | MATH OK
+ID: 178462 | Time: 2025-11-21 07:00:00 | Awal: 1013 | Masuk: 0 | Keluar: 2 | Sisa: 1011 | Ket: Penjualan - ID: 897 | Status: OK | MATH OK
+ID: 178463 | Time: 2025-11-22 07:00:00 | Awal: 1011 | Masuk: 0 | Keluar: 1 | Sisa: 1010 | Ket: Penjualan - ID: 899 | Status: OK | MATH OK
+ID: 178464 | Time: 2025-11-24 07:00:00 | Awal: 1010 | Masuk: 0 | Keluar: 1 | Sisa: 1009 | Ket: Penjualan - ID: 902 | Status: OK | MATH OK
+ID: 178465 | Time: 2025-11-24 07:00:00 | Awal: 1009 | Masuk: 0 | Keluar: 2 | Sisa: 1007 | Ket: Penjualan - ID: 903 | Status: OK | MATH OK
+ID: 178466 | Time: 2025-11-25 07:00:00 | Awal: 1007 | Masuk: 0 | Keluar: 2 | Sisa: 1005 | Ket: Penjualan - ID: 909 | Status: OK | MATH OK
+ID: 178467 | Time: 2025-11-27 07:00:00 | Awal: 1005 | Masuk: 0 | Keluar: 1 | Sisa: 1004 | Ket: Penjualan - ID: 914 | Status: OK | MATH OK
+ID: 178468 | Time: 2025-11-27 07:00:00 | Awal: 1004 | Masuk: 0 | Keluar: 1 | Sisa: 1003 | Ket: Penjualan - ID: 915 | Status: OK | MATH OK
+ID: 178469 | Time: 2025-11-27 07:00:00 | Awal: 1003 | Masuk: 0 | Keluar: 1 | Sisa: 1002 | Ket: Penjualan - ID: 918 | Status: OK | MATH OK
+ID: 178470 | Time: 2025-11-28 07:00:00 | Awal: 1002 | Masuk: 0 | Keluar: 1 | Sisa: 1001 | Ket: Penjualan - ID: 920 | Status: OK | MATH OK
+ID: 178471 | Time: 2025-11-29 07:00:00 | Awal: 1001 | Masuk: 0 | Keluar: 2 | Sisa: 999 | Ket: Penjualan - ID: 924 | Status: OK | MATH OK
+ID: 178472 | Time: 2025-12-02 07:00:00 | Awal: 999 | Masuk: 0 | Keluar: 1 | Sisa: 998 | Ket: Penjualan - ID: 930 | Status: OK | MATH OK
+ID: 178473 | Time: 2025-12-02 07:00:00 | Awal: 998 | Masuk: 0 | Keluar: 1 | Sisa: 997 | Ket: Penjualan - ID: 933 | Status: OK | MATH OK
+ID: 178474 | Time: 2025-12-04 07:00:00 | Awal: 997 | Masuk: 0 | Keluar: 2 | Sisa: 995 | Ket: Penjualan - ID: 938 | Status: OK | MATH OK
+ID: 178475 | Time: 2025-12-05 07:00:00 | Awal: 995 | Masuk: 0 | Keluar: 1 | Sisa: 994 | Ket: Penjualan - ID: 941 | Status: OK | MATH OK
+ID: 178476 | Time: 2025-12-05 07:00:00 | Awal: 994 | Masuk: 0 | Keluar: 1 | Sisa: 993 | Ket: Penjualan - ID: 942 | Status: OK | MATH OK
+ID: 178477 | Time: 2025-12-05 07:00:00 | Awal: 993 | Masuk: 0 | Keluar: 2 | Sisa: 991 | Ket: Penjualan - ID: 943 | Status: OK | MATH OK
+ID: 178478 | Time: 2025-12-06 07:00:00 | Awal: 991 | Masuk: 30 | Keluar: 0 | Sisa: 1021 | Ket: Pembelian - Faktur: 00651 | Status: OK | MATH OK
+ID: 178479 | Time: 2025-12-06 07:00:00 | Awal: 1021 | Masuk: 0 | Keluar: 1 | Sisa: 1020 | Ket: Penjualan - ID: 946 | Status: OK | MATH OK
+ID: 178480 | Time: 2025-12-08 07:00:00 | Awal: 1020 | Masuk: 0 | Keluar: 1 | Sisa: 1019 | Ket: Penjualan - ID: 949 | Status: OK | MATH OK
+ID: 178481 | Time: 2025-12-08 07:00:00 | Awal: 1019 | Masuk: 0 | Keluar: 1 | Sisa: 1018 | Ket: Penjualan - ID: 950 | Status: OK | MATH OK
+ID: 178482 | Time: 2025-12-08 07:00:00 | Awal: 1018 | Masuk: 0 | Keluar: 2 | Sisa: 1016 | Ket: Penjualan - ID: 951 | Status: OK | MATH OK
+ID: 178483 | Time: 2025-12-08 07:00:00 | Awal: 1016 | Masuk: 0 | Keluar: 1 | Sisa: 1015 | Ket: Penjualan - ID: 954 | Status: OK | MATH OK
+ID: 178484 | Time: 2025-12-09 07:00:00 | Awal: 1015 | Masuk: 0 | Keluar: 3 | Sisa: 1012 | Ket: Penjualan - ID: 956 | Status: OK | MATH OK
+ID: 178485 | Time: 2025-12-11 07:00:00 | Awal: 1012 | Masuk: 0 | Keluar: 1 | Sisa: 1011 | Ket: Penjualan - ID: 964 | Status: OK | MATH OK
+ID: 178486 | Time: 2025-12-12 07:00:00 | Awal: 1011 | Masuk: 0 | Keluar: 1 | Sisa: 1010 | Ket: Penjualan - ID: 966 | Status: OK | MATH OK
+ID: 178487 | Time: 2025-12-13 07:00:00 | Awal: 1010 | Masuk: 0 | Keluar: 2 | Sisa: 1008 | Ket: Penjualan - ID: 970 | Status: OK | MATH OK
+ID: 178488 | Time: 2025-12-13 07:00:00 | Awal: 1008 | Masuk: 0 | Keluar: 2 | Sisa: 1006 | Ket: Penjualan - ID: 970 | Status: OK | MATH OK
+ID: 178489 | Time: 2025-12-15 07:00:00 | Awal: 1006 | Masuk: 0 | Keluar: 3 | Sisa: 1003 | Ket: Penjualan - ID: 976 | Status: OK | MATH OK
+ID: 178490 | Time: 2025-12-15 07:00:00 | Awal: 1003 | Masuk: 0 | Keluar: 2 | Sisa: 1001 | Ket: Penjualan - ID: 977 | Status: OK | MATH OK
+ID: 178491 | Time: 2025-12-16 07:00:00 | Awal: 1001 | Masuk: 0 | Keluar: 1 | Sisa: 1000 | Ket: Penjualan - ID: 979 | Status: OK | MATH OK
+ID: 178492 | Time: 2025-12-16 07:00:00 | Awal: 1000 | Masuk: 0 | Keluar: 2 | Sisa: 998 | Ket: Penjualan - ID: 979 | Status: OK | MATH OK
+ID: 178493 | Time: 2025-12-19 07:00:00 | Awal: 998 | Masuk: 0 | Keluar: 1 | Sisa: 997 | Ket: Penjualan - ID: 990 | Status: OK | MATH OK
+ID: 178494 | Time: 2025-12-19 07:00:00 | Awal: 997 | Masuk: 0 | Keluar: 2 | Sisa: 995 | Ket: Penjualan - ID: 994 | Status: OK | MATH OK
+ID: 178495 | Time: 2025-12-20 07:00:00 | Awal: 995 | Masuk: 30 | Keluar: 0 | Sisa: 1025 | Ket: Pembelian - Faktur: 02192 | Status: OK | MATH OK
+ID: 178496 | Time: 2025-12-20 07:00:00 | Awal: 1025 | Masuk: 0 | Keluar: 1 | Sisa: 1024 | Ket: Penjualan - ID: 995 | Status: OK | MATH OK
+ID: 178497 | Time: 2025-12-22 07:00:00 | Awal: 1024 | Masuk: 0 | Keluar: 1 | Sisa: 1023 | Ket: Penjualan - ID: 1024 | Status: OK | MATH OK
+ID: 178498 | Time: 2025-12-23 07:00:00 | Awal: 1023 | Masuk: 0 | Keluar: 2 | Sisa: 1021 | Ket: Penjualan - ID: 1028 | Status: OK | MATH OK
+ID: 178499 | Time: 2025-12-23 07:00:00 | Awal: 1021 | Masuk: 0 | Keluar: 1 | Sisa: 1020 | Ket: Penjualan - ID: 1029 | Status: OK | MATH OK
+ID: 178500 | Time: 2025-12-23 07:00:00 | Awal: 1020 | Masuk: 0 | Keluar: 1 | Sisa: 1019 | Ket: Penjualan - ID: 1030 | Status: OK | MATH OK
+ID: 178501 | Time: 2025-12-24 07:00:00 | Awal: 1019 | Masuk: 0 | Keluar: 1 | Sisa: 1018 | Ket: Penjualan - ID: 1033 | Status: OK | MATH OK
+ID: 178502 | Time: 2025-12-24 07:00:00 | Awal: 1018 | Masuk: 0 | Keluar: 1 | Sisa: 1017 | Ket: Penjualan - ID: 1035 | Status: OK | MATH OK
+ID: 178503 | Time: 2025-12-25 07:00:00 | Awal: 1017 | Masuk: 0 | Keluar: 2 | Sisa: 1015 | Ket: Penjualan - ID: 1037 | Status: OK | MATH OK
+ID: 178504 | Time: 2025-12-26 07:00:00 | Awal: 1015 | Masuk: 0 | Keluar: 2 | Sisa: 1013 | Ket: Penjualan - ID: 1040 | Status: OK | MATH OK
+ID: 178505 | Time: 2025-12-26 07:00:00 | Awal: 1013 | Masuk: 0 | Keluar: 1 | Sisa: 1012 | Ket: Penjualan - ID: 1042 | Status: OK | MATH OK
+ID: 178506 | Time: 2025-12-27 07:00:00 | Awal: 1012 | Masuk: 0 | Keluar: 2 | Sisa: 1010 | Ket: Penjualan - ID: 1044 | Status: OK | MATH OK
+ID: 178507 | Time: 2025-12-27 07:00:00 | Awal: 1010 | Masuk: 0 | Keluar: 2 | Sisa: 1008 | Ket: Penjualan - ID: 1046 | Status: OK | MATH OK
+ID: 178508 | Time: 2025-12-29 07:00:00 | Awal: 1008 | Masuk: 0 | Keluar: 1 | Sisa: 1007 | Ket: Penjualan - ID: 1048 | Status: OK | MATH OK
+ID: 178509 | Time: 2025-12-29 07:00:00 | Awal: 1007 | Masuk: 0 | Keluar: 2 | Sisa: 1005 | Ket: Penjualan - ID: 1050 | Status: OK | MATH OK
+ID: 178510 | Time: 2025-12-29 07:00:00 | Awal: 1005 | Masuk: 0 | Keluar: 2 | Sisa: 1003 | Ket: Penjualan - ID: 1051 | Status: OK | MATH OK
+ID: 178511 | Time: 2025-12-30 07:00:00 | Awal: 1003 | Masuk: 0 | Keluar: 3 | Sisa: 1000 | Ket: Penjualan - ID: 1054 | Status: OK | MATH OK
+ID: 178512 | Time: 2026-01-01 07:00:00 | Awal: 1000 | Masuk: 0 | Keluar: 1 | Sisa: 999 | Ket: Penjualan - ID: 1056 | Status: OK | MATH OK
+ID: 178513 | Time: 2026-01-01 07:00:00 | Awal: 999 | Masuk: 0 | Keluar: 2 | Sisa: 997 | Ket: Penjualan - ID: 1057 | Status: OK | MATH OK
+ID: 178514 | Time: 2026-01-01 07:00:00 | Awal: 997 | Masuk: 0 | Keluar: 1 | Sisa: 996 | Ket: Penjualan - ID: 1057 | Status: OK | MATH OK
+ID: 178515 | Time: 2026-01-01 07:00:00 | Awal: 996 | Masuk: 0 | Keluar: 1 | Sisa: 995 | Ket: Penjualan - ID: 1059 | Status: OK | MATH OK
+ID: 178516 | Time: 2026-01-02 07:00:00 | Awal: 995 | Masuk: 0 | Keluar: 1 | Sisa: 994 | Ket: Penjualan - ID: 1062 | Status: OK | MATH OK
+ID: 178517 | Time: 2026-01-03 07:00:00 | Awal: 994 | Masuk: 0 | Keluar: 1 | Sisa: 993 | Ket: Penjualan - ID: 1064 | Status: OK | MATH OK
+ID: 178518 | Time: 2026-01-03 07:00:00 | Awal: 993 | Masuk: 0 | Keluar: 1 | Sisa: 992 | Ket: Penjualan - ID: 1066 | Status: OK | MATH OK
+ID: 178519 | Time: 2026-01-05 07:00:00 | Awal: 992 | Masuk: 0 | Keluar: 2 | Sisa: 990 | Ket: Penjualan - ID: 1070 | Status: OK | MATH OK
+ID: 178520 | Time: 2026-01-06 07:00:00 | Awal: 990 | Masuk: 30 | Keluar: 0 | Sisa: 1020 | Ket: Pembelian - Faktur: 00495 | Status: OK | MATH OK
+ID: 178521 | Time: 2026-01-06 07:00:00 | Awal: 1020 | Masuk: 0 | Keluar: 1 | Sisa: 1019 | Ket: Penjualan - ID: 1074 | Status: OK | MATH OK
+ID: 178522 | Time: 2026-01-06 07:00:00 | Awal: 1019 | Masuk: 0 | Keluar: 2 | Sisa: 1017 | Ket: Penjualan - ID: 1077 | Status: OK | MATH OK
+ID: 178523 | Time: 2026-01-07 07:00:00 | Awal: 1017 | Masuk: 0 | Keluar: 1 | Sisa: 1016 | Ket: Penjualan - ID: 1080 | Status: OK | MATH OK
+ID: 178524 | Time: 2026-01-08 07:00:00 | Awal: 1016 | Masuk: 0 | Keluar: 2 | Sisa: 1014 | Ket: Penjualan - ID: 1081 | Status: OK | MATH OK
+ID: 178525 | Time: 2026-01-09 07:00:00 | Awal: 1014 | Masuk: 0 | Keluar: 1 | Sisa: 1013 | Ket: Penjualan - ID: 1085 | Status: OK | MATH OK
+ID: 178526 | Time: 2026-01-12 07:00:00 | Awal: 1013 | Masuk: 0 | Keluar: 2 | Sisa: 1011 | Ket: Penjualan - ID: 1093 | Status: OK | MATH OK
+ID: 178527 | Time: 2026-01-12 07:00:00 | Awal: 1011 | Masuk: 0 | Keluar: 1 | Sisa: 1010 | Ket: Penjualan - ID: 1094 | Status: OK | MATH OK
+ID: 178528 | Time: 2026-01-13 07:00:00 | Awal: 1010 | Masuk: 0 | Keluar: 2 | Sisa: 1008 | Ket: Penjualan - ID: 1097 | Status: OK | MATH OK
+
+--- RAW TRANSACTIONS (PENJUALAN) ---
+Penjualan ID 23 | Time: 2024-05-07 00:00:00 | Qty: 1
+Penjualan ID 23 | Time: 2024-05-07 00:00:00 | Qty: 1
+Penjualan ID 24 | Time: 2024-05-07 00:00:00 | Qty: 1
+Penjualan ID 24 | Time: 2024-05-07 00:00:00 | Qty: 1
+Penjualan ID 26 | Time: 2024-05-07 00:00:00 | Qty: 1
+Penjualan ID 14 | Time: 2024-05-29 12:41:31 | Qty: 2
+Penjualan ID 16 | Time: 2024-05-29 14:11:28 | Qty: 1
+Penjualan ID 17 | Time: 2024-05-29 14:38:34 | Qty: 1
+Penjualan ID 17 | Time: 2024-05-29 14:38:34 | Qty: 2
+Penjualan ID 49 | Time: 2024-12-05 00:00:00 | Qty: 1
+Penjualan ID 54 | Time: 2024-12-09 00:00:00 | Qty: 1
+Penjualan ID 69 | Time: 2024-12-20 00:00:00 | Qty: 2
+Penjualan ID 72 | Time: 2024-12-20 00:00:00 | Qty: 2
+Penjualan ID 72 | Time: 2024-12-20 00:00:00 | Qty: 1
+Penjualan ID 83 | Time: 2024-12-25 00:00:00 | Qty: 1
+Penjualan ID 84 | Time: 2024-12-26 00:00:00 | Qty: 1
+Penjualan ID 87 | Time: 2024-12-26 00:00:00 | Qty: 2
+Penjualan ID 88 | Time: 2024-12-26 00:00:00 | Qty: 0
+Penjualan ID 89 | Time: 2024-12-26 00:00:00 | Qty: 1
+Penjualan ID 89 | Time: 2024-12-26 00:00:00 | Qty: 1
+Penjualan ID 89 | Time: 2024-12-26 00:00:00 | Qty: 1
+Penjualan ID 102 | Time: 2025-01-14 00:00:00 | Qty: 1
+Penjualan ID 103 | Time: 2025-01-14 00:00:00 | Qty: 1
+Penjualan ID 110 | Time: 2025-01-15 17:34:23 | Qty: 0
+Penjualan ID 111 | Time: 2025-01-17 00:00:00 | Qty: 1
+Penjualan ID 112 | Time: 2025-01-17 00:00:00 | Qty: 1
+Penjualan ID 113 | Time: 2025-01-17 00:00:00 | Qty: 2
+Penjualan ID 113 | Time: 2025-01-17 00:00:00 | Qty: 1
+Penjualan ID 116 | Time: 2025-01-20 00:00:00 | Qty: 1
+Penjualan ID 120 | Time: 2025-01-20 00:00:00 | Qty: 1
+Penjualan ID 121 | Time: 2025-01-21 00:00:00 | Qty: 1
+Penjualan ID 122 | Time: 2025-01-22 00:00:00 | Qty: 1
+Penjualan ID 123 | Time: 2025-01-22 00:00:00 | Qty: 1
+Penjualan ID 127 | Time: 2025-01-23 00:00:00 | Qty: 2
+Penjualan ID 128 | Time: 2025-01-24 00:00:00 | Qty: 1
+Penjualan ID 128 | Time: 2025-01-24 00:00:00 | Qty: 1
+Penjualan ID 129 | Time: 2025-01-24 00:00:00 | Qty: 1
+Penjualan ID 130 | Time: 2025-01-25 00:00:00 | Qty: 2
+Penjualan ID 131 | Time: 2025-01-28 00:00:00 | Qty: 1
+Penjualan ID 131 | Time: 2025-01-28 00:00:00 | Qty: 1
+Penjualan ID 131 | Time: 2025-01-28 00:00:00 | Qty: 1
+Penjualan ID 131 | Time: 2025-01-28 00:00:00 | Qty: 1
+Penjualan ID 224 | Time: 2025-07-04 00:00:00 | Qty: 1
+Penjualan ID 226 | Time: 2025-07-04 00:00:00 | Qty: 1
+Penjualan ID 230 | Time: 2025-07-05 00:00:00 | Qty: 1
+Penjualan ID 231 | Time: 2025-07-05 00:00:00 | Qty: 1
+Penjualan ID 231 | Time: 2025-07-05 00:00:00 | Qty: 1
+Penjualan ID 232 | Time: 2025-07-05 00:00:00 | Qty: 1
+Penjualan ID 232 | Time: 2025-07-05 00:00:00 | Qty: 1
+Penjualan ID 239 | Time: 2025-07-07 00:00:00 | Qty: 1
+Penjualan ID 244 | Time: 2025-07-08 00:00:00 | Qty: 2
+Penjualan ID 246 | Time: 2025-07-08 00:00:00 | Qty: 1
+Penjualan ID 248 | Time: 2025-07-09 00:00:00 | Qty: 1
+Penjualan ID 266 | Time: 2025-07-12 00:00:00 | Qty: 1
+Penjualan ID 267 | Time: 2025-07-12 00:00:00 | Qty: 2
+Penjualan ID 268 | Time: 2025-07-12 00:00:00 | Qty: 2
+Penjualan ID 268 | Time: 2025-07-12 00:00:00 | Qty: 1
+Penjualan ID 269 | Time: 2025-07-14 00:00:00 | Qty: 1
+Penjualan ID 271 | Time: 2025-07-14 00:00:00 | Qty: 2
+Penjualan ID 296 | Time: 2025-07-17 00:00:00 | Qty: 3
+Penjualan ID 279 | Time: 2025-07-18 00:00:00 | Qty: 2
+Penjualan ID 281 | Time: 2025-07-18 00:00:00 | Qty: 2
+Penjualan ID 302 | Time: 2025-07-19 00:00:00 | Qty: 1
+Penjualan ID 303 | Time: 2025-07-19 00:00:00 | Qty: 1
+Penjualan ID 304 | Time: 2025-07-19 00:00:00 | Qty: 2
+Penjualan ID 319 | Time: 2025-07-22 00:00:00 | Qty: 1
+Penjualan ID 322 | Time: 2025-07-23 00:00:00 | Qty: 2
+Penjualan ID 335 | Time: 2025-07-26 00:00:00 | Qty: 1
+Penjualan ID 336 | Time: 2025-07-26 00:00:00 | Qty: 3
+Penjualan ID 337 | Time: 2025-07-26 00:00:00 | Qty: 1
+Penjualan ID 341 | Time: 2025-07-28 00:00:00 | Qty: 1
+Penjualan ID 342 | Time: 2025-07-28 00:00:00 | Qty: 2
+Penjualan ID 344 | Time: 2025-07-28 00:00:00 | Qty: 2
+Penjualan ID 345 | Time: 2025-07-29 00:00:00 | Qty: 1
+Penjualan ID 346 | Time: 2025-07-29 00:00:00 | Qty: 1
+Penjualan ID 349 | Time: 2025-07-29 00:00:00 | Qty: 5
+Penjualan ID 354 | Time: 2025-07-30 00:00:00 | Qty: 2
+Penjualan ID 365 | Time: 2025-08-01 00:00:00 | Qty: 1
+Penjualan ID 371 | Time: 2025-08-02 00:00:00 | Qty: 2
+Penjualan ID 372 | Time: 2025-08-02 00:00:00 | Qty: 1
+Penjualan ID 374 | Time: 2025-08-02 00:00:00 | Qty: 2
+Penjualan ID 374 | Time: 2025-08-02 00:00:00 | Qty: 1
+Penjualan ID 376 | Time: 2025-08-04 00:00:00 | Qty: 2
+Penjualan ID 377 | Time: 2025-08-04 00:00:00 | Qty: 1
+Penjualan ID 380 | Time: 2025-08-04 00:00:00 | Qty: 2
+Penjualan ID 381 | Time: 2025-08-04 00:00:00 | Qty: 1
+Penjualan ID 381 | Time: 2025-08-04 00:00:00 | Qty: 2
+Penjualan ID 383 | Time: 2025-08-05 00:00:00 | Qty: 1
+Penjualan ID 390 | Time: 2025-08-06 00:00:00 | Qty: 2
+Penjualan ID 394 | Time: 2025-08-07 00:00:00 | Qty: 1
+Penjualan ID 400 | Time: 2025-08-08 00:00:00 | Qty: 1
+Penjualan ID 401 | Time: 2025-08-08 00:00:00 | Qty: 1
+Penjualan ID 402 | Time: 2025-08-09 00:00:00 | Qty: 2
+Penjualan ID 402 | Time: 2025-08-09 00:00:00 | Qty: 2
+Penjualan ID 404 | Time: 2025-08-09 00:00:00 | Qty: 1
+Penjualan ID 409 | Time: 2025-08-11 00:00:00 | Qty: 1
+Penjualan ID 413 | Time: 2025-08-11 00:00:00 | Qty: 1
+Penjualan ID 414 | Time: 2025-08-12 00:00:00 | Qty: 1
+Penjualan ID 415 | Time: 2025-08-12 00:00:00 | Qty: 1
+Penjualan ID 416 | Time: 2025-08-12 00:00:00 | Qty: 1
+Penjualan ID 420 | Time: 2025-08-13 00:00:00 | Qty: 1
+Penjualan ID 421 | Time: 2025-08-13 00:00:00 | Qty: 1
+Penjualan ID 433 | Time: 2025-08-16 00:00:00 | Qty: 1
+Penjualan ID 434 | Time: 2025-08-16 00:00:00 | Qty: 2
+Penjualan ID 438 | Time: 2025-08-18 00:00:00 | Qty: 1
+Penjualan ID 441 | Time: 2025-08-18 00:00:00 | Qty: 2
+Penjualan ID 450 | Time: 2025-08-19 00:00:00 | Qty: 1
+Penjualan ID 491 | Time: 2025-08-22 00:00:00 | Qty: 1
+Penjualan ID 493 | Time: 2025-08-22 00:00:00 | Qty: 1
+Penjualan ID 509 | Time: 2025-08-23 00:00:00 | Qty: 1
+Penjualan ID 530 | Time: 2025-08-25 00:00:00 | Qty: 2
+Penjualan ID 549 | Time: 2025-08-27 00:00:00 | Qty: 1
+Penjualan ID 554 | Time: 2025-08-27 00:00:00 | Qty: 1
+Penjualan ID 566 | Time: 2025-08-28 00:00:00 | Qty: 2
+Penjualan ID 570 | Time: 2025-08-29 00:00:00 | Qty: 1
+Penjualan ID 573 | Time: 2025-08-29 00:00:00 | Qty: 1
+Penjualan ID 576 | Time: 2025-08-29 00:00:00 | Qty: 1
+Penjualan ID 579 | Time: 2025-08-30 07:00:00 | Qty: 1
+Penjualan ID 589 | Time: 2025-08-30 07:00:00 | Qty: 1
+Penjualan ID 602 | Time: 2025-09-01 07:00:00 | Qty: 1
+Penjualan ID 638 | Time: 2025-09-05 07:00:00 | Qty: 1
+Penjualan ID 642 | Time: 2025-09-06 07:00:00 | Qty: 1
+Penjualan ID 646 | Time: 2025-09-06 07:00:00 | Qty: 1
+Penjualan ID 668 | Time: 2025-09-09 07:00:00 | Qty: 2
+Penjualan ID 680 | Time: 2025-09-16 07:00:00 | Qty: 1
+Penjualan ID 684 | Time: 2025-09-16 07:00:00 | Qty: 2
+Penjualan ID 685 | Time: 2025-09-16 07:00:00 | Qty: 1
+Penjualan ID 689 | Time: 2025-09-17 07:00:00 | Qty: 1
+Penjualan ID 696 | Time: 2025-09-18 07:00:00 | Qty: 1
+Penjualan ID 698 | Time: 2025-09-19 07:00:00 | Qty: 5
+Penjualan ID 701 | Time: 2025-09-22 07:00:00 | Qty: 2
+Penjualan ID 702 | Time: 2025-09-22 07:00:00 | Qty: 1
+Penjualan ID 703 | Time: 2025-09-22 07:00:00 | Qty: 1
+Penjualan ID 713 | Time: 2025-09-24 07:00:00 | Qty: 1
+Penjualan ID 717 | Time: 2025-09-25 07:00:00 | Qty: 2
+Penjualan ID 719 | Time: 2025-09-26 07:00:00 | Qty: 1
+Penjualan ID 720 | Time: 2025-09-26 07:00:00 | Qty: 1
+Penjualan ID 722 | Time: 2025-09-27 07:00:00 | Qty: 1
+Penjualan ID 727 | Time: 2025-10-01 07:00:00 | Qty: 1
+Penjualan ID 728 | Time: 2025-10-02 07:00:00 | Qty: 1
+Penjualan ID 730 | Time: 2025-10-02 07:00:00 | Qty: 1
+Penjualan ID 735 | Time: 2025-10-04 07:00:00 | Qty: 2
+Penjualan ID 735 | Time: 2025-10-04 07:00:00 | Qty: 1
+Penjualan ID 739 | Time: 2025-10-06 07:00:00 | Qty: 1
+Penjualan ID 740 | Time: 2025-10-06 07:00:00 | Qty: 2
+Penjualan ID 742 | Time: 2025-10-06 07:00:00 | Qty: 1
+Penjualan ID 750 | Time: 2025-10-08 07:00:00 | Qty: 2
+Penjualan ID 788 | Time: 2025-10-20 07:00:00 | Qty: 4
+Penjualan ID 789 | Time: 2025-10-20 07:00:00 | Qty: 2
+Penjualan ID 795 | Time: 2025-10-22 07:00:00 | Qty: 1
+Penjualan ID 796 | Time: 2025-10-22 07:00:00 | Qty: 1
+Penjualan ID 799 | Time: 2025-10-23 07:00:00 | Qty: 1
+Penjualan ID 802 | Time: 2025-10-24 07:00:00 | Qty: 2
+Penjualan ID 807 | Time: 2025-10-25 07:00:00 | Qty: 2
+Penjualan ID 810 | Time: 2025-10-27 07:00:00 | Qty: 1
+Penjualan ID 813 | Time: 2025-10-28 07:00:00 | Qty: 2
+Penjualan ID 820 | Time: 2025-10-29 07:00:00 | Qty: 2
+Penjualan ID 821 | Time: 2025-10-29 07:00:00 | Qty: 1
+Penjualan ID 824 | Time: 2025-10-30 07:00:00 | Qty: 1
+Penjualan ID 828 | Time: 2025-10-31 07:00:00 | Qty: 1
+Penjualan ID 829 | Time: 2025-11-01 07:00:00 | Qty: 1
+Penjualan ID 830 | Time: 2025-11-01 07:00:00 | Qty: 1
+Penjualan ID 831 | Time: 2025-11-01 07:00:00 | Qty: 2
+Penjualan ID 833 | Time: 2025-11-03 07:00:00 | Qty: 2
+Penjualan ID 833 | Time: 2025-11-03 07:00:00 | Qty: 1
+Penjualan ID 835 | Time: 2025-11-03 07:00:00 | Qty: 2
+Penjualan ID 842 | Time: 2025-11-05 07:00:00 | Qty: 1
+Penjualan ID 847 | Time: 2025-11-06 07:00:00 | Qty: 2
+Penjualan ID 855 | Time: 2025-11-08 07:00:00 | Qty: 2
+Penjualan ID 856 | Time: 2025-11-08 07:00:00 | Qty: 1
+Penjualan ID 862 | Time: 2025-11-11 07:00:00 | Qty: 1
+Penjualan ID 866 | Time: 2025-11-12 07:00:00 | Qty: 1
+Penjualan ID 869 | Time: 2025-11-13 07:00:00 | Qty: 1
+Penjualan ID 875 | Time: 2025-11-14 07:00:00 | Qty: 1
+Penjualan ID 877 | Time: 2025-11-15 07:00:00 | Qty: 1
+Penjualan ID 883 | Time: 2025-11-18 07:00:00 | Qty: 1
+Penjualan ID 885 | Time: 2025-11-18 07:00:00 | Qty: 1
+Penjualan ID 893 | Time: 2025-11-20 07:00:00 | Qty: 1
+Penjualan ID 897 | Time: 2025-11-21 07:00:00 | Qty: 1
+Penjualan ID 897 | Time: 2025-11-21 07:00:00 | Qty: 2
+Penjualan ID 899 | Time: 2025-11-22 07:00:00 | Qty: 1
+Penjualan ID 902 | Time: 2025-11-24 07:00:00 | Qty: 1
+Penjualan ID 903 | Time: 2025-11-24 07:00:00 | Qty: 2
+Penjualan ID 909 | Time: 2025-11-25 07:00:00 | Qty: 2
+Penjualan ID 914 | Time: 2025-11-27 07:00:00 | Qty: 1
+Penjualan ID 915 | Time: 2025-11-27 07:00:00 | Qty: 1
+Penjualan ID 918 | Time: 2025-11-27 07:00:00 | Qty: 1
+Penjualan ID 920 | Time: 2025-11-28 07:00:00 | Qty: 1
+Penjualan ID 924 | Time: 2025-11-29 07:00:00 | Qty: 2
+Penjualan ID 930 | Time: 2025-12-02 07:00:00 | Qty: 1
+Penjualan ID 933 | Time: 2025-12-02 07:00:00 | Qty: 1
+Penjualan ID 938 | Time: 2025-12-04 07:00:00 | Qty: 2
+Penjualan ID 941 | Time: 2025-12-05 07:00:00 | Qty: 1
+Penjualan ID 942 | Time: 2025-12-05 07:00:00 | Qty: 1
+Penjualan ID 943 | Time: 2025-12-05 07:00:00 | Qty: 2
+Penjualan ID 946 | Time: 2025-12-06 07:00:00 | Qty: 1
+Penjualan ID 949 | Time: 2025-12-08 07:00:00 | Qty: 1
+Penjualan ID 950 | Time: 2025-12-08 07:00:00 | Qty: 1
+Penjualan ID 951 | Time: 2025-12-08 07:00:00 | Qty: 2
+Penjualan ID 954 | Time: 2025-12-08 07:00:00 | Qty: 1
+Penjualan ID 956 | Time: 2025-12-09 07:00:00 | Qty: 3
+Penjualan ID 964 | Time: 2025-12-11 07:00:00 | Qty: 1
+Penjualan ID 966 | Time: 2025-12-12 07:00:00 | Qty: 1
+Penjualan ID 970 | Time: 2025-12-13 07:00:00 | Qty: 2
+Penjualan ID 970 | Time: 2025-12-13 07:00:00 | Qty: 2
+Penjualan ID 976 | Time: 2025-12-15 07:00:00 | Qty: 3
+Penjualan ID 977 | Time: 2025-12-15 07:00:00 | Qty: 2
+Penjualan ID 979 | Time: 2025-12-16 07:00:00 | Qty: 1
+Penjualan ID 979 | Time: 2025-12-16 07:00:00 | Qty: 2
+Penjualan ID 990 | Time: 2025-12-19 07:00:00 | Qty: 1
+Penjualan ID 994 | Time: 2025-12-19 07:00:00 | Qty: 2
+Penjualan ID 995 | Time: 2025-12-20 07:00:00 | Qty: 1
+Penjualan ID 1024 | Time: 2025-12-22 07:00:00 | Qty: 1
+Penjualan ID 1028 | Time: 2025-12-23 07:00:00 | Qty: 2
+Penjualan ID 1029 | Time: 2025-12-23 07:00:00 | Qty: 1
+Penjualan ID 1030 | Time: 2025-12-23 07:00:00 | Qty: 1
+Penjualan ID 1033 | Time: 2025-12-24 07:00:00 | Qty: 1
+Penjualan ID 1035 | Time: 2025-12-24 07:00:00 | Qty: 1
+Penjualan ID 1037 | Time: 2025-12-25 07:00:00 | Qty: 2
+Penjualan ID 1040 | Time: 2025-12-26 07:00:00 | Qty: 2
+Penjualan ID 1042 | Time: 2025-12-26 07:00:00 | Qty: 1
+Penjualan ID 1044 | Time: 2025-12-27 07:00:00 | Qty: 2
+Penjualan ID 1046 | Time: 2025-12-27 07:00:00 | Qty: 2
+Penjualan ID 1048 | Time: 2025-12-29 07:00:00 | Qty: 1
+Penjualan ID 1050 | Time: 2025-12-29 07:00:00 | Qty: 2
+Penjualan ID 1051 | Time: 2025-12-29 07:00:00 | Qty: 2
+Penjualan ID 1054 | Time: 2025-12-30 07:00:00 | Qty: 3
+Penjualan ID 1056 | Time: 2026-01-01 07:00:00 | Qty: 1
+Penjualan ID 1057 | Time: 2026-01-01 07:00:00 | Qty: 2
+Penjualan ID 1057 | Time: 2026-01-01 07:00:00 | Qty: 1
+Penjualan ID 1059 | Time: 2026-01-01 07:00:00 | Qty: 1
+Penjualan ID 1062 | Time: 2026-01-02 07:00:00 | Qty: 1
+Penjualan ID 1064 | Time: 2026-01-03 07:00:00 | Qty: 1
+Penjualan ID 1066 | Time: 2026-01-03 07:00:00 | Qty: 1
+Penjualan ID 1070 | Time: 2026-01-05 07:00:00 | Qty: 2
+Penjualan ID 1074 | Time: 2026-01-06 07:00:00 | Qty: 1
+Penjualan ID 1077 | Time: 2026-01-06 07:00:00 | Qty: 2
+Penjualan ID 1080 | Time: 2026-01-07 07:00:00 | Qty: 1
+Penjualan ID 1081 | Time: 2026-01-08 07:00:00 | Qty: 2
+Penjualan ID 1085 | Time: 2026-01-09 07:00:00 | Qty: 1
+Penjualan ID 1093 | Time: 2026-01-12 07:00:00 | Qty: 2
+Penjualan ID 1094 | Time: 2026-01-12 07:00:00 | Qty: 1
+Penjualan ID 1097 | Time: 2026-01-13 07:00:00 | Qty: 2
+
+--- RAW TRANSACTIONS (PEMBELIAN) ---
+Pembelian ID 55 | Time: 2025-07-15 00:00:00 | Qty: 20
+Pembelian ID 63 | Time: 2025-07-17 00:00:00 | Qty: 30
+Pembelian ID 121 | Time: 2025-08-08 00:00:00 | Qty: 12
+Pembelian ID 134 | Time: 2025-08-09 00:00:00 | Qty: 30
+Pembelian ID 155 | Time: 2025-08-26 00:00:00 | Qty: 1000
+Pembelian ID 266 | Time: 2025-10-11 07:00:00 | Qty: 30
+Pembelian ID 296 | Time: 2025-10-25 07:00:00 | Qty: 30
+Pembelian ID 342 | Time: 2025-11-20 07:00:00 | Qty: 30
+Pembelian ID 374 | Time: 2025-12-06 07:00:00 | Qty: 30
+Pembelian ID 406 | Time: 2025-12-20 07:00:00 | Qty: 30
+Pembelian ID 445 | Time: 2026-01-06 07:00:00 | Qty: 30

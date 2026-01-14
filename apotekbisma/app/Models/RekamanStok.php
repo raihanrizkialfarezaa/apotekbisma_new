@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use App\Models\Produk;
 
 class RekamanStok extends Model
@@ -37,10 +38,6 @@ class RekamanStok extends Model
                 ]);
                 $rekamanStok->stok_sisa = $calculatedSisa;
             }
-            
-            if ($rekamanStok->stok_sisa < 0) {
-                $rekamanStok->stok_sisa = 0;
-            }
         });
         
         static::updating(function ($rekamanStok) {
@@ -53,10 +50,6 @@ class RekamanStok extends Model
                     'calculated_sisa' => $calculatedSisa,
                 ]);
                 $rekamanStok->stok_sisa = $calculatedSisa;
-            }
-            
-            if ($rekamanStok->stok_sisa < 0) {
-                $rekamanStok->stok_sisa = 0;
             }
         });
     }
@@ -116,6 +109,14 @@ class RekamanStok extends Model
             return;
         }
         
+        $lockKey = 'stock_recalc_lock_' . $productId;
+        $lock = Cache::lock($lockKey, 30);
+        
+        if (!$lock->get()) {
+            Log::info('recalculateStock skipped - lock held by another process', ['product_id' => $productId]);
+            return;
+        }
+        
         try {
             static::$preventRecalculation = true;
             
@@ -128,6 +129,7 @@ class RekamanStok extends Model
 
             if ($stokRecords->isEmpty()) {
                 static::$preventRecalculation = false;
+                $lock->release();
                 return;
             }
 
@@ -163,20 +165,40 @@ class RekamanStok extends Model
                 $runningStock = $calculatedSisa;
             }
 
-            foreach ($updates as $recordId => $updateData) {
-                DB::table('rekaman_stoks')
-                    ->where('id_rekaman_stok', $recordId)
-                    ->update($updateData);
+            if (!empty($updates)) {
+                foreach ($updates as $recordId => $updateData) {
+                    DB::table('rekaman_stoks')
+                        ->where('id_rekaman_stok', $recordId)
+                        ->update($updateData);
+                }
+                
+                Log::info('recalculateStock fixed records', [
+                    'product_id' => $productId,
+                    'records_fixed' => count($updates)
+                ]);
             }
             
-            DB::table('produk')
-                ->where('id_produk', $productId)
-                ->update(['stok' => max(0, $runningStock)]);
+            $finalStock = max(0, $runningStock);
+            $currentStock = DB::table('produk')->where('id_produk', $productId)->value('stok');
+            
+            if (intval($currentStock) !== $finalStock) {
+                DB::table('produk')
+                    ->where('id_produk', $productId)
+                    ->update(['stok' => $finalStock]);
+                    
+                Log::info('recalculateStock synced produk.stok', [
+                    'product_id' => $productId,
+                    'old_stock' => $currentStock,
+                    'new_stock' => $finalStock
+                ]);
+            }
                 
             static::$preventRecalculation = false;
+            $lock->release();
             
         } catch (\Exception $e) {
             static::$preventRecalculation = false;
+            $lock->release();
             Log::error('RekamanStok::recalculateStock error: ' . $e->getMessage());
             throw $e;
         }
@@ -214,11 +236,100 @@ class RekamanStok extends Model
         $calculatedStock = self::getCalculatedStock($productId);
         $productStock = intval($produk->stok);
         
+        $chainErrors = 0;
+        $stokRecords = DB::table('rekaman_stoks')
+            ->where('id_produk', $productId)
+            ->orderBy('waktu', 'asc')
+            ->orderBy('created_at', 'asc')
+            ->orderBy('id_rekaman_stok', 'asc')
+            ->get();
+            
+        if ($stokRecords->isNotEmpty()) {
+            $runningStock = intval($stokRecords->first()->stok_awal);
+            $isFirst = true;
+            
+            foreach ($stokRecords as $record) {
+                if (!$isFirst && intval($record->stok_awal) != $runningStock) {
+                    $chainErrors++;
+                }
+                
+                $calculatedSisa = $runningStock + intval($record->stok_masuk) - intval($record->stok_keluar);
+                if (intval($record->stok_sisa) != $calculatedSisa) {
+                    $chainErrors++;
+                }
+                
+                $runningStock = $calculatedSisa;
+                $isFirst = false;
+            }
+        }
+        
         return [
-            'valid' => $productStock === $calculatedStock,
+            'valid' => $productStock === $calculatedStock && $chainErrors === 0,
             'product_stock' => $productStock,
             'calculated_stock' => $calculatedStock,
-            'difference' => $productStock - $calculatedStock
+            'difference' => $productStock - $calculatedStock,
+            'chain_errors' => $chainErrors
+        ];
+    }
+    
+    public static function cleanupDuplicates($productId)
+    {
+        $duplicatePenjualan = DB::table('rekaman_stoks')
+            ->select('id_penjualan', DB::raw('MIN(id_rekaman_stok) as keep_id'), DB::raw('COUNT(*) as cnt'))
+            ->where('id_produk', $productId)
+            ->whereNotNull('id_penjualan')
+            ->groupBy('id_penjualan')
+            ->having('cnt', '>', 1)
+            ->get();
+        
+        $deletedCount = 0;
+        foreach ($duplicatePenjualan as $dup) {
+            $deleted = DB::table('rekaman_stoks')
+                ->where('id_produk', $productId)
+                ->where('id_penjualan', $dup->id_penjualan)
+                ->where('id_rekaman_stok', '!=', $dup->keep_id)
+                ->delete();
+            $deletedCount += $deleted;
+        }
+        
+        $duplicatePembelian = DB::table('rekaman_stoks')
+            ->select('id_pembelian', DB::raw('MIN(id_rekaman_stok) as keep_id'), DB::raw('COUNT(*) as cnt'))
+            ->where('id_produk', $productId)
+            ->whereNotNull('id_pembelian')
+            ->groupBy('id_pembelian')
+            ->having('cnt', '>', 1)
+            ->get();
+        
+        foreach ($duplicatePembelian as $dup) {
+            $deleted = DB::table('rekaman_stoks')
+                ->where('id_produk', $productId)
+                ->where('id_pembelian', $dup->id_pembelian)
+                ->where('id_rekaman_stok', '!=', $dup->keep_id)
+                ->delete();
+            $deletedCount += $deleted;
+        }
+        
+        if ($deletedCount > 0) {
+            Log::info('cleanupDuplicates removed records', [
+                'product_id' => $productId,
+                'deleted_count' => $deletedCount
+            ]);
+        }
+        
+        return $deletedCount;
+    }
+    
+    public static function fullRepair($productId)
+    {
+        $duplicatesRemoved = self::cleanupDuplicates($productId);
+        
+        self::recalculateStock($productId);
+        
+        $integrity = self::verifyIntegrity($productId);
+        
+        return [
+            'duplicates_removed' => $duplicatesRemoved,
+            'integrity' => $integrity
         ];
     }
 }

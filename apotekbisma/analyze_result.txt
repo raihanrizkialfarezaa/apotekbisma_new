@@ -1,76 +1,826 @@
-﻿=======================================================
-  ANALYZE STOCK MANUAL ADJUSTMENTS - DETECT ANOMALIES
-  2026-01-08 21:54:26
-=======================================================
+============================================
+ANALISIS DETAIL KARTU STOK PRODUK ID: 48
+============================================
 
-Found 236 manual stock adjustments.
+INFORMASI PRODUK:
+- Nama: ANDALAN
+- Stok Aktual (produk.stok): -2
 
-=======================================================
-  ANOMALIES FOUND: 5
-=======================================================
+============================================
+SEMUA REKAMAN STOK (URUTAN KRONOLOGIS ASC)
+============================================
 
-Product ID: 301
-Product: GANDAPURA 60mL
-Adjustment ID: 175314
-Adjustment Time: 2025-12-31 21:19:33
-Adjustment Masuk: 2 -> Stok Sisa: 5
-Previous: 2025-12-04 07:02:25 (Stok: 3)
-Next: 2026-01-02 18:53:26 (Expected: 4, Actual: 5)
-Issue: Calculation mismatch with next transaction
----
+Total rekaman_stoks: 255
 
-Product ID: 300
-Product: GANDAPURA 30mL
-Adjustment ID: 175313
-Adjustment Time: 2025-12-31 21:19:20
-Adjustment Masuk: 1 -> Stok Sisa: 6
-Previous: 2025-12-30 13:32:05 (Stok: 5)
-Next: 2026-01-02 23:47:54 (Expected: 5, Actual: 4)
-Issue: Calculation mismatch with next transaction
----
+#1 | ID:150826 | 2024-05-07 00:01:46 | Awal:71 | +0 | -1 | Sisa:70
+   Ket: Penjualan - ID: 23 | Jual:23 | Beli:-
+#2 | ID:150827 | 2024-05-07 00:01:47 | Awal:70 | +0 | -1 | Sisa:69
+   Ket: Penjualan - ID: 23 | Jual:23 | Beli:-
+#3 | ID:150828 | 2024-05-07 00:01:48 | Awal:69 | +0 | -1 | Sisa:68
+   Ket: Penjualan - ID: 24 | Jual:24 | Beli:-
+#4 | ID:150829 | 2024-05-07 00:01:49 | Awal:68 | +0 | -1 | Sisa:67
+   Ket: Penjualan - ID: 24 | Jual:24 | Beli:-
+#5 | ID:150830 | 2024-05-07 00:01:50 | Awal:67 | +0 | -1 | Sisa:66
+   Ket: Penjualan - ID: 26 | Jual:26 | Beli:-
+#6 | ID:150831 | 2024-05-29 12:41:38 | Awal:66 | +0 | -2 | Sisa:64
+   Ket: Penjualan - ID: 14 | Jual:14 | Beli:-
+#7 | ID:150832 | 2024-05-29 14:11:37 | Awal:64 | +0 | -1 | Sisa:63
+   Ket: Penjualan - ID: 16 | Jual:16 | Beli:-
+#8 | ID:150833 | 2024-05-29 14:38:46 | Awal:63 | +0 | -1 | Sisa:62
+   Ket: Penjualan - ID: 17 | Jual:17 | Beli:-
+#9 | ID:150834 | 2024-05-29 14:38:47 | Awal:62 | +0 | -2 | Sisa:60
+   Ket: Penjualan - ID: 17 | Jual:17 | Beli:-
+#10 | ID:150835 | 2024-12-05 00:00:23 | Awal:60 | +0 | -1 | Sisa:59
+   Ket: Penjualan - ID: 49 | Jual:49 | Beli:-
+#11 | ID:150836 | 2024-12-09 00:00:36 | Awal:59 | +0 | -1 | Sisa:58
+   Ket: Penjualan - ID: 54 | Jual:54 | Beli:-
+#12 | ID:150837 | 2024-12-20 00:00:26 | Awal:58 | +0 | -2 | Sisa:56
+   Ket: Penjualan - ID: 72 | Jual:72 | Beli:-
+#13 | ID:150838 | 2024-12-20 00:00:27 | Awal:56 | +0 | -1 | Sisa:55
+   Ket: Penjualan - ID: 72 | Jual:72 | Beli:-
+#14 | ID:150839 | 2024-12-20 00:00:28 | Awal:55 | +0 | -2 | Sisa:53
+   Ket: Penjualan - ID: 69 | Jual:69 | Beli:-
+#15 | ID:150840 | 2024-12-25 00:00:25 | Awal:53 | +0 | -1 | Sisa:52
+   Ket: Penjualan - ID: 83 | Jual:83 | Beli:-
+#16 | ID:150841 | 2024-12-26 00:00:55 | Awal:52 | +0 | -1 | Sisa:51
+   Ket: Penjualan - ID: 84 | Jual:84 | Beli:-
+#17 | ID:150842 | 2024-12-26 00:00:56 | Awal:51 | +0 | -2 | Sisa:49
+   Ket: Penjualan - ID: 87 | Jual:87 | Beli:-
+#18 | ID:150843 | 2024-12-26 00:00:57 | Awal:49 | +0 | -0 | Sisa:49
+   Ket: Penjualan - ID: 88 | Jual:88 | Beli:-
+#19 | ID:150844 | 2024-12-26 00:00:58 | Awal:49 | +0 | -1 | Sisa:48
+   Ket: Penjualan - ID: 89 | Jual:89 | Beli:-
+#20 | ID:150845 | 2024-12-26 00:00:59 | Awal:48 | +0 | -1 | Sisa:47
+   Ket: Penjualan - ID: 89 | Jual:89 | Beli:-
+#21 | ID:150846 | 2024-12-26 00:01:00 | Awal:47 | +0 | -1 | Sisa:46
+   Ket: Penjualan - ID: 89 | Jual:89 | Beli:-
+#22 | ID:150847 | 2025-01-14 00:00:59 | Awal:46 | +0 | -1 | Sisa:45
+   Ket: Penjualan - ID: 102 | Jual:102 | Beli:-
+#23 | ID:150848 | 2025-01-14 00:01:00 | Awal:45 | +0 | -1 | Sisa:44
+   Ket: Penjualan - ID: 103 | Jual:103 | Beli:-
+#24 | ID:150849 | 2025-01-15 17:34:28 | Awal:44 | +0 | -0 | Sisa:44
+   Ket: Penjualan - ID: 110 | Jual:110 | Beli:-
+#25 | ID:150850 | 2025-01-17 00:00:16 | Awal:44 | +0 | -1 | Sisa:43
+   Ket: Penjualan - ID: 111 | Jual:111 | Beli:-
+#26 | ID:150851 | 2025-01-17 00:00:17 | Awal:43 | +0 | -1 | Sisa:42
+   Ket: Penjualan - ID: 112 | Jual:112 | Beli:-
+#27 | ID:150852 | 2025-01-17 00:00:18 | Awal:42 | +0 | -2 | Sisa:40
+   Ket: Penjualan - ID: 113 | Jual:113 | Beli:-
+#28 | ID:150853 | 2025-01-17 00:00:19 | Awal:40 | +0 | -1 | Sisa:39
+   Ket: Penjualan - ID: 113 | Jual:113 | Beli:-
+#29 | ID:150854 | 2025-01-20 00:00:56 | Awal:39 | +0 | -1 | Sisa:38
+   Ket: Penjualan - ID: 116 | Jual:116 | Beli:-
+#30 | ID:150855 | 2025-01-20 00:00:57 | Awal:38 | +0 | -1 | Sisa:37
+   Ket: Penjualan - ID: 120 | Jual:120 | Beli:-
+#31 | ID:150856 | 2025-01-21 00:00:10 | Awal:37 | +0 | -1 | Sisa:36
+   Ket: Penjualan - ID: 121 | Jual:121 | Beli:-
+#32 | ID:150857 | 2025-01-22 00:00:20 | Awal:36 | +0 | -1 | Sisa:35
+   Ket: Penjualan - ID: 122 | Jual:122 | Beli:-
+#33 | ID:150858 | 2025-01-22 00:00:21 | Awal:35 | +0 | -1 | Sisa:34
+   Ket: Penjualan - ID: 123 | Jual:123 | Beli:-
+#34 | ID:150859 | 2025-01-23 00:00:23 | Awal:34 | +0 | -2 | Sisa:32
+   Ket: Penjualan - ID: 127 | Jual:127 | Beli:-
+#35 | ID:150860 | 2025-01-24 00:00:47 | Awal:32 | +0 | -1 | Sisa:31
+   Ket: Penjualan - ID: 128 | Jual:128 | Beli:-
+#36 | ID:150861 | 2025-01-24 00:00:48 | Awal:31 | +0 | -1 | Sisa:30
+   Ket: Penjualan - ID: 128 | Jual:128 | Beli:-
+#37 | ID:150862 | 2025-01-24 00:00:49 | Awal:30 | +0 | -1 | Sisa:29
+   Ket: Penjualan - ID: 129 | Jual:129 | Beli:-
+#38 | ID:150863 | 2025-01-25 00:00:41 | Awal:29 | +0 | -2 | Sisa:27
+   Ket: Penjualan - ID: 130 | Jual:130 | Beli:-
+#39 | ID:150864 | 2025-01-28 00:00:28 | Awal:27 | +0 | -1 | Sisa:26
+   Ket: Penjualan - ID: 131 | Jual:131 | Beli:-
+#40 | ID:150865 | 2025-01-28 00:00:29 | Awal:26 | +0 | -1 | Sisa:25
+   Ket: Penjualan - ID: 131 | Jual:131 | Beli:-
+#41 | ID:150866 | 2025-01-28 00:00:30 | Awal:25 | +0 | -1 | Sisa:24
+   Ket: Penjualan - ID: 131 | Jual:131 | Beli:-
+#42 | ID:150867 | 2025-01-28 00:00:31 | Awal:24 | +0 | -1 | Sisa:23
+   Ket: Penjualan - ID: 131 | Jual:131 | Beli:-
+#43 | ID:150868 | 2025-07-04 00:00:46 | Awal:23 | +0 | -1 | Sisa:22
+   Ket: Penjualan - ID: 224 | Jual:224 | Beli:-
+#44 | ID:150869 | 2025-07-04 00:00:47 | Awal:22 | +0 | -1 | Sisa:21
+   Ket: Penjualan - ID: 226 | Jual:226 | Beli:-
+#45 | ID:150870 | 2025-07-05 00:00:53 | Awal:21 | +0 | -1 | Sisa:20
+   Ket: Penjualan - ID: 230 | Jual:230 | Beli:-
+#46 | ID:150871 | 2025-07-05 00:00:54 | Awal:20 | +0 | -1 | Sisa:19
+   Ket: Penjualan - ID: 231 | Jual:231 | Beli:-
+#47 | ID:150872 | 2025-07-05 00:00:55 | Awal:19 | +0 | -1 | Sisa:18
+   Ket: Penjualan - ID: 231 | Jual:231 | Beli:-
+#48 | ID:150873 | 2025-07-05 00:00:56 | Awal:18 | +0 | -1 | Sisa:17
+   Ket: Penjualan - ID: 232 | Jual:232 | Beli:-
+#49 | ID:150874 | 2025-07-05 00:00:57 | Awal:17 | +0 | -1 | Sisa:16
+   Ket: Penjualan - ID: 232 | Jual:232 | Beli:-
+#50 | ID:150875 | 2025-07-07 00:00:32 | Awal:16 | +0 | -1 | Sisa:15
+   Ket: Penjualan - ID: 239 | Jual:239 | Beli:-
+#51 | ID:150876 | 2025-07-08 00:00:43 | Awal:15 | +0 | -2 | Sisa:13
+   Ket: Penjualan - ID: 244 | Jual:244 | Beli:-
+#52 | ID:150877 | 2025-07-08 00:00:44 | Awal:13 | +0 | -1 | Sisa:12
+   Ket: Penjualan - ID: 246 | Jual:246 | Beli:-
+#53 | ID:150878 | 2025-07-09 00:00:51 | Awal:12 | +0 | -1 | Sisa:11
+   Ket: Penjualan - ID: 248 | Jual:248 | Beli:-
+#54 | ID:150879 | 2025-07-12 00:00:39 | Awal:11 | +0 | -1 | Sisa:10
+   Ket: Penjualan - ID: 266 | Jual:266 | Beli:-
+#55 | ID:150880 | 2025-07-12 00:00:40 | Awal:10 | +0 | -2 | Sisa:8
+   Ket: Penjualan - ID: 267 | Jual:267 | Beli:-
+#56 | ID:150881 | 2025-07-12 00:00:41 | Awal:8 | +0 | -2 | Sisa:6
+   Ket: Penjualan - ID: 268 | Jual:268 | Beli:-
+#57 | ID:150882 | 2025-07-12 00:00:42 | Awal:6 | +0 | -1 | Sisa:5
+   Ket: Penjualan - ID: 268 | Jual:268 | Beli:-
+#58 | ID:150883 | 2025-07-14 00:00:30 | Awal:5 | +0 | -1 | Sisa:4
+   Ket: Penjualan - ID: 269 | Jual:269 | Beli:-
+#59 | ID:150884 | 2025-07-14 00:00:31 | Awal:4 | +0 | -2 | Sisa:2
+   Ket: Penjualan - ID: 271 | Jual:271 | Beli:-
+#60 | ID:150885 | 2025-07-15 00:00:34 | Awal:2 | +20 | -0 | Sisa:22
+   Ket: Pembelian - Faktur: 376627 | Jual:- | Beli:55
+#61 | ID:150886 | 2025-07-17 00:00:33 | Awal:22 | +30 | -0 | Sisa:52
+   Ket: Pembelian - Faktur: 1678 | Jual:- | Beli:63
+#62 | ID:150887 | 2025-07-17 00:00:34 | Awal:52 | +0 | -3 | Sisa:49
+   Ket: Penjualan - ID: 296 | Jual:296 | Beli:-
+#63 | ID:150888 | 2025-07-18 00:00:35 | Awal:49 | +0 | -2 | Sisa:47
+   Ket: Penjualan - ID: 279 | Jual:279 | Beli:-
+#64 | ID:150889 | 2025-07-18 00:00:36 | Awal:47 | +0 | -2 | Sisa:45
+   Ket: Penjualan - ID: 281 | Jual:281 | Beli:-
+#65 | ID:150890 | 2025-07-19 00:00:35 | Awal:45 | +0 | -1 | Sisa:44
+   Ket: Penjualan - ID: 302 | Jual:302 | Beli:-
+#66 | ID:150891 | 2025-07-19 00:00:36 | Awal:44 | +0 | -1 | Sisa:43
+   Ket: Penjualan - ID: 303 | Jual:303 | Beli:-
+#67 | ID:150892 | 2025-07-19 00:00:37 | Awal:43 | +0 | -2 | Sisa:41
+   Ket: Penjualan - ID: 304 | Jual:304 | Beli:-
+#68 | ID:150893 | 2025-07-22 00:00:30 | Awal:41 | +0 | -1 | Sisa:40
+   Ket: Penjualan - ID: 319 | Jual:319 | Beli:-
+#69 | ID:150894 | 2025-07-23 00:00:36 | Awal:40 | +0 | -2 | Sisa:38
+   Ket: Penjualan - ID: 322 | Jual:322 | Beli:-
+#70 | ID:150895 | 2025-07-26 00:00:39 | Awal:38 | +0 | -1 | Sisa:37
+   Ket: Penjualan - ID: 335 | Jual:335 | Beli:-
+#71 | ID:150896 | 2025-07-26 00:00:40 | Awal:37 | +0 | -3 | Sisa:34
+   Ket: Penjualan - ID: 336 | Jual:336 | Beli:-
+#72 | ID:150897 | 2025-07-26 00:00:41 | Awal:34 | +0 | -1 | Sisa:33
+   Ket: Penjualan - ID: 337 | Jual:337 | Beli:-
+#73 | ID:150898 | 2025-07-28 00:00:36 | Awal:33 | +0 | -1 | Sisa:32
+   Ket: Penjualan - ID: 341 | Jual:341 | Beli:-
+#74 | ID:150899 | 2025-07-28 00:00:37 | Awal:32 | +0 | -2 | Sisa:30
+   Ket: Penjualan - ID: 342 | Jual:342 | Beli:-
+#75 | ID:150900 | 2025-07-28 00:00:38 | Awal:30 | +0 | -2 | Sisa:28
+   Ket: Penjualan - ID: 344 | Jual:344 | Beli:-
+#76 | ID:150901 | 2025-07-29 00:00:42 | Awal:28 | +0 | -1 | Sisa:27
+   Ket: Penjualan - ID: 345 | Jual:345 | Beli:-
+#77 | ID:150902 | 2025-07-29 00:00:43 | Awal:27 | +0 | -1 | Sisa:26
+   Ket: Penjualan - ID: 346 | Jual:346 | Beli:-
+#78 | ID:150903 | 2025-07-29 00:00:44 | Awal:26 | +0 | -5 | Sisa:21
+   Ket: Penjualan - ID: 349 | Jual:349 | Beli:-
+#79 | ID:150904 | 2025-07-30 00:00:27 | Awal:21 | +0 | -2 | Sisa:19
+   Ket: Penjualan - ID: 354 | Jual:354 | Beli:-
+#80 | ID:150905 | 2025-08-01 00:00:29 | Awal:19 | +0 | -1 | Sisa:18
+   Ket: Penjualan - ID: 365 | Jual:365 | Beli:-
+#81 | ID:150906 | 2025-08-02 00:00:24 | Awal:18 | +0 | -2 | Sisa:16
+   Ket: Penjualan - ID: 371 | Jual:371 | Beli:-
+#82 | ID:150907 | 2025-08-02 00:00:25 | Awal:16 | +0 | -1 | Sisa:15
+   Ket: Penjualan - ID: 372 | Jual:372 | Beli:-
+#83 | ID:150908 | 2025-08-02 00:00:26 | Awal:15 | +0 | -2 | Sisa:13
+   Ket: Penjualan - ID: 374 | Jual:374 | Beli:-
+#84 | ID:150909 | 2025-08-02 00:00:27 | Awal:13 | +0 | -1 | Sisa:12
+   Ket: Penjualan - ID: 374 | Jual:374 | Beli:-
+#85 | ID:150910 | 2025-08-04 00:01:04 | Awal:12 | +0 | -1 | Sisa:11
+   Ket: Penjualan - ID: 377 | Jual:377 | Beli:-
+#86 | ID:150911 | 2025-08-04 00:01:05 | Awal:11 | +0 | -2 | Sisa:9
+   Ket: Penjualan - ID: 380 | Jual:380 | Beli:-
+#87 | ID:150912 | 2025-08-04 00:01:06 | Awal:9 | +0 | -1 | Sisa:8
+   Ket: Penjualan - ID: 381 | Jual:381 | Beli:-
+#88 | ID:150913 | 2025-08-04 00:01:07 | Awal:8 | +0 | -2 | Sisa:6
+   Ket: Penjualan - ID: 381 | Jual:381 | Beli:-
+#89 | ID:150914 | 2025-08-04 00:01:08 | Awal:6 | +0 | -2 | Sisa:4
+   Ket: Penjualan - ID: 376 | Jual:376 | Beli:-
+#90 | ID:150915 | 2025-08-05 00:00:30 | Awal:4 | +0 | -1 | Sisa:3
+   Ket: Penjualan - ID: 383 | Jual:383 | Beli:-
+#91 | ID:150916 | 2025-08-06 00:00:44 | Awal:3 | +0 | -2 | Sisa:1
+   Ket: Penjualan - ID: 390 | Jual:390 | Beli:-
+#92 | ID:150917 | 2025-08-07 00:00:38 | Awal:1 | +0 | -1 | Sisa:0
+   Ket: Penjualan - ID: 394 | Jual:394 | Beli:-
+#93 | ID:150918 | 2025-08-08 00:00:58 | Awal:0 | +12 | -0 | Sisa:12
+   Ket: Pembelian - Faktur: 1812385 | Jual:- | Beli:121
+#94 | ID:150919 | 2025-08-08 00:00:59 | Awal:12 | +0 | -1 | Sisa:11
+   Ket: Penjualan - ID: 400 | Jual:400 | Beli:-
+#95 | ID:150920 | 2025-08-08 00:01:00 | Awal:11 | +0 | -1 | Sisa:10
+   Ket: Penjualan - ID: 401 | Jual:401 | Beli:-
+#96 | ID:150921 | 2025-08-09 00:00:38 | Awal:10 | +30 | -0 | Sisa:40
+   Ket: Pembelian - Faktur: 00820 | Jual:- | Beli:134
+#97 | ID:150922 | 2025-08-09 00:00:39 | Awal:40 | +0 | -2 | Sisa:38
+   Ket: Penjualan - ID: 402 | Jual:402 | Beli:-
+#98 | ID:150923 | 2025-08-09 00:00:40 | Awal:38 | +0 | -2 | Sisa:36
+   Ket: Penjualan - ID: 402 | Jual:402 | Beli:-
+#99 | ID:150924 | 2025-08-09 00:00:41 | Awal:36 | +0 | -1 | Sisa:35
+   Ket: Penjualan - ID: 404 | Jual:404 | Beli:-
+#100 | ID:150925 | 2025-08-11 00:00:53 | Awal:35 | +0 | -1 | Sisa:34
+   Ket: Penjualan - ID: 409 | Jual:409 | Beli:-
+#101 | ID:150926 | 2025-08-11 00:00:54 | Awal:34 | +0 | -1 | Sisa:33
+   Ket: Penjualan - ID: 413 | Jual:413 | Beli:-
+#102 | ID:150927 | 2025-08-12 00:00:33 | Awal:33 | +0 | -1 | Sisa:32
+   Ket: Penjualan - ID: 414 | Jual:414 | Beli:-
+#103 | ID:150928 | 2025-08-12 00:00:34 | Awal:32 | +0 | -1 | Sisa:31
+   Ket: Penjualan - ID: 415 | Jual:415 | Beli:-
+#104 | ID:150929 | 2025-08-12 00:00:35 | Awal:31 | +0 | -1 | Sisa:30
+   Ket: Penjualan - ID: 416 | Jual:416 | Beli:-
+#105 | ID:150930 | 2025-08-13 00:00:21 | Awal:30 | +0 | -1 | Sisa:29
+   Ket: Penjualan - ID: 420 | Jual:420 | Beli:-
+#106 | ID:150931 | 2025-08-13 00:00:22 | Awal:29 | +0 | -1 | Sisa:28
+   Ket: Penjualan - ID: 421 | Jual:421 | Beli:-
+#107 | ID:150932 | 2025-08-16 00:00:39 | Awal:28 | +0 | -1 | Sisa:27
+   Ket: Penjualan - ID: 433 | Jual:433 | Beli:-
+#108 | ID:150933 | 2025-08-16 00:00:40 | Awal:27 | +0 | -2 | Sisa:25
+   Ket: Penjualan - ID: 434 | Jual:434 | Beli:-
+#109 | ID:150934 | 2025-08-18 00:00:45 | Awal:25 | +0 | -1 | Sisa:24
+   Ket: Penjualan - ID: 438 | Jual:438 | Beli:-
+#110 | ID:150935 | 2025-08-18 00:00:46 | Awal:24 | +0 | -2 | Sisa:22
+   Ket: Penjualan - ID: 441 | Jual:441 | Beli:-
+#111 | ID:150936 | 2025-08-19 00:00:39 | Awal:22 | +0 | -1 | Sisa:21
+   Ket: Penjualan - ID: 450 | Jual:450 | Beli:-
+#112 | ID:150937 | 2025-08-22 00:00:34 | Awal:21 | +0 | -1 | Sisa:20
+   Ket: Penjualan - ID: 491 | Jual:491 | Beli:-
+#113 | ID:150938 | 2025-08-22 00:00:35 | Awal:20 | +0 | -1 | Sisa:19
+   Ket: Penjualan - ID: 493 | Jual:493 | Beli:-
+#114 | ID:150939 | 2025-08-23 00:00:29 | Awal:19 | +0 | -1 | Sisa:18
+   Ket: Penjualan - ID: 509 | Jual:509 | Beli:-
+#115 | ID:150940 | 2025-08-25 00:00:36 | Awal:18 | +0 | -2 | Sisa:16
+   Ket: Penjualan - ID: 530 | Jual:530 | Beli:-
+#116 | ID:150941 | 2025-08-26 00:00:40 | Awal:16 | +1000 | -0 | Sisa:1016
+   Ket: Pembelian - Faktur: 02525 | Jual:- | Beli:155
+#117 | ID:150942 | 2025-08-27 00:00:33 | Awal:1016 | +0 | -1 | Sisa:1015
+   Ket: Penjualan - ID: 549 | Jual:549 | Beli:-
+#118 | ID:150943 | 2025-08-27 00:00:34 | Awal:1015 | +0 | -1 | Sisa:1014
+   Ket: Penjualan - ID: 554 | Jual:554 | Beli:-
+#119 | ID:150944 | 2025-08-28 00:00:32 | Awal:1014 | +0 | -2 | Sisa:1012
+   Ket: Penjualan - ID: 566 | Jual:566 | Beli:-
+#120 | ID:150945 | 2025-08-29 00:00:33 | Awal:1012 | +0 | -1 | Sisa:1011
+   Ket: Penjualan - ID: 570 | Jual:570 | Beli:-
+#121 | ID:150946 | 2025-08-29 00:00:34 | Awal:1011 | +0 | -1 | Sisa:1010
+   Ket: Penjualan - ID: 573 | Jual:573 | Beli:-
+#122 | ID:150947 | 2025-08-29 00:00:35 | Awal:1010 | +0 | -1 | Sisa:1009
+   Ket: Penjualan - ID: 576 | Jual:576 | Beli:-
+#123 | ID:150948 | 2025-08-30 07:00:25 | Awal:1009 | +0 | -1 | Sisa:1008
+   Ket: Penjualan - ID: 579 | Jual:579 | Beli:-
+#124 | ID:150949 | 2025-08-30 07:00:26 | Awal:1008 | +0 | -1 | Sisa:1007
+   Ket: Penjualan - ID: 589 | Jual:589 | Beli:-
+#125 | ID:150950 | 2025-09-01 07:00:39 | Awal:1007 | +0 | -1 | Sisa:1006
+   Ket: Penjualan - ID: 602 | Jual:602 | Beli:-
+#126 | ID:150951 | 2025-09-05 07:00:26 | Awal:1006 | +0 | -1 | Sisa:1005
+   Ket: Penjualan - ID: 638 | Jual:638 | Beli:-
+#127 | ID:150952 | 2025-09-06 07:00:45 | Awal:1005 | +0 | -1 | Sisa:1004
+   Ket: Penjualan - ID: 642 | Jual:642 | Beli:-
+#128 | ID:150953 | 2025-09-06 07:00:46 | Awal:1004 | +0 | -1 | Sisa:1003
+   Ket: Penjualan - ID: 646 | Jual:646 | Beli:-
+#129 | ID:150954 | 2025-09-09 07:00:29 | Awal:1003 | +0 | -2 | Sisa:1001
+   Ket: Penjualan - ID: 668 | Jual:668 | Beli:-
+#130 | ID:150955 | 2025-09-16 07:00:56 | Awal:1001 | +0 | -1 | Sisa:1000
+   Ket: Penjualan - ID: 680 | Jual:680 | Beli:-
+#131 | ID:150956 | 2025-09-16 07:00:57 | Awal:1000 | +0 | -2 | Sisa:998
+   Ket: Penjualan - ID: 684 | Jual:684 | Beli:-
+#132 | ID:150957 | 2025-09-16 07:00:58 | Awal:998 | +0 | -1 | Sisa:997
+   Ket: Penjualan - ID: 685 | Jual:685 | Beli:-
+#133 | ID:150958 | 2025-09-17 07:00:34 | Awal:997 | +0 | -1 | Sisa:996
+   Ket: Penjualan - ID: 689 | Jual:689 | Beli:-
+#134 | ID:150959 | 2025-09-18 07:00:31 | Awal:996 | +0 | -1 | Sisa:995
+   Ket: Penjualan - ID: 696 | Jual:696 | Beli:-
+#135 | ID:150960 | 2025-09-19 07:00:15 | Awal:995 | +0 | -5 | Sisa:990
+   Ket: Penjualan - ID: 698 | Jual:698 | Beli:-
+#136 | ID:150961 | 2025-09-22 07:00:37 | Awal:990 | +0 | -2 | Sisa:988
+   Ket: Penjualan - ID: 701 | Jual:701 | Beli:-
+#137 | ID:150962 | 2025-09-22 07:00:38 | Awal:988 | +0 | -1 | Sisa:987
+   Ket: Penjualan - ID: 702 | Jual:702 | Beli:-
+#138 | ID:150963 | 2025-09-22 07:00:39 | Awal:987 | +0 | -1 | Sisa:986
+   Ket: Penjualan - ID: 703 | Jual:703 | Beli:-
+#139 | ID:150964 | 2025-09-24 07:00:35 | Awal:986 | +0 | -1 | Sisa:985
+   Ket: Penjualan - ID: 713 | Jual:713 | Beli:-
+#140 | ID:150965 | 2025-09-25 07:00:49 | Awal:985 | +0 | -2 | Sisa:983
+   Ket: Penjualan - ID: 717 | Jual:717 | Beli:-
+#141 | ID:150966 | 2025-09-26 07:00:30 | Awal:983 | +0 | -1 | Sisa:982
+   Ket: Penjualan - ID: 719 | Jual:719 | Beli:-
+#142 | ID:150967 | 2025-09-26 07:00:31 | Awal:982 | +0 | -1 | Sisa:981
+   Ket: Penjualan - ID: 720 | Jual:720 | Beli:-
+#143 | ID:150968 | 2025-09-27 07:00:09 | Awal:981 | +0 | -1 | Sisa:980
+   Ket: Penjualan - ID: 722 | Jual:722 | Beli:-
+#144 | ID:150969 | 2025-10-01 07:00:43 | Awal:980 | +0 | -1 | Sisa:979
+   Ket: Penjualan - ID: 727 | Jual:727 | Beli:-
+#145 | ID:150970 | 2025-10-02 07:00:21 | Awal:979 | +0 | -1 | Sisa:978
+   Ket: Penjualan - ID: 728 | Jual:728 | Beli:-
+#146 | ID:150971 | 2025-10-02 07:00:22 | Awal:978 | +0 | -1 | Sisa:977
+   Ket: Penjualan - ID: 730 | Jual:730 | Beli:-
+#147 | ID:150972 | 2025-10-04 07:00:38 | Awal:977 | +0 | -2 | Sisa:975
+   Ket: Penjualan - ID: 735 | Jual:735 | Beli:-
+#148 | ID:150973 | 2025-10-04 07:00:39 | Awal:975 | +0 | -1 | Sisa:974
+   Ket: Penjualan - ID: 735 | Jual:735 | Beli:-
+#149 | ID:150974 | 2025-10-06 07:00:43 | Awal:974 | +0 | -1 | Sisa:973
+   Ket: Penjualan - ID: 739 | Jual:739 | Beli:-
+#150 | ID:150975 | 2025-10-06 07:00:44 | Awal:973 | +0 | -2 | Sisa:971
+   Ket: Penjualan - ID: 740 | Jual:740 | Beli:-
+#151 | ID:150976 | 2025-10-06 07:00:45 | Awal:971 | +0 | -1 | Sisa:970
+   Ket: Penjualan - ID: 742 | Jual:742 | Beli:-
+#152 | ID:150977 | 2025-10-08 07:00:28 | Awal:970 | +0 | -2 | Sisa:968
+   Ket: Penjualan - ID: 750 | Jual:750 | Beli:-
+#153 | ID:150978 | 2025-10-11 07:00:35 | Awal:968 | +30 | -0 | Sisa:998
+   Ket: Pembelian - Faktur: 01124 | Jual:- | Beli:266
+#154 | ID:150979 | 2025-10-20 07:00:52 | Awal:998 | +0 | -4 | Sisa:994
+   Ket: Penjualan - ID: 788 | Jual:788 | Beli:-
+#155 | ID:150980 | 2025-10-20 07:00:53 | Awal:994 | +0 | -2 | Sisa:992
+   Ket: Penjualan - ID: 789 | Jual:789 | Beli:-
+#156 | ID:150981 | 2025-10-22 07:00:37 | Awal:992 | +0 | -1 | Sisa:991
+   Ket: Penjualan - ID: 795 | Jual:795 | Beli:-
+#157 | ID:150982 | 2025-10-22 07:00:38 | Awal:991 | +0 | -1 | Sisa:990
+   Ket: Penjualan - ID: 796 | Jual:796 | Beli:-
+#158 | ID:150983 | 2025-10-23 07:00:37 | Awal:990 | +0 | -1 | Sisa:989
+   Ket: Penjualan - ID: 799 | Jual:799 | Beli:-
+#159 | ID:150984 | 2025-10-24 07:00:28 | Awal:989 | +0 | -2 | Sisa:987
+   Ket: Penjualan - ID: 802 | Jual:802 | Beli:-
+#160 | ID:150985 | 2025-10-25 07:00:34 | Awal:987 | +30 | -0 | Sisa:1017
+   Ket: Pembelian - Faktur: 02618 | Jual:- | Beli:296
+#161 | ID:150986 | 2025-10-25 07:00:35 | Awal:1017 | +0 | -2 | Sisa:1015
+   Ket: Penjualan - ID: 807 | Jual:807 | Beli:-
+#162 | ID:150987 | 2025-10-27 07:00:47 | Awal:1015 | +0 | -1 | Sisa:1014
+   Ket: Penjualan - ID: 810 | Jual:810 | Beli:-
+#163 | ID:150988 | 2025-10-28 07:00:44 | Awal:1014 | +0 | -2 | Sisa:1012
+   Ket: Penjualan - ID: 813 | Jual:813 | Beli:-
+#164 | ID:150989 | 2025-10-29 07:00:31 | Awal:1012 | +0 | -2 | Sisa:1010
+   Ket: Penjualan - ID: 820 | Jual:820 | Beli:-
+#165 | ID:150990 | 2025-10-29 07:00:32 | Awal:1010 | +0 | -1 | Sisa:1009
+   Ket: Penjualan - ID: 821 | Jual:821 | Beli:-
+#166 | ID:150991 | 2025-10-30 07:00:29 | Awal:1009 | +0 | -1 | Sisa:1008
+   Ket: Penjualan - ID: 824 | Jual:824 | Beli:-
+#167 | ID:150992 | 2025-10-31 07:00:46 | Awal:1008 | +0 | -1 | Sisa:1007
+   Ket: Penjualan - ID: 828 | Jual:828 | Beli:-
+#168 | ID:150993 | 2025-11-01 07:00:47 | Awal:1007 | +0 | -1 | Sisa:1006
+   Ket: Penjualan - ID: 829 | Jual:829 | Beli:-
+#169 | ID:150994 | 2025-11-01 07:00:48 | Awal:1006 | +0 | -1 | Sisa:1005
+   Ket: Penjualan - ID: 830 | Jual:830 | Beli:-
+#170 | ID:150995 | 2025-11-01 07:00:49 | Awal:1005 | +0 | -2 | Sisa:1003
+   Ket: Penjualan - ID: 831 | Jual:831 | Beli:-
+#171 | ID:150996 | 2025-11-03 07:00:53 | Awal:1003 | +0 | -2 | Sisa:1001
+   Ket: Penjualan - ID: 833 | Jual:833 | Beli:-
+#172 | ID:150997 | 2025-11-03 07:00:54 | Awal:1001 | +0 | -1 | Sisa:1000
+   Ket: Penjualan - ID: 833 | Jual:833 | Beli:-
+#173 | ID:150998 | 2025-11-03 07:00:55 | Awal:1000 | +0 | -2 | Sisa:998
+   Ket: Penjualan - ID: 835 | Jual:835 | Beli:-
+#174 | ID:150999 | 2025-11-05 07:00:16 | Awal:998 | +0 | -1 | Sisa:997
+   Ket: Penjualan - ID: 842 | Jual:842 | Beli:-
+#175 | ID:151000 | 2025-11-06 07:00:29 | Awal:997 | +0 | -2 | Sisa:995
+   Ket: Penjualan - ID: 847 | Jual:847 | Beli:-
+#176 | ID:151001 | 2025-11-08 07:00:36 | Awal:995 | +0 | -2 | Sisa:993
+   Ket: Penjualan - ID: 855 | Jual:855 | Beli:-
+#177 | ID:151002 | 2025-11-08 07:00:37 | Awal:993 | +0 | -1 | Sisa:992
+   Ket: Penjualan - ID: 856 | Jual:856 | Beli:-
+#178 | ID:151003 | 2025-11-11 07:00:25 | Awal:992 | +0 | -1 | Sisa:991
+   Ket: Penjualan - ID: 862 | Jual:862 | Beli:-
+#179 | ID:151004 | 2025-11-12 07:00:25 | Awal:991 | +0 | -1 | Sisa:990
+   Ket: Penjualan - ID: 866 | Jual:866 | Beli:-
+#180 | ID:151005 | 2025-11-13 07:00:42 | Awal:990 | +0 | -1 | Sisa:989
+   Ket: Penjualan - ID: 869 | Jual:869 | Beli:-
+#181 | ID:151006 | 2025-11-14 07:00:44 | Awal:989 | +0 | -1 | Sisa:988
+   Ket: Penjualan - ID: 875 | Jual:875 | Beli:-
+#182 | ID:151007 | 2025-11-15 07:00:51 | Awal:988 | +0 | -1 | Sisa:987
+   Ket: Penjualan - ID: 877 | Jual:877 | Beli:-
+#183 | ID:151008 | 2025-11-18 07:00:31 | Awal:987 | +0 | -1 | Sisa:986
+   Ket: Penjualan - ID: 883 | Jual:883 | Beli:-
+#184 | ID:151009 | 2025-11-18 07:00:32 | Awal:986 | +0 | -1 | Sisa:985
+   Ket: Penjualan - ID: 885 | Jual:885 | Beli:-
+#185 | ID:151010 | 2025-11-20 07:00:47 | Awal:985 | +30 | -0 | Sisa:1015
+   Ket: Pembelian - Faktur: 02129 | Jual:- | Beli:342
+#186 | ID:151011 | 2025-11-20 07:00:48 | Awal:1015 | +0 | -1 | Sisa:1014
+   Ket: Penjualan - ID: 893 | Jual:893 | Beli:-
+#187 | ID:151012 | 2025-11-21 07:00:51 | Awal:1014 | +0 | -1 | Sisa:1013
+   Ket: Penjualan - ID: 897 | Jual:897 | Beli:-
+#188 | ID:151013 | 2025-11-21 07:00:52 | Awal:1013 | +0 | -2 | Sisa:1011
+   Ket: Penjualan - ID: 897 | Jual:897 | Beli:-
+#189 | ID:151014 | 2025-11-22 07:00:39 | Awal:1011 | +0 | -1 | Sisa:1010
+   Ket: Penjualan - ID: 899 | Jual:899 | Beli:-
+#190 | ID:151015 | 2025-11-24 07:00:42 | Awal:1010 | +0 | -1 | Sisa:1009
+   Ket: Penjualan - ID: 902 | Jual:902 | Beli:-
+#191 | ID:151016 | 2025-11-24 07:00:43 | Awal:1009 | +0 | -2 | Sisa:1007
+   Ket: Penjualan - ID: 903 | Jual:903 | Beli:-
+#192 | ID:151017 | 2025-11-25 07:00:27 | Awal:1007 | +0 | -2 | Sisa:1005
+   Ket: Penjualan - ID: 909 | Jual:909 | Beli:-
+#193 | ID:151018 | 2025-11-27 07:00:53 | Awal:1005 | +0 | -1 | Sisa:1004
+   Ket: Penjualan - ID: 914 | Jual:914 | Beli:-
+#194 | ID:151019 | 2025-11-27 07:00:54 | Awal:1004 | +0 | -1 | Sisa:1003
+   Ket: Penjualan - ID: 915 | Jual:915 | Beli:-
+#195 | ID:151020 | 2025-11-27 07:00:55 | Awal:1003 | +0 | -1 | Sisa:1002
+   Ket: Penjualan - ID: 918 | Jual:918 | Beli:-
+#196 | ID:151021 | 2025-11-28 07:00:29 | Awal:1002 | +0 | -1 | Sisa:1001
+   Ket: Penjualan - ID: 920 | Jual:920 | Beli:-
+#197 | ID:151022 | 2025-11-29 07:00:48 | Awal:1001 | +0 | -2 | Sisa:999
+   Ket: Penjualan - ID: 924 | Jual:924 | Beli:-
+#198 | ID:151023 | 2025-12-02 07:00:30 | Awal:999 | +0 | -1 | Sisa:998
+   Ket: Penjualan - ID: 930 | Jual:930 | Beli:-
+#199 | ID:151024 | 2025-12-02 07:00:31 | Awal:998 | +0 | -1 | Sisa:997
+   Ket: Penjualan - ID: 933 | Jual:933 | Beli:-
+#200 | ID:151025 | 2025-12-04 07:00:25 | Awal:997 | +0 | -2 | Sisa:995
+   Ket: Penjualan - ID: 938 | Jual:938 | Beli:-
+#201 | ID:151026 | 2025-12-05 07:00:37 | Awal:995 | +0 | -1 | Sisa:994
+   Ket: Penjualan - ID: 941 | Jual:941 | Beli:-
+#202 | ID:151027 | 2025-12-05 07:00:38 | Awal:994 | +0 | -1 | Sisa:993
+   Ket: Penjualan - ID: 942 | Jual:942 | Beli:-
+#203 | ID:151028 | 2025-12-05 07:00:39 | Awal:993 | +0 | -2 | Sisa:991
+   Ket: Penjualan - ID: 943 | Jual:943 | Beli:-
+#204 | ID:151029 | 2025-12-06 07:00:43 | Awal:991 | +30 | -0 | Sisa:1021
+   Ket: Pembelian - Faktur: 00651 | Jual:- | Beli:374
+#205 | ID:151030 | 2025-12-06 07:00:44 | Awal:1021 | +0 | -1 | Sisa:1020
+   Ket: Penjualan - ID: 946 | Jual:946 | Beli:-
+#206 | ID:151031 | 2025-12-08 07:00:40 | Awal:1020 | +0 | -1 | Sisa:1019
+   Ket: Penjualan - ID: 949 | Jual:949 | Beli:-
+#207 | ID:151032 | 2025-12-08 07:00:41 | Awal:1019 | +0 | -1 | Sisa:1018
+   Ket: Penjualan - ID: 950 | Jual:950 | Beli:-
+#208 | ID:151033 | 2025-12-08 07:00:42 | Awal:1018 | +0 | -2 | Sisa:1016
+   Ket: Penjualan - ID: 951 | Jual:951 | Beli:-
+#209 | ID:151034 | 2025-12-08 07:00:43 | Awal:1016 | +0 | -1 | Sisa:1015
+   Ket: Penjualan - ID: 954 | Jual:954 | Beli:-
+#210 | ID:151035 | 2025-12-09 07:00:31 | Awal:1015 | +0 | -3 | Sisa:1012
+   Ket: Penjualan - ID: 956 | Jual:956 | Beli:-
+#211 | ID:151036 | 2025-12-11 07:00:31 | Awal:1012 | +0 | -1 | Sisa:1011
+   Ket: Penjualan - ID: 964 | Jual:964 | Beli:-
+#212 | ID:151037 | 2025-12-12 07:00:39 | Awal:1011 | +0 | -1 | Sisa:1010
+   Ket: Penjualan - ID: 966 | Jual:966 | Beli:-
+#213 | ID:151038 | 2025-12-13 07:00:34 | Awal:1010 | +0 | -2 | Sisa:1008
+   Ket: Penjualan - ID: 970 | Jual:970 | Beli:-
+#214 | ID:151039 | 2025-12-13 07:00:35 | Awal:1008 | +0 | -2 | Sisa:1006
+   Ket: Penjualan - ID: 970 | Jual:970 | Beli:-
+#215 | ID:151040 | 2025-12-15 07:00:39 | Awal:1006 | +0 | -3 | Sisa:1003
+   Ket: Penjualan - ID: 976 | Jual:976 | Beli:-
+#216 | ID:151041 | 2025-12-15 07:00:40 | Awal:1003 | +0 | -2 | Sisa:1001
+   Ket: Penjualan - ID: 977 | Jual:977 | Beli:-
+#217 | ID:151042 | 2025-12-16 07:00:45 | Awal:1001 | +0 | -1 | Sisa:1000
+   Ket: Penjualan - ID: 979 | Jual:979 | Beli:-
+#218 | ID:151043 | 2025-12-16 07:00:46 | Awal:1000 | +0 | -2 | Sisa:998
+   Ket: Penjualan - ID: 979 | Jual:979 | Beli:-
+#219 | ID:151044 | 2025-12-19 07:00:44 | Awal:998 | +0 | -1 | Sisa:997
+   Ket: Penjualan - ID: 990 | Jual:990 | Beli:-
+#220 | ID:151045 | 2025-12-19 07:00:45 | Awal:997 | +0 | -2 | Sisa:995
+   Ket: Penjualan - ID: 994 | Jual:994 | Beli:-
+#221 | ID:151046 | 2025-12-20 07:00:16 | Awal:995 | +0 | -1 | Sisa:994
+   Ket: Penjualan - ID: 995 | Jual:995 | Beli:-
+#222 | ID:173489 | 2025-12-23 10:59:17 | Awal:994 | +30 | - | Sisa:1024
+   Ket: Pembelian: Update jumlah transaksi | Jual:- | Beli:406
+#223 | ID:173728 | 2025-12-25 07:00:23 | Awal:1024 | +0 | -1 | Sisa:1023
+   Ket: Penjualan: Transaksi penjualan produk | Jual:1024 | Beli:-
+#224 | ID:173893 | 2025-12-25 07:02:45 | Awal:1023 | +0 | -2 | Sisa:1021
+   Ket: Penjualan: Update jumlah transaksi | Jual:1028 | Beli:-
+#225 | ID:173955 | 2025-12-25 07:03:42 | Awal:1021 | +0 | -1 | Sisa:1020
+   Ket: Penjualan: Transaksi penjualan produk | Jual:1029 | Beli:-
+#226 | ID:173991 | 2025-12-25 07:04:16 | Awal:1020 | +0 | -1 | Sisa:1019
+   Ket: Penjualan: Transaksi penjualan produk | Jual:1030 | Beli:-
+#227 | ID:174103 | 2025-12-26 07:00:54 | Awal:1019 | +0 | -1 | Sisa:1018
+   Ket: Penjualan: Transaksi penjualan produk | Jual:1033 | Beli:-
+#228 | ID:174190 | 2025-12-26 07:02:08 | Awal:1018 | +0 | -1 | Sisa:1017
+   Ket: Penjualan: Transaksi penjualan produk | Jual:1035 | Beli:-
+#229 | ID:174224 | 2025-12-26 07:02:36 | Awal:1017 | +0 | -2 | Sisa:1015
+   Ket: Penjualan: Update jumlah transaksi | Jual:1037 | Beli:-
+#230 | ID:174407 | 2025-12-27 07:00:28 | Awal:1015 | +0 | -2 | Sisa:1013
+   Ket: Penjualan: Update jumlah transaksi | Jual:1040 | Beli:-
+#231 | ID:174500 | 2025-12-27 07:01:44 | Awal:1013 | +0 | -1 | Sisa:1012
+   Ket: Penjualan: Transaksi penjualan produk | Jual:1042 | Beli:-
+#232 | ID:174569 | 2025-12-27 07:02:40 | Awal:1012 | +0 | -2 | Sisa:1010
+   Ket: Penjualan: Update jumlah transaksi | Jual:1044 | Beli:-
+#233 | ID:174620 | 2025-12-28 07:00:07 | Awal:1010 | +0 | -2 | Sisa:1008
+   Ket: Penjualan: Update jumlah transaksi | Jual:1046 | Beli:-
+#234 | ID:174705 | 2025-12-29 07:00:47 | Awal:1008 | +0 | -1 | Sisa:1007
+   Ket: Penjualan: Transaksi penjualan produk | Jual:1048 | Beli:-
+#235 | ID:174772 | 2025-12-29 07:01:46 | Awal:1007 | +0 | -2 | Sisa:1005
+   Ket: Penjualan: Update jumlah transaksi | Jual:1050 | Beli:-
+#236 | ID:174829 | 2025-12-29 07:02:33 | Awal:1005 | +0 | -2 | Sisa:1003
+   Ket: Penjualan: Update jumlah transaksi | Jual:1051 | Beli:-
+#237 | ID:174983 | 2025-12-30 07:01:24 | Awal:1003 | +0 | -3 | Sisa:1000
+   Ket: Penjualan: Update jumlah transaksi | Jual:1054 | Beli:-
+#238 | ID:175438 | 2025-12-31 22:32:47 | Awal:1000 | +0 | -980 | Sisa:20
+   Ket: Perubahan Stok Manual: SO | Jual:- | Beli:-
+#239 | ID:176553 | 2026-01-01 06:59:59 | Awal:20 | + | - | Sisa:20
+   Ket: Stock Opname 31 Desember 2025: Penyesuaian dari 20 ke 20 | Jual:- | Beli:-
+#240 | ID:176114 | 2026-01-02 15:56:17 | Awal:20 | +0 | -1 | Sisa:19
+   Ket: Penjualan | Jual:1056 | Beli:-
+#241 | ID:176115 | 2026-01-02 18:53:14 | Awal:19 | +0 | -3 | Sisa:16
+   Ket: Penjualan | Jual:1057 | Beli:-
+#242 | ID:176116 | 2026-01-02 19:30:44 | Awal:16 | +0 | -1 | Sisa:15
+   Ket: Penjualan | Jual:1059 | Beli:-
+#243 | ID:176117 | 2026-01-03 01:28:43 | Awal:15 | +0 | -1 | Sisa:14
+   Ket: Penjualan | Jual:1062 | Beli:-
+#244 | ID:177035 | 2026-01-10 07:00:00 | Awal:14 | +0 | -1 | Sisa:13
+   Ket: Penjualan: Transaksi penjualan produk | Jual:1064 | Beli:-
+#245 | ID:177085 | 2026-01-10 07:00:00 | Awal:13 | +0 | -1 | Sisa:12
+   Ket: Penjualan: Transaksi penjualan produk | Jual:1066 | Beli:-
+#246 | ID:177215 | 2026-01-10 07:00:00 | Awal:12 | +0 | -2 | Sisa:10
+   Ket: Penjualan: Transaksi penjualan produk | Jual:1070 | Beli:-
+#247 | ID:177364 | 2026-01-12 07:00:00 | Awal:10 | +0 | -1 | Sisa:9
+   Ket: Penjualan: Transaksi penjualan produk | Jual:1074 | Beli:-
+#248 | ID:177461 | 2026-01-12 07:00:00 | Awal:9 | +0 | -2 | Sisa:7
+   Ket: Penjualan: Transaksi penjualan produk | Jual:1077 | Beli:-
+#249 | ID:177568 | 2026-01-12 07:00:00 | Awal:7 | +0 | -1 | Sisa:6
+   Ket: Penjualan: Transaksi penjualan produk | Jual:1080 | Beli:-
+#250 | ID:177605 | 2026-01-13 07:00:00 | Awal:6 | +0 | -2 | Sisa:4
+   Ket: Penjualan: Transaksi penjualan produk | Jual:1081 | Beli:-
+#251 | ID:177733 | 2026-01-13 07:00:00 | Awal:4 | +0 | -1 | Sisa:3
+   Ket: Penjualan: Transaksi penjualan produk | Jual:1085 | Beli:-
+#252 | ID:177978 | 2026-01-13 07:00:00 | Awal:3 | +0 | -2 | Sisa:1
+   Ket: Penjualan: Transaksi penjualan produk | Jual:1093 | Beli:-
+#253 | ID:178018 | 2026-01-13 07:00:00 | Awal:1 | +0 | -1 | Sisa:0
+   Ket: Penjualan: Transaksi penjualan produk | Jual:1094 | Beli:-
+#254 | ID:178105 | 2026-01-14 15:58:49 | Awal:-2 | +30 | -0 | Sisa:28
+   Ket: Pembelian: Update jumlah transaksi | Jual:- | Beli:445
+#255 | ID:178159 | 2026-01-14 15:58:49 | Awal:0 | +0 | -2 | Sisa:-2
+   Ket: Penjualan: Transaksi penjualan produk | Jual:1097 | Beli:-
 
-Product ID: 281
-Product: FITKOM ALL VAR
-Adjustment ID: 175120
-Adjustment Time: 2025-12-31 19:35:40
-Adjustment Masuk: 5 -> Stok Sisa: 5
-Previous: 2025-12-12 07:02:42 (Stok: 0)
-Next: 2026-01-02 15:56:04 (Expected: 4, Actual: 3)
-Issue: Calculation mismatch with next transaction
----
+============================================
+SIMULASI KALKULASI STOK BENAR
+============================================
 
-Product ID: 204
-Product: DEMACOLIN TAB
-Adjustment ID: 174774
-Adjustment Time: 2025-12-29 19:08:30
-Adjustment Masuk: 10 -> Stok Sisa: 1050
-Previous: 2025-12-29 07:01:08 (Stok: 1040)
-Next: 2026-01-02 23:47:55 (Expected: 1030, Actual: 430)
-Issue: Calculation mismatch with next transaction
----
+#1: 2024-05-07 00:01:46 | Awal=71 | +0 | -1 | Sisa=70
+#2: 2024-05-07 00:01:47 | Awal=70 | +0 | -1 | Sisa=69
+#3: 2024-05-07 00:01:48 | Awal=69 | +0 | -1 | Sisa=68
+#4: 2024-05-07 00:01:49 | Awal=68 | +0 | -1 | Sisa=67
+#5: 2024-05-07 00:01:50 | Awal=67 | +0 | -1 | Sisa=66
+#6: 2024-05-29 12:41:38 | Awal=66 | +0 | -2 | Sisa=64
+#7: 2024-05-29 14:11:37 | Awal=64 | +0 | -1 | Sisa=63
+#8: 2024-05-29 14:38:46 | Awal=63 | +0 | -1 | Sisa=62
+#9: 2024-05-29 14:38:47 | Awal=62 | +0 | -2 | Sisa=60
+#10: 2024-12-05 00:00:23 | Awal=60 | +0 | -1 | Sisa=59
+#11: 2024-12-09 00:00:36 | Awal=59 | +0 | -1 | Sisa=58
+#12: 2024-12-20 00:00:26 | Awal=58 | +0 | -2 | Sisa=56
+#13: 2024-12-20 00:00:27 | Awal=56 | +0 | -1 | Sisa=55
+#14: 2024-12-20 00:00:28 | Awal=55 | +0 | -2 | Sisa=53
+#15: 2024-12-25 00:00:25 | Awal=53 | +0 | -1 | Sisa=52
+#16: 2024-12-26 00:00:55 | Awal=52 | +0 | -1 | Sisa=51
+#17: 2024-12-26 00:00:56 | Awal=51 | +0 | -2 | Sisa=49
+#18: 2024-12-26 00:00:57 | Awal=49 | +0 | -0 | Sisa=49
+#19: 2024-12-26 00:00:58 | Awal=49 | +0 | -1 | Sisa=48
+#20: 2024-12-26 00:00:59 | Awal=48 | +0 | -1 | Sisa=47
+#21: 2024-12-26 00:01:00 | Awal=47 | +0 | -1 | Sisa=46
+#22: 2025-01-14 00:00:59 | Awal=46 | +0 | -1 | Sisa=45
+#23: 2025-01-14 00:01:00 | Awal=45 | +0 | -1 | Sisa=44
+#24: 2025-01-15 17:34:28 | Awal=44 | +0 | -0 | Sisa=44
+#25: 2025-01-17 00:00:16 | Awal=44 | +0 | -1 | Sisa=43
+#26: 2025-01-17 00:00:17 | Awal=43 | +0 | -1 | Sisa=42
+#27: 2025-01-17 00:00:18 | Awal=42 | +0 | -2 | Sisa=40
+#28: 2025-01-17 00:00:19 | Awal=40 | +0 | -1 | Sisa=39
+#29: 2025-01-20 00:00:56 | Awal=39 | +0 | -1 | Sisa=38
+#30: 2025-01-20 00:00:57 | Awal=38 | +0 | -1 | Sisa=37
+#31: 2025-01-21 00:00:10 | Awal=37 | +0 | -1 | Sisa=36
+#32: 2025-01-22 00:00:20 | Awal=36 | +0 | -1 | Sisa=35
+#33: 2025-01-22 00:00:21 | Awal=35 | +0 | -1 | Sisa=34
+#34: 2025-01-23 00:00:23 | Awal=34 | +0 | -2 | Sisa=32
+#35: 2025-01-24 00:00:47 | Awal=32 | +0 | -1 | Sisa=31
+#36: 2025-01-24 00:00:48 | Awal=31 | +0 | -1 | Sisa=30
+#37: 2025-01-24 00:00:49 | Awal=30 | +0 | -1 | Sisa=29
+#38: 2025-01-25 00:00:41 | Awal=29 | +0 | -2 | Sisa=27
+#39: 2025-01-28 00:00:28 | Awal=27 | +0 | -1 | Sisa=26
+#40: 2025-01-28 00:00:29 | Awal=26 | +0 | -1 | Sisa=25
+#41: 2025-01-28 00:00:30 | Awal=25 | +0 | -1 | Sisa=24
+#42: 2025-01-28 00:00:31 | Awal=24 | +0 | -1 | Sisa=23
+#43: 2025-07-04 00:00:46 | Awal=23 | +0 | -1 | Sisa=22
+#44: 2025-07-04 00:00:47 | Awal=22 | +0 | -1 | Sisa=21
+#45: 2025-07-05 00:00:53 | Awal=21 | +0 | -1 | Sisa=20
+#46: 2025-07-05 00:00:54 | Awal=20 | +0 | -1 | Sisa=19
+#47: 2025-07-05 00:00:55 | Awal=19 | +0 | -1 | Sisa=18
+#48: 2025-07-05 00:00:56 | Awal=18 | +0 | -1 | Sisa=17
+#49: 2025-07-05 00:00:57 | Awal=17 | +0 | -1 | Sisa=16
+#50: 2025-07-07 00:00:32 | Awal=16 | +0 | -1 | Sisa=15
+#51: 2025-07-08 00:00:43 | Awal=15 | +0 | -2 | Sisa=13
+#52: 2025-07-08 00:00:44 | Awal=13 | +0 | -1 | Sisa=12
+#53: 2025-07-09 00:00:51 | Awal=12 | +0 | -1 | Sisa=11
+#54: 2025-07-12 00:00:39 | Awal=11 | +0 | -1 | Sisa=10
+#55: 2025-07-12 00:00:40 | Awal=10 | +0 | -2 | Sisa=8
+#56: 2025-07-12 00:00:41 | Awal=8 | +0 | -2 | Sisa=6
+#57: 2025-07-12 00:00:42 | Awal=6 | +0 | -1 | Sisa=5
+#58: 2025-07-14 00:00:30 | Awal=5 | +0 | -1 | Sisa=4
+#59: 2025-07-14 00:00:31 | Awal=4 | +0 | -2 | Sisa=2
+#60: 2025-07-15 00:00:34 | Awal=2 | +20 | -0 | Sisa=22
+#61: 2025-07-17 00:00:33 | Awal=22 | +30 | -0 | Sisa=52
+#62: 2025-07-17 00:00:34 | Awal=52 | +0 | -3 | Sisa=49
+#63: 2025-07-18 00:00:35 | Awal=49 | +0 | -2 | Sisa=47
+#64: 2025-07-18 00:00:36 | Awal=47 | +0 | -2 | Sisa=45
+#65: 2025-07-19 00:00:35 | Awal=45 | +0 | -1 | Sisa=44
+#66: 2025-07-19 00:00:36 | Awal=44 | +0 | -1 | Sisa=43
+#67: 2025-07-19 00:00:37 | Awal=43 | +0 | -2 | Sisa=41
+#68: 2025-07-22 00:00:30 | Awal=41 | +0 | -1 | Sisa=40
+#69: 2025-07-23 00:00:36 | Awal=40 | +0 | -2 | Sisa=38
+#70: 2025-07-26 00:00:39 | Awal=38 | +0 | -1 | Sisa=37
+#71: 2025-07-26 00:00:40 | Awal=37 | +0 | -3 | Sisa=34
+#72: 2025-07-26 00:00:41 | Awal=34 | +0 | -1 | Sisa=33
+#73: 2025-07-28 00:00:36 | Awal=33 | +0 | -1 | Sisa=32
+#74: 2025-07-28 00:00:37 | Awal=32 | +0 | -2 | Sisa=30
+#75: 2025-07-28 00:00:38 | Awal=30 | +0 | -2 | Sisa=28
+#76: 2025-07-29 00:00:42 | Awal=28 | +0 | -1 | Sisa=27
+#77: 2025-07-29 00:00:43 | Awal=27 | +0 | -1 | Sisa=26
+#78: 2025-07-29 00:00:44 | Awal=26 | +0 | -5 | Sisa=21
+#79: 2025-07-30 00:00:27 | Awal=21 | +0 | -2 | Sisa=19
+#80: 2025-08-01 00:00:29 | Awal=19 | +0 | -1 | Sisa=18
+#81: 2025-08-02 00:00:24 | Awal=18 | +0 | -2 | Sisa=16
+#82: 2025-08-02 00:00:25 | Awal=16 | +0 | -1 | Sisa=15
+#83: 2025-08-02 00:00:26 | Awal=15 | +0 | -2 | Sisa=13
+#84: 2025-08-02 00:00:27 | Awal=13 | +0 | -1 | Sisa=12
+#85: 2025-08-04 00:01:04 | Awal=12 | +0 | -1 | Sisa=11
+#86: 2025-08-04 00:01:05 | Awal=11 | +0 | -2 | Sisa=9
+#87: 2025-08-04 00:01:06 | Awal=9 | +0 | -1 | Sisa=8
+#88: 2025-08-04 00:01:07 | Awal=8 | +0 | -2 | Sisa=6
+#89: 2025-08-04 00:01:08 | Awal=6 | +0 | -2 | Sisa=4
+#90: 2025-08-05 00:00:30 | Awal=4 | +0 | -1 | Sisa=3
+#91: 2025-08-06 00:00:44 | Awal=3 | +0 | -2 | Sisa=1
+#92: 2025-08-07 00:00:38 | Awal=1 | +0 | -1 | Sisa=0
+#93: 2025-08-08 00:00:58 | Awal=0 | +12 | -0 | Sisa=12
+#94: 2025-08-08 00:00:59 | Awal=12 | +0 | -1 | Sisa=11
+#95: 2025-08-08 00:01:00 | Awal=11 | +0 | -1 | Sisa=10
+#96: 2025-08-09 00:00:38 | Awal=10 | +30 | -0 | Sisa=40
+#97: 2025-08-09 00:00:39 | Awal=40 | +0 | -2 | Sisa=38
+#98: 2025-08-09 00:00:40 | Awal=38 | +0 | -2 | Sisa=36
+#99: 2025-08-09 00:00:41 | Awal=36 | +0 | -1 | Sisa=35
+#100: 2025-08-11 00:00:53 | Awal=35 | +0 | -1 | Sisa=34
+#101: 2025-08-11 00:00:54 | Awal=34 | +0 | -1 | Sisa=33
+#102: 2025-08-12 00:00:33 | Awal=33 | +0 | -1 | Sisa=32
+#103: 2025-08-12 00:00:34 | Awal=32 | +0 | -1 | Sisa=31
+#104: 2025-08-12 00:00:35 | Awal=31 | +0 | -1 | Sisa=30
+#105: 2025-08-13 00:00:21 | Awal=30 | +0 | -1 | Sisa=29
+#106: 2025-08-13 00:00:22 | Awal=29 | +0 | -1 | Sisa=28
+#107: 2025-08-16 00:00:39 | Awal=28 | +0 | -1 | Sisa=27
+#108: 2025-08-16 00:00:40 | Awal=27 | +0 | -2 | Sisa=25
+#109: 2025-08-18 00:00:45 | Awal=25 | +0 | -1 | Sisa=24
+#110: 2025-08-18 00:00:46 | Awal=24 | +0 | -2 | Sisa=22
+#111: 2025-08-19 00:00:39 | Awal=22 | +0 | -1 | Sisa=21
+#112: 2025-08-22 00:00:34 | Awal=21 | +0 | -1 | Sisa=20
+#113: 2025-08-22 00:00:35 | Awal=20 | +0 | -1 | Sisa=19
+#114: 2025-08-23 00:00:29 | Awal=19 | +0 | -1 | Sisa=18
+#115: 2025-08-25 00:00:36 | Awal=18 | +0 | -2 | Sisa=16
+#116: 2025-08-26 00:00:40 | Awal=16 | +1000 | -0 | Sisa=1016
+#117: 2025-08-27 00:00:33 | Awal=1016 | +0 | -1 | Sisa=1015
+#118: 2025-08-27 00:00:34 | Awal=1015 | +0 | -1 | Sisa=1014
+#119: 2025-08-28 00:00:32 | Awal=1014 | +0 | -2 | Sisa=1012
+#120: 2025-08-29 00:00:33 | Awal=1012 | +0 | -1 | Sisa=1011
+#121: 2025-08-29 00:00:34 | Awal=1011 | +0 | -1 | Sisa=1010
+#122: 2025-08-29 00:00:35 | Awal=1010 | +0 | -1 | Sisa=1009
+#123: 2025-08-30 07:00:25 | Awal=1009 | +0 | -1 | Sisa=1008
+#124: 2025-08-30 07:00:26 | Awal=1008 | +0 | -1 | Sisa=1007
+#125: 2025-09-01 07:00:39 | Awal=1007 | +0 | -1 | Sisa=1006
+#126: 2025-09-05 07:00:26 | Awal=1006 | +0 | -1 | Sisa=1005
+#127: 2025-09-06 07:00:45 | Awal=1005 | +0 | -1 | Sisa=1004
+#128: 2025-09-06 07:00:46 | Awal=1004 | +0 | -1 | Sisa=1003
+#129: 2025-09-09 07:00:29 | Awal=1003 | +0 | -2 | Sisa=1001
+#130: 2025-09-16 07:00:56 | Awal=1001 | +0 | -1 | Sisa=1000
+#131: 2025-09-16 07:00:57 | Awal=1000 | +0 | -2 | Sisa=998
+#132: 2025-09-16 07:00:58 | Awal=998 | +0 | -1 | Sisa=997
+#133: 2025-09-17 07:00:34 | Awal=997 | +0 | -1 | Sisa=996
+#134: 2025-09-18 07:00:31 | Awal=996 | +0 | -1 | Sisa=995
+#135: 2025-09-19 07:00:15 | Awal=995 | +0 | -5 | Sisa=990
+#136: 2025-09-22 07:00:37 | Awal=990 | +0 | -2 | Sisa=988
+#137: 2025-09-22 07:00:38 | Awal=988 | +0 | -1 | Sisa=987
+#138: 2025-09-22 07:00:39 | Awal=987 | +0 | -1 | Sisa=986
+#139: 2025-09-24 07:00:35 | Awal=986 | +0 | -1 | Sisa=985
+#140: 2025-09-25 07:00:49 | Awal=985 | +0 | -2 | Sisa=983
+#141: 2025-09-26 07:00:30 | Awal=983 | +0 | -1 | Sisa=982
+#142: 2025-09-26 07:00:31 | Awal=982 | +0 | -1 | Sisa=981
+#143: 2025-09-27 07:00:09 | Awal=981 | +0 | -1 | Sisa=980
+#144: 2025-10-01 07:00:43 | Awal=980 | +0 | -1 | Sisa=979
+#145: 2025-10-02 07:00:21 | Awal=979 | +0 | -1 | Sisa=978
+#146: 2025-10-02 07:00:22 | Awal=978 | +0 | -1 | Sisa=977
+#147: 2025-10-04 07:00:38 | Awal=977 | +0 | -2 | Sisa=975
+#148: 2025-10-04 07:00:39 | Awal=975 | +0 | -1 | Sisa=974
+#149: 2025-10-06 07:00:43 | Awal=974 | +0 | -1 | Sisa=973
+#150: 2025-10-06 07:00:44 | Awal=973 | +0 | -2 | Sisa=971
+#151: 2025-10-06 07:00:45 | Awal=971 | +0 | -1 | Sisa=970
+#152: 2025-10-08 07:00:28 | Awal=970 | +0 | -2 | Sisa=968
+#153: 2025-10-11 07:00:35 | Awal=968 | +30 | -0 | Sisa=998
+#154: 2025-10-20 07:00:52 | Awal=998 | +0 | -4 | Sisa=994
+#155: 2025-10-20 07:00:53 | Awal=994 | +0 | -2 | Sisa=992
+#156: 2025-10-22 07:00:37 | Awal=992 | +0 | -1 | Sisa=991
+#157: 2025-10-22 07:00:38 | Awal=991 | +0 | -1 | Sisa=990
+#158: 2025-10-23 07:00:37 | Awal=990 | +0 | -1 | Sisa=989
+#159: 2025-10-24 07:00:28 | Awal=989 | +0 | -2 | Sisa=987
+#160: 2025-10-25 07:00:34 | Awal=987 | +30 | -0 | Sisa=1017
+#161: 2025-10-25 07:00:35 | Awal=1017 | +0 | -2 | Sisa=1015
+#162: 2025-10-27 07:00:47 | Awal=1015 | +0 | -1 | Sisa=1014
+#163: 2025-10-28 07:00:44 | Awal=1014 | +0 | -2 | Sisa=1012
+#164: 2025-10-29 07:00:31 | Awal=1012 | +0 | -2 | Sisa=1010
+#165: 2025-10-29 07:00:32 | Awal=1010 | +0 | -1 | Sisa=1009
+#166: 2025-10-30 07:00:29 | Awal=1009 | +0 | -1 | Sisa=1008
+#167: 2025-10-31 07:00:46 | Awal=1008 | +0 | -1 | Sisa=1007
+#168: 2025-11-01 07:00:47 | Awal=1007 | +0 | -1 | Sisa=1006
+#169: 2025-11-01 07:00:48 | Awal=1006 | +0 | -1 | Sisa=1005
+#170: 2025-11-01 07:00:49 | Awal=1005 | +0 | -2 | Sisa=1003
+#171: 2025-11-03 07:00:53 | Awal=1003 | +0 | -2 | Sisa=1001
+#172: 2025-11-03 07:00:54 | Awal=1001 | +0 | -1 | Sisa=1000
+#173: 2025-11-03 07:00:55 | Awal=1000 | +0 | -2 | Sisa=998
+#174: 2025-11-05 07:00:16 | Awal=998 | +0 | -1 | Sisa=997
+#175: 2025-11-06 07:00:29 | Awal=997 | +0 | -2 | Sisa=995
+#176: 2025-11-08 07:00:36 | Awal=995 | +0 | -2 | Sisa=993
+#177: 2025-11-08 07:00:37 | Awal=993 | +0 | -1 | Sisa=992
+#178: 2025-11-11 07:00:25 | Awal=992 | +0 | -1 | Sisa=991
+#179: 2025-11-12 07:00:25 | Awal=991 | +0 | -1 | Sisa=990
+#180: 2025-11-13 07:00:42 | Awal=990 | +0 | -1 | Sisa=989
+#181: 2025-11-14 07:00:44 | Awal=989 | +0 | -1 | Sisa=988
+#182: 2025-11-15 07:00:51 | Awal=988 | +0 | -1 | Sisa=987
+#183: 2025-11-18 07:00:31 | Awal=987 | +0 | -1 | Sisa=986
+#184: 2025-11-18 07:00:32 | Awal=986 | +0 | -1 | Sisa=985
+#185: 2025-11-20 07:00:47 | Awal=985 | +30 | -0 | Sisa=1015
+#186: 2025-11-20 07:00:48 | Awal=1015 | +0 | -1 | Sisa=1014
+#187: 2025-11-21 07:00:51 | Awal=1014 | +0 | -1 | Sisa=1013
+#188: 2025-11-21 07:00:52 | Awal=1013 | +0 | -2 | Sisa=1011
+#189: 2025-11-22 07:00:39 | Awal=1011 | +0 | -1 | Sisa=1010
+#190: 2025-11-24 07:00:42 | Awal=1010 | +0 | -1 | Sisa=1009
+#191: 2025-11-24 07:00:43 | Awal=1009 | +0 | -2 | Sisa=1007
+#192: 2025-11-25 07:00:27 | Awal=1007 | +0 | -2 | Sisa=1005
+#193: 2025-11-27 07:00:53 | Awal=1005 | +0 | -1 | Sisa=1004
+#194: 2025-11-27 07:00:54 | Awal=1004 | +0 | -1 | Sisa=1003
+#195: 2025-11-27 07:00:55 | Awal=1003 | +0 | -1 | Sisa=1002
+#196: 2025-11-28 07:00:29 | Awal=1002 | +0 | -1 | Sisa=1001
+#197: 2025-11-29 07:00:48 | Awal=1001 | +0 | -2 | Sisa=999
+#198: 2025-12-02 07:00:30 | Awal=999 | +0 | -1 | Sisa=998
+#199: 2025-12-02 07:00:31 | Awal=998 | +0 | -1 | Sisa=997
+#200: 2025-12-04 07:00:25 | Awal=997 | +0 | -2 | Sisa=995
+#201: 2025-12-05 07:00:37 | Awal=995 | +0 | -1 | Sisa=994
+#202: 2025-12-05 07:00:38 | Awal=994 | +0 | -1 | Sisa=993
+#203: 2025-12-05 07:00:39 | Awal=993 | +0 | -2 | Sisa=991
+#204: 2025-12-06 07:00:43 | Awal=991 | +30 | -0 | Sisa=1021
+#205: 2025-12-06 07:00:44 | Awal=1021 | +0 | -1 | Sisa=1020
+#206: 2025-12-08 07:00:40 | Awal=1020 | +0 | -1 | Sisa=1019
+#207: 2025-12-08 07:00:41 | Awal=1019 | +0 | -1 | Sisa=1018
+#208: 2025-12-08 07:00:42 | Awal=1018 | +0 | -2 | Sisa=1016
+#209: 2025-12-08 07:00:43 | Awal=1016 | +0 | -1 | Sisa=1015
+#210: 2025-12-09 07:00:31 | Awal=1015 | +0 | -3 | Sisa=1012
+#211: 2025-12-11 07:00:31 | Awal=1012 | +0 | -1 | Sisa=1011
+#212: 2025-12-12 07:00:39 | Awal=1011 | +0 | -1 | Sisa=1010
+#213: 2025-12-13 07:00:34 | Awal=1010 | +0 | -2 | Sisa=1008
+#214: 2025-12-13 07:00:35 | Awal=1008 | +0 | -2 | Sisa=1006
+#215: 2025-12-15 07:00:39 | Awal=1006 | +0 | -3 | Sisa=1003
+#216: 2025-12-15 07:00:40 | Awal=1003 | +0 | -2 | Sisa=1001
+#217: 2025-12-16 07:00:45 | Awal=1001 | +0 | -1 | Sisa=1000
+#218: 2025-12-16 07:00:46 | Awal=1000 | +0 | -2 | Sisa=998
+#219: 2025-12-19 07:00:44 | Awal=998 | +0 | -1 | Sisa=997
+#220: 2025-12-19 07:00:45 | Awal=997 | +0 | -2 | Sisa=995
+#221: 2025-12-20 07:00:16 | Awal=995 | +0 | -1 | Sisa=994
+#222: 2025-12-23 10:59:17 | Awal=994 | +30 | -0 | Sisa=1024
+#223: 2025-12-25 07:00:23 | Awal=1024 | +0 | -1 | Sisa=1023
+#224: 2025-12-25 07:02:45 | Awal=1023 | +0 | -2 | Sisa=1021
+#225: 2025-12-25 07:03:42 | Awal=1021 | +0 | -1 | Sisa=1020
+#226: 2025-12-25 07:04:16 | Awal=1020 | +0 | -1 | Sisa=1019
+#227: 2025-12-26 07:00:54 | Awal=1019 | +0 | -1 | Sisa=1018
+#228: 2025-12-26 07:02:08 | Awal=1018 | +0 | -1 | Sisa=1017
+#229: 2025-12-26 07:02:36 | Awal=1017 | +0 | -2 | Sisa=1015
+#230: 2025-12-27 07:00:28 | Awal=1015 | +0 | -2 | Sisa=1013
+#231: 2025-12-27 07:01:44 | Awal=1013 | +0 | -1 | Sisa=1012
+#232: 2025-12-27 07:02:40 | Awal=1012 | +0 | -2 | Sisa=1010
+#233: 2025-12-28 07:00:07 | Awal=1010 | +0 | -2 | Sisa=1008
+#234: 2025-12-29 07:00:47 | Awal=1008 | +0 | -1 | Sisa=1007
+#235: 2025-12-29 07:01:46 | Awal=1007 | +0 | -2 | Sisa=1005
+#236: 2025-12-29 07:02:33 | Awal=1005 | +0 | -2 | Sisa=1003
+#237: 2025-12-30 07:01:24 | Awal=1003 | +0 | -3 | Sisa=1000
+#238: 2025-12-31 22:32:47 | Awal=1000 | +0 | -980 | Sisa=20
+#239: 2026-01-01 06:59:59 | Awal=20 | +0 | -0 | Sisa=20
+#240: 2026-01-02 15:56:17 | Awal=20 | +0 | -1 | Sisa=19
+#241: 2026-01-02 18:53:14 | Awal=19 | +0 | -3 | Sisa=16
+#242: 2026-01-02 19:30:44 | Awal=16 | +0 | -1 | Sisa=15
+#243: 2026-01-03 01:28:43 | Awal=15 | +0 | -1 | Sisa=14
+#244: 2026-01-10 07:00:00 | Awal=14 | +0 | -1 | Sisa=13
+#245: 2026-01-10 07:00:00 | Awal=13 | +0 | -1 | Sisa=12
+#246: 2026-01-10 07:00:00 | Awal=12 | +0 | -2 | Sisa=10
+#247: 2026-01-12 07:00:00 | Awal=10 | +0 | -1 | Sisa=9
+#248: 2026-01-12 07:00:00 | Awal=9 | +0 | -2 | Sisa=7
+#249: 2026-01-12 07:00:00 | Awal=7 | +0 | -1 | Sisa=6
+#250: 2026-01-13 07:00:00 | Awal=6 | +0 | -2 | Sisa=4
+#251: 2026-01-13 07:00:00 | Awal=4 | +0 | -1 | Sisa=3
+#252: 2026-01-13 07:00:00 | Awal=3 | +0 | -2 | Sisa=1
+#253: 2026-01-13 07:00:00 | Awal=1 | +0 | -1 | Sisa=0
+#254: 2026-01-14 15:58:49 | Awal=0 | +30 | -0 | Sisa=30 [AWAL SALAH: harusnya 0] [SISA SALAH: harusnya 30]
+#255: 2026-01-14 15:58:49 | Awal=30 | +0 | -2 | Sisa=28 [AWAL SALAH: harusnya 30] [SISA SALAH: harusnya 28]
 
-Product ID: 214
-Product: DEXTEEM PLUS
-Adjustment ID: 173699
-Adjustment Time: 2025-12-24 18:52:26
-Adjustment Masuk: 1 -> Stok Sisa: 788
-Previous: 2025-12-24 18:52:25 (Stok: 787)
-Next: 2026-01-02 18:53:07 (Expected: 778, Actual: 340)
-Issue: Calculation mismatch with next transaction
----
+STOK AKHIR SEHARUSNYA: 28
+STOK AKTUAL DI PRODUK: -2
+SELISIH: 30
 
+============================================
+CEK DUPLIKAT TRANSAKSI
+============================================
 
-=======================================================
-  SPECIFIC CHECK FOR PRODUCT 63
-=======================================================
+DUPLIKAT PENJUALAN:
+- ID Penjualan: 23 muncul 2 kali
+- ID Penjualan: 24 muncul 2 kali
+- ID Penjualan: 17 muncul 2 kali
+- ID Penjualan: 72 muncul 2 kali
+- ID Penjualan: 89 muncul 3 kali
+- ID Penjualan: 113 muncul 2 kali
+- ID Penjualan: 128 muncul 2 kali
+- ID Penjualan: 131 muncul 4 kali
+- ID Penjualan: 231 muncul 2 kali
+- ID Penjualan: 232 muncul 2 kali
+- ID Penjualan: 268 muncul 2 kali
+- ID Penjualan: 374 muncul 2 kali
+- ID Penjualan: 381 muncul 2 kali
+- ID Penjualan: 402 muncul 2 kali
+- ID Penjualan: 735 muncul 2 kali
+- ID Penjualan: 833 muncul 2 kali
+- ID Penjualan: 897 muncul 2 kali
+- ID Penjualan: 970 muncul 2 kali
+- ID Penjualan: 979 muncul 2 kali
+Tidak ada duplikat pembelian.
 
-Records for Product 63 (29 Dec 2025 - 02 Jan 2026):
+============================================
+MASALAH TERDETEKSI
+============================================
 
-ID           Waktu                     Masuk      Keluar     Stok Awal    Stok Sisa    Type
-----------------------------------------------------------------------------------------------------
-175533       2025-12-31 23:29:08       380        -          0            380          Manual
-176069       2026-01-02 01:35:56       1000       -          380          1380         Pembelian
-176070       2026-01-02 15:56:10       -          20         1380         1360         Penjualan
-176071       2026-01-02 23:47:38       -          10         1360         1350         Penjualan
+Record #254 ID:178105: stok_awal salah (-2 vs 0)
+Record #254 ID:178105: stok_sisa salah (28 vs 30)
+Record #255 ID:178159: stok_awal salah (0 vs 30)
+Record #255 ID:178159: stok_sisa salah (-2 vs 28)
+Stok produk tidak sinkron: harusnya 28, aktual -2
 
-Done.
+Selesai.

@@ -43,6 +43,14 @@ class KartuStokController extends Controller
         usort($dataStokLengkap, function($a, $b) {
             $timeA = strtotime($a['waktu_raw'] ?? '1970-01-01');
             $timeB = strtotime($b['waktu_raw'] ?? '1970-01-01');
+            
+            if ($timeA == $timeB) {
+                // Secondary sort by ID Descending to ensure consistent order for same-second transactions
+                $idA = $a['id'] ?? 0;
+                $idB = $b['id'] ?? 0;
+                return $idB - $idA;
+            }
+            
             return $timeB - $timeA; // Descending
         });
 
@@ -348,6 +356,7 @@ class KartuStokController extends Controller
 
         foreach ($stok as $item) {
             $row = array();
+            $row['id'] = $item->id_rekaman_stok; // Add ID for accurate sorting
             $row['DT_RowIndex'] = $no++;
             
             // AUDIT-COMPLIANT: Always use rekaman_stoks.waktu for display
