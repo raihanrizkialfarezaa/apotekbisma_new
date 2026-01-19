@@ -543,6 +543,7 @@ class PenjualanDetailController extends Controller
             
             if ($lock->get()) {
                 try {
+                    // IMPORTANT: Sort by waktu ASC, created_at ASC, id ASC for deterministic ordering
                     $stokRecords = DB::table('rekaman_stoks')
                         ->where('id_produk', $produkId)
                         ->orderBy('waktu', 'asc')
@@ -555,24 +556,24 @@ class PenjualanDetailController extends Controller
                         return;
                     }
 
-                    $runningStock = 0;
-                    $isFirst = true;
+                    // Start from the FIRST record's stok_awal (which should be the initial stock)
+                    // The first record establishes the baseline
+                    $firstRecord = $stokRecords->first();
+                    $runningStock = intval($firstRecord->stok_awal);
+                    
                     $updates = [];
 
-                    foreach ($stokRecords as $record) {
+                    foreach ($stokRecords as $index => $record) {
                         $needsUpdate = false;
                         $updateData = [];
 
-                        if ($isFirst) {
-                            $runningStock = intval($record->stok_awal);
-                            $isFirst = false;
-                        } else {
-                            if (intval($record->stok_awal) != $runningStock) {
-                                $updateData['stok_awal'] = $runningStock;
-                                $needsUpdate = true;
-                            }
+                        // For all records: validate that stok_awal matches running stock
+                        if (intval($record->stok_awal) != $runningStock) {
+                            $updateData['stok_awal'] = $runningStock;
+                            $needsUpdate = true;
                         }
 
+                        // Calculate expected stok_sisa
                         $calculatedSisa = $runningStock + intval($record->stok_masuk) - intval($record->stok_keluar);
 
                         if (intval($record->stok_sisa) != $calculatedSisa) {
@@ -584,19 +585,22 @@ class PenjualanDetailController extends Controller
                             $updates[$record->id_rekaman_stok] = $updateData;
                         }
 
+                        // Move to next record - running stock becomes this record's sisa
                         $runningStock = $calculatedSisa;
                     }
 
+                    // Apply all updates
                     foreach ($updates as $recordId => $updateData) {
                         DB::table('rekaman_stoks')
                             ->where('id_rekaman_stok', $recordId)
                             ->update($updateData);
                     }
                     
-                    $finalStock = max(0, $runningStock);
+                    // Update master stock - DO NOT cap at 0 for kartu stok integrity
+                    // Business logic should prevent negative stock at transaction time
                     DB::table('produk')
                         ->where('id_produk', $produkId)
-                        ->update(['stok' => $finalStock]);
+                        ->update(['stok' => $runningStock]);
                         
                 } finally {
                     $lock->release();
