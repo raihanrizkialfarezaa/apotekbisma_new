@@ -1,0 +1,813 @@
+=============================================================
+VERIFY CSV PRODUCTS DETAILED (ONE BY ONE)
+Date: 2026-01-22 13:05:46
+Cutoff: 2025-12-31 23:59:59
+=============================================================
+
+CSV products loaded: 790
+CSV duplicate IDs encountered: 12
+
+ID | NAMA | CSV | +BUY | -SELL | EXPECTED | DB | STATUS
+--------------------------------------------------------------------------------------------------------------
+876 | CANDESARTAN 16MG | 90 | 0 | 0 | 90 | 90 | OK
+402 | KETOCONAZOLE TAB | 220 | 0 | 110 | 110 | 110 | OK
+872 | X-FLAM | 30 | 0 | 10 | 20 | 20 | OK
+253 | ERPHAFLAM | 50 | 200 | 90 | 160 | 160 | OK
+223 | DIVOLTAR | 50 | 0 | 50 | 0 | 0 | OK
+767 | SPASMINAL | 150 | 0 | 10 | 140 | 140 | OK
+711 | SALICYL MENTOL | 4 | 12 | 4 | 12 | 12 | OK
+712 | SALICYL PINK | 6 | 0 | 2 | 4 | 4 | OK
+349 | HEROCYN 150mg | 1 | 0 | 0 | 1 | 1 | OK
+350 | HEROCYN 50mg | 6 | 0 | 0 | 6 | 6 | OK
+351 | HEROCYN 75mg | 5 | 0 | 1 | 4 | 4 | OK
+352 | HEROCYN BABY 100mg | 3 | 0 | 0 | 3 | 3 | OK
+353 | HEROCYN BABY 200mg | 2 | 0 | 0 | 2 | 2 | OK
+399 | KEJIBELING PLUS GINGSENG | 3 | 10 | 3 | 10 | 10 | OK
+398 | ORALIT | 63 | 0 | 7 | 56 | 56 | OK
+412 | KOOLFEVER ANAK | 11 | 0 | 7 | 4 | 4 | OK
+413 | KOOLFEVER BABY | 24 | 0 | 4 | 20 | 20 | OK
+125 | BYE FEVER ANAK | 17 | 0 | 11 | 6 | 6 | OK
+126 | BYE FEVER BABY | 11 | 0 | 8 | 3 | 3 | OK
+958 | HUFAGRIP PAMOL TAB | 70 | 0 | 0 | 70 | 70 | OK
+421 | LACTO-B | 11 | 40 | 15 | 36 | 36 | OK
+439 | L-BIO | 21 | 0 | 8 | 13 | 13 | OK
+167 | VITAMIN E IPI | 13 | 0 | 1 | 12 | 12 | OK
+743 | SIDOMUNCUL C 1000 ALL VAR | 5 | 0 | 0 | 5 | 5 | OK
+411 | KONIDIN PERMEN | 28 | 0 | 4 | 24 | 24 | OK
+498 | MADURASA | 48 | 0 | 48 | 0 | 0 | OK
+52 | ANTANGIN JUNIOR | 25 | 0 | 4 | 21 | 21 | OK
+807 | TOLAK ANGIN ANAK | 30 | 0 | 0 | 30 | 30 | OK
+809 | TOLAK LINU | 20 | 15 | 18 | 17 | 17 | OK
+51 | ANTANGIN CAIR | 113 | 36 | 81 | 68 | 68 | OK
+808 | TOLAK ANGIN DEWASA | 47 | 36 | 33 | 50 | 50 | OK
+832 | VEGETA HERBAL | 19 | 0 | 19 | 0 | 0 | OK
+833 | VEGETA JERUK | 11 | 0 | 0 | 11 | 11 | OK
+656 | PLOSA ALL VAR | 16 | 6 | 1 | 21 | 21 | OK
+730 | SARI KURMA TJ | 1 | 0 | 0 | 1 | 1 | OK
+494 | MADU TJ JOYBEE ALL VAR | 5 | 6 | 2 | 9 | 9 | OK
+493 | MADU TJ ORI 500ML | 3 | 0 | 0 | 3 | 3 | OK
+496 | MADU TJ ORI 150ML | 5 | 0 | 2 | 3 | 3 | OK
+497 | MADU TJ ORI 250ML | 7 | 0 | 2 | 5 | 5 | OK
+492 | MADU TJ EXTRA 250 | 3 | 0 | 0 | 3 | 3 | OK
+975 | MADU TJ EXTRA 150 | 3 | 0 | 0 | 3 | 3 | OK
+427 | LANCAR ASI | 1 | 0 | 1 | 0 | 0 | OK
+406 | KOMIX ALL VAR | 141 | 0 | 33 | 108 | 108 | OK
+116 | BORAX | 22 | 0 | 0 | 22 | 22 | OK
+396 | KAPSIDA | 5 | 0 | 2 | 3 | 3 | OK
+685 | PUYER 16 | 109 | 0 | 0 | 109 | 109 | OK
+54 | ANTANGIN TAB | 9 | 20 | 9 | 20 | 20 | OK
+11 | ADEM SARI | 11 | 0 | 0 | 11 | 11 | OK
+416 | KULDON | 2 | 20 | 3 | 19 | 19 | OK
+408 | KOMIX KID ALL | 64 | 0 | 5 | 59 | 59 | OK
+58 | ANTIMO ANAK ALL | 3 | 0 | 3 | 0 | 0 | OK
+407 | KOMIX HERBAL | 9 | 0 | 0 | 9 | 9 | OK
+574 | NORIT | 2 | 0 | 0 | 2 | 2 | OK
+908 | MYLANTA TAB | 4 | 10 | 2 | 12 | 12 | OK
+674 | PROMAG SCH | 19 | 0 | 5 | 14 | 14 | OK
+759 | SIROP INDRA | 8 | 0 | 0 | 8 | 8 | OK
+304 | PROMAG HERBAL | 7 | 18 | 12 | 13 | 13 | OK
+256 | ESEMAG | 17 | 0 | 10 | 7 | 7 | OK
+245 | ENTROSTOP | 12 | 0 | 7 | 5 | 5 | OK
+246 | ENTROSTOP ANAK | 8 | 0 | 0 | 8 | 8 | OK
+661 | POLYSILANE TAB | 8 | 0 | 3 | 5 | 5 | OK
+172 | COMBANTRIN SYR | 6 | 0 | 5 | 1 | 1 | OK
+173 | COMBANTRIN TAB | 6 | 0 | 4 | 2 | 2 | OK
+102 | BIOLYSIN KID ALL VAR | 9 | 0 | 0 | 9 | 9 | OK
+281 | FITKOM ALL VAR | 4 | 0 | 2 | 2 | 2 | OK
+705 | SAKA ABC ALL VAR | 10 | 0 | 3 | 7 | 7 | OK
+495 | MADU TJ KURMA | 1 | 0 | 0 | 1 | 1 | OK
+38 | SILADEX UNGU 60ML | 6 | 0 | 2 | 4 | 4 | OK
+841 | VICKS F 44 100ml | 7 | 0 | 2 | 5 | 5 | OK
+842 | VICKS F 44 27ml | 4 | 6 | 3 | 7 | 7 | OK
+881 | VICKS F 44 54ML | 5 | 6 | 5 | 6 | 6 | OK
+604 | OBP ITRASAL | 1 | 0 | 1 | 0 | 0 | OK
+602 | OBH ITRASAL | 8 | 12 | 4 | 16 | 16 | OK
+894 | ITRABAT | 14 | 0 | 2 | 12 | 12 | OK
+348 | SANADRYL EXP 100ML | 2 | 0 | 0 | 2 | 2 | OK
+887 | SANADRYL EXP 60ML | 3 | 0 | 1 | 2 | 2 | OK
+198 | DECADRYL 120mg | 2 | 0 | 1 | 1 | 1 | OK
+199 | DECADRYL 60mg | 2 | 0 | 0 | 2 | 2 | OK
+553 | NELLCO SPESIAL B | 3 | 0 | 0 | 3 | 3 | OK
+554 | NELLCO SPESIAL K | 3 | 0 | 0 | 3 | 3 | OK
+599 | OBH COMBI DAHAK | 9 | 0 | 2 | 7 | 7 | OK
+600 | OBH COMBI PLUS 100ml | 6 | 6 | 9 | 3 | 3 | OK
+601 | OBH COMBI PLUS 60ml | 4 | 5 | 0 | 9 | 9 | OK
+201 | DECOLSIN | 25 | 0 | 3 | 22 | 22 | OK
+723 | SANGOBION S'10 | 24 | 0 | 3 | 21 | 21 | OK
+635 | PARAMEX | 69 | 0 | 14 | 55 | 55 | OK
+29 | AMBEVEN | 10 | 0 | 6 | 4 | 4 | OK
+231 | DUMIN 500mg | 22 | 0 | 8 | 14 | 14 | OK
+774 | STREPSIL | 14 | 0 | 6 | 8 | 8 | OK
+871 | WOOD'S PERMEN ALL | 5 | 0 | 3 | 2 | 2 | OK
+519 | MIRASIC | 40 | 0 | 0 | 40 | 40 | OK
+504 | MEFINAL | 210 | 0 | 120 | 90 | 90 | OK
+524 | MIXALGIN | 130 | 200 | 100 | 230 | 230 | OK
+974 | MEGABAL | 40 | 0 | 30 | 10 | 10 | OK
+543 | MYCORAL TAB | 64 | 0 | 30 | 34 | 34 | OK
+508 | MERTIGO | 103 | 0 | 9 | 94 | 94 | OK
+948 | MUCOS TAB | 20 | 0 | 0 | 20 | 20 | OK
+537 | MOLACORT 0,75 | 70 | 400 | 110 | 360 | 360 | OK
+567 | NEUROSANBE PLUS | 110 | 0 | 40 | 70 | 70 | OK
+584 | NOVAPYRON | 200 | 0 | 10 | 190 | 190 | OK
+578 | NOVAGESIC TAB | 70 | 0 | 0 | 70 | 70 | OK
+564 | NEUROPYRON-V | 190 | 0 | 50 | 140 | 140 | OK
+586 | NOVASTAN TAB | 130 | 0 | 60 | 70 | 70 | OK
+563 | NEURODEX | 120 | 0 | 70 | 50 | 50 | OK
+560 | NEURALGIN | 270 | 0 | 120 | 150 | 150 | OK
+588 | NOVATRIM TAB | 200 | 0 | 0 | 200 | 200 | OK
+581 | NOVAMAG TAB | 50 | 0 | 0 | 50 | 50 | OK
+593 | NUFADOL TAB | 40 | 0 | 10 | 30 | 30 | OK
+565 | NEUROSANBE | 50 | 0 | 10 | 40 | 40 | OK
+606 | OMEDOM TAB | 140 | 0 | 30 | 110 | 110 | OK
+610 | OMELLEGAR | 90 | 200 | 80 | 210 | 210 | OK
+609 | OMEGZOLE | 80 | 200 | 80 | 200 | 200 | OK
+623 | ORPHEN | 160 | 0 | 10 | 150 | 150 | OK
+616 | OMERIC 300 | 80 | 0 | 10 | 70 | 70 | OK
+611 | OMEMOX | 50 | 0 | 0 | 50 | 50 | OK
+614 | OMEPROXIL | 70 | 0 | 0 | 70 | 70 | OK
+608 | OMEGESIC | 140 | 200 | 40 | 300 | 300 | OK
+621 | OPISTAN | 210 | 0 | 0 | 210 | 210 | OK
+619 | OMETILSON | 200 | 300 | 150 | 350 | 350 | OK
+615 | OMERIC 100 | 80 | 0 | 0 | 80 | 80 | OK
+618 | OMEROXOL TAB | 130 | 0 | 30 | 100 | 100 | OK
+692 | RHEMAFAR | 390 | 0 | 40 | 350 | 350 | OK
+861 | WINATIN | 20 | 0 | 0 | 20 | 20 | OK
+669 | PRIMADEX FORTE | 60 | 0 | 0 | 60 | 60 | OK
+664 | PONSTELAX | 70 | 0 | 0 | 70 | 70 | OK
+717 | SAMCOFENAC | 430 | 0 | 0 | 430 | 430 | OK
+900 | SELVIM 10MG | 150 | 0 | 0 | 150 | 150 | OK
+658 | POLOFAR PLUS | 150 | 0 | 30 | 120 | 120 | OK
+795 | TEOSAL | 550 | 0 | 270 | 280 | 280 | OK
+718 | SAMTACID | 100 | 0 | 0 | 100 | 100 | OK
+668 | PRIMADEX | 100 | 0 | 0 | 100 | 100 | OK
+694 | RENABETIC | 310 | 0 | 90 | 220 | 220 | OK
+741 | SELVIM 20 | 90 | 0 | 20 | 70 | 70 | OK
+764 | SOLDEXTAM | 140 | 0 | 40 | 100 | 100 | OK
+776 | SULFADIASIN | 160 | 0 | 30 | 130 | 130 | OK
+778 | SUPERTETRA | 14 | 20 | 19 | 15 | 15 | OK
+663 | PONSTAN | 103 | 0 | 37 | 66 | 66 | OK
+677 | PRONICY | 100 | 0 | 0 | 100 | 100 | OK
+814 | TRANSAMIN | 100 | 0 | 10 | 90 | 90 | OK
+820 | TRIOCID TAB | 170 | 0 | 50 | 120 | 120 | OK
+666 | POSTINOR | 6 | 9 | 8 | 7 | 7 | OK
+1001 | PARAVEN TAB | 140 | 0 | 80 | 60 | 60 | OK
+662 | PONDEX F | 70 | 0 | 10 | 60 | 60 | OK
+216 | DEXYCOL | 20 | 0 | 0 | 20 | 20 | OK
+221 | DIONICOL | 80 | 0 | 0 | 80 | 80 | OK
+247 | EPEXOL TAB | 90 | 0 | 10 | 80 | 80 | OK
+239 | EMTURNAS | 80 | 0 | 20 | 60 | 60 | OK
+238 | EMTURNAS FORTE | 150 | 0 | 20 | 130 | 130 | OK
+264 | ETAMOX | 30 | 0 | 10 | 20 | 20 | OK
+260 | ETABION | 140 | 0 | 10 | 130 | 130 | OK
+285 | FLOXIGRA | 80 | 0 | 10 | 70 | 70 | OK
+278 | FG TROCHES | 7 | 12 | 4 | 15 | 15 | OK
+280 | FIMESTAN | 70 | 100 | 40 | 130 | 130 | OK
+922 | FARSIFEN TAB | 220 | 0 | 50 | 170 | 170 | OK
+275 | FAXIDEN | 180 | 0 | 40 | 140 | 140 | OK
+293 | FOLAVIT | 30 | 100 | 60 | 70 | 70 | OK
+964 | FLOXIFAR | 100 | 0 | 0 | 100 | 100 | OK
+295 | FORMYCO TAB | 43 | 0 | 0 | 43 | 43 | OK
+284 | FLAMAR | 60 | 0 | 0 | 60 | 60 | OK
+277 | FENAMIN | 100 | 0 | 0 | 100 | 100 | OK
+893 | FARGETIX | 40 | 0 | 0 | 40 | 40 | OK
+335 | GRATAZONE | 80 | 0 | 80 | 0 | 0 | OK
+336 | GRATEOS | 80 | 0 | 20 | 60 | 60 | OK
+890 | GASELA | 120 | 0 | 10 | 110 | 110 | OK
+986 | GENCEF 500 | 110 | 0 | 10 | 100 | 100 | OK
+333 | GRAFAZOL | 30 | 0 | 0 | 30 | 30 | OK
+303 | GASTRUCID TAB | 30 | 0 | 0 | 30 | 30 | OK
+985 | GENXICAM 15MG | 230 | 0 | 70 | 160 | 160 | OK
+323 | GLUCOSAMIN MPL | 10 | 100 | 60 | 50 | 50 | OK
+324 | GLUDEPATIC | 40 | 200 | 60 | 180 | 180 | OK
+332 | GRAFAMIC | 30 | 0 | 0 | 30 | 30 | OK
+330 | GRAFACHLOR | 120 | 0 | 20 | 100 | 100 | OK
+331 | GRAFADON | 30 | 0 | 30 | 0 | 0 | OK
+951 | HISTAPAN | 10 | 0 | 0 | 10 | 10 | OK
+362 | HUFAMAG TAB | 140 | 0 | 10 | 130 | 130 | OK
+923 | INFLASON | 90 | 200 | 30 | 260 | 260 | OK
+365 | HYSTIGO | 130 | 0 | 50 | 80 | 80 | OK
+376 | INFALGIN | 80 | 0 | 30 | 50 | 50 | OK
+379 | INTERHISTIN | 70 | 200 | 100 | 170 | 170 | OK
+27 | HUFADEXTA-M | 20 | 0 | 10 | 10 | 10 | OK
+973 | HUFRALGIN | 200 | 0 | 20 | 180 | 180 | OK
+720 | HYPOFIL | 100 | 0 | 0 | 100 | 100 | OK
+880 | HUFARIZINE TAB | 60 | 150 | 50 | 160 | 160 | OK
+442 | LERZIN TAB | 40 | 0 | 40 | 0 | 0 | OK
+913 | LOKEV | 30 | 0 | 20 | 10 | 10 | OK
+457 | LOPAMID | 180 | 0 | 30 | 150 | 150 | OK
+460 | LOSTACEF TAB | 100 | 0 | 10 | 90 | 90 | OK
+444 | LICOKALK | 160 | 0 | 50 | 110 | 110 | OK
+455 | LODIA | 100 | 0 | 50 | 50 | 50 | OK
+385 | KADITIC | 370 | 0 | 200 | 170 | 170 | OK
+374 | INAMID | 50 | 0 | 10 | 40 | 40 | OK
+430 | LAPISTAN | 20 | 0 | 0 | 20 | 20 | OK
+445 | LICOSTAN | 110 | 0 | 0 | 110 | 110 | OK
+388 | KALMETASON | 240 | 600 | 480 | 360 | 360 | OK
+371 | IMODIUM | 72 | 0 | 7 | 65 | 65 | OK
+507 | MELOXICAM 7.5mg | 190 | 0 | 10 | 180 | 180 | OK
+506 | MELOXICAM 15mg | 320 | 0 | 80 | 240 | 240 | OK
+320 | GLIMEPIRID 2mg | 110 | 300 | 120 | 290 | 290 | OK
+139 | CAPTOPRIL 12.5mg | 60 | 0 | 0 | 60 | 60 | OK
+140 | CAPTOPRIL 25mg | 40 | 0 | 10 | 30 | 30 | OK
+706 | SALBUTAMOL 2mg | 140 | 0 | 40 | 100 | 100 | OK
+886 | salbutamol 4mg | 240 | 0 | 110 | 130 | 130 | OK
+322 | GLIMEPIRID 4mg | 200 | 0 | 0 | 200 | 200 | OK
+319 | GLIMEPIRID 1mg | 110 | 0 | 90 | 20 | 20 | OK
+321 | GLIMEPIRID 3mg | 260 | 0 | 30 | 230 | 230 | OK
+678 | PROPANOLOL 10mg | 100 | 0 | 0 | 100 | 100 | OK
+679 | PROPANOLOL 40mg | 200 | 0 | 0 | 200 | 200 | OK
+757 | SIMVASTATIN 20 | 430 | 0 | 140 | 290 | 290 | OK
+667 | PREDNISON | 120 | 0 | 10 | 110 | 110 | OK
+510 | METHYLPREDNISOLON 16mg | 90 | 0 | 0 | 90 | 90 | OK
+511 | METHYLPREDNISOLON 4mg | 690 | 0 | 150 | 540 | 540 | OK
+512 | METHYLPREDNISOLON 8mg | 320 | 0 | 120 | 200 | 200 | OK
+860 | VOLTADEX | 30 | 500 | 250 | 280 | 280 | OK
+671 | PRIMOLUT N | 30 | 30 | 2 | 58 | 58 | OK
+834 | VENARON 300mg | 96 | 0 | 0 | 96 | 96 | OK
+802 | THIAMYCIN 1000mg | 22 | 0 | 2 | 20 | 20 | OK
+733 | SCOPMA PLUS | 30 | 0 | 0 | 30 | 30 | OK
+779 | SUPRABIOTIK | 40 | 0 | 20 | 20 | 20 | OK
+879 | YUSIMOX TABLET | 50 | 0 | 30 | 20 | 20 | OK
+884 | ZYLORIC 100mg | 17 | 0 | 4 | 13 | 13 | OK
+885 | ZYLORIC 300mg | 16 | 0 | 0 | 16 | 16 | OK
+45 | ANASTAN | 130 | 0 | 10 | 120 | 120 | OK
+21 | ALLOFAR 100MG | 90 | 0 | 0 | 90 | 90 | OK
+22 | ALLOFAR 300MG | 170 | 0 | 50 | 120 | 120 | OK
+36 | AMOXAN 500mg | 80 | 0 | 0 | 80 | 80 | OK
+153 | ALLERON | 110 | 0 | 10 | 100 | 100 | OK
+66 | ASPILET | 170 | 0 | 70 | 100 | 100 | OK
+5 | ACIFAR TAB | 60 | 0 | 10 | 50 | 50 | OK
+99 | BINTAMOX | 130 | 0 | 0 | 130 | 130 | OK
+118 | BROADAMOX | 50 | 200 | 70 | 180 | 180 | OK
+80 | BECOM C | 30 | 0 | 0 | 30 | 30 | OK
+81 | BECOM ZET | 90 | 0 | 10 | 80 | 80 | OK
+665 | BROMIFAR | 30 | 0 | 10 | 20 | 20 | OK
+120 | BRONEX | 50 | 0 | 10 | 40 | 40 | OK
+121 | BUFACARYL | 150 | 200 | 40 | 310 | 310 | OK
+147 | CAVIPLEX TAB | 170 | 0 | 60 | 110 | 110 | OK
+892 | CAVIPLEX CDEZ | 80 | 0 | 10 | 70 | 70 | OK
+142 | CARBIDU 0,5 | 130 | 0 | 60 | 70 | 70 | OK
+143 | CARBIDU 0,75 | 210 | 0 | 20 | 190 | 190 | OK
+750 | CALCIFAR PLUS | 90 | 0 | 10 | 80 | 80 | OK
+144 | CARGESIC 500mg | 20 | 0 | 0 | 20 | 20 | OK
+145 | CATAFLAM 50mg | 45 | 0 | 35 | 10 | 10 | OK
+181 | CORTIDEX | 10 | 0 | 0 | 10 | 10 | OK
+225 | DOLOLICOBION | 30 | 200 | 30 | 200 | 200 | OK
+211 | DEXANTA | 20 | 0 | 0 | 20 | 20 | OK
+209 | DEXAMETHASONE 0,5 | 280 | 400 | 270 | 410 | 410 | OK
+210 | DEXAMETHASONE 0,75 | 210 | 400 | 250 | 360 | 360 | OK
+227 | DRAMAMIN | 41 | 0 | 18 | 23 | 23 | OK
+196 | DANASONE | 90 | 400 | 90 | 400 | 400 | OK
+214 | DEXTEEM PLUS | 350 | 600 | 550 | 400 | 400 | OK
+213 | DEXTAMIN | 90 | 0 | 5 | 85 | 85 | OK
+63 | ASAM MEFENAMAT 500mg | 380 | 1000 | 540 | 840 | 840 | OK
+39 | AMPICILIN | 80 | 0 | 0 | 80 | 80 | OK
+994 | AMOXICILIN 500mg HJ | 140 | 1200 | 670 | 670 | 670 | OK
+30 | AMBROXOL | 130 | 0 | 120 | 10 | 10 | OK
+55 | ANTASIDA DOEN | 460 | 0 | 170 | 290 | 290 | OK
+2 | ACETHYLESISTEIN 200mg | 30 | 0 | 10 | 20 | 20 | OK
+37 | AMOXICILIN PHARMA | 140 | 0 | 10 | 130 | 130 | OK
+993 | ACYCLOVIR TAB | 130 | 0 | 40 | 90 | 90 | OK
+875 | COTRIMOXAZOL | 30 | 0 | 10 | 20 | 20 | OK
+161 | CETIRIZIN | 520 | 0 | 360 | 160 | 160 | OK
+168 | CLINDAMICIN 150mg | 80 | 0 | 10 | 70 | 70 | OK
+169 | CLINDAMICIN 300mg | 20 | 0 | 20 | 0 | 0 | OK
+165 | CIPROFLOXACIN 500mg | 120 | 200 | 60 | 260 | 260 | OK
+154 | CEFIXIM 100MG | 30 | 100 | 40 | 90 | 90 | OK
+910 | CEFIXIM 200MG | 30 | 0 | 0 | 30 | 30 | OK
+152 | CEFADROXIL 500mg | 70 | 200 | 20 | 250 | 250 | OK
+107 | BISOPROLOL FURMATE | 20 | 0 | 0 | 20 | 20 | OK
+849 | CANDESARTAN 8MG | 70 | 0 | 20 | 50 | 50 | OK
+954 | GUAFINESIN | 180 | 0 | 50 | 130 | 130 | OK
+316 | DOMPERIDON | 60 | 0 | 10 | 50 | 50 | OK
+921 | GLUCODEX | 60 | 100 | 50 | 110 | 110 | OK
+956 | GABAPENTIN 300mg | 30 | 30 | 60 | 0 | 0 | OK
+299 | FUROSEMIDE | 30 | 0 | 20 | 10 | 10 | OK
+366 | IBUPROFEN | 310 | 300 | 140 | 470 | 470 | OK
+309 | GEMFIBROZIL | 100 | 0 | 20 | 80 | 80 | OK
+839 | GRISIOFULVIN | 30 | 0 | 0 | 30 | 30 | OK
+612 | OMEPRASOL | 300 | 0 | 90 | 210 | 210 | OK
+428 | LANSOPRAZOLE | 80 | 100 | 90 | 90 | 90 | OK
+458 | LORATADIN | 320 | 0 | 60 | 260 | 260 | OK
+620 | ONDANSETRON 4mg | 50 | 0 | 10 | 40 | 40 | OK
+570 | NIFEDIPIN | 180 | 0 | 0 | 180 | 180 | OK
+501 | MECOBALAMIN | 80 | 0 | 20 | 60 | 60 | OK
+955 | EPERISONE | 80 | 0 | 10 | 70 | 70 | OK
+691 | RAVALGIN | 200 | 0 | 10 | 190 | 190 | OK
+514 | METRONIDAZOL | 40 | 0 | 30 | 10 | 10 | OK
+289 | FLUNARISIN 5mg | 20 | 0 | 0 | 20 | 20 | OK
+865 | ONDANSETRON 8MG | 70 | 0 | 0 | 70 | 70 | OK
+381 | ISDN | 210 | 0 | 20 | 190 | 190 | OK
+689 | RANITIDINE | 230 | 400 | 60 | 570 | 570 | OK
+318 | GLIBENCLAMIDE | 210 | 0 | 150 | 60 | 60 | OK
+755 | PIROXICAM 20MG | 210 | 500 | 470 | 240 | 240 | OK
+23 | ALLOPURINOL 100mg | 310 | 1000 | 600 | 710 | 710 | OK
+24 | ALLOPURINOL 300mg | 230 | 200 | 130 | 300 | 300 | OK
+220 | DICLOFENAC POTASIUM | 160 | 300 | 200 | 260 | 260 | OK
+403 | KETOPROFEN | 30 | 0 | 0 | 30 | 30 | OK
+509 | METFORMIN 500 mg | 300 | 0 | 190 | 110 | 110 | OK
+33 | AMLODIPIN 10mg | 480 | 300 | 370 | 410 | 410 | OK
+34 | AMLODIPIN 5mg | 740 | 0 | 370 | 370 | 370 | OK
+756 | SIMVASTATIN 10 | 650 | 0 | 210 | 440 | 440 | OK
+183 | COUNTERPAIN 15g | 13 | 0 | 3 | 10 | 10 | OK
+184 | COUNTERPAIN 30g | 2 | 3 | 3 | 2 | 2 | OK
+185 | COUNTERPAIN 5g | 5 | 6 | 2 | 9 | 9 | OK
+186 | COUNTERPAIN 60g | 1 | 2 | 1 | 2 | 2 | OK
+505 | VITAQUIN 2% | 2 | 0 | 0 | 2 | 2 | OK
+990 | BURNAZIN SLP | 1 | 0 | 0 | 1 | 1 | OK
+959 | VITAQUIN CR | 1 | 0 | 0 | 1 | 1 | OK
+960 | BORRAGINOL N SLP | 1 | 0 | 0 | 1 | 1 | OK
+961 | BORRAGINOL S SLP | 1 | 0 | 0 | 1 | 1 | OK
+714 | SALONPAS GEL 30mg | 2 | 0 | 1 | 1 | 1 | OK
+205 | DENOMIX KRIM 10g | 2 | 3 | 3 | 2 | 2 | OK
+944 | NEBACETIN OINT | 1 | 0 | 0 | 1 | 1 | OK
+552 | NEBACETINE POW | 3 | 0 | 0 | 3 | 3 | OK
+164 | CINOLON-N | 6 | 0 | 1 | 5 | 5 | OK
+704 | SAGESTAM | 4 | 0 | 3 | 1 | 1 | OK
+103 | BIOPLACENTON | 3 | 6 | 7 | 2 | 2 | OK
+122 | BUFACOMB IOB | 3 | 0 | 0 | 3 | 3 | OK
+177 | COOLING 5 PLUS | 3 | 0 | 0 | 3 | 3 | OK
+178 | COOLING 5 SPRAY | 4 | 0 | 0 | 4 | 4 | OK
+392 | KANDISTATIN | 3 | 0 | 0 | 3 | 3 | OK
+148 | CAZETIN | 2 | 0 | 1 | 1 | 1 | OK
+13 | AKURAT | 6 | 0 | 3 | 3 | 3 | OK
+516 | MICROGYNON | 17 | 4 | 16 | 5 | 5 | OK
+194 | CYCLOGYNON | 3 | 0 | 1 | 2 | 2 | OK
+217 | DIANE | 2 | 0 | 1 | 1 | 1 | OK
+572 | PREGNACHEK | 9 | 0 | 1 | 8 | 8 | OK
+904 | SENSITIF | 2 | 0 | 0 | 2 | 2 | OK
+50 | ANDALAN LAKTASI | 9 | 0 | 2 | 7 | 7 | OK
+48 | ANDALAN | 20 | 30 | 33 | 17 | 17 | OK
+49 | ANDALAN FE | 31 | 0 | 8 | 23 | 23 | OK
+701 | ROOHTO | 5 | 0 | 0 | 5 | 5 | OK
+702 | ROOHTO COOL | 5 | 0 | 3 | 2 | 2 | OK
+175 | INSTO COOL | 2 | 12 | 10 | 4 | 4 | OK
+377 | INSTO | 7 | 0 | 2 | 5 | 5 | OK
+378 | INSTO DRY EYES | 4 | 0 | 0 | 4 | 4 | OK
+966 | INSTO 15ml | 2 | 0 | 1 | 1 | 1 | OK
+12 | AITO | 4 | 0 | 0 | 4 | 4 | OK
+313 | GENOINT TM | 6 | 0 | 2 | 4 | 4 | OK
+928 | SANBE TEARS | 1 | 0 | 0 | 1 | 1 | OK
+20 | ALLETROL TM | 5 | 0 | 2 | 3 | 3 | OK
+251 | ERLAMYCETIN PLUS TM | 1 | 0 | 1 | 0 | 0 | OK
+157 | CENDO XITROL | 5 | 0 | 1 | 4 | 4 | OK
+898 | CENDO LYTERS | 4 | 0 | 1 | 3 | 3 | OK
+155 | CENDO CATARLENT 15ml | 3 | 0 | 1 | 2 | 2 | OK
+156 | CENDO CATARLENT 5ml | 3 | 0 | 0 | 3 | 3 | OK
+249 | ERLAMICETIN SM | 2 | 3 | 3 | 2 | 2 | OK
+312 | GENOINT SM | 2 | 6 | 1 | 7 | 7 | OK
+854 | VITAL TT | 3 | 0 | 1 | 2 | 2 | OK
+930 | SANTADEX TT | 1 | 6 | 1 | 6 | 6 | OK
+135 | CALLUSOL | 1 | 3 | 2 | 2 | 2 | OK
+6 | ACNOL | 3 | 0 | 0 | 3 | 3 | OK
+138 | CANESTEN | 4 | 0 | 0 | 4 | 4 | OK
+297 | FUNGIDREM B | 1 | 0 | 0 | 1 | 1 | OK
+298 | FUNGIDREM K | 2 | 3 | 1 | 4 | 4 | OK
+195 | DAKTARIN | 1 | 3 | 0 | 4 | 4 | OK
+294 | FORMYCO CR | 5 | 0 | 0 | 5 | 5 | OK
+91 | BETADINE OINT | 1 | 0 | 0 | 1 | 1 | OK
+840 | VERIL ACNE GEL | 1 | 0 | 0 | 1 | 1 | OK
+542 | MYCORAL CREAM | 1 | 3 | 0 | 4 | 4 | OK
+813 | TOP CORT | 2 | 0 | 2 | 0 | 0 | OK
+989 | MEBO | 1 | 0 | 0 | 1 | 1 | OK
+830 | FLAMAR GEL | 3 | 0 | 0 | 3 | 3 | OK
+732 | SCABIMITE K | 3 | 0 | 3 | 0 | 0 | OK
+404 | KLODERMA COKLAT | 2 | 0 | 1 | 1 | 1 | OK
+926 | INERSON | 3 | 0 | 1 | 2 | 2 | OK
+257 | ESPERSON | 1 | 0 | 0 | 1 | 1 | OK
+803 | THROMBO GEL | 3 | 0 | 1 | 2 | 2 | OK
+804 | THROMBOPOB GEL | 2 | 2 | 1 | 3 | 3 | OK
+502 | MEDIKLIN | 1 | 0 | 0 | 1 | 1 | OK
+367 | ICHTIYOL | 14 | 0 | 3 | 11 | 11 | OK
+709 | SALEP KEMBANG BULAN | 4 | 0 | 0 | 4 | 4 | OK
+576 | NOSIB | 1 | 0 | 0 | 1 | 1 | OK
+708 | SALEP 88 | 10 | 0 | 6 | 4 | 4 | OK
+707 | SALEP 24 | 12 | 0 | 0 | 12 | 12 | OK
+628 | PAGODA SALEP | 8 | 0 | 4 | 4 | 4 | OK
+826 | ULTRASILIN | 4 | 0 | 0 | 4 | 4 | OK
+901 | MICONAZOLE | 24 | 0 | 14 | 10 | 10 | OK
+765 | SOLINFEC CR | 4 | 6 | 3 | 7 | 7 | OK
+389 | KALPANAX CREAM | 12 | 0 | 0 | 12 | 12 | OK
+363 | HYDROCORTISON | 3 | 0 | 3 | 0 | 0 | OK
+400 | KETOCONAZOLE CR DEXA | 7 | 0 | 3 | 4 | 4 | OK
+123 | BUFACORT-N | 1 | 6 | 0 | 7 | 7 | OK
+592 | NUFACORT | 5 | 0 | 0 | 5 | 5 | OK
+786 | SYNALTEN | 7 | 0 | 0 | 7 | 7 | OK
+906 | PIKANG SUANG | 6 | 10 | 8 | 8 | 8 | OK
+984 | SRITI SALP | 8 | 0 | 1 | 7 | 7 | OK
+252 | ERLANEO HYDROCORT | 5 | 0 | 0 | 5 | 5 | OK
+98 | BEVALEX | 2 | 3 | 1 | 4 | 4 | OK
+571 | NISAGON | 5 | 0 | 1 | 4 | 4 | OK
+97 | BETASON-N | 8 | 0 | 1 | 7 | 7 | OK
+83 | BENOSON | 3 | 0 | 0 | 3 | 3 | OK
+84 | BENOSON-N 15g | 1 | 0 | 0 | 1 | 1 | OK
+85 | BENOSON-N 5g | 3 | 3 | 3 | 3 | 3 | OK
+987 | BENOSON 15gr | 2 | 0 | 0 | 2 | 2 | OK
+96 | BETAMETASON | 6 | 0 | 2 | 4 | 4 | OK
+314 | GENTAMICIN SLP | 12 | 0 | 3 | 9 | 9 | OK
+248 | ERLADERM-N | 13 | 0 | 10 | 3 | 3 | OK
+851 | VIRUGON CREAM | 2 | 0 | 0 | 2 | 2 | OK
+4 | ACIFAR CREAM | 1 | 6 | 1 | 6 | 6 | OK
+9 | ACYCLOVIR CREAM | 11 | 10 | 11 | 10 | 10 | OK
+311 | GENOINT SK | 3 | 0 | 1 | 2 | 2 | OK
+240 | ENBATIC | 20 | 0 | 6 | 14 | 14 | OK
+933 | ENBATIC CREAM | 2 | 0 | 1 | 1 | 1 | OK
+230 | DULCOLAX SUPP | 2 | 0 | 0 | 2 | 2 | OK
+104 | VENTOLIN NEBUL | 7 | 0 | 1 | 6 | 6 | OK
+941 | PROFENID SUPP | 10 | 0 | 0 | 10 | 10 | OK
+282 | FLAGYSTATIN SUPP | 6 | 0 | 2 | 4 | 4 | OK
+681 | PRORIS SUPP | 6 | 0 | 0 | 6 | 6 | OK
+641 | PARCOK B | 4 | 0 | 0 | 4 | 4 | OK
+642 | PARCOK K | 4 | 0 | 0 | 4 | 4 | OK
+461 | M.KAPAK 10mL | 13 | 0 | 2 | 11 | 11 | OK
+462 | M.KAPAK 14mL | 5 | 0 | 2 | 3 | 3 | OK
+463 | M.KAPAK 28mL | 3 | 0 | 1 | 2 | 2 | OK
+464 | M.KAPAK 3mL | 3 | 0 | 0 | 3 | 3 | OK
+465 | M.KAPAK 54mL | 2 | 0 | 0 | 2 | 2 | OK
+466 | M.KAPAK 5mL | 9 | 0 | 1 | 8 | 8 | OK
+525 | MKP GAJAH 120ML | 1 | 0 | 0 | 1 | 1 | OK
+526 | MKP GAJAH 30mL | 4 | 0 | 0 | 4 | 4 | OK
+527 | MKP GAJAH 60mL | 2 | 0 | 0 | 2 | 2 | OK
+469 | M. TELON GAJAH 30ml | 1 | 0 | 0 | 1 | 1 | OK
+470 | M. TELON GAJAH 60ml | 4 | 0 | 0 | 4 | 4 | OK
+532 | MKP LANG 120mL | 3 | 0 | 1 | 2 | 2 | OK
+533 | MKP LANG 15mL | 5 | 12 | 4 | 13 | 13 | OK
+534 | MKP LANG 30mL | 11 | 0 | 5 | 6 | 6 | OK
+535 | MKP LANG 60mL | 11 | 12 | 8 | 15 | 15 | OK
+957 | MKP LANG 210ML | 3 | 0 | 0 | 3 | 3 | OK
+761 | SITRONELLA 30ml | 7 | 0 | 1 | 6 | 6 | OK
+762 | SITRONELLA 60ml | 5 | 0 | 0 | 5 | 5 | OK
+479 | M.TELON KONICARE PLUS 30ml | 3 | 0 | 0 | 3 | 3 | OK
+480 | M.TELON KONICARE PLUS 60ml | 3 | 0 | 0 | 3 | 3 | OK
+530 | MKP KONICARE PLUS 30ml | 1 | 0 | 0 | 1 | 1 | OK
+531 | MKP KONICARE PLUS 60ml | 2 | 0 | 0 | 2 | 2 | OK
+477 | M.TELON KONICARE 30ml | 2 | 0 | 0 | 2 | 2 | OK
+478 | M.TELON KONICARE 60ml | 2 | 0 | 0 | 2 | 2 | OK
+489 | M.TELON MY BABY  + 60ML | 3 | 0 | 3 | 0 | 0 | OK
+490 | M.TELON MY BABY + 90ML | 0 | 3 | 0 | 3 | 3 | OK
+983 | M.TELON MYBABY +150ML | 2 | 0 | 0 | 2 | 2 | OK
+482 | M.TELON LANG 15mL | 4 | 0 | 0 | 4 | 4 | OK
+483 | M.TELON LANG 30mL | 4 | 0 | 0 | 4 | 4 | OK
+484 | M.TELON LANG 60mL | 4 | 0 | 0 | 4 | 4 | OK
+481 | M.TELON LANG 100mL | 2 | 0 | 0 | 2 | 2 | OK
+485 | M.TELON LANG PLUS 100mL | 1 | 0 | 0 | 1 | 1 | OK
+915 | LARUTAN BOTOL B | 4 | 0 | 3 | 1 | 1 | OK
+942 | LARUTAN KALENG | 5 | 0 | 0 | 5 | 5 | OK
+943 | LARUTAN BOTOL K | 4 | 0 | 2 | 2 | 2 | OK
+234 | KAPAS GULUNG100GR | 7 | 0 | 0 | 7 | 7 | OK
+17 | ALKOHOL 70% 300mL | 8 | 0 | 3 | 5 | 5 | OK
+15 | ALKOHOL 70% 100mL | 2 | 24 | 0 | 26 | 26 | OK
+699 | RIVANOL 100mL | 5 | 25 | 2 | 28 | 28 | OK
+700 | RIVANOL 300mL | 17 | 0 | 1 | 16 | 16 | OK
+59 | ANTIMO TAB | 50 | 0 | 16 | 34 | 34 | OK
+224 | DERMAFIX 5X7 | 50 | 0 | 2 | 48 | 48 | OK
+963 | DERMAFIX 10X25 | 5 | 0 | 1 | 4 | 4 | OK
+1003 | DERMAFIX 10X8 | 12 | 0 | 1 | 11 | 11 | OK
+197 | DARYANTULLE | 3 | 0 | 0 | 3 | 3 | OK
+456 | LOMATUL | 6 | 0 | 2 | 4 | 4 | OK
+962 | ULTRAFIX | 10 | 0 | 6 | 4 | 4 | OK
+499 | ALKOHOL SWAB | 6 | 0 | 1 | 5 | 5 | OK
+1000 | HYPAFIX 5M | 1 | 0 | 0 | 1 | 1 | OK
+517 | MICROLAX | 6 | 6 | 4 | 8 | 8 | OK
+315 | MEDICREPE 3'' | 2 | 0 | 0 | 2 | 2 | OK
+405 | MEDICREPE 4'' | 5 | 0 | 0 | 5 | 5 | OK
+735 | MEDICREPE 6'' | 1 | 0 | 0 | 1 | 1 | OK
+792 | TENSOCRAPE 3'' | 1 | 0 | 0 | 1 | 1 | OK
+793 | TENSOCRAPE 4'' | 3 | 0 | 0 | 3 | 3 | OK
+794 | TENSOCRAPE 6'' | 1 | 0 | 0 | 1 | 1 | OK
+1004 | H2O2 | 3 | 0 | 2 | 1 | 1 | OK
+92 | BETADINE SOL 15mL | 3 | 0 | 0 | 3 | 3 | OK
+93 | BETADINE SOL 30mL | 4 | 0 | 0 | 4 | 4 | OK
+94 | BETADINE SOL 5mL | 11 | 12 | 9 | 14 | 14 | OK
+95 | BETADINE SOL 60mL | 2 | 0 | 0 | 2 | 2 | OK
+207 | DETTOL LIQ 45ml | 2 | 3 | 0 | 5 | 5 | OK
+208 | DETTOL LIQ 95ml | 2 | 3 | 1 | 4 | 4 | OK
+395 | KAPAS GULUNG 50g | 2 | 6 | 0 | 8 | 8 | OK
+874 | KAPAS GULUNG 250GR | 1 | 0 | 0 | 1 | 1 | OK
+995 | KASSA KOTAK OM | 4 | 0 | 0 | 4 | 4 | OK
+836 | VERBAN 10cm | 0 | 0 | 0 | 0 | 0 | OK
+837 | VERBAN 15cm | 2 | 0 | 1 | 1 | 1 | OK
+838 | VERBAN 5cm | 1 | 0 | 0 | 1 | 1 | OK
+397 | KASSA  STERIL HUSADA | 20 | 0 | 8 | 12 | 12 | OK
+980 | KASSA BIASA | 34 | 0 | 8 | 26 | 26 | OK
+569 | LEUKOPLAST 2,5 | 1 | 0 | 1 | 0 | 0 | OK
+643 | LEUKOPLAST 5 | 0 | 0 | 0 | 0 | 0 | OK
+902 | POLIDENT K | 3 | 0 | 1 | 2 | 2 | OK
+909 | POLIDENT B | 3 | 0 | 0 | 3 | 3 | OK
+340 | HANSAPLAST ROLL 1m | 18 | 0 | 3 | 15 | 15 | OK
+341 | HANSAPLAST ROLL 5m | 3 | 0 | 3 | 0 | 0 | OK
+936 | BEDAK MARSK ALL | 9 | 0 | 0 | 9 | 9 | OK
+703 | SAFE CARE | 2 | 0 | 1 | 1 | 1 | OK
+1002 | TRANSPLUMIN KIDS | 1 | 0 | 0 | 1 | 1 | OK
+35 | CESSA BABY | 3 | 0 | 2 | 1 | 1 | OK
+579 | CESSA KIDS | 4 | 0 | 0 | 4 | 4 | OK
+810 | TOLAKANGIN CARE ROLL ON | 2 | 0 | 0 | 2 | 2 | OK
+410 | KONIDIN OBH | 1 | 30 | 3 | 28 | 28 | OK
+296 | FRESH CARE ALL | 49 | 12 | 24 | 37 | 37 | OK
+355 | HOT IN 120GR ALL VAR | 6 | 12 | 6 | 12 | 12 | OK
+356 | HOT IN 60GR ALL VAR | 2 | 12 | 5 | 9 | 9 | OK
+998 | HOT IN DCL 60GR | 3 | 6 | 2 | 7 | 7 | OK
+999 | HOT IN DCL 120 GR | 2 | 6 | 2 | 6 | 6 | OK
+130 | CALADINE LOT 60mL | 4 | 6 | 3 | 7 | 7 | OK
+131 | CALADINE LOT 90mL | 5 | 0 | 0 | 5 | 5 | OK
+132 | CALADINE POW 100mg | 4 | 0 | 0 | 4 | 4 | OK
+133 | CALADINE POW 60mg | 3 | 3 | 1 | 5 | 5 | OK
+997 | SUTRA 003 | 3 | 0 | 0 | 3 | 3 | OK
+279 | FIESTA ALL | 3 | 0 | 1 | 2 | 2 | OK
+805 | TISU MAGIC ALL | 25 | 0 | 6 | 19 | 19 | OK
+7 | SUTRA BIRU S'12 | 4 | 0 | 0 | 4 | 4 | OK
+687 | SUTRA ABU2 S'12 | 1 | 0 | 0 | 1 | 1 | OK
+781 | SUTRA ABU-ABU S'3 | 3 | 0 | 0 | 3 | 3 | OK
+782 | SUTRA OK 3'S | 2 | 0 | 2 | 0 | 0 | OK
+783 | SUTRA OK S'12 | 5 | 0 | 0 | 5 | 5 | OK
+784 | SUTRA MERAH S'12 | 1 | 12 | 3 | 10 | 10 | OK
+785 | SUTRA MERAH S'3 | 15 | 0 | 7 | 8 | 8 | OK
+888 | SUTRA BIRU S'3 | 5 | 0 | 0 | 5 | 5 | OK
+967 | SUTRA MERAH  S'24 | 1 | 0 | 0 | 1 | 1 | OK
+918 | SABUN IJO | 12 | 0 | 1 | 11 | 11 | OK
+64 | ASEPSO ALL VAR | 6 | 12 | 5 | 13 | 13 | OK
+384 | JF SULFUR ORANGE | 2 | 0 | 0 | 2 | 2 | OK
+383 | JF SULFUR KUNING | 1 | 3 | 3 | 1 | 1 | OK
+645 | PEDITOX | 8 | 0 | 0 | 8 | 8 | OK
+659 | KANA B | 3 | 0 | 0 | 3 | 3 | OK
+939 | MOMILEN DIAPER RUSH | 4 | 0 | 1 | 3 | 3 | OK
+518 | BABY OIL | 1 | 0 | 0 | 1 | 1 | OK
+419 | LACTACYD BABY | 1 | 3 | 2 | 2 | 2 | OK
+420 | LACTACYD FEMINIM | 2 | 0 | 0 | 2 | 2 | OK
+88 | BETADIN SABUN CAIR | 4 | 0 | 0 | 4 | 4 | OK
+87 | BETADIN FEM | 3 | 0 | 0 | 3 | 3 | OK
+738 | SELSUN BLUE | 2 | 0 | 0 | 2 | 2 | OK
+739 | SELSUN YELLOW B | 4 | 0 | 0 | 4 | 4 | OK
+740 | SELSUN YELLOW K | 2 | 0 | 0 | 2 | 2 | OK
+89 | BETADINE KUMUR B | 4 | 0 | 0 | 4 | 4 | OK
+90 | BETADINE KUMUR K | 2 | 3 | 1 | 4 | 4 | OK
+41 | ANAKONIDIN 30mL | 4 | 0 | 1 | 3 | 3 | OK
+43 | ANAKONIDIN OBH 30mL | 3 | 0 | 1 | 2 | 2 | OK
+44 | ANAKONIDIN OBH 60mL | 6 | 0 | 2 | 4 | 4 | OK
+799 | TERMOREX PLUS 30mL | 3 | 0 | 0 | 3 | 3 | OK
+800 | TERMOREX PLUS 60mL | 3 | 0 | 2 | 1 | 1 | OK
+598 | OBH COMBI ANAK ALL VAR | 20 | 9 | 8 | 21 | 21 | OK
+57 | ANTASIDA SYR FM | 9 | 0 | 4 | 5 | 5 | OK
+544 | MYLANTA LIQ 150mL | 2 | 0 | 0 | 2 | 2 | OK
+545 | MYLANTA LIQ 50mL | 6 | 0 | 2 | 4 | 4 | OK
+824 | ULTILOX SYR | 1 | 0 | 0 | 1 | 1 | OK
+124 | BUFANTASID SYR | 2 | 0 | 0 | 2 | 2 | OK
+660 | POLYSILANE SYR | 3 | 0 | 1 | 2 | 2 | OK
+675 | PROMAG SYR 60ml | 1 | 0 | 1 | 0 | 0 | OK
+302 | GASTRUCID SYR | 5 | 0 | 1 | 4 | 4 | OK
+819 | TRIOCID SYR | 4 | 0 | 1 | 3 | 3 | OK
+491 | MAAGEL SYR | 4 | 0 | 0 | 4 | 4 | OK
+726 | SANMAG SYR | 2 | 3 | 3 | 2 | 2 | OK
+655 | PLANTACID SYR | 3 | 3 | 3 | 3 | 3 | OK
+654 | PLANTACID FORTE SYR | 2 | 2 | 2 | 2 | 2 | OK
+595 | OB HERBAL 100mL | 2 | 0 | 0 | 2 | 2 | OK
+596 | OB HERBAL 60mL | 7 | 0 | 2 | 5 | 5 | OK
+639 | PARATUSIN | 15 | 0 | 12 | 3 | 3 | OK
+283 | ACTIFED 25ML ALL | 4 | 0 | 0 | 4 | 4 | OK
+106 | BISOLVON EXTRA SYR | 2 | 0 | 0 | 2 | 2 | OK
+417 | LACOLDIN SYR | 2 | 0 | 0 | 2 | 2 | OK
+105 | BISOLVON KIDS | 3 | 0 | 0 | 3 | 3 | OK
+433 | LASERIN SYR 110ML | 3 | 0 | 0 | 3 | 3 | OK
+434 | LASERIN SYR 30 mL | 8 | 0 | 2 | 6 | 6 | OK
+435 | LASERIN SYR 60ML | 8 | 0 | 3 | 5 | 5 | OK
+597 | OB HERBAL JUNIOR | 2 | 6 | 2 | 6 | 6 | OK
+896 | VICKS F 44 ANAK 27ML | 7 | 0 | 1 | 6 | 6 | OK
+897 | VICKS F 44 ANAK 54ML | 4 | 0 | 0 | 4 | 4 | OK
+170 | COLDREXIN SYR | 2 | 0 | 0 | 2 | 2 | OK
+287 | FLUCADEX SYR | 3 | 0 | 0 | 3 | 3 | OK
+292 | FLUTOP C | 3 | 0 | 0 | 3 | 3 | OK
+171 | COLVIN SYR | 3 | 0 | 0 | 3 | 3 | OK
+882 | ZENIREX SYR | 2 | 6 | 2 | 6 | 6 | OK
+119 | BRONCITIN | 6 | 0 | 0 | 6 | 6 | OK
+180 | COPARCETIN SYR | 1 | 0 | 1 | 0 | 0 | OK
+848 | TRIAMINIC F&B | 1 | 0 | 0 | 1 | 1 | OK
+263 | ETAFLUSIN TAB | 90 | 0 | 10 | 80 | 80 | OK
+46 | ANATON SYR | 7 | 0 | 0 | 7 | 7 | OK
+40 | ANACETIN | 1 | 0 | 1 | 0 | 0 | OK
+431 | LASERIN MADU 30ML | 2 | 0 | 0 | 2 | 2 | OK
+432 | LASERIN MADU 60ML | 2 | 0 | 0 | 2 | 2 | OK
+358 | HUFAGRIP KUNING | 4 | 10 | 3 | 11 | 11 | OK
+357 | HUFAGRIP BP IJO | 12 | 0 | 3 | 9 | 9 | OK
+895 | HUFAGRIP BIRU | 5 | 0 | 0 | 5 | 5 | OK
+868 | WOOD'S ATT 60ML | 7 | 3 | 1 | 9 | 9 | OK
+744 | SILADEX ALL VAR 100ml | 6 | 0 | 1 | 5 | 5 | OK
+745 | SILADEX ALL VAR 30ml | 6 | 0 | 1 | 5 | 5 | OK
+746 | SILADEX ALL VAR 60ml | 10 | 9 | 11 | 8 | 8 | OK
+603 | OBIDA | 1 | 0 | 0 | 1 | 1 | OK
+193 | CURVIT CL | 2 | 0 | 0 | 2 | 2 | OK
+801 | CURCUMA GROW ALL | 5 | 0 | 0 | 5 | 5 | OK
+734 | SCOTT EMULSION 200mL | 3 | 0 | 0 | 3 | 3 | OK
+159 | CEREBROFOT GOLD ALL VAR | 4 | 3 | 3 | 4 | 4 | OK
+262 | ELKANA SYR | 1 | 2 | 1 | 2 | 2 | OK
+947 | BIOLYSIN SMART 60ML | 1 | 0 | 0 | 1 | 1 | OK
+61 | APIALYS DROP | 2 | 0 | 1 | 1 | 1 | OK
+422 | APIALYS SYR | 1 | 0 | 0 | 1 | 1 | OK
+191 | CURCUMA PLUS SHARPY ALL VAR | 5 | 0 | 0 | 5 | 5 | OK
+190 | CURCUMA PLUS IMUNS | 3 | 0 | 0 | 3 | 3 | OK
+773 | STIMUNO SYR ALL VAR | 3 | 0 | 0 | 3 | 3 | OK
+369 | IMBOOST FORCE | 2 | 0 | 0 | 2 | 2 | OK
+370 | IMBOOST KIDS | 2 | 0 | 0 | 2 | 2 | OK
+149 | CDR FORTOS | 4 | 0 | 0 | 4 | 4 | OK
+150 | CDR S'10 | 12 | 0 | 1 | 11 | 11 | OK
+151 | CDR S'15 | 3 | 0 | 0 | 3 | 3 | OK
+693 | REDOXON | 3 | 0 | 0 | 3 | 3 | OK
+146 | CAVIPLEX SYR | 1 | 0 | 0 | 1 | 1 | OK
+79 | BATUGIN K | 1 | 0 | 1 | 0 | 0 | OK
+258 | ESTER C BTL | 2 | 0 | 0 | 2 | 2 | OK
+992 | VITALONG C s"30 | 2 | 0 | 0 | 2 | 2 | OK
+242 | ENERVON C BTL | 3 | 0 | 0 | 3 | 3 | OK
+760 | SIRPLUS ALL VAR | 12 | 0 | 2 | 10 | 10 | OK
+827 | LACTULOSE SYR | 2 | 0 | 1 | 1 | 1 | OK
+916 | MY WELL D3 | 2 | 0 | 0 | 2 | 2 | OK
+393 | KAOTIN SYR | 1 | 6 | 0 | 7 | 7 | OK
+556 | NEO KAOLANA SYR | 2 | 0 | 0 | 2 | 2 | OK
+337 | GUANESTREP SYR | 7 | 0 | 2 | 5 | 5 | OK
+633 | PARACETAMOL SYR | 9 | 0 | 3 | 6 | 6 | OK
+271 | FARSIFEN SYR | 1 | 0 | 1 | 0 | 0 | OK
+938 | NOVAGESIC SYR | 6 | 0 | 0 | 6 | 6 | OK
+382 | ITRAMOL SYR | 5 | 0 | 0 | 5 | 5 | OK
+788 | TEMPRA DROP | 2 | 0 | 1 | 1 | 1 | OK
+789 | TEMPRA FORTE SYR | 2 | 0 | 1 | 1 | 1 | OK
+790 | TEMPRA SYR B | 2 | 0 | 0 | 2 | 2 | OK
+791 | TEMPRA SYR K | 2 | 3 | 1 | 4 | 4 | OK
+573 | HUFAGRIP DEMAM SYR | 3 | 0 | 0 | 3 | 3 | OK
+232 | DUMIN SYR | 2 | 0 | 1 | 1 | 1 | OK
+680 | PRORIS FORTE SYR | 6 | 0 | 1 | 5 | 5 | OK
+682 | PRORIS SYR | 7 | 0 | 3 | 4 | 4 | OK
+727 | SANMOL DROP | 2 | 9 | 6 | 5 | 5 | OK
+728 | SANMOL SYR | 11 | 6 | 9 | 8 | 8 | OK
+920 | SANMOL FORTE SYR | 1 | 0 | 0 | 1 | 1 | OK
+244 | OBH TROPICA EXTRA ALL | 7 | 0 | 0 | 7 | 7 | OK
+914 | OBH TROPICA PLUS ANAK ALL | 7 | 3 | 7 | 3 | 3 | OK
+649 | PIMTRAKOL ALL VAR | 22 | 0 | 9 | 13 | 13 | OK
+972 | PIMTRAKOL KID | 2 | 0 | 0 | 2 | 2 | OK
+753 | PACDIN COUGH ALL VAR | 3 | 6 | 3 | 6 | 6 | OK
+203 | DEMACOLIN SYR | 9 | 0 | 2 | 7 | 7 | OK
+42 | ANAKONIDIN 60mL | 1 | 3 | 2 | 2 | 2 | OK
+344 | HEMAVITON ACTION | 5 | 0 | 0 | 5 | 5 | OK
+345 | HEMAVITON STAMINA | 12 | 0 | 3 | 9 | 9 | OK
+555 | NEO HORMOVITON | 9 | 0 | 0 | 9 | 9 | OK
+267 | EYEVIT | 2 | 5 | 1 | 6 | 6 | OK
+850 | VIOSTIN | 5 | 0 | 0 | 5 | 5 | OK
+647 | OSTEFORTE | 2 | 0 | 0 | 2 | 2 | OK
+212 | NATUR E ADVANCE | 2 | 0 | 2 | 0 | 0 | OK
+549 | NATUR-E 300IU | 2 | 0 | 0 | 2 | 2 | OK
+550 | NATUR-E S'16 | 4 | 0 | 1 | 3 | 3 | OK
+551 | NATUR-E S'32 | 2 | 0 | 0 | 2 | 2 | OK
+817 | NATUR E WHITE 16 | 3 | 0 | 1 | 2 | 2 | OK
+748 | PROSTAKUR | 4 | 0 | 0 | 4 | 4 | OK
+265 | EVER E S'12 | 4 | 0 | 0 | 4 | 4 | OK
+646 | PHARMATON | 1 | 10 | 2 | 9 | 9 | OK
+467 | M. IKAN S'100 | 3 | 0 | 0 | 3 | 3 | OK
+945 | STIMUNO CAPSUL | 1 | 3 | 1 | 3 | 3 | OK
+276 | FEMINAX | 4 | 0 | 4 | 0 | 0 | OK
+866 | WELMOVE CAP | 3 | 0 | 2 | 1 | 1 | OK
+266 | EVER E S'6 | 4 | 0 | 2 | 2 | 2 | OK
+468 | M. IKAN S'50 | 2 | 0 | 2 | 0 | 0 | OK
+965 | VITAMIN D3+K2 IPI | 6 | 0 | 1 | 5 | 5 | OK
+613 | VITAMIN D3 IPI | 12 | 0 | 2 | 10 | 10 | OK
+856 | VITAMIN B KOMP IPI | 8 | 12 | 11 | 9 | 9 | OK
+857 | VITAMIN B1 IPI | 4 | 0 | 0 | 4 | 4 | OK
+858 | VITAMIN B12 IPI | 11 | 0 | 2 | 9 | 9 | OK
+855 | VITAMIN A IPI | 6 | 0 | 1 | 5 | 5 | OK
+724 | SANGOBION S'4 | 2 | 20 | 10 | 12 | 12 | OK
+561 | NEUROBION | 15 | 0 | 3 | 12 | 12 | OK
+562 | NEUROBION 5000 | 9 | 10 | 11 | 8 | 8 | OK
+731 | SARIDON | 26 | 0 | 1 | 25 | 25 | OK
+219 | DIAPET NR | 12 | 0 | 3 | 9 | 9 | OK
+929 | DIAPET S'10 | 12 | 0 | 5 | 7 | 7 | OK
+843 | VICKS VAP 10g | 4 | 12 | 3 | 13 | 13 | OK
+844 | VICKS VAP 25g | 4 | 0 | 1 | 3 | 3 | OK
+845 | VICKS VAP 50g | 3 | 0 | 0 | 3 | 3 | OK
+953 | VICKS IN HALER | 4 | 3 | 4 | 3 | 3 | OK
+111 | CONTREXYN | 4 | 25 | 7 | 22 | 22 | OK
+636 | PARAMEX FB | 12 | 0 | 4 | 8 | 8 | OK
+522 | MIXAGRIP | 109 | 0 | 8 | 101 | 101 | OK
+523 | MIXAGRIP FB | 74 | 0 | 15 | 59 | 59 | OK
+629 | PANADOL BIRU | 8 | 0 | 2 | 6 | 6 | OK
+630 | PANADOL IJO | 3 | 0 | 0 | 3 | 3 | OK
+631 | PANADOL MERAH | 10 | 0 | 1 | 9 | 9 | OK
+815 | PANADOL MERAH S'4 | 26 | 0 | 0 | 26 | 26 | OK
+272 | LAXING  S'10 | 8 | 10 | 7 | 11 | 11 | OK
+652 | DISFLATYL | 3 | 0 | 2 | 1 | 1 | OK
+56 | SANAFLU | 15 | 0 | 1 | 14 | 14 | OK
+200 | DECOLGEN | 14 | 0 | 4 | 10 | 10 | OK
+192 | CURCUMA TAB | 10 | 0 | 2 | 8 | 8 | OK
+110 | BODREX FB ALL VAR | 25 | 0 | 4 | 21 | 21 | OK
+273 | FATIGON PUTIH | 5 | 0 | 2 | 3 | 3 | OK
+274 | FATIGON SPIRIT | 9 | 0 | 2 | 7 | 7 | OK
+558 | NEOZEP | 12 | 0 | 5 | 7 | 7 | OK
+825 | ULTRAFLU | 16 | 0 | 15 | 1 | 1 | OK
+112 | BODREX MIGRA | 4 | 25 | 3 | 26 | 26 | OK
+228 | DULCOLAX S'10 | 5 | 0 | 2 | 3 | 3 | OK
+229 | DULCOLAX S'4 | 21 | 0 | 3 | 18 | 18 | OK
+696 | RENOVIT | 5 | 0 | 0 | 5 | 5 | OK
+697 | RENOVIT GOLD | 5 | 0 | 0 | 5 | 5 | OK
+409 | KONIDIN | 10 | 0 | 1 | 9 | 9 | OK
+672 | PROCOLD | 16 | 0 | 2 | 14 | 14 | OK
+568 | NEW DIATAB | 65 | 0 | 5 | 60 | 60 | OK
+624 | OSKADON | 15 | 0 | 15 | 0 | 0 | OK
+625 | OSKADON SP | 13 | 25 | 11 | 27 | 27 | OK
+729 | SANMOL TAB | 40 | 0 | 7 | 33 | 33 | OK
+108 | BODREX | 9 | 0 | 9 | 0 | 0 | OK
+101 | BIOGESIC | 20 | 0 | 0 | 20 | 20 | OK
+202 | DEGIROL S'10 | 2 | 10 | 5 | 7 | 7 | OK
+160 | MIXADIN | 25 | 0 | 0 | 25 | 25 | OK
+68 | ARKAVIT C | 7 | 0 | 1 | 6 | 6 | OK
+414 | COROSOB | 4 | 0 | 1 | 3 | 3 | OK
+375 | INCIDAL | 34 | 32 | 48 | 18 | 18 | OK
+676 | PROMAG TAB | 20 | 36 | 34 | 22 | 22 | OK
+237 | EM KAPSUL | 1 | 0 | 0 | 1 | 1 | OK
+690 | RAPET WANGI | 3 | 0 | 0 | 3 | 3 | OK
+648 | PIL TUNTAS | 2 | 0 | 0 | 2 | 2 | OK
+188 | CTM PIM | 22 | 0 | 6 | 16 | 16 | OK
+19 | IMBOST S'4 | 3 | 5 | 3 | 5 | 5 | OK
+924 | IMBOST S'10 | 2 | 0 | 0 | 2 | 2 | OK
+372 | IMUNOS | 7 | 0 | 0 | 7 | 7 | OK
+440 | LELAP | 4 | 0 | 2 | 2 | 2 | OK
+557 | NEO RHEUMACYL | 22 | 0 | 10 | 12 | 12 | OK
+380 | INTUNAL F | 25 | 0 | 2 | 23 | 23 | OK
+415 | KOYO CABE | 16 | 0 | 7 | 9 | 9 | OK
+327 | GPU CREAM 150mL | 2 | 0 | 0 | 2 | 2 | OK
+328 | GPU CREAM 250mL | 2 | 0 | 0 | 2 | 2 | OK
+386 | KAKAK TUA | 1 | 3 | 1 | 3 | 3 | OK
+179 | COPAL | 3 | 0 | 2 | 1 | 1 | OK
+305 | GELIGA BALSEM 10g | 5 | 0 | 0 | 5 | 5 | OK
+306 | GELIGA BALSEM 20g | 7 | 0 | 5 | 2 | 2 | OK
+307 | GELIGA BALSEM 40g | 6 | 0 | 1 | 5 | 5 | OK
+73 | BALSEM LANG 10g | 5 | 0 | 0 | 5 | 5 | OK
+74 | BALSEM LANG 20g | 3 | 0 | 0 | 3 | 3 | OK
+75 | BALSEM LANG 40g | 3 | 0 | 0 | 3 | 3 | OK
+446 | LION HEAD B | 3 | 0 | 0 | 3 | 3 | OK
+447 | LION HEAD K | 3 | 0 | 0 | 3 | 3 | OK
+72 | BALPIRIK MERAH | 5 | 0 | 1 | 4 | 4 | OK
+698 | RHEUMASON NELLCO | 2 | 6 | 3 | 5 | 5 | OK
+259 | ESTER C S'4 | 11 | 0 | 1 | 10 | 10 | OK
+241 | ENERVON C | 18 | 0 | 8 | 10 | 10 | OK
+60 | VITALONG C S'4 | 7 | 0 | 0 | 7 | 7 | OK
+71 | B COMPLEX STRIP | 8 | 0 | 0 | 8 | 8 | OK
+115 | B1 STRIP | 204 | 0 | 4 | 200 | 200 | OK
+853 | VITACIMIN | 36 | 100 | 18 | 118 | 118 | OK
+873 | XON-CE | 43 | 0 | 24 | 19 | 19 | OK
+473 | M.TAWON CC | 3 | 12 | 7 | 8 | 8 | OK
+474 | M.TAWON DD | 6 | 0 | 3 | 3 | 3 | OK
+475 | M.TAWON EE | 1 | 0 | 0 | 1 | 1 | OK
+476 | M.TAWON FF | 1 | 0 | 0 | 1 | 1 | OK
+82 | GELIGA CAIR 60ML | 3 | 0 | 0 | 3 | 3 | OK
+308 | GELIGA CAIR 30ML | 2 | 0 | 0 | 2 | 2 | OK
+325 | GPU 30mL | 8 | 6 | 8 | 6 | 6 | OK
+326 | GPU 60mL | 8 | 0 | 3 | 5 | 5 | OK
+300 | GANDAPURA 30mL | 5 | 0 | 1 | 4 | 4 | OK
+301 | GANDAPURA 60mL | 6 | 0 | 3 | 3 | 3 | OK
+846 | SAMCODIN | 130 | 0 | 0 | 130 | 130 | OK
+934 | LAPIFED | 40 | 0 | 10 | 30 | 30 | OK
+127 | CROFED | 100 | 0 | 10 | 90 | 90 | OK
+204 | DEMACOLIN TAB | 450 | 500 | 460 | 490 | 490 | OK
+136 | CALORTUSIN | 240 | 0 | 20 | 220 | 220 | OK
+215 | DEXTRAL | 210 | 0 | 40 | 170 | 170 | OK
+429 | LAPISIV-T | 20 | 0 | 20 | 0 | 0 | OK
+359 | HUFAGRIP  FORTE TAB | 120 | 200 | 110 | 210 | 210 | OK
+286 | FLUCADEX | 170 | 0 | 60 | 110 | 110 | OK
+949 | ANTIZA | 100 | 0 | 0 | 100 | 100 | OK
+25 | ALPARA | 160 | 0 | 120 | 40 | 40 | OK
+418 | LACOLDIN TAB | 20 | 0 | 20 | 0 | 0 | OK
+763 | COPARCETIN TAB | 90 | 0 | 10 | 80 | 80 | OK
+454 | LODECON FORTE | 130 | 0 | 20 | 110 | 110 | OK
+47 | ANATON TAB | 120 | 0 | 30 | 90 | 90 | OK
+796 | TERA F | 110 | 0 | 50 | 60 | 60 | OK
+290 | FLUTAMOL | 110 | 200 | 20 | 290 | 290 | OK
+539 | MOLEXFLU | 30 | 150 | 30 | 150 | 150 | OK
+31 | AMBROXOL SYR | 1 | 0 | 0 | 1 | 1 | OK
+835 | VENTOLIN SPRAY | 1 | 0 | 0 | 1 | 1 | OK
+617 | OMEROXOL SYR | 4 | 0 | 0 | 4 | 4 | OK
+605 | OMEDOM SYR | 6 | 0 | 3 | 3 | 3 | OK
+591 | HUFARIZINE SYR | 3 | 0 | 0 | 3 | 3 | OK
+752 | HUFABETAMIN SYR | 2 | 0 | 1 | 1 | 1 | OK
+222 | DIONICOL SYR | 4 | 0 | 0 | 4 | 4 | OK
+925 | GENCEF SYR | 3 | 0 | 0 | 3 | 3 | OK
+877 | YUSIMOX FORTE SYR | 1 | 0 | 0 | 1 | 1 | OK
+878 | YUSIMOX SYR | 7 | 0 | 2 | 5 | 5 | OK
+775 | SUCRALFAT SYR | 4 | 9 | 4 | 9 | 9 | OK
+343 | HELIXIM SYR | 3 | 0 | 1 | 2 | 2 | OK
+346 | MUCOS SYR | 2 | 0 | 0 | 2 | 2 | OK
+28 | XYLERGY | 2 | 10 | 1 | 11 | 11 | OK
+670 | PRIMADEX SYR | 1 | 0 | 0 | 1 | 1 | OK
+950 | LAPISIV-T SYR | 1 | 0 | 0 | 1 | 1 | OK
+657 | POLDANMIG | 17 | 0 | 2 | 15 | 15 | OK
+86 | MEXTRIL | 23 | 0 | 3 | 20 | 20 | OK
+538 | MOLAGIT | 5 | 0 | 5 | 0 | 0 | OK
+715 | SALONPAS KOYO ALL VAR | 43 | 0 | 14 | 29 | 29 | OK
+806 | LEUKOPLST 7,5 | 1 | 0 | 0 | 1 | 1 | OK
+816 | OM TEST | 30 | 0 | 24 | 6 | 6 | OK
+
+=============================================================
+SUMMARY
+=============================================================
+
+Total CSV products: 790
+Correct: 790
+Incorrect: 0
+Missing in DB: 0
+Report saved to: C:\laragon\www\apotekbisma\apotekbisma/verify_csv_products_detailed_2026-01-22_130546.txt
+
+✓✓✓ ALL CSV PRODUCTS VERIFIED CORRECT ✓✓✓
