@@ -1,0 +1,54 @@
+=============================================================
+ULTRA COMPREHENSIVE STOCK VERIFICATION
+Date: 2026-01-22 09:34:44
+Cutoff: 2025-12-31 23:59:59
+=============================================================
+
+CSV products loaded: 790
+CSV duplicate IDs: 12
+
+Database products: 993
+CSV-only scope: 790
+
+=============================================================
+STEP 1: TRANSACTION AGGREGATES AFTER CUTOFF
+=============================================================
+
+Products with sales after cutoff: 538
+Products with purchases after cutoff: 191
+
+=============================================================
+STEP 2: FULL VERIFICATION AGAINST CSV + TRANSACTIONS
+=============================================================
+
+Correct: 790
+Incorrect: 0
+Missing in DB (CSV scope): 0
+
+=============================================================
+STEP 3: BASELINE REKAMAN STOKS CHECK
+=============================================================
+
+Baseline records on 2025-12-31: 790
+Unique products with baseline: 790
+
+=============================================================
+STEP 4: DB PRODUCTS NOT IN CSV (UNCHANGED SCOPE)
+=============================================================
+
+Products in DB but NOT in CSV: 203
+(These are intentionally NOT synced)
+
+=============================================================
+FINAL SUMMARY
+=============================================================
+
+CSV scope products: 790
+Correct within CSV scope: 790
+Incorrect within CSV scope: 0
+Missing CSV IDs in DB: 0
+Baseline records count: 790
+Baseline unique products: 790
+Report saved to: C:\laragon\www\apotekbisma\apotekbisma/ultra_verification_report_2026-01-22_093444.txt
+
+✓✓✓ VERIFICATION PASSED: 100% SYNC WITH CSV + TRANSACTIONS ✓✓✓
