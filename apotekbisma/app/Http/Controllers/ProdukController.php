@@ -247,23 +247,39 @@ class ProdukController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $produk = Produk::find($id);
+        DB::beginTransaction();
         
-        if (!$produk) {
-            return response()->json('Produk tidak ditemukan', 404);
+        try {
+            $produk = Produk::where('id_produk', $id)->lockForUpdate()->first();
+            
+            if (!$produk) {
+                DB::rollBack();
+                return response()->json('Produk tidak ditemukan', 404);
+            }
+
+            $stok_lama = intval($produk->stok);
+            $stok_baru = isset($request->stok) ? intval($request->stok) : $stok_lama;
+
+            $produk->update($request->all());
+
+            // Jika ada perubahan stok, buat Stock Opname record
+            if ($stok_baru !== $stok_lama) {
+                $this->createStockOpnameRecord(
+                    $produk->id_produk, 
+                    $stok_lama, 
+                    $stok_baru, 
+                    'Stock Opname: Perubahan Stok via Edit Produk'
+                );
+            }
+
+            DB::commit();
+            return response()->json('Data berhasil disimpan', 200);
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error update produk: ' . $e->getMessage());
+            return response()->json('Terjadi kesalahan: ' . $e->getMessage(), 500);
         }
-
-        $stok_lama = $produk->stok;
-        $stok_baru = isset($request->stok) ? intval($request->stok) : $stok_lama;
-
-        $produk->update($request->all());
-
-        if ($stok_baru !== $stok_lama) {
-            $this->ensureProdukHasRekamanStok($produk);
-            $this->sinkronisasiStokProduk($produk, 'Perubahan Stok Manual via Edit Produk');
-        }
-
-        return response()->json('Data berhasil disimpan', 200);
     }
 
     /**
@@ -330,11 +346,9 @@ class ProdukController extends Controller
             
             Cache::forget($idempotencyKey);
 
-            try {
-                RekamanStok::recalculateStock($produk->id_produk);
-            } catch (\Exception $e) {
-                Log::warning('Recalculate stock warning after stock opname: ' . $e->getMessage());
-            }
+            // PENTING: Jangan panggil recalculateStock() setelah Stock Opname!
+            // Stock Opname adalah "source of truth" yang mengoreksi stok ke nilai yang benar.
+            // Memanggil recalculateStock() akan menghitung ulang dari rekaman dan menimpa nilai opname.
 
             return response()->json([
                 'success' => true,

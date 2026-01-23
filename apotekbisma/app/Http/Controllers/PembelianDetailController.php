@@ -251,7 +251,9 @@ class PembelianDetailController extends Controller
             
             Cache::forget($idempotencyKey);
             
-            $this->atomicRecalculateAndSync($result['produk_id']);
+            // PENTING: Jangan panggil atomicRecalculateAndSync setelah pembelian!
+            // Stok dan rekaman sudah dihitung dengan benar di dalam transaction.
+            // Memanggil recalculate akan menimpa nilai yang sudah tepat.
             
             return response()->json('Data berhasil disimpan', 200);
             
@@ -427,7 +429,9 @@ class PembelianDetailController extends Controller
             
             Cache::forget($idempotencyKey);
             
-            $this->atomicRecalculateAndSync($result['produk_id']);
+            // PENTING: Jangan panggil atomicRecalculateAndSync setelah update pembelian!
+            // Stok dan rekaman sudah dihitung dengan benar di dalam transaction.
+            // Memanggil recalculate akan menimpa nilai yang sudah tepat.
             
             return response()->json([
                 'message' => 'Data berhasil diperbarui',
@@ -550,7 +554,9 @@ class PembelianDetailController extends Controller
             
             Cache::forget($idempotencyKey);
             
-            $this->atomicRecalculateAndSync($produk->id_produk);
+            // PENTING: Jangan panggil atomicRecalculateAndSync setelah update edit!
+            // Stok dan rekaman sudah dihitung dengan benar di dalam transaction.
+            // Memanggil recalculate akan menimpa nilai yang sudah tepat.
             
             return response()->json('Data berhasil diperbarui', 200);
             
@@ -618,9 +624,9 @@ class PembelianDetailController extends Controller
             
             Cache::forget($idempotencyKey);
             
-            if ($produkId) {
-                $this->atomicRecalculateAndSync($produkId);
-            }
+            // PENTING: Jangan panggil atomicRecalculateAndSync setelah delete!
+            // Stok dan rekaman sudah dihitung dengan benar di dalam transaction.
+            // Memanggil recalculate akan menimpa nilai yang sudah tepat.
             
         } catch (\Exception $e) {
             DB::rollBack();

@@ -224,7 +224,9 @@ class PenjualanDetailController extends Controller
             
             Cache::forget($idempotencyKey);
             
-            $this->atomicRecalculateAndSync($produk->id_produk);
+            // PENTING: Jangan panggil atomicRecalculateAndSync setelah penjualan!
+            // Stok dan rekaman sudah dihitung dengan benar di dalam transaction.
+            // Memanggil recalculate akan menimpa nilai yang sudah tepat.
             
             return response()->json([
                 'success' => true,
@@ -362,7 +364,9 @@ class PenjualanDetailController extends Controller
             
             Cache::forget($idempotencyKey);
             
-            $this->atomicRecalculateAndSync($produk->id_produk);
+            // PENTING: Jangan panggil atomicRecalculateAndSync setelah update penjualan!
+            // Stok dan rekaman sudah dihitung dengan benar di dalam transaction.
+            // Memanggil recalculate akan menimpa nilai yang sudah tepat.
             
             return response()->json([
                 'message' => 'Jumlah berhasil diperbarui. Stok tersisa: ' . $stok_baru,
@@ -453,9 +457,9 @@ class PenjualanDetailController extends Controller
                 
                 Cache::forget($idempotencyKey);
                 
-                if ($produkId) {
-                    $this->atomicRecalculateAndSync($produkId);
-                }
+                // PENTING: Jangan panggil atomicRecalculateAndSync setelah delete!
+                // Stok dan rekaman sudah dihitung dengan benar di dalam transaction.
+                // Memanggil recalculate akan menimpa nilai yang sudah tepat.
             } else {
                 DB::commit();
                 Cache::forget($idempotencyKey);
