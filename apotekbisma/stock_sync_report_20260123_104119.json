@@ -1,0 +1,4979 @@
+{
+    "timestamp": "2026-01-23 10:41:19",
+    "total_produk": 997,
+    "sinkron": 442,
+    "tidak_sinkron": 497,
+    "tanpa_rekaman": 58,
+    "detail": [
+        {
+            "id_produk": 2,
+            "kode_produk": null,
+            "nama_produk": "ACETHYLESISTEIN 200mg",
+            "stok_produk": 20,
+            "stok_rekaman": 30,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:50",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 4,
+            "kode_produk": null,
+            "nama_produk": "ACIFAR CREAM",
+            "stok_produk": 6,
+            "stok_rekaman": 1,
+            "selisih": -5,
+            "waktu_rekaman": "2026-01-23 09:26:56",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 5,
+            "kode_produk": null,
+            "nama_produk": "ACIFAR TAB",
+            "stok_produk": 50,
+            "stok_rekaman": 60,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:49",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 8,
+            "kode_produk": null,
+            "nama_produk": "ACTIFED ALL VAR",
+            "stok_produk": 4,
+            "stok_rekaman": 0,
+            "selisih": -4,
+            "waktu_rekaman": "2026-01-21 16:01:52",
+            "keterangan": "Penjualan: Transaksi penjualan produk"
+        },
+        {
+            "id_produk": 9,
+            "kode_produk": null,
+            "nama_produk": "ACYCLOVIR CREAM",
+            "stok_produk": 10,
+            "stok_rekaman": 11,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:56",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 13,
+            "kode_produk": null,
+            "nama_produk": "AKURAT",
+            "stok_produk": 3,
+            "stok_rekaman": 6,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:26:53",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 15,
+            "kode_produk": null,
+            "nama_produk": "ALKOHOL 70% 100mL",
+            "stok_produk": 26,
+            "stok_rekaman": 2,
+            "selisih": -24,
+            "waktu_rekaman": "2026-01-23 09:26:58",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 17,
+            "kode_produk": null,
+            "nama_produk": "ALKOHOL 70% 300mL",
+            "stok_produk": 5,
+            "stok_rekaman": 8,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:26:58",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 19,
+            "kode_produk": null,
+            "nama_produk": "IMBOST S'4",
+            "stok_produk": 5,
+            "stok_rekaman": 3,
+            "selisih": -2,
+            "waktu_rekaman": "2026-01-23 09:27:10",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 20,
+            "kode_produk": null,
+            "nama_produk": "ALLETROL TM",
+            "stok_produk": 3,
+            "stok_rekaman": 5,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:26:53",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 22,
+            "kode_produk": null,
+            "nama_produk": "ALLOFAR 300MG",
+            "stok_produk": 120,
+            "stok_rekaman": 170,
+            "selisih": 50,
+            "waktu_rekaman": "2026-01-23 09:26:48",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 23,
+            "kode_produk": null,
+            "nama_produk": "ALLOPURINOL 100mg",
+            "stok_produk": 710,
+            "stok_rekaman": 310,
+            "selisih": -400,
+            "waktu_rekaman": "2026-01-23 09:26:51",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 24,
+            "kode_produk": null,
+            "nama_produk": "ALLOPURINOL 300mg",
+            "stok_produk": 300,
+            "stok_rekaman": 230,
+            "selisih": -70,
+            "waktu_rekaman": "2026-01-23 09:26:51",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 25,
+            "kode_produk": null,
+            "nama_produk": "ALPARA",
+            "stok_produk": 40,
+            "stok_rekaman": 160,
+            "selisih": 120,
+            "waktu_rekaman": "2026-01-23 09:27:12",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 27,
+            "kode_produk": null,
+            "nama_produk": "HUFADEXTA-M",
+            "stok_produk": 10,
+            "stok_rekaman": 20,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:47",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 28,
+            "kode_produk": null,
+            "nama_produk": "XYLERGY",
+            "stok_produk": 11,
+            "stok_rekaman": 2,
+            "selisih": -9,
+            "waktu_rekaman": "2026-01-23 09:27:13",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 29,
+            "kode_produk": null,
+            "nama_produk": "AMBEVEN",
+            "stok_produk": 4,
+            "stok_rekaman": 10,
+            "selisih": 6,
+            "waktu_rekaman": "2026-01-23 09:26:43",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 30,
+            "kode_produk": null,
+            "nama_produk": "AMBROXOL",
+            "stok_produk": 10,
+            "stok_rekaman": 130,
+            "selisih": 120,
+            "waktu_rekaman": "2026-01-23 09:26:50",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 33,
+            "kode_produk": null,
+            "nama_produk": "AMLODIPIN 10mg",
+            "stok_produk": 410,
+            "stok_rekaman": 480,
+            "selisih": 70,
+            "waktu_rekaman": "2026-01-23 09:26:52",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 34,
+            "kode_produk": null,
+            "nama_produk": "AMLODIPIN 5mg",
+            "stok_produk": 370,
+            "stok_rekaman": 740,
+            "selisih": 370,
+            "waktu_rekaman": "2026-01-23 09:26:52",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 35,
+            "kode_produk": null,
+            "nama_produk": "CESSA BABY",
+            "stok_produk": 1,
+            "stok_rekaman": 3,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:00",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 37,
+            "kode_produk": null,
+            "nama_produk": "AMOXICILIN PHARMA",
+            "stok_produk": 130,
+            "stok_rekaman": 140,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:50",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 38,
+            "kode_produk": null,
+            "nama_produk": "SILADEX UNGU 60ML",
+            "stok_produk": 4,
+            "stok_rekaman": 6,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:26:42",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 40,
+            "kode_produk": null,
+            "nama_produk": "ANACETIN",
+            "stok_produk": 0,
+            "stok_rekaman": 1,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:04",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 41,
+            "kode_produk": null,
+            "nama_produk": "ANAKONIDIN 30mL",
+            "stok_produk": 3,
+            "stok_rekaman": 4,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:02",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 42,
+            "kode_produk": null,
+            "nama_produk": "ANAKONIDIN 60mL",
+            "stok_produk": 2,
+            "stok_rekaman": 1,
+            "selisih": -1,
+            "waktu_rekaman": "2026-01-23 09:27:06",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 43,
+            "kode_produk": null,
+            "nama_produk": "ANAKONIDIN OBH 30mL",
+            "stok_produk": 2,
+            "stok_rekaman": 3,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:02",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 44,
+            "kode_produk": null,
+            "nama_produk": "ANAKONIDIN OBH 60mL",
+            "stok_produk": 4,
+            "stok_rekaman": 6,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:02",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 45,
+            "kode_produk": null,
+            "nama_produk": "ANASTAN",
+            "stok_produk": 120,
+            "stok_rekaman": 130,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:48",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 47,
+            "kode_produk": null,
+            "nama_produk": "ANATON TAB",
+            "stok_produk": 90,
+            "stok_rekaman": 120,
+            "selisih": 30,
+            "waktu_rekaman": "2026-01-23 09:27:12",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 48,
+            "kode_produk": null,
+            "nama_produk": "ANDALAN",
+            "stok_produk": 17,
+            "stok_rekaman": 20,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:26:53",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 49,
+            "kode_produk": null,
+            "nama_produk": "ANDALAN FE",
+            "stok_produk": 23,
+            "stok_rekaman": 31,
+            "selisih": 8,
+            "waktu_rekaman": "2026-01-23 09:26:53",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 50,
+            "kode_produk": null,
+            "nama_produk": "ANDALAN LAKTASI",
+            "stok_produk": 7,
+            "stok_rekaman": 9,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:26:53",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 51,
+            "kode_produk": null,
+            "nama_produk": "ANTANGIN CAIR",
+            "stok_produk": 68,
+            "stok_rekaman": 113,
+            "selisih": 45,
+            "waktu_rekaman": "2026-01-23 09:26:40",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 52,
+            "kode_produk": null,
+            "nama_produk": "ANTANGIN JUNIOR",
+            "stok_produk": 21,
+            "stok_rekaman": 25,
+            "selisih": 4,
+            "waktu_rekaman": "2026-01-23 09:26:40",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 54,
+            "kode_produk": null,
+            "nama_produk": "ANTANGIN TAB",
+            "stok_produk": 20,
+            "stok_rekaman": 9,
+            "selisih": -11,
+            "waktu_rekaman": "2026-01-23 09:26:41",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 55,
+            "kode_produk": null,
+            "nama_produk": "ANTASIDA DOEN",
+            "stok_produk": 290,
+            "stok_rekaman": 460,
+            "selisih": 170,
+            "waktu_rekaman": "2026-01-23 09:26:50",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 56,
+            "kode_produk": null,
+            "nama_produk": "SANAFLU",
+            "stok_produk": 14,
+            "stok_rekaman": 15,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:08",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 57,
+            "kode_produk": null,
+            "nama_produk": "ANTASIDA SYR FM",
+            "stok_produk": 5,
+            "stok_rekaman": 9,
+            "selisih": 4,
+            "waktu_rekaman": "2026-01-23 09:27:02",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 58,
+            "kode_produk": null,
+            "nama_produk": "ANTIMO ANAK ALL",
+            "stok_produk": 0,
+            "stok_rekaman": 3,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:26:41",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 59,
+            "kode_produk": null,
+            "nama_produk": "ANTIMO TAB",
+            "stok_produk": 34,
+            "stok_rekaman": 50,
+            "selisih": 16,
+            "waktu_rekaman": "2026-01-23 09:26:58",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 61,
+            "kode_produk": null,
+            "nama_produk": "APIALYS DROP",
+            "stok_produk": 1,
+            "stok_rekaman": 2,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:04",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 63,
+            "kode_produk": null,
+            "nama_produk": "ASAM MEFENAMAT 500mg",
+            "stok_produk": 840,
+            "stok_rekaman": 380,
+            "selisih": -460,
+            "waktu_rekaman": "2026-01-23 09:26:50",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 64,
+            "kode_produk": null,
+            "nama_produk": "ASEPSO ALL VAR",
+            "stok_produk": 13,
+            "stok_rekaman": 6,
+            "selisih": -7,
+            "waktu_rekaman": "2026-01-23 09:27:01",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 66,
+            "kode_produk": null,
+            "nama_produk": "ASPILET",
+            "stok_produk": 100,
+            "stok_rekaman": 170,
+            "selisih": 70,
+            "waktu_rekaman": "2026-01-23 09:26:49",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 68,
+            "kode_produk": null,
+            "nama_produk": "ARKAVIT C",
+            "stok_produk": 6,
+            "stok_rekaman": 7,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:09",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 72,
+            "kode_produk": null,
+            "nama_produk": "BALPIRIK MERAH",
+            "stok_produk": 4,
+            "stok_rekaman": 5,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:10",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 79,
+            "kode_produk": null,
+            "nama_produk": "BATUGIN K",
+            "stok_produk": 0,
+            "stok_rekaman": 1,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:05",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 81,
+            "kode_produk": null,
+            "nama_produk": "BECOM ZET",
+            "stok_produk": 80,
+            "stok_rekaman": 90,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:49",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 86,
+            "kode_produk": null,
+            "nama_produk": "MEXTRIL",
+            "stok_produk": 20,
+            "stok_rekaman": 23,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:27:13",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 90,
+            "kode_produk": null,
+            "nama_produk": "BETADINE KUMUR K",
+            "stok_produk": 4,
+            "stok_rekaman": 2,
+            "selisih": -2,
+            "waktu_rekaman": "2026-01-23 09:27:02",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 94,
+            "kode_produk": null,
+            "nama_produk": "BETADINE SOL 5mL",
+            "stok_produk": 14,
+            "stok_rekaman": 11,
+            "selisih": -3,
+            "waktu_rekaman": "2026-01-23 09:26:59",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 96,
+            "kode_produk": null,
+            "nama_produk": "BETAMETASON",
+            "stok_produk": 4,
+            "stok_rekaman": 6,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:26:56",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 97,
+            "kode_produk": null,
+            "nama_produk": "BETASON-N",
+            "stok_produk": 7,
+            "stok_rekaman": 8,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:56",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 98,
+            "kode_produk": null,
+            "nama_produk": "BEVALEX",
+            "stok_produk": 4,
+            "stok_rekaman": 2,
+            "selisih": -2,
+            "waktu_rekaman": "2026-01-23 09:26:56",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 103,
+            "kode_produk": null,
+            "nama_produk": "BIOPLACENTON",
+            "stok_produk": 2,
+            "stok_rekaman": 3,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:52",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 104,
+            "kode_produk": null,
+            "nama_produk": "VENTOLIN NEBUL",
+            "stok_produk": 6,
+            "stok_rekaman": 7,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:56",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 110,
+            "kode_produk": null,
+            "nama_produk": "BODREX FB ALL VAR",
+            "stok_produk": 21,
+            "stok_rekaman": 25,
+            "selisih": 4,
+            "waktu_rekaman": "2026-01-23 09:27:08",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 111,
+            "kode_produk": null,
+            "nama_produk": "CONTREXYN",
+            "stok_produk": 22,
+            "stok_rekaman": 4,
+            "selisih": -18,
+            "waktu_rekaman": "2026-01-23 09:27:08",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 112,
+            "kode_produk": null,
+            "nama_produk": "BODREX MIGRA",
+            "stok_produk": 26,
+            "stok_rekaman": 4,
+            "selisih": -22,
+            "waktu_rekaman": "2026-01-23 09:27:09",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 118,
+            "kode_produk": null,
+            "nama_produk": "BROADAMOX",
+            "stok_produk": 180,
+            "stok_rekaman": 50,
+            "selisih": -130,
+            "waktu_rekaman": "2026-01-23 09:26:49",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 120,
+            "kode_produk": null,
+            "nama_produk": "BRONEX",
+            "stok_produk": 40,
+            "stok_rekaman": 50,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:49",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 121,
+            "kode_produk": null,
+            "nama_produk": "BUFACARYL",
+            "stok_produk": 310,
+            "stok_rekaman": 150,
+            "selisih": -160,
+            "waktu_rekaman": "2026-01-23 09:26:49",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 123,
+            "kode_produk": null,
+            "nama_produk": "BUFACORT-N",
+            "stok_produk": 7,
+            "stok_rekaman": 1,
+            "selisih": -6,
+            "waktu_rekaman": "2026-01-23 09:26:55",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 125,
+            "kode_produk": null,
+            "nama_produk": "BYE FEVER ANAK",
+            "stok_produk": 6,
+            "stok_rekaman": 17,
+            "selisih": 11,
+            "waktu_rekaman": "2026-01-23 09:26:40",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 126,
+            "kode_produk": null,
+            "nama_produk": "BYE FEVER BABY",
+            "stok_produk": 3,
+            "stok_rekaman": 11,
+            "selisih": 8,
+            "waktu_rekaman": "2026-01-23 09:26:40",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 127,
+            "kode_produk": null,
+            "nama_produk": "CROFED",
+            "stok_produk": 90,
+            "stok_rekaman": 100,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:27:11",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 130,
+            "kode_produk": null,
+            "nama_produk": "CALADINE LOT 60mL",
+            "stok_produk": 7,
+            "stok_rekaman": 4,
+            "selisih": -3,
+            "waktu_rekaman": "2026-01-23 09:27:00",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 133,
+            "kode_produk": null,
+            "nama_produk": "CALADINE POW 60mg",
+            "stok_produk": 5,
+            "stok_rekaman": 3,
+            "selisih": -2,
+            "waktu_rekaman": "2026-01-23 09:27:00",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 135,
+            "kode_produk": null,
+            "nama_produk": "CALLUSOL",
+            "stok_produk": 2,
+            "stok_rekaman": 1,
+            "selisih": -1,
+            "waktu_rekaman": "2026-01-23 09:26:54",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 136,
+            "kode_produk": null,
+            "nama_produk": "CALORTUSIN",
+            "stok_produk": 220,
+            "stok_rekaman": 240,
+            "selisih": 20,
+            "waktu_rekaman": "2026-01-23 09:27:11",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 140,
+            "kode_produk": null,
+            "nama_produk": "CAPTOPRIL 25mg",
+            "stok_produk": 30,
+            "stok_rekaman": 40,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:47",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 142,
+            "kode_produk": null,
+            "nama_produk": "CARBIDU 0,5",
+            "stok_produk": 70,
+            "stok_rekaman": 130,
+            "selisih": 60,
+            "waktu_rekaman": "2026-01-23 09:26:49",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 143,
+            "kode_produk": null,
+            "nama_produk": "CARBIDU 0,75",
+            "stok_produk": 190,
+            "stok_rekaman": 210,
+            "selisih": 20,
+            "waktu_rekaman": "2026-01-23 09:26:49",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 145,
+            "kode_produk": null,
+            "nama_produk": "CATAFLAM 50mg",
+            "stok_produk": 10,
+            "stok_rekaman": 45,
+            "selisih": 35,
+            "waktu_rekaman": "2026-01-23 09:26:49",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 147,
+            "kode_produk": null,
+            "nama_produk": "CAVIPLEX TAB",
+            "stok_produk": 110,
+            "stok_rekaman": 170,
+            "selisih": 60,
+            "waktu_rekaman": "2026-01-23 09:26:49",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 148,
+            "kode_produk": null,
+            "nama_produk": "CAZETIN",
+            "stok_produk": 1,
+            "stok_rekaman": 2,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:53",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 150,
+            "kode_produk": null,
+            "nama_produk": "CDR S'10",
+            "stok_produk": 11,
+            "stok_rekaman": 12,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:05",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 152,
+            "kode_produk": null,
+            "nama_produk": "CEFADROXIL 500mg",
+            "stok_produk": 250,
+            "stok_rekaman": 70,
+            "selisih": -180,
+            "waktu_rekaman": "2026-01-23 09:26:50",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 153,
+            "kode_produk": null,
+            "nama_produk": "ALLERON",
+            "stok_produk": 100,
+            "stok_rekaman": 110,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:49",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 154,
+            "kode_produk": null,
+            "nama_produk": "CEFIXIM 100MG",
+            "stok_produk": 90,
+            "stok_rekaman": 30,
+            "selisih": -60,
+            "waktu_rekaman": "2026-01-23 09:26:50",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 155,
+            "kode_produk": null,
+            "nama_produk": "CENDO CATARLENT 15ml",
+            "stok_produk": 2,
+            "stok_rekaman": 3,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:54",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 157,
+            "kode_produk": null,
+            "nama_produk": "CENDO XITROL",
+            "stok_produk": 4,
+            "stok_rekaman": 5,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:54",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 161,
+            "kode_produk": null,
+            "nama_produk": "CETIRIZIN",
+            "stok_produk": 160,
+            "stok_rekaman": 520,
+            "selisih": 360,
+            "waktu_rekaman": "2026-01-23 09:26:50",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 164,
+            "kode_produk": null,
+            "nama_produk": "CINOLON-N",
+            "stok_produk": 5,
+            "stok_rekaman": 6,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:52",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 165,
+            "kode_produk": null,
+            "nama_produk": "CIPROFLOXACIN 500mg",
+            "stok_produk": 260,
+            "stok_rekaman": 120,
+            "selisih": -140,
+            "waktu_rekaman": "2026-01-23 09:26:50",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 167,
+            "kode_produk": null,
+            "nama_produk": "VITAMIN E IPI",
+            "stok_produk": 12,
+            "stok_rekaman": 13,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:40",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 168,
+            "kode_produk": null,
+            "nama_produk": "CLINDAMICIN 150mg",
+            "stok_produk": 70,
+            "stok_rekaman": 80,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:50",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 169,
+            "kode_produk": null,
+            "nama_produk": "CLINDAMICIN 300mg",
+            "stok_produk": 0,
+            "stok_rekaman": 20,
+            "selisih": 20,
+            "waktu_rekaman": "2026-01-23 09:26:50",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 172,
+            "kode_produk": null,
+            "nama_produk": "COMBANTRIN SYR",
+            "stok_produk": 1,
+            "stok_rekaman": 6,
+            "selisih": 5,
+            "waktu_rekaman": "2026-01-23 09:26:42",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 173,
+            "kode_produk": null,
+            "nama_produk": "COMBANTRIN TAB",
+            "stok_produk": 2,
+            "stok_rekaman": 6,
+            "selisih": 4,
+            "waktu_rekaman": "2026-01-23 09:26:42",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 175,
+            "kode_produk": null,
+            "nama_produk": "INSTO COOL",
+            "stok_produk": 4,
+            "stok_rekaman": 2,
+            "selisih": -2,
+            "waktu_rekaman": "2026-01-23 09:26:53",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 179,
+            "kode_produk": null,
+            "nama_produk": "COPAL",
+            "stok_produk": 1,
+            "stok_rekaman": 3,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:10",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 180,
+            "kode_produk": null,
+            "nama_produk": "COPARCETIN SYR",
+            "stok_produk": 0,
+            "stok_rekaman": 1,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:03",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 183,
+            "kode_produk": null,
+            "nama_produk": "COUNTERPAIN 15g",
+            "stok_produk": 10,
+            "stok_rekaman": 13,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:26:52",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 185,
+            "kode_produk": null,
+            "nama_produk": "COUNTERPAIN 5g",
+            "stok_produk": 9,
+            "stok_rekaman": 5,
+            "selisih": -4,
+            "waktu_rekaman": "2026-01-23 09:26:52",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 186,
+            "kode_produk": null,
+            "nama_produk": "COUNTERPAIN 60g",
+            "stok_produk": 2,
+            "stok_rekaman": 1,
+            "selisih": -1,
+            "waktu_rekaman": "2026-01-23 09:26:52",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 188,
+            "kode_produk": null,
+            "nama_produk": "CTM PIM",
+            "stok_produk": 16,
+            "stok_rekaman": 22,
+            "selisih": 6,
+            "waktu_rekaman": "2026-01-23 09:27:10",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 192,
+            "kode_produk": null,
+            "nama_produk": "CURCUMA TAB",
+            "stok_produk": 8,
+            "stok_rekaman": 10,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:08",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 194,
+            "kode_produk": null,
+            "nama_produk": "CYCLOGYNON",
+            "stok_produk": 2,
+            "stok_rekaman": 3,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:53",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 195,
+            "kode_produk": null,
+            "nama_produk": "DAKTARIN",
+            "stok_produk": 4,
+            "stok_rekaman": 1,
+            "selisih": -3,
+            "waktu_rekaman": "2026-01-23 09:26:54",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 196,
+            "kode_produk": null,
+            "nama_produk": "DANASONE",
+            "stok_produk": 400,
+            "stok_rekaman": 90,
+            "selisih": -310,
+            "waktu_rekaman": "2026-01-23 09:26:50",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 198,
+            "kode_produk": null,
+            "nama_produk": "DECADRYL 120mg",
+            "stok_produk": 1,
+            "stok_rekaman": 2,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:42",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 200,
+            "kode_produk": null,
+            "nama_produk": "DECOLGEN",
+            "stok_produk": 10,
+            "stok_rekaman": 14,
+            "selisih": 4,
+            "waktu_rekaman": "2026-01-23 09:27:08",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 201,
+            "kode_produk": null,
+            "nama_produk": "DECOLSIN",
+            "stok_produk": 22,
+            "stok_rekaman": 25,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:26:42",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 202,
+            "kode_produk": null,
+            "nama_produk": "DEGIROL S'10",
+            "stok_produk": 7,
+            "stok_rekaman": 2,
+            "selisih": -5,
+            "waktu_rekaman": "2026-01-23 09:27:09",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 203,
+            "kode_produk": null,
+            "nama_produk": "DEMACOLIN SYR",
+            "stok_produk": 7,
+            "stok_rekaman": 9,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:06",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 204,
+            "kode_produk": null,
+            "nama_produk": "DEMACOLIN TAB",
+            "stok_produk": 490,
+            "stok_rekaman": 450,
+            "selisih": -40,
+            "waktu_rekaman": "2026-01-23 09:27:11",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 207,
+            "kode_produk": null,
+            "nama_produk": "DETTOL LIQ 45ml",
+            "stok_produk": 5,
+            "stok_rekaman": 2,
+            "selisih": -3,
+            "waktu_rekaman": "2026-01-23 09:26:59",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 208,
+            "kode_produk": null,
+            "nama_produk": "DETTOL LIQ 95ml",
+            "stok_produk": 4,
+            "stok_rekaman": 2,
+            "selisih": -2,
+            "waktu_rekaman": "2026-01-23 09:26:59",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 209,
+            "kode_produk": null,
+            "nama_produk": "DEXAMETHASONE 0,5",
+            "stok_produk": 410,
+            "stok_rekaman": 280,
+            "selisih": -130,
+            "waktu_rekaman": "2026-01-23 09:26:49",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 210,
+            "kode_produk": null,
+            "nama_produk": "DEXAMETHASONE 0,75",
+            "stok_produk": 360,
+            "stok_rekaman": 210,
+            "selisih": -150,
+            "waktu_rekaman": "2026-01-23 09:26:49",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 212,
+            "kode_produk": null,
+            "nama_produk": "NATUR E ADVANCE",
+            "stok_produk": 0,
+            "stok_rekaman": 2,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:07",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 213,
+            "kode_produk": null,
+            "nama_produk": "DEXTAMIN",
+            "stok_produk": 85,
+            "stok_rekaman": 90,
+            "selisih": 5,
+            "waktu_rekaman": "2026-01-23 09:26:50",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 214,
+            "kode_produk": null,
+            "nama_produk": "DEXTEEM PLUS",
+            "stok_produk": 400,
+            "stok_rekaman": 350,
+            "selisih": -50,
+            "waktu_rekaman": "2026-01-23 09:26:50",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 215,
+            "kode_produk": null,
+            "nama_produk": "DEXTRAL",
+            "stok_produk": 170,
+            "stok_rekaman": 210,
+            "selisih": 40,
+            "waktu_rekaman": "2026-01-23 09:27:12",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 217,
+            "kode_produk": null,
+            "nama_produk": "DIANE",
+            "stok_produk": 1,
+            "stok_rekaman": 2,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:53",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 219,
+            "kode_produk": null,
+            "nama_produk": "DIAPET NR",
+            "stok_produk": 9,
+            "stok_rekaman": 12,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:27:08",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 220,
+            "kode_produk": null,
+            "nama_produk": "DICLOFENAC POTASIUM",
+            "stok_produk": 260,
+            "stok_rekaman": 160,
+            "selisih": -100,
+            "waktu_rekaman": "2026-01-23 09:26:51",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 223,
+            "kode_produk": null,
+            "nama_produk": "DIVOLTAR",
+            "stok_produk": 0,
+            "stok_rekaman": 50,
+            "selisih": 50,
+            "waktu_rekaman": "2026-01-23 09:26:39",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 224,
+            "kode_produk": null,
+            "nama_produk": "DERMAFIX 5X7",
+            "stok_produk": 48,
+            "stok_rekaman": 50,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:26:58",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 225,
+            "kode_produk": null,
+            "nama_produk": "DOLOLICOBION",
+            "stok_produk": 200,
+            "stok_rekaman": 30,
+            "selisih": -170,
+            "waktu_rekaman": "2026-01-23 09:26:49",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 227,
+            "kode_produk": null,
+            "nama_produk": "DRAMAMIN",
+            "stok_produk": 23,
+            "stok_rekaman": 41,
+            "selisih": 18,
+            "waktu_rekaman": "2026-01-23 09:26:49",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 228,
+            "kode_produk": null,
+            "nama_produk": "DULCOLAX S'10",
+            "stok_produk": 3,
+            "stok_rekaman": 5,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:09",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 229,
+            "kode_produk": null,
+            "nama_produk": "DULCOLAX S'4",
+            "stok_produk": 18,
+            "stok_rekaman": 21,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:27:09",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 231,
+            "kode_produk": null,
+            "nama_produk": "DUMIN 500mg",
+            "stok_produk": 14,
+            "stok_rekaman": 22,
+            "selisih": 8,
+            "waktu_rekaman": "2026-01-23 09:26:43",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 232,
+            "kode_produk": null,
+            "nama_produk": "DUMIN SYR",
+            "stok_produk": 1,
+            "stok_rekaman": 2,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:06",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 238,
+            "kode_produk": null,
+            "nama_produk": "EMTURNAS FORTE",
+            "stok_produk": 130,
+            "stok_rekaman": 150,
+            "selisih": 20,
+            "waktu_rekaman": "2026-01-23 09:26:45",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 239,
+            "kode_produk": null,
+            "nama_produk": "EMTURNAS",
+            "stok_produk": 60,
+            "stok_rekaman": 80,
+            "selisih": 20,
+            "waktu_rekaman": "2026-01-23 09:26:45",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 240,
+            "kode_produk": null,
+            "nama_produk": "ENBATIC",
+            "stok_produk": 14,
+            "stok_rekaman": 20,
+            "selisih": 6,
+            "waktu_rekaman": "2026-01-23 09:26:56",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 241,
+            "kode_produk": null,
+            "nama_produk": "ENERVON C",
+            "stok_produk": 10,
+            "stok_rekaman": 18,
+            "selisih": 8,
+            "waktu_rekaman": "2026-01-23 09:27:11",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 245,
+            "kode_produk": null,
+            "nama_produk": "ENTROSTOP",
+            "stok_produk": 5,
+            "stok_rekaman": 12,
+            "selisih": 7,
+            "waktu_rekaman": "2026-01-23 09:26:41",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 247,
+            "kode_produk": null,
+            "nama_produk": "EPEXOL TAB",
+            "stok_produk": 80,
+            "stok_rekaman": 90,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:45",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 248,
+            "kode_produk": null,
+            "nama_produk": "ERLADERM-N",
+            "stok_produk": 3,
+            "stok_rekaman": 13,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:56",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 251,
+            "kode_produk": null,
+            "nama_produk": "ERLAMYCETIN PLUS TM",
+            "stok_produk": 0,
+            "stok_rekaman": 1,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:54",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 253,
+            "kode_produk": null,
+            "nama_produk": "ERPHAFLAM",
+            "stok_produk": 160,
+            "stok_rekaman": 50,
+            "selisih": -110,
+            "waktu_rekaman": "2026-01-23 09:26:39",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 256,
+            "kode_produk": null,
+            "nama_produk": "ESEMAG",
+            "stok_produk": 7,
+            "stok_rekaman": 17,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:41",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 259,
+            "kode_produk": null,
+            "nama_produk": "ESTER C S'4",
+            "stok_produk": 10,
+            "stok_rekaman": 11,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:11",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 260,
+            "kode_produk": null,
+            "nama_produk": "ETABION",
+            "stok_produk": 130,
+            "stok_rekaman": 140,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:45",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 262,
+            "kode_produk": null,
+            "nama_produk": "ELKANA SYR",
+            "stok_produk": 2,
+            "stok_rekaman": 1,
+            "selisih": -1,
+            "waktu_rekaman": "2026-01-23 09:27:04",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 263,
+            "kode_produk": null,
+            "nama_produk": "ETAFLUSIN TAB",
+            "stok_produk": 80,
+            "stok_rekaman": 90,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:27:04",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 264,
+            "kode_produk": null,
+            "nama_produk": "ETAMOX",
+            "stok_produk": 20,
+            "stok_rekaman": 30,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:45",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 266,
+            "kode_produk": null,
+            "nama_produk": "EVER E S'6",
+            "stok_produk": 2,
+            "stok_rekaman": 4,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:07",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 267,
+            "kode_produk": null,
+            "nama_produk": "EYEVIT",
+            "stok_produk": 6,
+            "stok_rekaman": 2,
+            "selisih": -4,
+            "waktu_rekaman": "2026-01-23 09:27:06",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 271,
+            "kode_produk": null,
+            "nama_produk": "FARSIFEN SYR",
+            "stok_produk": 0,
+            "stok_rekaman": 1,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:05",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 272,
+            "kode_produk": null,
+            "nama_produk": "LAXING  S'10",
+            "stok_produk": 11,
+            "stok_rekaman": 8,
+            "selisih": -3,
+            "waktu_rekaman": "2026-01-23 09:27:08",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 273,
+            "kode_produk": null,
+            "nama_produk": "FATIGON PUTIH",
+            "stok_produk": 3,
+            "stok_rekaman": 5,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:08",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 274,
+            "kode_produk": null,
+            "nama_produk": "FATIGON SPIRIT",
+            "stok_produk": 7,
+            "stok_rekaman": 9,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:09",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 275,
+            "kode_produk": null,
+            "nama_produk": "FAXIDEN",
+            "stok_produk": 140,
+            "stok_rekaman": 180,
+            "selisih": 40,
+            "waktu_rekaman": "2026-01-23 09:26:46",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 276,
+            "kode_produk": null,
+            "nama_produk": "FEMINAX",
+            "stok_produk": 0,
+            "stok_rekaman": 4,
+            "selisih": 4,
+            "waktu_rekaman": "2026-01-23 09:27:07",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 278,
+            "kode_produk": null,
+            "nama_produk": "FG TROCHES",
+            "stok_produk": 15,
+            "stok_rekaman": 7,
+            "selisih": -8,
+            "waktu_rekaman": "2026-01-23 09:26:45",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 279,
+            "kode_produk": null,
+            "nama_produk": "FIESTA ALL",
+            "stok_produk": 2,
+            "stok_rekaman": 3,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:01",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 280,
+            "kode_produk": null,
+            "nama_produk": "FIMESTAN",
+            "stok_produk": 130,
+            "stok_rekaman": 70,
+            "selisih": -60,
+            "waktu_rekaman": "2026-01-23 09:26:45",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 281,
+            "kode_produk": null,
+            "nama_produk": "FITKOM ALL VAR",
+            "stok_produk": 2,
+            "stok_rekaman": 4,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:26:42",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 282,
+            "kode_produk": null,
+            "nama_produk": "FLAGYSTATIN SUPP",
+            "stok_produk": 4,
+            "stok_rekaman": 6,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:26:56",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 285,
+            "kode_produk": null,
+            "nama_produk": "FLOXIGRA",
+            "stok_produk": 70,
+            "stok_rekaman": 80,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:45",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 286,
+            "kode_produk": null,
+            "nama_produk": "FLUCADEX",
+            "stok_produk": 110,
+            "stok_rekaman": 170,
+            "selisih": 60,
+            "waktu_rekaman": "2026-01-23 09:27:12",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 290,
+            "kode_produk": null,
+            "nama_produk": "FLUTAMOL",
+            "stok_produk": 290,
+            "stok_rekaman": 110,
+            "selisih": -180,
+            "waktu_rekaman": "2026-01-23 09:27:12",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 293,
+            "kode_produk": null,
+            "nama_produk": "FOLAVIT",
+            "stok_produk": 70,
+            "stok_rekaman": 30,
+            "selisih": -40,
+            "waktu_rekaman": "2026-01-23 09:26:46",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 296,
+            "kode_produk": null,
+            "nama_produk": "FRESH CARE ALL",
+            "stok_produk": 37,
+            "stok_rekaman": 49,
+            "selisih": 12,
+            "waktu_rekaman": "2026-01-23 09:27:00",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 298,
+            "kode_produk": null,
+            "nama_produk": "FUNGIDREM K",
+            "stok_produk": 4,
+            "stok_rekaman": 2,
+            "selisih": -2,
+            "waktu_rekaman": "2026-01-23 09:26:54",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 299,
+            "kode_produk": null,
+            "nama_produk": "FUROSEMIDE",
+            "stok_produk": 10,
+            "stok_rekaman": 30,
+            "selisih": 20,
+            "waktu_rekaman": "2026-01-23 09:26:51",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 300,
+            "kode_produk": null,
+            "nama_produk": "GANDAPURA 30mL",
+            "stok_produk": 4,
+            "stok_rekaman": 5,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:11",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 301,
+            "kode_produk": null,
+            "nama_produk": "GANDAPURA 60mL",
+            "stok_produk": 3,
+            "stok_rekaman": 6,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:27:11",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 302,
+            "kode_produk": null,
+            "nama_produk": "GASTRUCID SYR",
+            "stok_produk": 4,
+            "stok_rekaman": 5,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:02",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 304,
+            "kode_produk": null,
+            "nama_produk": "PROMAG HERBAL",
+            "stok_produk": 13,
+            "stok_rekaman": 7,
+            "selisih": -6,
+            "waktu_rekaman": "2026-01-23 09:26:41",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 306,
+            "kode_produk": null,
+            "nama_produk": "GELIGA BALSEM 20g",
+            "stok_produk": 2,
+            "stok_rekaman": 7,
+            "selisih": 5,
+            "waktu_rekaman": "2026-01-23 09:27:10",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 307,
+            "kode_produk": null,
+            "nama_produk": "GELIGA BALSEM 40g",
+            "stok_produk": 5,
+            "stok_rekaman": 6,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:10",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 309,
+            "kode_produk": null,
+            "nama_produk": "GEMFIBROZIL",
+            "stok_produk": 80,
+            "stok_rekaman": 100,
+            "selisih": 20,
+            "waktu_rekaman": "2026-01-23 09:26:51",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 311,
+            "kode_produk": null,
+            "nama_produk": "GENOINT SK",
+            "stok_produk": 2,
+            "stok_rekaman": 3,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:56",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 312,
+            "kode_produk": null,
+            "nama_produk": "GENOINT SM",
+            "stok_produk": 7,
+            "stok_rekaman": 2,
+            "selisih": -5,
+            "waktu_rekaman": "2026-01-23 09:26:54",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 313,
+            "kode_produk": null,
+            "nama_produk": "GENOINT TM",
+            "stok_produk": 4,
+            "stok_rekaman": 6,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:26:53",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 314,
+            "kode_produk": null,
+            "nama_produk": "GENTAMICIN SLP",
+            "stok_produk": 9,
+            "stok_rekaman": 12,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:26:56",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 316,
+            "kode_produk": null,
+            "nama_produk": "DOMPERIDON",
+            "stok_produk": 50,
+            "stok_rekaman": 60,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:50",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 318,
+            "kode_produk": null,
+            "nama_produk": "GLIBENCLAMIDE",
+            "stok_produk": 60,
+            "stok_rekaman": 210,
+            "selisih": 150,
+            "waktu_rekaman": "2026-01-23 09:26:51",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 319,
+            "kode_produk": null,
+            "nama_produk": "GLIMEPIRID 1mg",
+            "stok_produk": 20,
+            "stok_rekaman": 110,
+            "selisih": 90,
+            "waktu_rekaman": "2026-01-23 09:26:48",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 320,
+            "kode_produk": null,
+            "nama_produk": "GLIMEPIRID 2mg",
+            "stok_produk": 290,
+            "stok_rekaman": 110,
+            "selisih": -180,
+            "waktu_rekaman": "2026-01-23 09:26:47",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 321,
+            "kode_produk": null,
+            "nama_produk": "GLIMEPIRID 3mg",
+            "stok_produk": 230,
+            "stok_rekaman": 260,
+            "selisih": 30,
+            "waktu_rekaman": "2026-01-23 09:26:48",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 323,
+            "kode_produk": null,
+            "nama_produk": "GLUCOSAMIN MPL",
+            "stok_produk": 50,
+            "stok_rekaman": 10,
+            "selisih": -40,
+            "waktu_rekaman": "2026-01-23 09:26:46",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 324,
+            "kode_produk": null,
+            "nama_produk": "GLUDEPATIC",
+            "stok_produk": 180,
+            "stok_rekaman": 40,
+            "selisih": -140,
+            "waktu_rekaman": "2026-01-23 09:26:46",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 325,
+            "kode_produk": null,
+            "nama_produk": "GPU 30mL",
+            "stok_produk": 6,
+            "stok_rekaman": 8,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:11",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 326,
+            "kode_produk": null,
+            "nama_produk": "GPU 60mL",
+            "stok_produk": 5,
+            "stok_rekaman": 8,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:27:11",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 330,
+            "kode_produk": null,
+            "nama_produk": "GRAFACHLOR",
+            "stok_produk": 100,
+            "stok_rekaman": 120,
+            "selisih": 20,
+            "waktu_rekaman": "2026-01-23 09:26:46",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 331,
+            "kode_produk": null,
+            "nama_produk": "GRAFADON",
+            "stok_produk": 0,
+            "stok_rekaman": 30,
+            "selisih": 30,
+            "waktu_rekaman": "2026-01-23 09:26:46",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 334,
+            "kode_produk": null,
+            "nama_produk": "GRANTUSIF",
+            "stok_produk": 0,
+            "stok_rekaman": 20,
+            "selisih": 20,
+            "waktu_rekaman": "2026-01-18 09:02:34",
+            "keterangan": "Penjualan: Transaksi penjualan produk"
+        },
+        {
+            "id_produk": 335,
+            "kode_produk": null,
+            "nama_produk": "GRATAZONE",
+            "stok_produk": 0,
+            "stok_rekaman": 80,
+            "selisih": 80,
+            "waktu_rekaman": "2026-01-23 09:26:46",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 336,
+            "kode_produk": null,
+            "nama_produk": "GRATEOS",
+            "stok_produk": 60,
+            "stok_rekaman": 80,
+            "selisih": 20,
+            "waktu_rekaman": "2026-01-23 09:26:46",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 337,
+            "kode_produk": null,
+            "nama_produk": "GUANESTREP SYR",
+            "stok_produk": 5,
+            "stok_rekaman": 7,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:05",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 340,
+            "kode_produk": null,
+            "nama_produk": "HANSAPLAST ROLL 1m",
+            "stok_produk": 15,
+            "stok_rekaman": 18,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:27:00",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 341,
+            "kode_produk": null,
+            "nama_produk": "HANSAPLAST ROLL 5m",
+            "stok_produk": 0,
+            "stok_rekaman": 3,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:27:00",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 343,
+            "kode_produk": null,
+            "nama_produk": "HELIXIM SYR",
+            "stok_produk": 2,
+            "stok_rekaman": 3,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:13",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 345,
+            "kode_produk": null,
+            "nama_produk": "HEMAVITON STAMINA",
+            "stok_produk": 9,
+            "stok_rekaman": 12,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:27:06",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 351,
+            "kode_produk": null,
+            "nama_produk": "HEROCYN 75mg",
+            "stok_produk": 4,
+            "stok_rekaman": 5,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:39",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 355,
+            "kode_produk": null,
+            "nama_produk": "HOT IN 120GR ALL VAR",
+            "stok_produk": 12,
+            "stok_rekaman": 6,
+            "selisih": -6,
+            "waktu_rekaman": "2026-01-23 09:27:00",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 356,
+            "kode_produk": null,
+            "nama_produk": "HOT IN 60GR ALL VAR",
+            "stok_produk": 9,
+            "stok_rekaman": 2,
+            "selisih": -7,
+            "waktu_rekaman": "2026-01-23 09:27:00",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 357,
+            "kode_produk": null,
+            "nama_produk": "HUFAGRIP BP IJO",
+            "stok_produk": 9,
+            "stok_rekaman": 12,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:27:04",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 358,
+            "kode_produk": null,
+            "nama_produk": "HUFAGRIP KUNING",
+            "stok_produk": 11,
+            "stok_rekaman": 4,
+            "selisih": -7,
+            "waktu_rekaman": "2026-01-23 09:27:04",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 359,
+            "kode_produk": null,
+            "nama_produk": "HUFAGRIP  FORTE TAB",
+            "stok_produk": 210,
+            "stok_rekaman": 120,
+            "selisih": -90,
+            "waktu_rekaman": "2026-01-23 09:27:12",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 362,
+            "kode_produk": null,
+            "nama_produk": "HUFAMAG TAB",
+            "stok_produk": 130,
+            "stok_rekaman": 140,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:46",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 363,
+            "kode_produk": null,
+            "nama_produk": "HYDROCORTISON",
+            "stok_produk": 0,
+            "stok_rekaman": 3,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:26:55",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 364,
+            "kode_produk": null,
+            "nama_produk": "HYPAFIX 1m",
+            "stok_produk": 1,
+            "stok_rekaman": 0,
+            "selisih": -1,
+            "waktu_rekaman": "2025-12-31 20:08:10",
+            "keterangan": "Perubahan Stok Manual: SO"
+        },
+        {
+            "id_produk": 365,
+            "kode_produk": null,
+            "nama_produk": "HYSTIGO",
+            "stok_produk": 80,
+            "stok_rekaman": 130,
+            "selisih": 50,
+            "waktu_rekaman": "2026-01-23 09:26:46",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 366,
+            "kode_produk": null,
+            "nama_produk": "IBUPROFEN",
+            "stok_produk": 470,
+            "stok_rekaman": 310,
+            "selisih": -160,
+            "waktu_rekaman": "2026-01-23 09:26:51",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 367,
+            "kode_produk": null,
+            "nama_produk": "ICHTIYOL",
+            "stok_produk": 11,
+            "stok_rekaman": 14,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:26:55",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 371,
+            "kode_produk": null,
+            "nama_produk": "IMODIUM",
+            "stok_produk": 65,
+            "stok_rekaman": 72,
+            "selisih": 7,
+            "waktu_rekaman": "2026-01-23 09:26:47",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 374,
+            "kode_produk": null,
+            "nama_produk": "INAMID",
+            "stok_produk": 40,
+            "stok_rekaman": 50,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:47",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 375,
+            "kode_produk": null,
+            "nama_produk": "INCIDAL",
+            "stok_produk": 18,
+            "stok_rekaman": 34,
+            "selisih": 16,
+            "waktu_rekaman": "2026-01-23 09:27:09",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 376,
+            "kode_produk": null,
+            "nama_produk": "INFALGIN",
+            "stok_produk": 50,
+            "stok_rekaman": 80,
+            "selisih": 30,
+            "waktu_rekaman": "2026-01-23 09:26:46",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 377,
+            "kode_produk": null,
+            "nama_produk": "INSTO",
+            "stok_produk": 5,
+            "stok_rekaman": 7,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:26:53",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 379,
+            "kode_produk": null,
+            "nama_produk": "INTERHISTIN",
+            "stok_produk": 170,
+            "stok_rekaman": 70,
+            "selisih": -100,
+            "waktu_rekaman": "2026-01-23 09:26:47",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 380,
+            "kode_produk": null,
+            "nama_produk": "INTUNAL F",
+            "stok_produk": 23,
+            "stok_rekaman": 25,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:10",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 381,
+            "kode_produk": null,
+            "nama_produk": "ISDN",
+            "stok_produk": 190,
+            "stok_rekaman": 210,
+            "selisih": 20,
+            "waktu_rekaman": "2026-01-23 09:26:51",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 385,
+            "kode_produk": null,
+            "nama_produk": "KADITIC",
+            "stok_produk": 170,
+            "stok_rekaman": 370,
+            "selisih": 200,
+            "waktu_rekaman": "2026-01-23 09:26:47",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 386,
+            "kode_produk": null,
+            "nama_produk": "KAKAK TUA",
+            "stok_produk": 3,
+            "stok_rekaman": 1,
+            "selisih": -2,
+            "waktu_rekaman": "2026-01-23 09:27:10",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 388,
+            "kode_produk": null,
+            "nama_produk": "KALMETASON",
+            "stok_produk": 360,
+            "stok_rekaman": 240,
+            "selisih": -120,
+            "waktu_rekaman": "2026-01-23 09:26:47",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 393,
+            "kode_produk": null,
+            "nama_produk": "KAOTIN SYR",
+            "stok_produk": 7,
+            "stok_rekaman": 1,
+            "selisih": -6,
+            "waktu_rekaman": "2026-01-23 09:27:05",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 395,
+            "kode_produk": null,
+            "nama_produk": "KAPAS GULUNG 50g",
+            "stok_produk": 8,
+            "stok_rekaman": 2,
+            "selisih": -6,
+            "waktu_rekaman": "2026-01-23 09:26:59",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 396,
+            "kode_produk": null,
+            "nama_produk": "KAPSIDA",
+            "stok_produk": 3,
+            "stok_rekaman": 5,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:26:41",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 397,
+            "kode_produk": null,
+            "nama_produk": "KASSA  STERIL HUSADA",
+            "stok_produk": 12,
+            "stok_rekaman": 20,
+            "selisih": 8,
+            "waktu_rekaman": "2026-01-23 09:26:59",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 398,
+            "kode_produk": null,
+            "nama_produk": "ORALIT",
+            "stok_produk": 56,
+            "stok_rekaman": 63,
+            "selisih": 7,
+            "waktu_rekaman": "2026-01-23 09:26:40",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 399,
+            "kode_produk": null,
+            "nama_produk": "KEJIBELING PLUS GINGSENG",
+            "stok_produk": 10,
+            "stok_rekaman": 3,
+            "selisih": -7,
+            "waktu_rekaman": "2026-01-23 09:26:39",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 400,
+            "kode_produk": null,
+            "nama_produk": "KETOCONAZOLE CR DEXA",
+            "stok_produk": 4,
+            "stok_rekaman": 7,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:26:55",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 402,
+            "kode_produk": null,
+            "nama_produk": "KETOCONAZOLE TAB",
+            "stok_produk": 110,
+            "stok_rekaman": 220,
+            "selisih": 110,
+            "waktu_rekaman": "2026-01-23 09:26:39",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 404,
+            "kode_produk": null,
+            "nama_produk": "KLODERMA COKLAT",
+            "stok_produk": 1,
+            "stok_rekaman": 2,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:54",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 406,
+            "kode_produk": null,
+            "nama_produk": "KOMIX ALL VAR",
+            "stok_produk": 108,
+            "stok_rekaman": 141,
+            "selisih": 33,
+            "waktu_rekaman": "2026-01-23 09:26:41",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 408,
+            "kode_produk": null,
+            "nama_produk": "KOMIX KID ALL",
+            "stok_produk": 59,
+            "stok_rekaman": 64,
+            "selisih": 5,
+            "waktu_rekaman": "2026-01-23 09:26:41",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 409,
+            "kode_produk": null,
+            "nama_produk": "KONIDIN",
+            "stok_produk": 9,
+            "stok_rekaman": 10,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:09",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 410,
+            "kode_produk": null,
+            "nama_produk": "KONIDIN OBH",
+            "stok_produk": 28,
+            "stok_rekaman": 1,
+            "selisih": -27,
+            "waktu_rekaman": "2026-01-23 09:27:00",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 411,
+            "kode_produk": null,
+            "nama_produk": "KONIDIN PERMEN",
+            "stok_produk": 24,
+            "stok_rekaman": 28,
+            "selisih": 4,
+            "waktu_rekaman": "2026-01-23 09:26:40",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 412,
+            "kode_produk": null,
+            "nama_produk": "KOOLFEVER ANAK",
+            "stok_produk": 4,
+            "stok_rekaman": 11,
+            "selisih": 7,
+            "waktu_rekaman": "2026-01-23 09:26:40",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 413,
+            "kode_produk": null,
+            "nama_produk": "KOOLFEVER BABY",
+            "stok_produk": 20,
+            "stok_rekaman": 24,
+            "selisih": 4,
+            "waktu_rekaman": "2026-01-23 09:26:40",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 414,
+            "kode_produk": null,
+            "nama_produk": "COROSOB",
+            "stok_produk": 3,
+            "stok_rekaman": 4,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:09",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 415,
+            "kode_produk": null,
+            "nama_produk": "KOYO CABE",
+            "stok_produk": 9,
+            "stok_rekaman": 16,
+            "selisih": 7,
+            "waktu_rekaman": "2026-01-23 09:27:10",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 416,
+            "kode_produk": null,
+            "nama_produk": "KULDON",
+            "stok_produk": 19,
+            "stok_rekaman": 2,
+            "selisih": -17,
+            "waktu_rekaman": "2026-01-23 09:26:41",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 418,
+            "kode_produk": null,
+            "nama_produk": "LACOLDIN TAB",
+            "stok_produk": 0,
+            "stok_rekaman": 20,
+            "selisih": 20,
+            "waktu_rekaman": "2026-01-23 09:27:12",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 419,
+            "kode_produk": null,
+            "nama_produk": "LACTACYD BABY",
+            "stok_produk": 2,
+            "stok_rekaman": 1,
+            "selisih": -1,
+            "waktu_rekaman": "2026-01-23 09:27:01",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 421,
+            "kode_produk": null,
+            "nama_produk": "LACTO-B",
+            "stok_produk": 36,
+            "stok_rekaman": 11,
+            "selisih": -25,
+            "waktu_rekaman": "2026-01-23 09:26:40",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 427,
+            "kode_produk": null,
+            "nama_produk": "LANCAR ASI",
+            "stok_produk": 0,
+            "stok_rekaman": 1,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:41",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 428,
+            "kode_produk": null,
+            "nama_produk": "LANSOPRAZOLE",
+            "stok_produk": 90,
+            "stok_rekaman": 80,
+            "selisih": -10,
+            "waktu_rekaman": "2026-01-23 09:26:51",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 429,
+            "kode_produk": null,
+            "nama_produk": "LAPISIV-T",
+            "stok_produk": 0,
+            "stok_rekaman": 20,
+            "selisih": 20,
+            "waktu_rekaman": "2026-01-23 09:27:12",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 434,
+            "kode_produk": null,
+            "nama_produk": "LASERIN SYR 30 mL",
+            "stok_produk": 6,
+            "stok_rekaman": 8,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:03",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 435,
+            "kode_produk": null,
+            "nama_produk": "LASERIN SYR 60ML",
+            "stok_produk": 5,
+            "stok_rekaman": 8,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:27:03",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 439,
+            "kode_produk": null,
+            "nama_produk": "L-BIO",
+            "stok_produk": 13,
+            "stok_rekaman": 21,
+            "selisih": 8,
+            "waktu_rekaman": "2026-01-23 09:26:40",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 440,
+            "kode_produk": null,
+            "nama_produk": "LELAP",
+            "stok_produk": 2,
+            "stok_rekaman": 4,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:10",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 442,
+            "kode_produk": null,
+            "nama_produk": "LERZIN TAB",
+            "stok_produk": 0,
+            "stok_rekaman": 40,
+            "selisih": 40,
+            "waktu_rekaman": "2026-01-23 09:26:47",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 444,
+            "kode_produk": null,
+            "nama_produk": "LICOKALK",
+            "stok_produk": 110,
+            "stok_rekaman": 160,
+            "selisih": 50,
+            "waktu_rekaman": "2026-01-23 09:26:47",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 454,
+            "kode_produk": null,
+            "nama_produk": "LODECON FORTE",
+            "stok_produk": 110,
+            "stok_rekaman": 130,
+            "selisih": 20,
+            "waktu_rekaman": "2026-01-23 09:27:12",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 455,
+            "kode_produk": null,
+            "nama_produk": "LODIA",
+            "stok_produk": 50,
+            "stok_rekaman": 100,
+            "selisih": 50,
+            "waktu_rekaman": "2026-01-23 09:26:47",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 456,
+            "kode_produk": null,
+            "nama_produk": "LOMATUL",
+            "stok_produk": 4,
+            "stok_rekaman": 6,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:26:58",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 457,
+            "kode_produk": null,
+            "nama_produk": "LOPAMID",
+            "stok_produk": 150,
+            "stok_rekaman": 180,
+            "selisih": 30,
+            "waktu_rekaman": "2026-01-23 09:26:47",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 458,
+            "kode_produk": null,
+            "nama_produk": "LORATADIN",
+            "stok_produk": 260,
+            "stok_rekaman": 320,
+            "selisih": 60,
+            "waktu_rekaman": "2026-01-23 09:26:51",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 460,
+            "kode_produk": null,
+            "nama_produk": "LOSTACEF TAB",
+            "stok_produk": 90,
+            "stok_rekaman": 100,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:47",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 461,
+            "kode_produk": null,
+            "nama_produk": "M.KAPAK 10mL",
+            "stok_produk": 11,
+            "stok_rekaman": 13,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:26:57",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 462,
+            "kode_produk": null,
+            "nama_produk": "M.KAPAK 14mL",
+            "stok_produk": 3,
+            "stok_rekaman": 5,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:26:57",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 463,
+            "kode_produk": null,
+            "nama_produk": "M.KAPAK 28mL",
+            "stok_produk": 2,
+            "stok_rekaman": 3,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:57",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 466,
+            "kode_produk": null,
+            "nama_produk": "M.KAPAK 5mL",
+            "stok_produk": 8,
+            "stok_rekaman": 9,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:57",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 468,
+            "kode_produk": null,
+            "nama_produk": "M. IKAN S'50",
+            "stok_produk": 0,
+            "stok_rekaman": 2,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:07",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 473,
+            "kode_produk": null,
+            "nama_produk": "M.TAWON CC",
+            "stok_produk": 8,
+            "stok_rekaman": 3,
+            "selisih": -5,
+            "waktu_rekaman": "2026-01-23 09:27:11",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 474,
+            "kode_produk": null,
+            "nama_produk": "M.TAWON DD",
+            "stok_produk": 3,
+            "stok_rekaman": 6,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:27:11",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 489,
+            "kode_produk": null,
+            "nama_produk": "M.TELON MY BABY  + 60ML",
+            "stok_produk": 0,
+            "stok_rekaman": 3,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:26:58",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 490,
+            "kode_produk": null,
+            "nama_produk": "M.TELON MY BABY + 90ML",
+            "stok_produk": 3,
+            "stok_rekaman": 0,
+            "selisih": -3,
+            "waktu_rekaman": "2026-01-23 09:26:58",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 494,
+            "kode_produk": null,
+            "nama_produk": "MADU TJ JOYBEE ALL VAR",
+            "stok_produk": 9,
+            "stok_rekaman": 5,
+            "selisih": -4,
+            "waktu_rekaman": "2026-01-23 09:26:40",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 496,
+            "kode_produk": null,
+            "nama_produk": "MADU TJ ORI 150ML",
+            "stok_produk": 3,
+            "stok_rekaman": 5,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:26:41",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 497,
+            "kode_produk": null,
+            "nama_produk": "MADU TJ ORI 250ML",
+            "stok_produk": 5,
+            "stok_rekaman": 7,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:26:41",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 498,
+            "kode_produk": null,
+            "nama_produk": "MADURASA",
+            "stok_produk": 0,
+            "stok_rekaman": 48,
+            "selisih": 48,
+            "waktu_rekaman": "2026-01-23 09:26:40",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 499,
+            "kode_produk": null,
+            "nama_produk": "ALKOHOL SWAB",
+            "stok_produk": 5,
+            "stok_rekaman": 6,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:59",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 501,
+            "kode_produk": null,
+            "nama_produk": "MECOBALAMIN",
+            "stok_produk": 60,
+            "stok_rekaman": 80,
+            "selisih": 20,
+            "waktu_rekaman": "2026-01-23 09:26:51",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 504,
+            "kode_produk": null,
+            "nama_produk": "MEFINAL",
+            "stok_produk": 90,
+            "stok_rekaman": 210,
+            "selisih": 120,
+            "waktu_rekaman": "2026-01-23 09:26:43",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 506,
+            "kode_produk": null,
+            "nama_produk": "MELOXICAM 15mg",
+            "stok_produk": 240,
+            "stok_rekaman": 320,
+            "selisih": 80,
+            "waktu_rekaman": "2026-01-23 09:26:47",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 507,
+            "kode_produk": null,
+            "nama_produk": "MELOXICAM 7.5mg",
+            "stok_produk": 180,
+            "stok_rekaman": 190,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:47",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 508,
+            "kode_produk": null,
+            "nama_produk": "MERTIGO",
+            "stok_produk": 94,
+            "stok_rekaman": 103,
+            "selisih": 9,
+            "waktu_rekaman": "2026-01-23 09:26:43",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 509,
+            "kode_produk": null,
+            "nama_produk": "METFORMIN 500 mg",
+            "stok_produk": 110,
+            "stok_rekaman": 300,
+            "selisih": 190,
+            "waktu_rekaman": "2026-01-23 09:26:52",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 511,
+            "kode_produk": null,
+            "nama_produk": "METHYLPREDNISOLON 4mg",
+            "stok_produk": 540,
+            "stok_rekaman": 690,
+            "selisih": 150,
+            "waktu_rekaman": "2026-01-23 09:26:48",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 512,
+            "kode_produk": null,
+            "nama_produk": "METHYLPREDNISOLON 8mg",
+            "stok_produk": 200,
+            "stok_rekaman": 320,
+            "selisih": 120,
+            "waktu_rekaman": "2026-01-23 09:26:48",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 514,
+            "kode_produk": null,
+            "nama_produk": "METRONIDAZOL",
+            "stok_produk": 10,
+            "stok_rekaman": 40,
+            "selisih": 30,
+            "waktu_rekaman": "2026-01-23 09:26:51",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 516,
+            "kode_produk": null,
+            "nama_produk": "MICROGYNON",
+            "stok_produk": 5,
+            "stok_rekaman": 17,
+            "selisih": 12,
+            "waktu_rekaman": "2026-01-23 09:26:53",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 517,
+            "kode_produk": null,
+            "nama_produk": "MICROLAX",
+            "stok_produk": 8,
+            "stok_rekaman": 6,
+            "selisih": -2,
+            "waktu_rekaman": "2026-01-23 09:26:59",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 522,
+            "kode_produk": null,
+            "nama_produk": "MIXAGRIP",
+            "stok_produk": 101,
+            "stok_rekaman": 109,
+            "selisih": 8,
+            "waktu_rekaman": "2026-01-23 09:27:08",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 523,
+            "kode_produk": null,
+            "nama_produk": "MIXAGRIP FB",
+            "stok_produk": 59,
+            "stok_rekaman": 74,
+            "selisih": 15,
+            "waktu_rekaman": "2026-01-23 09:27:08",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 524,
+            "kode_produk": null,
+            "nama_produk": "MIXALGIN",
+            "stok_produk": 230,
+            "stok_rekaman": 130,
+            "selisih": -100,
+            "waktu_rekaman": "2026-01-23 09:26:43",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 532,
+            "kode_produk": null,
+            "nama_produk": "MKP LANG 120mL",
+            "stok_produk": 2,
+            "stok_rekaman": 3,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:57",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 533,
+            "kode_produk": null,
+            "nama_produk": "MKP LANG 15mL",
+            "stok_produk": 13,
+            "stok_rekaman": 5,
+            "selisih": -8,
+            "waktu_rekaman": "2026-01-23 09:26:57",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 534,
+            "kode_produk": null,
+            "nama_produk": "MKP LANG 30mL",
+            "stok_produk": 6,
+            "stok_rekaman": 11,
+            "selisih": 5,
+            "waktu_rekaman": "2026-01-23 09:26:57",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 535,
+            "kode_produk": null,
+            "nama_produk": "MKP LANG 60mL",
+            "stok_produk": 15,
+            "stok_rekaman": 11,
+            "selisih": -4,
+            "waktu_rekaman": "2026-01-23 09:26:57",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 537,
+            "kode_produk": null,
+            "nama_produk": "MOLACORT 0,75",
+            "stok_produk": 360,
+            "stok_rekaman": 70,
+            "selisih": -290,
+            "waktu_rekaman": "2026-01-23 09:26:43",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 538,
+            "kode_produk": null,
+            "nama_produk": "MOLAGIT",
+            "stok_produk": 0,
+            "stok_rekaman": 5,
+            "selisih": 5,
+            "waktu_rekaman": "2026-01-23 09:27:13",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 539,
+            "kode_produk": null,
+            "nama_produk": "MOLEXFLU",
+            "stok_produk": 150,
+            "stok_rekaman": 30,
+            "selisih": -120,
+            "waktu_rekaman": "2026-01-23 09:27:12",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 542,
+            "kode_produk": null,
+            "nama_produk": "MYCORAL CREAM",
+            "stok_produk": 4,
+            "stok_rekaman": 1,
+            "selisih": -3,
+            "waktu_rekaman": "2026-01-23 09:26:54",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 543,
+            "kode_produk": null,
+            "nama_produk": "MYCORAL TAB",
+            "stok_produk": 34,
+            "stok_rekaman": 64,
+            "selisih": 30,
+            "waktu_rekaman": "2026-01-23 09:26:43",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 545,
+            "kode_produk": null,
+            "nama_produk": "MYLANTA LIQ 50mL",
+            "stok_produk": 4,
+            "stok_rekaman": 6,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:02",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 550,
+            "kode_produk": null,
+            "nama_produk": "NATUR-E S'16",
+            "stok_produk": 3,
+            "stok_rekaman": 4,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:07",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 557,
+            "kode_produk": null,
+            "nama_produk": "NEO RHEUMACYL",
+            "stok_produk": 12,
+            "stok_rekaman": 22,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:27:10",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 558,
+            "kode_produk": null,
+            "nama_produk": "NEOZEP",
+            "stok_produk": 7,
+            "stok_rekaman": 12,
+            "selisih": 5,
+            "waktu_rekaman": "2026-01-23 09:27:09",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 560,
+            "kode_produk": null,
+            "nama_produk": "NEURALGIN",
+            "stok_produk": 150,
+            "stok_rekaman": 270,
+            "selisih": 120,
+            "waktu_rekaman": "2026-01-23 09:26:43",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 561,
+            "kode_produk": null,
+            "nama_produk": "NEUROBION",
+            "stok_produk": 12,
+            "stok_rekaman": 15,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:27:07",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 562,
+            "kode_produk": null,
+            "nama_produk": "NEUROBION 5000",
+            "stok_produk": 8,
+            "stok_rekaman": 9,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:08",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 563,
+            "kode_produk": null,
+            "nama_produk": "NEURODEX",
+            "stok_produk": 50,
+            "stok_rekaman": 120,
+            "selisih": 70,
+            "waktu_rekaman": "2026-01-23 09:26:43",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 564,
+            "kode_produk": null,
+            "nama_produk": "NEUROPYRON-V",
+            "stok_produk": 140,
+            "stok_rekaman": 190,
+            "selisih": 50,
+            "waktu_rekaman": "2026-01-23 09:26:43",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 565,
+            "kode_produk": null,
+            "nama_produk": "NEUROSANBE",
+            "stok_produk": 40,
+            "stok_rekaman": 50,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:44",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 567,
+            "kode_produk": null,
+            "nama_produk": "NEUROSANBE PLUS",
+            "stok_produk": 70,
+            "stok_rekaman": 110,
+            "selisih": 40,
+            "waktu_rekaman": "2026-01-23 09:26:43",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 568,
+            "kode_produk": null,
+            "nama_produk": "NEW DIATAB",
+            "stok_produk": 60,
+            "stok_rekaman": 65,
+            "selisih": 5,
+            "waktu_rekaman": "2026-01-23 09:27:09",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 569,
+            "kode_produk": null,
+            "nama_produk": "LEUKOPLAST 2,5",
+            "stok_produk": 0,
+            "stok_rekaman": 1,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:00",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 571,
+            "kode_produk": null,
+            "nama_produk": "NISAGON",
+            "stok_produk": 4,
+            "stok_rekaman": 5,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:56",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 572,
+            "kode_produk": null,
+            "nama_produk": "PREGNACHEK",
+            "stok_produk": 8,
+            "stok_rekaman": 9,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:53",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 584,
+            "kode_produk": null,
+            "nama_produk": "NOVAPYRON",
+            "stok_produk": 190,
+            "stok_rekaman": 200,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:43",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 586,
+            "kode_produk": null,
+            "nama_produk": "NOVASTAN TAB",
+            "stok_produk": 70,
+            "stok_rekaman": 130,
+            "selisih": 60,
+            "waktu_rekaman": "2026-01-23 09:26:43",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 593,
+            "kode_produk": null,
+            "nama_produk": "NUFADOL TAB",
+            "stok_produk": 30,
+            "stok_rekaman": 40,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:44",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 596,
+            "kode_produk": null,
+            "nama_produk": "OB HERBAL 60mL",
+            "stok_produk": 5,
+            "stok_rekaman": 7,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:03",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 597,
+            "kode_produk": null,
+            "nama_produk": "OB HERBAL JUNIOR",
+            "stok_produk": 6,
+            "stok_rekaman": 2,
+            "selisih": -4,
+            "waktu_rekaman": "2026-01-23 09:27:03",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 598,
+            "kode_produk": null,
+            "nama_produk": "OBH COMBI ANAK ALL VAR",
+            "stok_produk": 21,
+            "stok_rekaman": 20,
+            "selisih": -1,
+            "waktu_rekaman": "2026-01-23 09:27:02",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 599,
+            "kode_produk": null,
+            "nama_produk": "OBH COMBI DAHAK",
+            "stok_produk": 7,
+            "stok_rekaman": 9,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:26:42",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 600,
+            "kode_produk": null,
+            "nama_produk": "OBH COMBI PLUS 100ml",
+            "stok_produk": 3,
+            "stok_rekaman": 6,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:26:42",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 601,
+            "kode_produk": null,
+            "nama_produk": "OBH COMBI PLUS 60ml",
+            "stok_produk": 9,
+            "stok_rekaman": 4,
+            "selisih": -5,
+            "waktu_rekaman": "2026-01-23 09:26:42",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 602,
+            "kode_produk": null,
+            "nama_produk": "OBH ITRASAL",
+            "stok_produk": 16,
+            "stok_rekaman": 8,
+            "selisih": -8,
+            "waktu_rekaman": "2026-01-23 09:26:42",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 604,
+            "kode_produk": null,
+            "nama_produk": "OBP ITRASAL",
+            "stok_produk": 0,
+            "stok_rekaman": 1,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:42",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 605,
+            "kode_produk": null,
+            "nama_produk": "OMEDOM SYR",
+            "stok_produk": 3,
+            "stok_rekaman": 6,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:27:12",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 606,
+            "kode_produk": null,
+            "nama_produk": "OMEDOM TAB",
+            "stok_produk": 110,
+            "stok_rekaman": 140,
+            "selisih": 30,
+            "waktu_rekaman": "2026-01-23 09:26:44",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 608,
+            "kode_produk": null,
+            "nama_produk": "OMEGESIC",
+            "stok_produk": 300,
+            "stok_rekaman": 140,
+            "selisih": -160,
+            "waktu_rekaman": "2026-01-23 09:26:44",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 609,
+            "kode_produk": null,
+            "nama_produk": "OMEGZOLE",
+            "stok_produk": 200,
+            "stok_rekaman": 80,
+            "selisih": -120,
+            "waktu_rekaman": "2026-01-23 09:26:44",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 610,
+            "kode_produk": null,
+            "nama_produk": "OMELLEGAR",
+            "stok_produk": 210,
+            "stok_rekaman": 90,
+            "selisih": -120,
+            "waktu_rekaman": "2026-01-23 09:26:44",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 612,
+            "kode_produk": null,
+            "nama_produk": "OMEPRASOL",
+            "stok_produk": 210,
+            "stok_rekaman": 300,
+            "selisih": 90,
+            "waktu_rekaman": "2026-01-23 09:26:51",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 613,
+            "kode_produk": null,
+            "nama_produk": "VITAMIN D3 IPI",
+            "stok_produk": 10,
+            "stok_rekaman": 12,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:07",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 616,
+            "kode_produk": null,
+            "nama_produk": "OMERIC 300",
+            "stok_produk": 70,
+            "stok_rekaman": 80,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:44",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 618,
+            "kode_produk": null,
+            "nama_produk": "OMEROXOL TAB",
+            "stok_produk": 100,
+            "stok_rekaman": 130,
+            "selisih": 30,
+            "waktu_rekaman": "2026-01-23 09:26:44",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 619,
+            "kode_produk": null,
+            "nama_produk": "OMETILSON",
+            "stok_produk": 350,
+            "stok_rekaman": 200,
+            "selisih": -150,
+            "waktu_rekaman": "2026-01-23 09:26:44",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 620,
+            "kode_produk": null,
+            "nama_produk": "ONDANSETRON 4mg",
+            "stok_produk": 40,
+            "stok_rekaman": 50,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:51",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 623,
+            "kode_produk": null,
+            "nama_produk": "ORPHEN",
+            "stok_produk": 150,
+            "stok_rekaman": 160,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:44",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 624,
+            "kode_produk": null,
+            "nama_produk": "OSKADON",
+            "stok_produk": 0,
+            "stok_rekaman": 15,
+            "selisih": 15,
+            "waktu_rekaman": "2026-01-23 09:27:09",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 625,
+            "kode_produk": null,
+            "nama_produk": "OSKADON SP",
+            "stok_produk": 27,
+            "stok_rekaman": 13,
+            "selisih": -14,
+            "waktu_rekaman": "2026-01-23 09:27:09",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 628,
+            "kode_produk": null,
+            "nama_produk": "PAGODA SALEP",
+            "stok_produk": 4,
+            "stok_rekaman": 8,
+            "selisih": 4,
+            "waktu_rekaman": "2026-01-23 09:26:55",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 629,
+            "kode_produk": null,
+            "nama_produk": "PANADOL BIRU",
+            "stok_produk": 6,
+            "stok_rekaman": 8,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:08",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 631,
+            "kode_produk": null,
+            "nama_produk": "PANADOL MERAH",
+            "stok_produk": 9,
+            "stok_rekaman": 10,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:08",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 633,
+            "kode_produk": null,
+            "nama_produk": "PARACETAMOL SYR",
+            "stok_produk": 6,
+            "stok_rekaman": 9,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:27:05",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 635,
+            "kode_produk": null,
+            "nama_produk": "PARAMEX",
+            "stok_produk": 55,
+            "stok_rekaman": 69,
+            "selisih": 14,
+            "waktu_rekaman": "2026-01-23 09:26:43",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 636,
+            "kode_produk": null,
+            "nama_produk": "PARAMEX FB",
+            "stok_produk": 8,
+            "stok_rekaman": 12,
+            "selisih": 4,
+            "waktu_rekaman": "2026-01-23 09:27:08",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 639,
+            "kode_produk": null,
+            "nama_produk": "PARATUSIN",
+            "stok_produk": 3,
+            "stok_rekaman": 15,
+            "selisih": 12,
+            "waktu_rekaman": "2026-01-23 09:27:03",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 646,
+            "kode_produk": null,
+            "nama_produk": "PHARMATON",
+            "stok_produk": 9,
+            "stok_rekaman": 1,
+            "selisih": -8,
+            "waktu_rekaman": "2026-01-23 09:27:07",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 649,
+            "kode_produk": null,
+            "nama_produk": "PIMTRAKOL ALL VAR",
+            "stok_produk": 13,
+            "stok_rekaman": 22,
+            "selisih": 9,
+            "waktu_rekaman": "2026-01-23 09:27:06",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 652,
+            "kode_produk": null,
+            "nama_produk": "DISFLATYL",
+            "stok_produk": 1,
+            "stok_rekaman": 3,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:08",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 656,
+            "kode_produk": null,
+            "nama_produk": "PLOSA ALL VAR",
+            "stok_produk": 21,
+            "stok_rekaman": 16,
+            "selisih": -5,
+            "waktu_rekaman": "2026-01-23 09:26:40",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 657,
+            "kode_produk": null,
+            "nama_produk": "POLDANMIG",
+            "stok_produk": 15,
+            "stok_rekaman": 17,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:13",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 658,
+            "kode_produk": null,
+            "nama_produk": "POLOFAR PLUS",
+            "stok_produk": 120,
+            "stok_rekaman": 150,
+            "selisih": 30,
+            "waktu_rekaman": "2026-01-23 09:26:44",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 660,
+            "kode_produk": null,
+            "nama_produk": "POLYSILANE SYR",
+            "stok_produk": 2,
+            "stok_rekaman": 3,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:02",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 661,
+            "kode_produk": null,
+            "nama_produk": "POLYSILANE TAB",
+            "stok_produk": 5,
+            "stok_rekaman": 8,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:26:42",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 662,
+            "kode_produk": null,
+            "nama_produk": "PONDEX F",
+            "stok_produk": 60,
+            "stok_rekaman": 70,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:45",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 663,
+            "kode_produk": null,
+            "nama_produk": "PONSTAN",
+            "stok_produk": 66,
+            "stok_rekaman": 103,
+            "selisih": 37,
+            "waktu_rekaman": "2026-01-23 09:26:45",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 665,
+            "kode_produk": null,
+            "nama_produk": "BROMIFAR",
+            "stok_produk": 20,
+            "stok_rekaman": 30,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:49",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 666,
+            "kode_produk": null,
+            "nama_produk": "POSTINOR",
+            "stok_produk": 7,
+            "stok_rekaman": 6,
+            "selisih": -1,
+            "waktu_rekaman": "2026-01-23 09:26:45",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 667,
+            "kode_produk": null,
+            "nama_produk": "PREDNISON",
+            "stok_produk": 110,
+            "stok_rekaman": 120,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:48",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 671,
+            "kode_produk": null,
+            "nama_produk": "PRIMOLUT N",
+            "stok_produk": 58,
+            "stok_rekaman": 30,
+            "selisih": -28,
+            "waktu_rekaman": "2026-01-23 09:26:48",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 672,
+            "kode_produk": null,
+            "nama_produk": "PROCOLD",
+            "stok_produk": 14,
+            "stok_rekaman": 16,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:09",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 674,
+            "kode_produk": null,
+            "nama_produk": "PROMAG SCH",
+            "stok_produk": 14,
+            "stok_rekaman": 19,
+            "selisih": 5,
+            "waktu_rekaman": "2026-01-23 09:26:41",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 675,
+            "kode_produk": null,
+            "nama_produk": "PROMAG SYR 60ml",
+            "stok_produk": 0,
+            "stok_rekaman": 1,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:02",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 676,
+            "kode_produk": null,
+            "nama_produk": "PROMAG TAB",
+            "stok_produk": 22,
+            "stok_rekaman": 20,
+            "selisih": -2,
+            "waktu_rekaman": "2026-01-23 09:27:09",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 680,
+            "kode_produk": null,
+            "nama_produk": "PRORIS FORTE SYR",
+            "stok_produk": 5,
+            "stok_rekaman": 6,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:06",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 682,
+            "kode_produk": null,
+            "nama_produk": "PRORIS SYR",
+            "stok_produk": 4,
+            "stok_rekaman": 7,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:27:06",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 689,
+            "kode_produk": null,
+            "nama_produk": "RANITIDINE",
+            "stok_produk": 570,
+            "stok_rekaman": 230,
+            "selisih": -340,
+            "waktu_rekaman": "2026-01-23 09:26:51",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 691,
+            "kode_produk": null,
+            "nama_produk": "RAVALGIN",
+            "stok_produk": 190,
+            "stok_rekaman": 200,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:51",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 692,
+            "kode_produk": null,
+            "nama_produk": "RHEMAFAR",
+            "stok_produk": 350,
+            "stok_rekaman": 390,
+            "selisih": 40,
+            "waktu_rekaman": "2026-01-23 09:26:44",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 694,
+            "kode_produk": null,
+            "nama_produk": "RENABETIC",
+            "stok_produk": 220,
+            "stok_rekaman": 310,
+            "selisih": 90,
+            "waktu_rekaman": "2026-01-23 09:26:45",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 698,
+            "kode_produk": null,
+            "nama_produk": "RHEUMASON NELLCO",
+            "stok_produk": 5,
+            "stok_rekaman": 2,
+            "selisih": -3,
+            "waktu_rekaman": "2026-01-23 09:27:11",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 699,
+            "kode_produk": null,
+            "nama_produk": "RIVANOL 100mL",
+            "stok_produk": 28,
+            "stok_rekaman": 5,
+            "selisih": -23,
+            "waktu_rekaman": "2026-01-23 09:26:58",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 700,
+            "kode_produk": null,
+            "nama_produk": "RIVANOL 300mL",
+            "stok_produk": 16,
+            "stok_rekaman": 17,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:58",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 702,
+            "kode_produk": null,
+            "nama_produk": "ROOHTO COOL",
+            "stok_produk": 2,
+            "stok_rekaman": 5,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:26:53",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 703,
+            "kode_produk": null,
+            "nama_produk": "SAFE CARE",
+            "stok_produk": 1,
+            "stok_rekaman": 2,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:00",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 704,
+            "kode_produk": null,
+            "nama_produk": "SAGESTAM",
+            "stok_produk": 1,
+            "stok_rekaman": 4,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:26:52",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 705,
+            "kode_produk": null,
+            "nama_produk": "SAKA ABC ALL VAR",
+            "stok_produk": 7,
+            "stok_rekaman": 10,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:26:42",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 706,
+            "kode_produk": null,
+            "nama_produk": "SALBUTAMOL 2mg",
+            "stok_produk": 100,
+            "stok_rekaman": 140,
+            "selisih": 40,
+            "waktu_rekaman": "2026-01-23 09:26:47",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 708,
+            "kode_produk": null,
+            "nama_produk": "SALEP 88",
+            "stok_produk": 4,
+            "stok_rekaman": 10,
+            "selisih": 6,
+            "waktu_rekaman": "2026-01-23 09:26:55",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 711,
+            "kode_produk": null,
+            "nama_produk": "SALICYL MENTOL",
+            "stok_produk": 12,
+            "stok_rekaman": 4,
+            "selisih": -8,
+            "waktu_rekaman": "2026-01-23 09:26:39",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 712,
+            "kode_produk": null,
+            "nama_produk": "SALICYL PINK",
+            "stok_produk": 4,
+            "stok_rekaman": 6,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:26:39",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 714,
+            "kode_produk": null,
+            "nama_produk": "SALONPAS GEL 30mg",
+            "stok_produk": 1,
+            "stok_rekaman": 2,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:52",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 715,
+            "kode_produk": null,
+            "nama_produk": "SALONPAS KOYO ALL VAR",
+            "stok_produk": 29,
+            "stok_rekaman": 43,
+            "selisih": 14,
+            "waktu_rekaman": "2026-01-23 09:27:13",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 723,
+            "kode_produk": null,
+            "nama_produk": "SANGOBION S'10",
+            "stok_produk": 21,
+            "stok_rekaman": 24,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:26:43",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 724,
+            "kode_produk": null,
+            "nama_produk": "SANGOBION S'4",
+            "stok_produk": 12,
+            "stok_rekaman": 2,
+            "selisih": -10,
+            "waktu_rekaman": "2026-01-23 09:27:07",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 727,
+            "kode_produk": null,
+            "nama_produk": "SANMOL DROP",
+            "stok_produk": 5,
+            "stok_rekaman": 2,
+            "selisih": -3,
+            "waktu_rekaman": "2026-01-23 09:27:06",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 728,
+            "kode_produk": null,
+            "nama_produk": "SANMOL SYR",
+            "stok_produk": 8,
+            "stok_rekaman": 11,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:27:06",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 729,
+            "kode_produk": null,
+            "nama_produk": "SANMOL TAB",
+            "stok_produk": 33,
+            "stok_rekaman": 40,
+            "selisih": 7,
+            "waktu_rekaman": "2026-01-23 09:27:09",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 731,
+            "kode_produk": null,
+            "nama_produk": "SARIDON",
+            "stok_produk": 25,
+            "stok_rekaman": 26,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:08",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 732,
+            "kode_produk": null,
+            "nama_produk": "SCABIMITE K",
+            "stok_produk": 0,
+            "stok_rekaman": 3,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:26:54",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 741,
+            "kode_produk": null,
+            "nama_produk": "SELVIM 20",
+            "stok_produk": 70,
+            "stok_rekaman": 90,
+            "selisih": 20,
+            "waktu_rekaman": "2026-01-23 09:26:45",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 744,
+            "kode_produk": null,
+            "nama_produk": "SILADEX ALL VAR 100ml",
+            "stok_produk": 5,
+            "stok_rekaman": 6,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:04",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 745,
+            "kode_produk": null,
+            "nama_produk": "SILADEX ALL VAR 30ml",
+            "stok_produk": 5,
+            "stok_rekaman": 6,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:04",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 746,
+            "kode_produk": null,
+            "nama_produk": "SILADEX ALL VAR 60ml",
+            "stok_produk": 8,
+            "stok_rekaman": 10,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:04",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 750,
+            "kode_produk": null,
+            "nama_produk": "CALCIFAR PLUS",
+            "stok_produk": 80,
+            "stok_rekaman": 90,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:49",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 752,
+            "kode_produk": null,
+            "nama_produk": "HUFABETAMIN SYR",
+            "stok_produk": 1,
+            "stok_rekaman": 2,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:12",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 753,
+            "kode_produk": null,
+            "nama_produk": "PACDIN COUGH ALL VAR",
+            "stok_produk": 6,
+            "stok_rekaman": 3,
+            "selisih": -3,
+            "waktu_rekaman": "2026-01-23 09:27:06",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 755,
+            "kode_produk": null,
+            "nama_produk": "PIROXICAM 20MG",
+            "stok_produk": 240,
+            "stok_rekaman": 210,
+            "selisih": -30,
+            "waktu_rekaman": "2026-01-23 09:26:51",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 756,
+            "kode_produk": null,
+            "nama_produk": "SIMVASTATIN 10",
+            "stok_produk": 440,
+            "stok_rekaman": 650,
+            "selisih": 210,
+            "waktu_rekaman": "2026-01-23 09:26:52",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 757,
+            "kode_produk": null,
+            "nama_produk": "SIMVASTATIN 20",
+            "stok_produk": 290,
+            "stok_rekaman": 430,
+            "selisih": 140,
+            "waktu_rekaman": "2026-01-23 09:26:48",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 760,
+            "kode_produk": null,
+            "nama_produk": "SIRPLUS ALL VAR",
+            "stok_produk": 10,
+            "stok_rekaman": 12,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:05",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 761,
+            "kode_produk": null,
+            "nama_produk": "SITRONELLA 30ml",
+            "stok_produk": 6,
+            "stok_rekaman": 7,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:57",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 763,
+            "kode_produk": null,
+            "nama_produk": "COPARCETIN TAB",
+            "stok_produk": 80,
+            "stok_rekaman": 90,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:27:12",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 764,
+            "kode_produk": null,
+            "nama_produk": "SOLDEXTAM",
+            "stok_produk": 100,
+            "stok_rekaman": 140,
+            "selisih": 40,
+            "waktu_rekaman": "2026-01-23 09:26:45",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 765,
+            "kode_produk": null,
+            "nama_produk": "SOLINFEC CR",
+            "stok_produk": 7,
+            "stok_rekaman": 4,
+            "selisih": -3,
+            "waktu_rekaman": "2026-01-23 09:26:55",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 767,
+            "kode_produk": null,
+            "nama_produk": "SPASMINAL",
+            "stok_produk": 140,
+            "stok_rekaman": 150,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:39",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 774,
+            "kode_produk": null,
+            "nama_produk": "STREPSIL",
+            "stok_produk": 8,
+            "stok_rekaman": 14,
+            "selisih": 6,
+            "waktu_rekaman": "2026-01-23 09:26:43",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 775,
+            "kode_produk": null,
+            "nama_produk": "SUCRALFAT SYR",
+            "stok_produk": 9,
+            "stok_rekaman": 4,
+            "selisih": -5,
+            "waktu_rekaman": "2026-01-23 09:27:13",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 776,
+            "kode_produk": null,
+            "nama_produk": "SULFADIASIN",
+            "stok_produk": 130,
+            "stok_rekaman": 160,
+            "selisih": 30,
+            "waktu_rekaman": "2026-01-23 09:26:45",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 778,
+            "kode_produk": null,
+            "nama_produk": "SUPERTETRA",
+            "stok_produk": 15,
+            "stok_rekaman": 14,
+            "selisih": -1,
+            "waktu_rekaman": "2026-01-23 09:26:45",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 779,
+            "kode_produk": null,
+            "nama_produk": "SUPRABIOTIK",
+            "stok_produk": 20,
+            "stok_rekaman": 40,
+            "selisih": 20,
+            "waktu_rekaman": "2026-01-23 09:26:48",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 782,
+            "kode_produk": null,
+            "nama_produk": "SUTRA OK 3'S",
+            "stok_produk": 0,
+            "stok_rekaman": 2,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:01",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 784,
+            "kode_produk": null,
+            "nama_produk": "SUTRA MERAH S'12",
+            "stok_produk": 10,
+            "stok_rekaman": 1,
+            "selisih": -9,
+            "waktu_rekaman": "2026-01-23 09:27:01",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 785,
+            "kode_produk": null,
+            "nama_produk": "SUTRA MERAH S'3",
+            "stok_produk": 8,
+            "stok_rekaman": 15,
+            "selisih": 7,
+            "waktu_rekaman": "2026-01-23 09:27:01",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 788,
+            "kode_produk": null,
+            "nama_produk": "TEMPRA DROP",
+            "stok_produk": 1,
+            "stok_rekaman": 2,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:05",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 789,
+            "kode_produk": null,
+            "nama_produk": "TEMPRA FORTE SYR",
+            "stok_produk": 1,
+            "stok_rekaman": 2,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:06",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 791,
+            "kode_produk": null,
+            "nama_produk": "TEMPRA SYR K",
+            "stok_produk": 4,
+            "stok_rekaman": 2,
+            "selisih": -2,
+            "waktu_rekaman": "2026-01-23 09:27:06",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 795,
+            "kode_produk": null,
+            "nama_produk": "TEOSAL",
+            "stok_produk": 280,
+            "stok_rekaman": 550,
+            "selisih": 270,
+            "waktu_rekaman": "2026-01-23 09:26:44",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 796,
+            "kode_produk": null,
+            "nama_produk": "TERA F",
+            "stok_produk": 60,
+            "stok_rekaman": 110,
+            "selisih": 50,
+            "waktu_rekaman": "2026-01-23 09:27:12",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 800,
+            "kode_produk": null,
+            "nama_produk": "TERMOREX PLUS 60mL",
+            "stok_produk": 1,
+            "stok_rekaman": 3,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:02",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 802,
+            "kode_produk": null,
+            "nama_produk": "THIAMYCIN 1000mg",
+            "stok_produk": 20,
+            "stok_rekaman": 22,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:26:48",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 803,
+            "kode_produk": null,
+            "nama_produk": "THROMBO GEL",
+            "stok_produk": 2,
+            "stok_rekaman": 3,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:55",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 804,
+            "kode_produk": null,
+            "nama_produk": "THROMBOPOB GEL",
+            "stok_produk": 3,
+            "stok_rekaman": 2,
+            "selisih": -1,
+            "waktu_rekaman": "2026-01-23 09:26:55",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 805,
+            "kode_produk": null,
+            "nama_produk": "TISU MAGIC ALL",
+            "stok_produk": 19,
+            "stok_rekaman": 25,
+            "selisih": 6,
+            "waktu_rekaman": "2026-01-23 09:27:01",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 808,
+            "kode_produk": null,
+            "nama_produk": "TOLAK ANGIN DEWASA",
+            "stok_produk": 50,
+            "stok_rekaman": 47,
+            "selisih": -3,
+            "waktu_rekaman": "2026-01-23 09:26:40",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 809,
+            "kode_produk": null,
+            "nama_produk": "TOLAK LINU",
+            "stok_produk": 17,
+            "stok_rekaman": 20,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:26:40",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 813,
+            "kode_produk": null,
+            "nama_produk": "TOP CORT",
+            "stok_produk": 0,
+            "stok_rekaman": 2,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:26:54",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 814,
+            "kode_produk": null,
+            "nama_produk": "TRANSAMIN",
+            "stok_produk": 90,
+            "stok_rekaman": 100,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:45",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 816,
+            "kode_produk": null,
+            "nama_produk": "OM TEST",
+            "stok_produk": 6,
+            "stok_rekaman": 30,
+            "selisih": 24,
+            "waktu_rekaman": "2026-01-23 09:27:13",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 817,
+            "kode_produk": null,
+            "nama_produk": "NATUR E WHITE 16",
+            "stok_produk": 2,
+            "stok_rekaman": 3,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:07",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 819,
+            "kode_produk": null,
+            "nama_produk": "TRIOCID SYR",
+            "stok_produk": 3,
+            "stok_rekaman": 4,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:02",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 820,
+            "kode_produk": null,
+            "nama_produk": "TRIOCID TAB",
+            "stok_produk": 120,
+            "stok_rekaman": 170,
+            "selisih": 50,
+            "waktu_rekaman": "2026-01-23 09:26:45",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 825,
+            "kode_produk": null,
+            "nama_produk": "ULTRAFLU",
+            "stok_produk": 1,
+            "stok_rekaman": 16,
+            "selisih": 15,
+            "waktu_rekaman": "2026-01-23 09:27:09",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 827,
+            "kode_produk": null,
+            "nama_produk": "LACTULOSE SYR",
+            "stok_produk": 1,
+            "stok_rekaman": 2,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:05",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 832,
+            "kode_produk": null,
+            "nama_produk": "VEGETA HERBAL",
+            "stok_produk": 0,
+            "stok_rekaman": 19,
+            "selisih": 19,
+            "waktu_rekaman": "2026-01-23 09:26:40",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 837,
+            "kode_produk": null,
+            "nama_produk": "VERBAN 15cm",
+            "stok_produk": 1,
+            "stok_rekaman": 2,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:59",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 841,
+            "kode_produk": null,
+            "nama_produk": "VICKS F 44 100ml",
+            "stok_produk": 5,
+            "stok_rekaman": 7,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:26:42",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 842,
+            "kode_produk": null,
+            "nama_produk": "VICKS F 44 27ml",
+            "stok_produk": 7,
+            "stok_rekaman": 4,
+            "selisih": -3,
+            "waktu_rekaman": "2026-01-23 09:26:42",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 843,
+            "kode_produk": null,
+            "nama_produk": "VICKS VAP 10g",
+            "stok_produk": 13,
+            "stok_rekaman": 4,
+            "selisih": -9,
+            "waktu_rekaman": "2026-01-23 09:27:08",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 844,
+            "kode_produk": null,
+            "nama_produk": "VICKS VAP 25g",
+            "stok_produk": 3,
+            "stok_rekaman": 4,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:08",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 849,
+            "kode_produk": null,
+            "nama_produk": "CANDESARTAN 8MG",
+            "stok_produk": 50,
+            "stok_rekaman": 70,
+            "selisih": 20,
+            "waktu_rekaman": "2026-01-23 09:26:50",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 853,
+            "kode_produk": null,
+            "nama_produk": "VITACIMIN",
+            "stok_produk": 118,
+            "stok_rekaman": 36,
+            "selisih": -82,
+            "waktu_rekaman": "2026-01-23 09:27:11",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 854,
+            "kode_produk": null,
+            "nama_produk": "VITAL TT",
+            "stok_produk": 2,
+            "stok_rekaman": 3,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:54",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 855,
+            "kode_produk": null,
+            "nama_produk": "VITAMIN A IPI",
+            "stok_produk": 5,
+            "stok_rekaman": 6,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:07",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 856,
+            "kode_produk": null,
+            "nama_produk": "VITAMIN B KOMP IPI",
+            "stok_produk": 9,
+            "stok_rekaman": 8,
+            "selisih": -1,
+            "waktu_rekaman": "2026-01-23 09:27:07",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 858,
+            "kode_produk": null,
+            "nama_produk": "VITAMIN B12 IPI",
+            "stok_produk": 9,
+            "stok_rekaman": 11,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:07",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 860,
+            "kode_produk": null,
+            "nama_produk": "VOLTADEX",
+            "stok_produk": 280,
+            "stok_rekaman": 30,
+            "selisih": -250,
+            "waktu_rekaman": "2026-01-23 09:26:48",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 866,
+            "kode_produk": null,
+            "nama_produk": "WELMOVE CAP",
+            "stok_produk": 1,
+            "stok_rekaman": 3,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:07",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 868,
+            "kode_produk": null,
+            "nama_produk": "WOOD'S ATT 60ML",
+            "stok_produk": 9,
+            "stok_rekaman": 7,
+            "selisih": -2,
+            "waktu_rekaman": "2026-01-23 09:27:04",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 871,
+            "kode_produk": null,
+            "nama_produk": "WOOD'S PERMEN ALL",
+            "stok_produk": 2,
+            "stok_rekaman": 5,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:26:43",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 872,
+            "kode_produk": null,
+            "nama_produk": "X-FLAM",
+            "stok_produk": 20,
+            "stok_rekaman": 30,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:39",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 873,
+            "kode_produk": null,
+            "nama_produk": "XON-CE",
+            "stok_produk": 19,
+            "stok_rekaman": 43,
+            "selisih": 24,
+            "waktu_rekaman": "2026-01-23 09:27:11",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 875,
+            "kode_produk": null,
+            "nama_produk": "COTRIMOXAZOL",
+            "stok_produk": 20,
+            "stok_rekaman": 30,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:50",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 878,
+            "kode_produk": null,
+            "nama_produk": "YUSIMOX SYR",
+            "stok_produk": 5,
+            "stok_rekaman": 7,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:27:12",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 879,
+            "kode_produk": null,
+            "nama_produk": "YUSIMOX TABLET",
+            "stok_produk": 20,
+            "stok_rekaman": 50,
+            "selisih": 30,
+            "waktu_rekaman": "2026-01-23 09:26:48",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 880,
+            "kode_produk": null,
+            "nama_produk": "HUFARIZINE TAB",
+            "stok_produk": 160,
+            "stok_rekaman": 60,
+            "selisih": -100,
+            "waktu_rekaman": "2026-01-23 09:26:47",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 881,
+            "kode_produk": null,
+            "nama_produk": "VICKS F 44 54ML",
+            "stok_produk": 6,
+            "stok_rekaman": 5,
+            "selisih": -1,
+            "waktu_rekaman": "2026-01-23 09:26:42",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 882,
+            "kode_produk": null,
+            "nama_produk": "ZENIREX SYR",
+            "stok_produk": 6,
+            "stok_rekaman": 2,
+            "selisih": -4,
+            "waktu_rekaman": "2026-01-23 09:27:03",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 884,
+            "kode_produk": null,
+            "nama_produk": "ZYLORIC 100mg",
+            "stok_produk": 13,
+            "stok_rekaman": 17,
+            "selisih": 4,
+            "waktu_rekaman": "2026-01-23 09:26:48",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 886,
+            "kode_produk": null,
+            "nama_produk": "salbutamol 4mg",
+            "stok_produk": 130,
+            "stok_rekaman": 240,
+            "selisih": 110,
+            "waktu_rekaman": "2026-01-23 09:26:48",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 887,
+            "kode_produk": null,
+            "nama_produk": "SANADRYL EXP 60ML",
+            "stok_produk": 2,
+            "stok_rekaman": 3,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:42",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 890,
+            "kode_produk": null,
+            "nama_produk": "GASELA",
+            "stok_produk": 110,
+            "stok_rekaman": 120,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:46",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 892,
+            "kode_produk": null,
+            "nama_produk": "CAVIPLEX CDEZ",
+            "stok_produk": 70,
+            "stok_rekaman": 80,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:49",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 894,
+            "kode_produk": null,
+            "nama_produk": "ITRABAT",
+            "stok_produk": 12,
+            "stok_rekaman": 14,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:26:42",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 896,
+            "kode_produk": null,
+            "nama_produk": "VICKS F 44 ANAK 27ML",
+            "stok_produk": 6,
+            "stok_rekaman": 7,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:03",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 898,
+            "kode_produk": null,
+            "nama_produk": "CENDO LYTERS",
+            "stok_produk": 3,
+            "stok_rekaman": 4,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:54",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 901,
+            "kode_produk": null,
+            "nama_produk": "MICONAZOLE",
+            "stok_produk": 10,
+            "stok_rekaman": 24,
+            "selisih": 14,
+            "waktu_rekaman": "2026-01-23 09:26:55",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 902,
+            "kode_produk": null,
+            "nama_produk": "POLIDENT K",
+            "stok_produk": 2,
+            "stok_rekaman": 3,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:00",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 906,
+            "kode_produk": null,
+            "nama_produk": "PIKANG SUANG",
+            "stok_produk": 8,
+            "stok_rekaman": 6,
+            "selisih": -2,
+            "waktu_rekaman": "2026-01-23 09:26:55",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 908,
+            "kode_produk": null,
+            "nama_produk": "MYLANTA TAB",
+            "stok_produk": 12,
+            "stok_rekaman": 4,
+            "selisih": -8,
+            "waktu_rekaman": "2026-01-23 09:26:41",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 913,
+            "kode_produk": null,
+            "nama_produk": "LOKEV",
+            "stok_produk": 10,
+            "stok_rekaman": 30,
+            "selisih": 20,
+            "waktu_rekaman": "2026-01-23 09:26:47",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 914,
+            "kode_produk": null,
+            "nama_produk": "OBH TROPICA PLUS ANAK ALL",
+            "stok_produk": 3,
+            "stok_rekaman": 7,
+            "selisih": 4,
+            "waktu_rekaman": "2026-01-23 09:27:06",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 915,
+            "kode_produk": null,
+            "nama_produk": "LARUTAN BOTOL B",
+            "stok_produk": 1,
+            "stok_rekaman": 4,
+            "selisih": 3,
+            "waktu_rekaman": "2026-01-23 09:26:58",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 918,
+            "kode_produk": null,
+            "nama_produk": "SABUN IJO",
+            "stok_produk": 11,
+            "stok_rekaman": 12,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:01",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 921,
+            "kode_produk": null,
+            "nama_produk": "GLUCODEX",
+            "stok_produk": 110,
+            "stok_rekaman": 60,
+            "selisih": -50,
+            "waktu_rekaman": "2026-01-23 09:26:51",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 922,
+            "kode_produk": null,
+            "nama_produk": "FARSIFEN TAB",
+            "stok_produk": 170,
+            "stok_rekaman": 220,
+            "selisih": 50,
+            "waktu_rekaman": "2026-01-23 09:26:45",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 923,
+            "kode_produk": null,
+            "nama_produk": "INFLASON",
+            "stok_produk": 260,
+            "stok_rekaman": 90,
+            "selisih": -170,
+            "waktu_rekaman": "2026-01-23 09:26:46",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 926,
+            "kode_produk": null,
+            "nama_produk": "INERSON",
+            "stok_produk": 2,
+            "stok_rekaman": 3,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:55",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 929,
+            "kode_produk": null,
+            "nama_produk": "DIAPET S'10",
+            "stok_produk": 7,
+            "stok_rekaman": 12,
+            "selisih": 5,
+            "waktu_rekaman": "2026-01-23 09:27:08",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 930,
+            "kode_produk": null,
+            "nama_produk": "SANTADEX TT",
+            "stok_produk": 6,
+            "stok_rekaman": 1,
+            "selisih": -5,
+            "waktu_rekaman": "2026-01-23 09:26:54",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 933,
+            "kode_produk": null,
+            "nama_produk": "ENBATIC CREAM",
+            "stok_produk": 1,
+            "stok_rekaman": 2,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:56",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 934,
+            "kode_produk": null,
+            "nama_produk": "LAPIFED",
+            "stok_produk": 30,
+            "stok_rekaman": 40,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:27:11",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 939,
+            "kode_produk": null,
+            "nama_produk": "MOMILEN DIAPER RUSH",
+            "stok_produk": 3,
+            "stok_rekaman": 4,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:01",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 943,
+            "kode_produk": null,
+            "nama_produk": "LARUTAN BOTOL K",
+            "stok_produk": 2,
+            "stok_rekaman": 4,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:26:58",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 945,
+            "kode_produk": null,
+            "nama_produk": "STIMUNO CAPSUL",
+            "stok_produk": 3,
+            "stok_rekaman": 1,
+            "selisih": -2,
+            "waktu_rekaman": "2026-01-23 09:27:07",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 953,
+            "kode_produk": null,
+            "nama_produk": "VICKS IN HALER",
+            "stok_produk": 3,
+            "stok_rekaman": 4,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:08",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 954,
+            "kode_produk": null,
+            "nama_produk": "GUAFINESIN",
+            "stok_produk": 130,
+            "stok_rekaman": 180,
+            "selisih": 50,
+            "waktu_rekaman": "2026-01-23 09:26:50",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 955,
+            "kode_produk": null,
+            "nama_produk": "EPERISONE",
+            "stok_produk": 70,
+            "stok_rekaman": 80,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:51",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 956,
+            "kode_produk": null,
+            "nama_produk": "GABAPENTIN 300mg",
+            "stok_produk": 0,
+            "stok_rekaman": 30,
+            "selisih": 30,
+            "waktu_rekaman": "2026-01-23 09:26:51",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 962,
+            "kode_produk": null,
+            "nama_produk": "ULTRAFIX",
+            "stok_produk": 4,
+            "stok_rekaman": 10,
+            "selisih": 6,
+            "waktu_rekaman": "2026-01-23 09:26:58",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 963,
+            "kode_produk": null,
+            "nama_produk": "DERMAFIX 10X25",
+            "stok_produk": 4,
+            "stok_rekaman": 5,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:58",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 965,
+            "kode_produk": null,
+            "nama_produk": "VITAMIN D3+K2 IPI",
+            "stok_produk": 5,
+            "stok_rekaman": 6,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:27:07",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 966,
+            "kode_produk": "P000257",
+            "nama_produk": "INSTO 15ml",
+            "stok_produk": 1,
+            "stok_rekaman": 2,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:53",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 973,
+            "kode_produk": "P000973",
+            "nama_produk": "HUFRALGIN",
+            "stok_produk": 180,
+            "stok_rekaman": 200,
+            "selisih": 20,
+            "waktu_rekaman": "2026-01-23 09:26:47",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 974,
+            "kode_produk": "P000974",
+            "nama_produk": "MEGABAL",
+            "stok_produk": 10,
+            "stok_rekaman": 40,
+            "selisih": 30,
+            "waktu_rekaman": "2026-01-23 09:26:43",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 980,
+            "kode_produk": "P000980",
+            "nama_produk": "KASSA BIASA",
+            "stok_produk": 26,
+            "stok_rekaman": 34,
+            "selisih": 8,
+            "waktu_rekaman": "2026-01-23 09:27:00",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 984,
+            "kode_produk": "P000984",
+            "nama_produk": "SRITI SALP",
+            "stok_produk": 7,
+            "stok_rekaman": 8,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:55",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 985,
+            "kode_produk": "P000985",
+            "nama_produk": "GENXICAM 15MG",
+            "stok_produk": 160,
+            "stok_rekaman": 230,
+            "selisih": 70,
+            "waktu_rekaman": "2026-01-23 09:26:46",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 986,
+            "kode_produk": "P000986",
+            "nama_produk": "GENCEF 500",
+            "stok_produk": 100,
+            "stok_rekaman": 110,
+            "selisih": 10,
+            "waktu_rekaman": "2026-01-23 09:26:46",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 993,
+            "kode_produk": "P000993",
+            "nama_produk": "ACYCLOVIR TAB",
+            "stok_produk": 90,
+            "stok_rekaman": 130,
+            "selisih": 40,
+            "waktu_rekaman": "2026-01-23 09:26:50",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 994,
+            "kode_produk": "P000994",
+            "nama_produk": "AMOXICILIN 500mg HJ",
+            "stok_produk": 670,
+            "stok_rekaman": 140,
+            "selisih": -530,
+            "waktu_rekaman": "2026-01-23 09:26:50",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 998,
+            "kode_produk": "P000998",
+            "nama_produk": "HOT IN DCL 60GR",
+            "stok_produk": 7,
+            "stok_rekaman": 3,
+            "selisih": -4,
+            "waktu_rekaman": "2026-01-23 09:27:00",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 999,
+            "kode_produk": "P000999",
+            "nama_produk": "HOT IN DCL 120 GR",
+            "stok_produk": 6,
+            "stok_rekaman": 2,
+            "selisih": -4,
+            "waktu_rekaman": "2026-01-23 09:27:00",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 1001,
+            "kode_produk": "P001001",
+            "nama_produk": "PARAVEN TAB",
+            "stok_produk": 60,
+            "stok_rekaman": 140,
+            "selisih": 80,
+            "waktu_rekaman": "2026-01-23 09:26:45",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 1003,
+            "kode_produk": "P001003",
+            "nama_produk": "DERMAFIX 10X8",
+            "stok_produk": 11,
+            "stok_rekaman": 12,
+            "selisih": 1,
+            "waktu_rekaman": "2026-01-23 09:26:58",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 1004,
+            "kode_produk": "P001004",
+            "nama_produk": "H2O2",
+            "stok_produk": 1,
+            "stok_rekaman": 3,
+            "selisih": 2,
+            "waktu_rekaman": "2026-01-23 09:26:59",
+            "keterangan": "Stock Opname Cutoff 31 Desember 2025"
+        },
+        {
+            "id_produk": 1011,
+            "kode_produk": "PTIME001011",
+            "nama_produk": "TIMESTAMP TEST",
+            "stok_produk": 1000,
+            "stok_rekaman": 1170,
+            "selisih": 170,
+            "waktu_rekaman": "2026-01-23 10:11:56",
+            "keterangan": "TEST: Penjualan hari ini"
+        }
+    ]
+}

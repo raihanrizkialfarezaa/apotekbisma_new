@@ -1,10 +1,25 @@
 <?php
 /**
- * CREATE STOCK OPNAME BASELINE RECORDS
+ * ❌ DEPRECATED - JANGAN GUNAKAN SCRIPT INI!
+ * ==========================================
  * 
- * Membuat rekaman stock opname baseline untuk semua produk di CSV
- * agar kartu stok menampilkan dengan benar
+ * Script ini TIDAK LENGKAP dan menyebabkan masalah:
+ * - Hanya membuat rekaman_stoks
+ * - TIDAK update produk.stok
+ * - Menyebabkan data tidak sinkron
+ * 
+ * ✅ GUNAKAN SCRIPT INI SAJA:
+ *    php ultimate_stock_fix.php
+ * 
+ * Incident: 23 Jan 2026 - script ini dijalankan dan menyebabkan
+ * 497 produk tidak sinkron, harus diperbaiki manual.
  */
+
+die("\n❌ SCRIPT INI DEPRECATED!\n\n" .
+    "Gunakan script yang benar:\n" .
+    "  php ultimate_stock_fix.php\n\n" .
+    "Script ini tidak lengkap dan menyebabkan masalah.\n" .
+    "Lihat ANALISIS_SCRIPT_STOCK.md untuk penjelasan lengkap.\n\n");
 
 require __DIR__ . '/vendor/autoload.php';
 

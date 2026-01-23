@@ -271,8 +271,8 @@ if (!$DRY_RUN) {
         
         // Check if SO baseline already exists
         $existingSO = DB::table('rekaman_stoks')
-            ->where('produk_id', $csvId)
-            ->where('jenis', 'Stock Opname')
+            ->where('id_produk', $csvId)
+            ->where('keterangan', 'LIKE', '%BASELINE_OPNAME_31DES2025%')
             ->whereDate('created_at', '2025-12-31')
             ->first();
         
@@ -282,12 +282,15 @@ if (!$DRY_RUN) {
                 // The stok_sisa should be the CSV baseline
                 // This becomes the "starting point" for post-cutoff transactions
                 DB::table('rekaman_stoks')->insert([
-                    'produk_id' => $csvId,
-                    'jumlah' => $csvItem['stok'], // The baseline stock
-                    'jenis' => 'Stock Opname',
-                    'stok_sebelum' => 0, // Before opname was 0 (reset point)
+                    'id_produk' => $csvId,
+                    'waktu' => $baselineDate,
+                    'stok_masuk' => 0,
+                    'stok_keluar' => 0,
+                    'stok_awal' => 0, // Before opname was 0 (reset point)
                     'stok_sisa' => $csvItem['stok'], // After opname = CSV baseline
-                    'keterangan' => 'Stock Opname Cutoff 31 Desember 2025 (CSV Baseline)',
+                    'keterangan' => 'BASELINE_OPNAME_31DES2025_V3',
+                    'id_penjualan' => null,
+                    'id_pembelian' => null,
                     'created_at' => $baselineDate,
                     'updated_at' => $baselineDate
                 ]);
