@@ -1,0 +1,266 @@
+{
+    "generated_at": "2026-03-06 12:52:26",
+    "mode": "SIMULATION_ONLY_NO_DB_CHANGES",
+    "target_ids": [
+        510,
+        511,
+        512
+    ],
+    "products": [
+        {
+            "id_produk": 510,
+            "nama_produk": "METHYLPREDNISOLON 16mg",
+            "stok_saat_ini": 90,
+            "stok_setelah_repair_simulasi": 280,
+            "delta_stok": 190,
+            "total_rekaman": 13,
+            "chain_errors": 8,
+            "rekaman_updates_preview": 4,
+            "produk_update_preview": true,
+            "first_issues": [
+                {
+                    "id_rekaman_stok": 174345,
+                    "waktu": "2025-12-27 17:06:41",
+                    "keterangan": "Pembelian: Update jumlah transaksi",
+                    "stok_masuk": 100,
+                    "stok_keluar": 0,
+                    "changes": {
+                        "stok_awal": {
+                            "old": 20,
+                            "new": 30
+                        },
+                        "stok_sisa": {
+                            "old": 120,
+                            "new": 130
+                        }
+                    }
+                },
+                {
+                    "id_rekaman_stok": 174417,
+                    "waktu": "2025-12-27 17:06:42",
+                    "keterangan": "Penjualan: Update jumlah transaksi",
+                    "stok_masuk": 0,
+                    "stok_keluar": 10,
+                    "changes": {
+                        "stok_awal": {
+                            "old": 30,
+                            "new": 130
+                        },
+                        "stok_sisa": {
+                            "old": 20,
+                            "new": 120
+                        }
+                    }
+                },
+                {
+                    "id_rekaman_stok": 179868,
+                    "waktu": "2025-12-31 23:59:59",
+                    "keterangan": "BASELINE_OPNAME_31DES2025_V3",
+                    "stok_masuk": 70,
+                    "stok_keluar": 0,
+                    "changes": {
+                        "stok_awal": {
+                            "old": 20,
+                            "new": 120
+                        },
+                        "stok_sisa": {
+                            "old": 90,
+                            "new": 190
+                        }
+                    }
+                },
+                {
+                    "id_rekaman_stok": 180717,
+                    "waktu": "2026-01-23 09:26:48",
+                    "keterangan": "Stock Opname Cutoff 31 Desember 2025",
+                    "stok_masuk": 90,
+                    "stok_keluar": 0,
+                    "changes": {
+                        "stok_awal": {
+                            "old": 0,
+                            "new": 190
+                        },
+                        "stok_sisa": {
+                            "old": 90,
+                            "new": 280
+                        }
+                    }
+                }
+            ],
+            "top_changes_preview": [
+                {
+                    "id_rekaman_stok": 180717,
+                    "waktu": "2026-01-23 09:26:48",
+                    "keterangan": "Stock Opname Cutoff 31 Desember 2025",
+                    "stok_masuk": 90,
+                    "stok_keluar": 0,
+                    "changes": {
+                        "stok_awal": {
+                            "old": 0,
+                            "new": 190
+                        },
+                        "stok_sisa": {
+                            "old": 90,
+                            "new": 280
+                        }
+                    }
+                },
+                {
+                    "id_rekaman_stok": 174417,
+                    "waktu": "2025-12-27 17:06:42",
+                    "keterangan": "Penjualan: Update jumlah transaksi",
+                    "stok_masuk": 0,
+                    "stok_keluar": 10,
+                    "changes": {
+                        "stok_awal": {
+                            "old": 30,
+                            "new": 130
+                        },
+                        "stok_sisa": {
+                            "old": 20,
+                            "new": 120
+                        }
+                    }
+                },
+                {
+                    "id_rekaman_stok": 179868,
+                    "waktu": "2025-12-31 23:59:59",
+                    "keterangan": "BASELINE_OPNAME_31DES2025_V3",
+                    "stok_masuk": 70,
+                    "stok_keluar": 0,
+                    "changes": {
+                        "stok_awal": {
+                            "old": 20,
+                            "new": 120
+                        },
+                        "stok_sisa": {
+                            "old": 90,
+                            "new": 190
+                        }
+                    }
+                },
+                {
+                    "id_rekaman_stok": 174345,
+                    "waktu": "2025-12-27 17:06:41",
+                    "keterangan": "Pembelian: Update jumlah transaksi",
+                    "stok_masuk": 100,
+                    "stok_keluar": 0,
+                    "changes": {
+                        "stok_awal": {
+                            "old": 20,
+                            "new": 30
+                        },
+                        "stok_sisa": {
+                            "old": 120,
+                            "new": 130
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "id_produk": 511,
+            "nama_produk": "METHYLPREDNISOLON 4mg",
+            "stok_saat_ini": 540,
+            "stok_setelah_repair_simulasi": 1230,
+            "delta_stok": 690,
+            "total_rekaman": 232,
+            "chain_errors": 2,
+            "rekaman_updates_preview": 1,
+            "produk_update_preview": true,
+            "first_issues": [
+                {
+                    "id_rekaman_stok": 180718,
+                    "waktu": "2026-01-23 09:26:48",
+                    "keterangan": "Stock Opname Cutoff 31 Desember 2025",
+                    "stok_masuk": 690,
+                    "stok_keluar": 0,
+                    "changes": {
+                        "stok_awal": {
+                            "old": 0,
+                            "new": 540
+                        },
+                        "stok_sisa": {
+                            "old": 690,
+                            "new": 1230
+                        }
+                    }
+                }
+            ],
+            "top_changes_preview": [
+                {
+                    "id_rekaman_stok": 180718,
+                    "waktu": "2026-01-23 09:26:48",
+                    "keterangan": "Stock Opname Cutoff 31 Desember 2025",
+                    "stok_masuk": 690,
+                    "stok_keluar": 0,
+                    "changes": {
+                        "stok_awal": {
+                            "old": 0,
+                            "new": 540
+                        },
+                        "stok_sisa": {
+                            "old": 690,
+                            "new": 1230
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "id_produk": 512,
+            "nama_produk": "METHYLPREDNISOLON 8mg",
+            "stok_saat_ini": 200,
+            "stok_setelah_repair_simulasi": 520,
+            "delta_stok": 320,
+            "total_rekaman": 133,
+            "chain_errors": 2,
+            "rekaman_updates_preview": 1,
+            "produk_update_preview": true,
+            "first_issues": [
+                {
+                    "id_rekaman_stok": 180719,
+                    "waktu": "2026-01-23 09:26:48",
+                    "keterangan": "Stock Opname Cutoff 31 Desember 2025",
+                    "stok_masuk": 320,
+                    "stok_keluar": 0,
+                    "changes": {
+                        "stok_awal": {
+                            "old": 0,
+                            "new": 200
+                        },
+                        "stok_sisa": {
+                            "old": 320,
+                            "new": 520
+                        }
+                    }
+                }
+            ],
+            "top_changes_preview": [
+                {
+                    "id_rekaman_stok": 180719,
+                    "waktu": "2026-01-23 09:26:48",
+                    "keterangan": "Stock Opname Cutoff 31 Desember 2025",
+                    "stok_masuk": 320,
+                    "stok_keluar": 0,
+                    "changes": {
+                        "stok_awal": {
+                            "old": 0,
+                            "new": 200
+                        },
+                        "stok_sisa": {
+                            "old": 320,
+                            "new": 520
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "global_summary": {
+        "total_products_found": 3,
+        "total_rekaman_updates_preview": 6,
+        "total_produk_updates_preview": 3,
+        "total_abs_delta_stock": 1200
+    }
+}

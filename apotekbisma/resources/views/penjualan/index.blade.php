@@ -49,6 +49,35 @@
         background-color: #286090;
         border-color: #204d74;
     }
+
+    .penjualan-filter-wrap {
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #f4f4f4;
+        background: #fafafa;
+        border-radius: 3px;
+    }
+
+    .penjualan-filter-wrap .form-group {
+        margin-bottom: 10px;
+    }
+
+    .penjualan-filter-wrap label {
+        font-size: 12px;
+        margin-bottom: 4px;
+        color: #666;
+        display: block;
+    }
+
+    .filter-actions {
+        margin-top: 4px;
+    }
+
+    .filter-note {
+        font-size: 12px;
+        color: #777;
+        margin-top: 6px;
+    }
     
     /* Mobile responsive fixes */
     .table-responsive-mobile {
@@ -92,6 +121,15 @@
             font-size: 12px;
             padding: 5px 10px;
         }
+
+        .penjualan-filter-wrap {
+            padding: 8px;
+        }
+
+        .filter-actions .btn {
+            width: 100%;
+            margin-bottom: 6px;
+        }
         
         .box-header .pull-right {
             float: none !important;
@@ -127,7 +165,72 @@
         
         <div class="box">
             <div class="box-header with-border">
-                <button onclick="syncStock()" class="btn btn-primary btn-xs btn-flat pull-right"><i class="fa fa-refresh"></i> Cocokkan data Stok Produk</button>
+                <div class="penjualan-filter-wrap">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6">
+                            <div class="form-group">
+                                <label for="date_preset">Filter Tanggal</label>
+                                <select id="date_preset" class="form-control input-sm">
+                                    <option value="all">Semua Tanggal</option>
+                                    <option value="today">Hari Ini</option>
+                                    <option value="yesterday">Kemarin</option>
+                                    <option value="last_7_days">7 Hari Terakhir</option>
+                                    <option value="last_30_days">30 Hari Terakhir</option>
+                                    <option value="this_week">Minggu Ini</option>
+                                    <option value="last_week">Minggu Lalu</option>
+                                    <option value="this_month">Bulan Ini</option>
+                                    <option value="last_month">Bulan Lalu</option>
+                                    <option value="this_year">Tahun Ini</option>
+                                    <option value="custom">Custom Range</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 col-sm-6">
+                            <div class="form-group">
+                                <label for="start_date">Tanggal Mulai</label>
+                                <input type="date" id="start_date" class="form-control input-sm">
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 col-sm-6">
+                            <div class="form-group">
+                                <label for="end_date">Tanggal Akhir</label>
+                                <input type="date" id="end_date" class="form-control input-sm">
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 col-sm-6">
+                            <div class="form-group">
+                                <label for="id_produk_filter">Filter Produk</label>
+                                <select id="id_produk_filter" class="form-control input-sm">
+                                    <option value="">Semua Produk</option>
+                                    @foreach($products as $product)
+                                        <option value="{{ $product->id_produk }}">{{ $product->nama_produk }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row filter-actions">
+                        <div class="col-md-12">
+                            <button type="button" id="btnApplyFilter" class="btn btn-info btn-sm btn-flat">
+                                <i class="fa fa-filter"></i> Terapkan Filter
+                            </button>
+                            <button type="button" id="btnResetFilter" class="btn btn-default btn-sm btn-flat">
+                                <i class="fa fa-undo"></i> Reset Filter
+                            </button>
+                            <button onclick="syncStock()" class="btn btn-primary btn-sm btn-flat pull-right">
+                                <i class="fa fa-refresh"></i> Cocokkan data Stok Produk
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="filter-note">
+                        Gunakan preset tanggal untuk filter cepat, atau pilih <strong>Custom Range</strong> untuk rentang tanggal spesifik.
+                    </div>
+                </div>
                 <div class="clearfix"></div>
             </div>
             <div class="box-body">
@@ -157,9 +260,62 @@
 @push('scripts')
 <script>
     let table, table1;
+    const filterDefaults = @json($filterDefaults ?? []);
+
+    function collectFilters() {
+        const selectedPreset = $('#date_preset').val() || 'all';
+        const startDate = $('#start_date').val() || '';
+        const endDate = $('#end_date').val() || '';
+
+        const effectivePreset = (selectedPreset !== 'custom' && (startDate !== '' || endDate !== ''))
+            ? 'custom'
+            : selectedPreset;
+
+        return {
+            date_preset: effectivePreset,
+            start_date: startDate,
+            end_date: endDate,
+            id_produk: $('#id_produk_filter').val() || ''
+        };
+    }
+
+    function setCustomDateInputsState() {
+        const isCustom = $('#date_preset').val() === 'custom';
+        $('#start_date, #end_date').toggleClass('input-sm', true);
+        $('#start_date, #end_date').attr('title', isCustom ? 'Pilih rentang tanggal custom' : 'Bisa dipilih kapan saja; saat diisi otomatis dianggap custom range');
+    }
+
+    function updateFilterUrl(filters) {
+        const params = new URLSearchParams(window.location.search);
+
+        Object.keys(filters).forEach((key) => {
+            const value = filters[key];
+            if (value === '' || value === 'all') {
+                params.delete(key);
+            } else {
+                params.set(key, value);
+            }
+        });
+
+        const query = params.toString();
+        const newUrl = window.location.pathname + (query ? ('?' + query) : '');
+        window.history.replaceState({}, '', newUrl);
+    }
+
+    function applyInitialFilters() {
+        const preset = filterDefaults.date_preset || 'all';
+        $('#date_preset').val(preset);
+        $('#start_date').val(filterDefaults.start_date || '');
+        $('#end_date').val(filterDefaults.end_date || '');
+        $('#id_produk_filter').val(filterDefaults.id_produk || '');
+        setCustomDateInputsState();
+    }
 
     $(function () {
+        applyInitialFilters();
+
         table = $('.table-penjualan').DataTable({
+            order: [],
             responsive: {
                 details: {
                     type: 'column',
@@ -173,21 +329,34 @@
             scrollCollapse: true,
             ajax: {
                 url: '{{ route('penjualan.data') }}',
+                data: function (d) {
+                    const filters = collectFilters();
+                    d.date_preset = filters.date_preset;
+                    d.start_date = filters.start_date;
+                    d.end_date = filters.end_date;
+                    d.id_produk = filters.id_produk;
+                },
+                error: function (xhr) {
+                    console.error('Gagal memuat data penjualan:', xhr.responseText || xhr.statusText);
+                    alert('Gagal memuat data penjualan. Silakan refresh halaman.');
+                }
             },
             columns: [
-                {data: 'DT_RowIndex', searchable: false, sortable: false},
-                {data: 'tanggal'},
-                {data: 'kode_member'},
-                {data: 'total_item'},
-                {data: 'total_harga'},
-                {data: 'diskon'},
-                {data: 'bayar'},
-                {data: 'kasir'},
-                {data: 'aksi', searchable: false, sortable: false},
+                {data: 'DT_RowIndex', name: 'penjualan.id_penjualan', searchable: false, orderable: false},
+                {data: 'tanggal', name: 'penjualan.waktu', searchable: false, orderable: true},
+                {data: 'kode_member', name: 'penjualan.id_member', searchable: false, orderable: false},
+                {data: 'total_item', name: 'penjualan.total_item', searchable: false, orderable: true},
+                {data: 'total_harga', name: 'penjualan.total_harga', searchable: false, orderable: true},
+                {data: 'diskon', name: 'penjualan.diskon', searchable: false, orderable: true},
+                {data: 'bayar', name: 'penjualan.bayar', searchable: false, orderable: true},
+                {data: 'kasir', name: 'penjualan.id_user', searchable: false, orderable: false},
+                {data: 'aksi', name: 'aksi', searchable: false, orderable: false},
             ]
         }).on('draw.dt', function () {
             // Inisialisasi tooltip setelah datatable di-draw
             $('[data-toggle="tooltip"]').tooltip();
+        }).on('error.dt', function (e, settings, techNote, message) {
+            console.error('DataTables error:', message);
         });
 
         table1 = $('.table-detail').DataTable({
@@ -202,7 +371,36 @@
                 {data: 'jumlah'},
                 {data: 'subtotal'},
             ]
-        })
+        });
+
+        $('#date_preset').on('change', function () {
+            setCustomDateInputsState();
+        });
+
+        $('#start_date, #end_date').on('focus change', function () {
+            if ($('#date_preset').val() !== 'custom') {
+                $('#date_preset').val('custom');
+                setCustomDateInputsState();
+            }
+        });
+
+        $('#btnApplyFilter').on('click', function () {
+            const filters = collectFilters();
+            updateFilterUrl(filters);
+            table.ajax.reload();
+        });
+
+        $('#btnResetFilter').on('click', function () {
+            $('#date_preset').val('all');
+            $('#start_date').val('');
+            $('#end_date').val('');
+            $('#id_produk_filter').val('');
+            setCustomDateInputsState();
+
+            const filters = collectFilters();
+            updateFilterUrl(filters);
+            table.ajax.reload();
+        });
     });
 
     function showDetail(url) {

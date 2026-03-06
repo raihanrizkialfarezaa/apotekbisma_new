@@ -10,6 +10,10 @@ class FixerController
 {
     public function perfect(Request $request)
     {
+        if (!config('stock.enable_destructive_rebuild_tools', false)) {
+            abort(403, 'Fitur fixer destruktif dinonaktifkan demi integritas stok.');
+        }
+
         date_default_timezone_set('Asia/Jakarta');
         set_time_limit(900);
         ini_set('memory_limit', '1024M');

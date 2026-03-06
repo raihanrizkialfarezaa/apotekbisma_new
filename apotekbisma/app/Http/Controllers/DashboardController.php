@@ -563,6 +563,13 @@ class DashboardController extends Controller
 
     public function syncStock(Request $request)
     {
+        if (!config('stock.enable_legacy_sync_command', false)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sinkronisasi legacy dinonaktifkan. Gunakan proses baseline rebuild yang tervalidasi.'
+            ], 403);
+        }
+
         try {
             $lockKey = 'sync_stock_in_progress';
             $lockTimeout = 300;

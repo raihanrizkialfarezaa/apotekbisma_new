@@ -14,6 +14,13 @@ use Carbon\Carbon;
 
 class KartuStokController extends Controller
 {
+    private function assertDestructiveToolsEnabled()
+    {
+        if (!config('stock.enable_destructive_rebuild_tools', false)) {
+            abort(403, 'Fitur rebuild destruktif dinonaktifkan demi integritas stok.');
+        }
+    }
+
     public function index()
     {
         $produk = Produk::with('kategori')->orderBy('nama_produk', 'asc')->get();
@@ -541,6 +548,8 @@ class KartuStokController extends Controller
      */
     public function fixRecords(Request $request)
     {
+        $this->assertDestructiveToolsEnabled();
+
         // Set execution time and memory for large datasets
         set_time_limit(600); // 10 minutes
         ini_set('memory_limit', '512M');
@@ -754,6 +763,8 @@ class KartuStokController extends Controller
      */
     public function fixRecordsForProduct($id)
     {
+        $this->assertDestructiveToolsEnabled();
+
         set_time_limit(120); // 2 minutes for single product
         
         $startTime = microtime(true);

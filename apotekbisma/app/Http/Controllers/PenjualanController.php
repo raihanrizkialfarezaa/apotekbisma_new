@@ -16,14 +16,46 @@ use Carbon\Carbon;
 
 class PenjualanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('penjualan.index');
+        $products = Produk::select('id_produk', 'nama_produk')
+            ->orderBy('nama_produk', 'asc')
+            ->get();
+
+        $filterDefaults = [
+            'date_preset' => $request->get('date_preset', 'all'),
+            'start_date' => $request->get('start_date'),
+            'end_date' => $request->get('end_date'),
+            'id_produk' => $request->get('id_produk'),
+        ];
+
+        return view('penjualan.index', compact('products', 'filterDefaults'));
     }
 
-    public function data()
+    public function data(Request $request)
     {
-        $penjualan = Penjualan::with('member')->orderBy('id_penjualan', 'desc')->get();
+        $penjualan = Penjualan::query()
+            ->with(['member', 'user'])
+            ->orderBy('id_penjualan', 'desc');
+
+        [$resolvedStartDate, $resolvedEndDate] = $this->resolveDateRange(
+            $request->input('date_preset', 'all'),
+            $request->input('start_date'),
+            $request->input('end_date')
+        );
+
+        if ($resolvedStartDate && $resolvedEndDate) {
+            $penjualan->whereDate(DB::raw('COALESCE(penjualan.waktu, penjualan.created_at)'), '>=', $resolvedStartDate)
+                ->whereDate(DB::raw('COALESCE(penjualan.waktu, penjualan.created_at)'), '<=', $resolvedEndDate);
+        }
+
+        $productId = $request->input('id_produk');
+        if (is_numeric($productId) && (int) $productId > 0) {
+            $productId = (int) $productId;
+            $penjualan->whereHas('detail', function ($query) use ($productId) {
+                $query->where('id_produk', $productId);
+            });
+        }
 
         return datatables()
             ->of($penjualan)
@@ -36,26 +68,16 @@ class PenjualanController extends Controller
                 
                 // Transaksi sebelum hari ini dianggap selesai semua
                 $today = date('Y-m-d');
-                $transactionDate = date('Y-m-d', strtotime($penjualan->created_at));
+                $transactionDate = date('Y-m-d', strtotime($penjualan->waktu ?? $penjualan->created_at));
                 
                 if ($transactionDate < $today) {
                     $totalHarga .= ' <span class="label label-success">Selesai</span>';
                 } else {
-                    // Untuk transaksi hari ini dan seterusnya, cek status sebenarnya
-                    $hasDetail = \App\Models\PenjualanDetail::where('id_penjualan', $penjualan->id_penjualan)->exists();
-                    $hasIncompleteDetail = \App\Models\PenjualanDetail::where('id_penjualan', $penjualan->id_penjualan)
-                                                                      ->where('jumlah', '<=', 0)
-                                                                      ->exists();
+                    $isIncomplete = ($penjualan->total_item <= 0 ||
+                                    $penjualan->total_harga <= 0 ||
+                                    $penjualan->diterima <= 0);
                     
-                    $isIncomplete = (!$hasDetail || 
-                                    $hasIncompleteDetail || 
-                                    $penjualan->total_harga == 0 || 
-                                    $penjualan->diterima == 0);
-                    
-                    $isCompleted = ($hasDetail && 
-                                   !$hasIncompleteDetail && 
-                                   $penjualan->total_harga > 0 && 
-                                   $penjualan->diterima > 0);
+                    $isCompleted = !$isIncomplete;
                     
                     if ($isIncomplete) {
                         $totalHarga .= ' <span class="label label-warning">Belum Selesai</span>';
@@ -90,7 +112,7 @@ class PenjualanController extends Controller
             ->addColumn('aksi', function ($penjualan) {
                 // Transaksi sebelum hari ini dianggap selesai semua
                 $today = date('Y-m-d');
-                $transactionDate = date('Y-m-d', strtotime($penjualan->created_at));
+                $transactionDate = date('Y-m-d', strtotime($penjualan->waktu ?? $penjualan->created_at));
                 
                 if ($transactionDate < $today) {
                     // Transaksi lama - selalu tampilkan tombol edit
@@ -105,21 +127,11 @@ class PenjualanController extends Controller
                     return $buttons;
                 }
                 
-                // Untuk transaksi hari ini dan seterusnya, cek status sebenarnya
-                $hasDetail = \App\Models\PenjualanDetail::where('id_penjualan', $penjualan->id_penjualan)->exists();
-                $hasIncompleteDetail = \App\Models\PenjualanDetail::where('id_penjualan', $penjualan->id_penjualan)
-                                                                  ->where('jumlah', '<=', 0)
-                                                                  ->exists();
+                $isIncomplete = ($penjualan->total_item <= 0 ||
+                                $penjualan->total_harga <= 0 ||
+                                $penjualan->diterima <= 0);
                 
-                $isIncomplete = (!$hasDetail || 
-                                $hasIncompleteDetail || 
-                                $penjualan->total_harga == 0 || 
-                                $penjualan->diterima == 0);
-                
-                $isCompleted = ($hasDetail && 
-                               !$hasIncompleteDetail && 
-                               $penjualan->total_harga > 0 && 
-                               $penjualan->diterima > 0);
+                $isCompleted = !$isIncomplete;
                 
                 $buttons = '
                 <div class="btn-group">
@@ -135,7 +147,7 @@ class PenjualanController extends Controller
                 }
                 
                 // Tambahkan tombol print untuk semua transaksi yang memiliki detail
-                if ($hasDetail) {
+                if ((int) $penjualan->total_item > 0) {
                     $buttons .= '
                     <button onclick="printReceipt('. $penjualan->id_penjualan .')" class="btn btn-xs btn-primary btn-flat" title="Cetak Struk" data-toggle="tooltip"><i class="fa fa-print"></i></button>';
                 }
@@ -148,6 +160,100 @@ class PenjualanController extends Controller
             })
             ->rawColumns(['aksi', 'kode_member', 'total_harga'])
             ->make(true);
+    }
+
+    private function resolveDateRange(string $preset, ?string $startDate, ?string $endDate): array
+    {
+        $today = Carbon::today();
+        $start = null;
+        $end = null;
+
+        switch ($preset) {
+            case 'today':
+                $start = $today->copy();
+                $end = $today->copy();
+                break;
+            case 'yesterday':
+                $start = $today->copy()->subDay();
+                $end = $today->copy()->subDay();
+                break;
+            case 'last_7_days':
+                $start = $today->copy()->subDays(6);
+                $end = $today->copy();
+                break;
+            case 'last_30_days':
+                $start = $today->copy()->subDays(29);
+                $end = $today->copy();
+                break;
+            case 'this_week':
+                $start = $today->copy()->startOfWeek(Carbon::MONDAY);
+                $end = $today->copy()->endOfWeek(Carbon::SUNDAY);
+                break;
+            case 'last_week':
+                $start = $today->copy()->subWeek()->startOfWeek(Carbon::MONDAY);
+                $end = $today->copy()->subWeek()->endOfWeek(Carbon::SUNDAY);
+                break;
+            case 'this_month':
+                $start = $today->copy()->startOfMonth();
+                $end = $today->copy()->endOfMonth();
+                break;
+            case 'last_month':
+                $start = $today->copy()->subMonthNoOverflow()->startOfMonth();
+                $end = $today->copy()->subMonthNoOverflow()->endOfMonth();
+                break;
+            case 'this_year':
+                $start = $today->copy()->startOfYear();
+                $end = $today->copy()->endOfYear();
+                break;
+            case 'custom':
+            case 'all':
+            default:
+                break;
+        }
+
+        if ($preset === 'custom') {
+            $parsedStart = $this->parseDateInput($startDate);
+            $parsedEnd = $this->parseDateInput($endDate);
+
+            if ($parsedStart) {
+                $start = $parsedStart;
+            }
+
+            if ($parsedEnd) {
+                $end = $parsedEnd;
+            }
+
+            if ($start && !$end) {
+                $end = $start->copy();
+            }
+
+            if ($end && !$start) {
+                $start = $end->copy();
+            }
+
+            if ($start && $end && $start->greaterThan($end)) {
+                [$start, $end] = [$end, $start];
+            }
+        }
+
+        return [
+            $start?->toDateString(),
+            $end?->toDateString(),
+        ];
+    }
+
+    private function parseDateInput(?string $date): ?Carbon
+    {
+        if (!$date) {
+            return null;
+        }
+
+        try {
+            $parsed = Carbon::createFromFormat('Y-m-d', $date);
+            return $parsed && $parsed->format('Y-m-d') === $date ? $parsed : null;
+        } catch (\Throwable $e) {
+            return null;
+        }
     }
 
     public function create()
@@ -337,7 +443,10 @@ class PenjualanController extends Controller
             DB::table('rekaman_stoks')->where('id_penjualan', $penjualan->id_penjualan)->delete();
             
             foreach ($detail as $item) {
-                $produk = Produk::lockForUpdate()->find($item->id_produk);
+                $produk = Produk::query()
+                    ->where('id_produk', $item->id_produk)
+                    ->lockForUpdate()
+                    ->first();
                 if ($produk) {
                     $affectedProductIds[] = $produk->id_produk;
                     $stokSebelum = intval($produk->stok);

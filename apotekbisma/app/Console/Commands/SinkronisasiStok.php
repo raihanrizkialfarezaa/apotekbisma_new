@@ -25,6 +25,11 @@ class SinkronisasiStok extends Command
 
     public function handle()
     {
+        if (!config('stock.enable_legacy_sync_command', false)) {
+            $this->error('Command legacy sync dinonaktifkan. Gunakan command rebuild baseline yang tervalidasi.');
+            return 1;
+        }
+
         $this->info('Memulai sinkronisasi komprehensif...');
         
         $this->perbaikiTransaksiNull();
