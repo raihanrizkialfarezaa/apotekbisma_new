@@ -35,6 +35,13 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 .\run_stock_fix_production.ps1
 ```
 
+Jika muncul error `mysqldump.exe tidak ditemukan`, set path sekali lalu jalankan ulang:
+
+```powershell
+$env:MYSQLDUMP_PATH = "C:\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqldump.exe"
+.\run_stock_fix_production.ps1
+```
+
 Jika ingin skip backup DB (tidak disarankan):
 
 ```powershell

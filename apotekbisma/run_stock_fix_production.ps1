@@ -29,6 +29,34 @@ function Get-LatestReport {
     return $null
 }
 
+function Resolve-MySqlDumpPath {
+    if ($env:MYSQLDUMP_PATH -and (Test-Path $env:MYSQLDUMP_PATH)) {
+        return $env:MYSQLDUMP_PATH
+    }
+
+    $cmd = Get-Command mysqldump.exe -ErrorAction SilentlyContinue
+    if ($cmd -and $cmd.Source) {
+        return $cmd.Source
+    }
+
+    $candidates = @(
+        'C:\laragon\bin\mysql\*\bin\mysqldump.exe',
+        'C:\Program Files\MySQL\*\bin\mysqldump.exe',
+        'C:\xampp\mysql\bin\mysqldump.exe'
+    )
+
+    foreach ($pattern in $candidates) {
+        $found = Get-ChildItem -Path $pattern -ErrorAction SilentlyContinue |
+            Sort-Object FullName -Descending |
+            Select-Object -First 1
+        if ($found) {
+            return $found.FullName
+        }
+    }
+
+    return $null
+}
+
 Log-Step "STEP 1/8 - Pre-check command"
 php artisan help stock:baseline-rebuild
 
@@ -53,13 +81,21 @@ else {
         exit 1
     }
 
+    $mysqldumpPath = Resolve-MySqlDumpPath
+    if (-not $mysqldumpPath) {
+        Write-Error "mysqldump.exe tidak ditemukan. Tambahkan ke PATH atau set `$env:MYSQLDUMP_PATH. Alternatif sementara: set `$env:SKIP_BACKUP='1' untuk lanjut tanpa backup."
+        exit 1
+    }
+
+    Write-Host "[INFO] Menggunakan mysqldump: $mysqldumpPath"
+
     $backupFile = "storage/logs/db_backup_before_stock_fix_$(Get-Date -Format 'yyyyMMdd_HHmmss').sql"
 
     if ([string]::IsNullOrWhiteSpace($dbPass)) {
-        & mysqldump -h $dbHost -P $dbPort -u $dbUser $dbName | Out-File -Encoding utf8 $backupFile
+        & $mysqldumpPath -h $dbHost -P $dbPort -u $dbUser $dbName | Out-File -Encoding utf8 $backupFile
     }
     else {
-        & mysqldump -h $dbHost -P $dbPort -u $dbUser "-p$dbPass" $dbName | Out-File -Encoding utf8 $backupFile
+        & $mysqldumpPath -h $dbHost -P $dbPort -u $dbUser "-p$dbPass" $dbName | Out-File -Encoding utf8 $backupFile
     }
 
     Write-Host "[OK] Backup tersimpan: $backupFile"
