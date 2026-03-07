@@ -49,11 +49,26 @@ class PenjualanController extends Controller
                 ->whereDate(DB::raw('COALESCE(penjualan.waktu, penjualan.created_at)'), '<=', $resolvedEndDate);
         }
 
-        $productId = $request->input('id_produk');
-        if (is_numeric($productId) && (int) $productId > 0) {
-            $productId = (int) $productId;
-            $penjualan->whereHas('detail', function ($query) use ($productId) {
-                $query->where('id_produk', $productId);
+        $productFilter = $request->input('id_produk');
+        $productIds = collect(is_array($productFilter) ? $productFilter : [$productFilter])
+            ->flatMap(function ($value) {
+                return explode(',', (string) $value);
+            })
+            ->map(function ($value) {
+                return trim((string) $value);
+            })
+            ->filter(function ($value) {
+                return $value !== '' && is_numeric($value) && (int) $value > 0;
+            })
+            ->map(function ($value) {
+                return (int) $value;
+            })
+            ->unique()
+            ->values();
+
+        if ($productIds->isNotEmpty()) {
+            $penjualan->whereHas('detail', function ($query) use ($productIds) {
+                $query->whereIn('id_produk', $productIds->all());
             });
         }
 

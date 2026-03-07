@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Production stock fix runner
-# Urutan command dibuat sama dengan PRODUCTION_RUN_COMMANDS_SHORT.md
+# Production stock fix runner (Shell)
+# Urutan command dibuat sama persis dengan run_stock_fix_production.ps1 dan PRODUCTION_RUN_COMMANDS_SHORT.md
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$ROOT_DIR"
@@ -14,6 +14,40 @@ fi
 
 mkdir -p storage/logs
 
+RUNNER_SKIP_BACKUP="${SKIP_BACKUP:-0}"
+RUNNER_ALLOW_BACKUP_FAIL="${ALLOW_BACKUP_FAIL:-0}"
+
+print_runner_usage() {
+  cat <<'TXT'
+Usage:
+  ./run_stock_fix_production.sh [options]
+
+Options:
+  --skip-backup         Lewati STEP 3 backup DB
+  --allow-backup-fail   Jika backup gagal, lanjutkan ke step berikutnya
+  --help-runner         Tampilkan bantuan runner ini
+
+Env alternatif:
+  SKIP_BACKUP=1
+  ALLOW_BACKUP_FAIL=1
+TXT
+}
+
+for arg in "$@"; do
+  case "$arg" in
+    --skip-backup)
+      RUNNER_SKIP_BACKUP="1"
+      ;;
+    --allow-backup-fail)
+      RUNNER_ALLOW_BACKUP_FAIL="1"
+      ;;
+    --help-runner)
+      print_runner_usage
+      exit 0
+      ;;
+  esac
+done
+
 log() {
   echo
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1"
@@ -23,35 +57,192 @@ latest_report() {
   ls -1t baseline_rebuild_report_*.json 2>/dev/null | head -n 1 || true
 }
 
+resolve_sql_dump_path() {
+  if [[ -n "${MARIADB_DUMP_PATH:-}" && -x "${MARIADB_DUMP_PATH}" ]]; then
+    echo "${MARIADB_DUMP_PATH}"
+    return 0
+  fi
+
+  if [[ -n "${MYSQLDUMP_PATH:-}" && -x "${MYSQLDUMP_PATH}" ]]; then
+    echo "${MYSQLDUMP_PATH}"
+    return 0
+  fi
+
+  if command -v mariadb-dump >/dev/null 2>&1; then
+    command -v mariadb-dump
+    return 0
+  fi
+
+  if command -v mysqldump >/dev/null 2>&1; then
+    command -v mysqldump
+    return 0
+  fi
+
+  local candidates=(
+    '/usr/bin/mariadb-dump'
+    '/usr/local/bin/mariadb-dump'
+    '/usr/bin/mysqldump'
+    '/usr/local/bin/mysqldump'
+    '/c/laragon/bin/mysql/*/bin/mariadb-dump.exe'
+    '/c/laragon/bin/mysql/*/bin/mysqldump.exe'
+    '/c/Program Files/MySQL/*/bin/mariadb-dump.exe'
+    '/c/Program Files/MySQL/*/bin/mysqldump.exe'
+    '/c/xampp/mysql/bin/mariadb-dump.exe'
+    '/c/xampp/mysql/bin/mysqldump.exe'
+  )
+
+  local pattern
+  local found
+  for pattern in "${candidates[@]}"; do
+    found="$(compgen -G "$pattern" | sort -r | head -n 1 || true)"
+    if [[ -n "$found" ]]; then
+      echo "$found"
+      return 0
+    fi
+  done
+
+  return 1
+}
+
+read_db_config_from_laravel() {
+  php -r '
+require "vendor/autoload.php";
+$app = require "bootstrap/app.php";
+$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+$kernel->bootstrap();
+$cfg = (array) config("database.connections.mysql", []);
+$values = [
+  (string)($cfg["host"] ?? ""),
+  (string)($cfg["port"] ?? "3306"),
+  (string)($cfg["database"] ?? ""),
+  (string)($cfg["username"] ?? ""),
+  (string)($cfg["password"] ?? ""),
+  (string)($cfg["url"] ?? ""),
+  (string)($cfg["unix_socket"] ?? "")
+];
+foreach ($values as $v) {
+  echo base64_encode($v), PHP_EOL;
+}
+' 2>/dev/null || true
+}
+
+read_db_config_from_env() {
+  local extract_value
+  extract_value() {
+    local key="$1"
+    local line
+    line="$(grep -E "^${key}[[:space:]]*=" .env 2>/dev/null | head -n 1 | tr -d '\r' || true)"
+    line="$(printf '%s' "$line" | sed -E "s/^${key}[[:space:]]*=[[:space:]]*//")"
+
+    if [[ "$line" =~ ^".*"$ || "$line" =~ ^\'.*\'$ ]]; then
+      line="${line:1:${#line}-2}"
+    fi
+
+    printf '%s' "$line" | base64 | tr -d '\n'
+    printf '\n'
+  }
+
+  extract_value "DB_HOST"
+  extract_value "DB_PORT"
+  extract_value "DB_DATABASE"
+  extract_value "DB_USERNAME"
+  extract_value "DB_PASSWORD"
+  extract_value "DATABASE_URL"
+  extract_value "DB_SOCKET"
+}
+
+decode_b64() {
+  local value="${1:-}"
+  if [[ -z "$value" ]]; then
+    printf ''
+    return 0
+  fi
+
+  if printf '%s' "$value" | base64 --decode >/dev/null 2>&1; then
+    printf '%s' "$value" | base64 --decode 2>/dev/null || true
+  else
+    printf '%s' "$value" | base64 -d 2>/dev/null || true
+  fi
+}
+
+prompt_secret_if_empty() {
+  local current_value="${1:-}"
+  local prompt_text="${2:-Masukkan nilai rahasia: }"
+
+  if [[ -n "$current_value" ]]; then
+    printf '%s' "$current_value"
+    return 0
+  fi
+
+  if [[ -t 0 ]]; then
+    local input_value
+    read -r -s -p "$prompt_text" input_value
+    echo
+    printf '%s' "$input_value"
+    return 0
+  fi
+
+  printf ''
+}
+
+run_db_dump() {
+  local dump_bin="$1"
+  local backup_file="$2"
+  local err_file="$3"
+  local db_host="$4"
+  local db_port="$5"
+  local db_name="$6"
+  local db_user="$7"
+  local db_pass="$8"
+  local db_socket="$9"
+
+  if [[ -n "$db_socket" ]]; then
+    if [[ -n "$db_pass" ]]; then
+      MYSQL_PWD="$db_pass" "$dump_bin" --protocol=SOCKET --socket="$db_socket" -u "$db_user" "$db_name" > "$backup_file" 2>"$err_file"
+    else
+      "$dump_bin" --protocol=SOCKET --socket="$db_socket" -u "$db_user" "$db_name" > "$backup_file" 2>"$err_file"
+    fi
+  else
+    if [[ -n "$db_pass" ]]; then
+      MYSQL_PWD="$db_pass" "$dump_bin" -h "$db_host" -P "$db_port" -u "$db_user" "$db_name" > "$backup_file" 2>"$err_file"
+    else
+      "$dump_bin" -h "$db_host" -P "$db_port" -u "$db_user" "$db_name" > "$backup_file" 2>"$err_file"
+    fi
+  fi
+}
+
+parse_database_url_to_b64() {
+  local db_url="${1:-}"
+  if [[ -z "$db_url" ]]; then
+    return 0
+  fi
+
+  php -r '
+$url = $argv[1] ?? "";
+$parts = parse_url($url);
+if (!$parts) { exit(0); }
+$path = isset($parts["path"]) ? ltrim((string)$parts["path"], "/") : "";
+$values = [
+  (string)($parts["host"] ?? ""),
+  (string)($parts["port"] ?? "3306"),
+  (string)$path,
+  isset($parts["user"]) ? urldecode((string)$parts["user"]) : "",
+  isset($parts["pass"]) ? urldecode((string)$parts["pass"]) : ""
+];
+foreach ($values as $v) {
+  echo base64_encode($v), PHP_EOL;
+}
+' "$db_url" 2>/dev/null || true
+}
+
 log "STEP 1/8 - Pre-check command"
 php artisan help stock:baseline-rebuild
 
 log "STEP 2/8 - Clear cache"
 php artisan optimize:clear
 
-log "STEP 3/8 - Backup DB (minimal)"
-if [[ "${SKIP_BACKUP:-0}" == "1" ]]; then
-  echo "[WARN] Backup dilewati karena SKIP_BACKUP=1"
-else
-  DB_HOST="$(grep -E '^DB_HOST=' .env | head -n1 | cut -d'=' -f2- | tr -d '\r' | sed 's/^"//;s/"$//')"
-  DB_PORT="$(grep -E '^DB_PORT=' .env | head -n1 | cut -d'=' -f2- | tr -d '\r' | sed 's/^"//;s/"$//')"
-  DB_DATABASE="$(grep -E '^DB_DATABASE=' .env | head -n1 | cut -d'=' -f2- | tr -d '\r' | sed 's/^"//;s/"$//')"
-  DB_USERNAME="$(grep -E '^DB_USERNAME=' .env | head -n1 | cut -d'=' -f2- | tr -d '\r' | sed 's/^"//;s/"$//')"
-  DB_PASSWORD="$(grep -E '^DB_PASSWORD=' .env | head -n1 | cut -d'=' -f2- | tr -d '\r' | sed 's/^"//;s/"$//')"
-
-  if [[ -z "$DB_HOST" || -z "$DB_DATABASE" || -z "$DB_USERNAME" ]]; then
-    echo "[ERROR] DB_HOST/DB_DATABASE/DB_USERNAME tidak valid di .env"
-    exit 1
-  fi
-
-  BACKUP_FILE="storage/logs/db_backup_before_stock_fix_$(date +%Y%m%d_%H%M%S).sql"
-  if [[ -n "$DB_PASSWORD" ]]; then
-    mysqldump -h "$DB_HOST" -P "${DB_PORT:-3306}" -u "$DB_USERNAME" -p"$DB_PASSWORD" "$DB_DATABASE" > "$BACKUP_FILE"
-  else
-    mysqldump -h "$DB_HOST" -P "${DB_PORT:-3306}" -u "$DB_USERNAME" "$DB_DATABASE" > "$BACKUP_FILE"
-  fi
-  echo "[OK] Backup tersimpan: $BACKUP_FILE"
-fi
+log "STEP 3/8 - Backup DB (disabled on hosting)"
+echo "[INFO] Backup dilewati permanen untuk flow hosting."
 
 log "STEP 4/8 - Dry-run awal (tanpa ubah DB)"
 php artisan stock:baseline-rebuild

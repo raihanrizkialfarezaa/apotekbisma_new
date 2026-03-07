@@ -29,9 +29,18 @@ function Get-LatestReport {
     return $null
 }
 
-function Resolve-MySqlDumpPath {
+function Resolve-SqlDumpPath {
+    if ($env:MARIADB_DUMP_PATH -and (Test-Path $env:MARIADB_DUMP_PATH)) {
+        return $env:MARIADB_DUMP_PATH
+    }
+
     if ($env:MYSQLDUMP_PATH -and (Test-Path $env:MYSQLDUMP_PATH)) {
         return $env:MYSQLDUMP_PATH
+    }
+
+    $cmd = Get-Command mariadb-dump.exe -ErrorAction SilentlyContinue
+    if ($cmd -and $cmd.Source) {
+        return $cmd.Source
     }
 
     $cmd = Get-Command mysqldump.exe -ErrorAction SilentlyContinue
@@ -40,8 +49,11 @@ function Resolve-MySqlDumpPath {
     }
 
     $candidates = @(
+        'C:\laragon\bin\mysql\*\bin\mariadb-dump.exe',
         'C:\laragon\bin\mysql\*\bin\mysqldump.exe',
+        'C:\Program Files\MySQL\*\bin\mariadb-dump.exe',
         'C:\Program Files\MySQL\*\bin\mysqldump.exe',
+        'C:\xampp\mysql\bin\mariadb-dump.exe',
         'C:\xampp\mysql\bin\mysqldump.exe'
     )
 
@@ -57,6 +69,70 @@ function Resolve-MySqlDumpPath {
     return $null
 }
 
+function Get-DbConfigFromLaravel {
+    $tmpPath = "tmp_read_db_config.php"
+    $tmpPhp = @'
+<?php
+require 'vendor/autoload.php';
+$app = require 'bootstrap/app.php';
+$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+$kernel->bootstrap();
+$cfg = (array) config('database.connections.mysql', []);
+echo json_encode([
+  'host' => (string)($cfg['host'] ?? ''),
+  'port' => (string)($cfg['port'] ?? '3306'),
+  'database' => (string)($cfg['database'] ?? ''),
+  'username' => (string)($cfg['username'] ?? ''),
+  'password' => (string)($cfg['password'] ?? '')
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+'@
+
+    $tmpPhp | Set-Content $tmpPath -Encoding UTF8
+    $json = $null
+
+    try {
+        $json = php $tmpPath 2>$null
+    } catch {
+        $json = $null
+    } finally {
+        if (Test-Path $tmpPath) {
+            Remove-Item $tmpPath -Force
+        }
+    }
+
+    if (-not [string]::IsNullOrWhiteSpace($json)) {
+        try {
+            return $json | ConvertFrom-Json
+        } catch {
+            return $null
+        }
+    }
+
+    return $null
+}
+
+function Get-EnvValue([string]$key, [string]$default = '') {
+    if (-not (Test-Path '.env')) {
+        return $default
+    }
+
+    $line = Get-Content .env | Where-Object { $_ -match ("^\s*" + [regex]::Escape($key) + "\s*=") } | Select-Object -First 1
+    if (-not $line) {
+        return $default
+    }
+
+    $value = [regex]::Replace($line, "^\s*" + [regex]::Escape($key) + "\s*=\s*", '')
+    $value = $value.Trim()
+
+    if (($value.StartsWith('"') -and $value.EndsWith('"')) -or ($value.StartsWith("'") -and $value.EndsWith("'"))) {
+        if ($value.Length -ge 2) {
+            $value = $value.Substring(1, $value.Length - 2)
+        }
+    }
+
+    return $value
+}
+
 Log-Step "STEP 1/8 - Pre-check command"
 php artisan help stock:baseline-rebuild
 
@@ -68,34 +144,50 @@ if ($env:SKIP_BACKUP -eq '1') {
     Write-Warning "Backup dilewati karena SKIP_BACKUP=1"
 }
 else {
-    $dbHost = (Get-Content .env | Select-String '^DB_HOST=' | Select-Object -First 1).ToString().Split('=')[1].Trim('"')
-    $dbPortLine = (Get-Content .env | Select-String '^DB_PORT=' | Select-Object -First 1)
-    $dbPort = if ($dbPortLine) { $dbPortLine.ToString().Split('=')[1].Trim('"') } else { '3306' }
-    $dbName = (Get-Content .env | Select-String '^DB_DATABASE=' | Select-Object -First 1).ToString().Split('=')[1].Trim('"')
-    $dbUser = (Get-Content .env | Select-String '^DB_USERNAME=' | Select-Object -First 1).ToString().Split('=')[1].Trim('"')
-    $dbPassLine = (Get-Content .env | Select-String '^DB_PASSWORD=' | Select-Object -First 1)
-    $dbPass = if ($dbPassLine) { $dbPassLine.ToString().Split('=')[1].Trim('"') } else { '' }
+    $dbSource = '.env'
+    $dbConfig = Get-DbConfigFromLaravel
+
+    if ($dbConfig) {
+        $dbHost = [string]$dbConfig.host
+        $dbPort = [string]$dbConfig.port
+        $dbName = [string]$dbConfig.database
+        $dbUser = [string]$dbConfig.username
+        $dbPass = [string]$dbConfig.password
+        $dbSource = 'laravel-config'
+    }
+    else {
+        $dbHost = Get-EnvValue 'DB_HOST'
+        $dbPort = Get-EnvValue 'DB_PORT' '3306'
+        $dbName = Get-EnvValue 'DB_DATABASE'
+        $dbUser = Get-EnvValue 'DB_USERNAME'
+        $dbPass = Get-EnvValue 'DB_PASSWORD'
+    }
+
+    if ([string]::IsNullOrWhiteSpace($dbPort)) {
+        $dbPort = '3306'
+    }
 
     if ([string]::IsNullOrWhiteSpace($dbHost) -or [string]::IsNullOrWhiteSpace($dbName) -or [string]::IsNullOrWhiteSpace($dbUser)) {
         Write-Error "DB_HOST/DB_DATABASE/DB_USERNAME tidak valid di .env"
         exit 1
     }
 
-    $mysqldumpPath = Resolve-MySqlDumpPath
-    if (-not $mysqldumpPath) {
-        Write-Error "mysqldump.exe tidak ditemukan. Tambahkan ke PATH atau set `$env:MYSQLDUMP_PATH. Alternatif sementara: set `$env:SKIP_BACKUP='1' untuk lanjut tanpa backup."
+    $sqlDumpPath = Resolve-SqlDumpPath
+    if (-not $sqlDumpPath) {
+        Write-Error "mariadb-dump/mysqldump tidak ditemukan. Tambahkan ke PATH atau set `$env:MARIADB_DUMP_PATH / `$env:MYSQLDUMP_PATH. Alternatif sementara: set `$env:SKIP_BACKUP='1' untuk lanjut tanpa backup."
         exit 1
     }
 
-    Write-Host "[INFO] Menggunakan mysqldump: $mysqldumpPath"
+    Write-Host "[INFO] Sumber konfigurasi DB: $dbSource"
+    Write-Host "[INFO] Menggunakan dump binary: $sqlDumpPath"
 
     $backupFile = "storage/logs/db_backup_before_stock_fix_$(Get-Date -Format 'yyyyMMdd_HHmmss').sql"
 
     if ([string]::IsNullOrWhiteSpace($dbPass)) {
-        & $mysqldumpPath -h $dbHost -P $dbPort -u $dbUser $dbName | Out-File -Encoding utf8 $backupFile
+        & $sqlDumpPath -h $dbHost -P $dbPort -u $dbUser $dbName | Out-File -Encoding utf8 $backupFile
     }
     else {
-        & $mysqldumpPath -h $dbHost -P $dbPort -u $dbUser "-p$dbPass" $dbName | Out-File -Encoding utf8 $backupFile
+        & $sqlDumpPath -h $dbHost -P $dbPort -u $dbUser "-p$dbPass" $dbName | Out-File -Encoding utf8 $backupFile
     }
 
     Write-Host "[OK] Backup tersimpan: $backupFile"

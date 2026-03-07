@@ -1,0 +1,107 @@
+{
+    "summary": {
+        "mode": "APPLY",
+        "csv_path": "C:\\laragon\\www\\apotekbisma\\apotekbisma\\REKAMAN STOK FINAL 31 DESEMBER 2025.csv",
+        "cutoff": "2025-12-31 23:59:59",
+        "until": "2026-03-07 04:39:52",
+        "baseline_rows_read": 802,
+        "baseline_unique_ids": 790,
+        "baseline_duplicate_conflict_ids": 10,
+        "baseline_missing_in_db": 0,
+        "processed_products": 1,
+        "products_stock_changed": 1,
+        "total_abs_delta_stock": 1120,
+        "total_post_cutoff_events": 110,
+        "products_with_negative_event": 1,
+        "products_eligible_for_apply": 1,
+        "products_skipped_because_negative_event": 0,
+        "generated_at": "2026-03-07 04:39:52"
+    },
+    "sample_top_delta": [
+        {
+            "id_produk": 63,
+            "nama_produk": "ASAM MEFENAMAT 500mg",
+            "stok_db_saat_ini": 1120,
+            "stok_baseline": 380,
+            "stok_hasil_rebuild": 0,
+            "delta_stok": -1120,
+            "post_cutoff_events": 110,
+            "negative_events_detected": 58,
+            "eligible_for_apply": true
+        }
+    ],
+    "skipped_negative_event_products": [],
+    "duplicate_conflicts": {
+        "767": [
+            {
+                "old_stok": 100,
+                "new_stok": 150,
+                "nama_produk": "SPASMINAL"
+            }
+        ],
+        "958": [
+            {
+                "old_stok": 240,
+                "new_stok": 70,
+                "nama_produk": "HUFAGRIP PAMOL TAB"
+            }
+        ],
+        "402": [
+            {
+                "old_stok": 100,
+                "new_stok": 220,
+                "nama_produk": "KETOCONAZOLE TAB"
+            }
+        ],
+        "659": [
+            {
+                "old_stok": 2,
+                "new_stok": 3,
+                "nama_produk": "KANA B"
+            }
+        ],
+        "167": [
+            {
+                "old_stok": 6,
+                "new_stok": 13,
+                "nama_produk": "VITAMIN E IPI"
+            }
+        ],
+        "723": [
+            {
+                "old_stok": 17,
+                "new_stok": 24,
+                "nama_produk": "SANGOBION S'10"
+            }
+        ],
+        "635": [
+            {
+                "old_stok": 50,
+                "new_stok": 69,
+                "nama_produk": "PARAMEX"
+            }
+        ],
+        "639": [
+            {
+                "old_stok": 2,
+                "new_stok": 15,
+                "nama_produk": "PARATUSIN"
+            }
+        ],
+        "369": [
+            {
+                "old_stok": 1,
+                "new_stok": 2,
+                "nama_produk": "IMBOOST FORCE"
+            }
+        ],
+        "263": [
+            {
+                "old_stok": 2,
+                "new_stok": 90,
+                "nama_produk": "ETAFLUSIN TAB"
+            }
+        ]
+    },
+    "missing_baseline_ids_in_db": []
+}

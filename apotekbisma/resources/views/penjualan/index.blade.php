@@ -5,6 +5,7 @@
 @endsection
 
 @push('css')
+<link rel="stylesheet" href="{{ asset('/AdminLTE-2/bower_components/select2/dist/css/select2.min.css') }}">
 <style>
     .label-warning {
         background-color: #f0ad4e;
@@ -77,6 +78,39 @@
         font-size: 12px;
         color: #777;
         margin-top: 6px;
+    }
+
+    .penjualan-filter-wrap .select2-container {
+        width: 100% !important;
+    }
+
+    .penjualan-filter-wrap .select2-container--default .select2-selection--multiple {
+        min-height: 31px;
+        border-color: #d2d6de;
+        border-radius: 0;
+        padding: 1px 4px;
+    }
+
+    .penjualan-filter-wrap .select2-container--default.select2-container--focus .select2-selection--multiple {
+        border-color: #3c8dbc;
+    }
+
+    .penjualan-filter-wrap .select2-container--default .select2-selection--multiple .select2-selection__choice {
+        margin-top: 4px;
+        margin-right: 4px;
+        margin-bottom: 0;
+    }
+
+    .select2-results > .select2-results__options {
+        max-height: 280px;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+    }
+
+    .product-filter-hint {
+        font-size: 11px;
+        color: #888;
+        margin-top: 4px;
     }
     
     /* Mobile responsive fixes */
@@ -203,12 +237,12 @@
                         <div class="col-md-3 col-sm-6">
                             <div class="form-group">
                                 <label for="id_produk_filter">Filter Produk</label>
-                                <select id="id_produk_filter" class="form-control input-sm">
-                                    <option value="">Semua Produk</option>
+                                <select id="id_produk_filter" class="form-control input-sm" multiple>
                                     @foreach($products as $product)
                                         <option value="{{ $product->id_produk }}">{{ $product->nama_produk }}</option>
                                     @endforeach
                                 </select>
+                                <div class="product-filter-hint">Ketik untuk cari, scroll untuk melihat produk lainnya, bisa pilih banyak item.</div>
                             </div>
                         </div>
                     </div>
@@ -258,14 +292,137 @@
 @endsection
 
 @push('scripts')
+<script src="{{ asset('AdminLTE-2/bower_components/select2/dist/js/select2.full.min.js') }}"></script>
 <script>
     let table, table1;
     const filterDefaults = @json($filterDefaults ?? []);
+    const productFilterConfig = {
+        pageSize: 40
+    };
+    let productFilterData = [];
+
+    function normalizeProductFilterValues(rawValue) {
+        if (Array.isArray(rawValue)) {
+            return rawValue
+                .map((value) => String(value || '').trim())
+                .filter((value) => value !== '');
+        }
+
+        if (rawValue === null || rawValue === undefined || rawValue === '') {
+            return [];
+        }
+
+        return String(rawValue)
+            .split(',')
+            .map((value) => value.trim())
+            .filter((value) => value !== '');
+    }
+
+    function buildProductFilterData() {
+        productFilterData = [];
+
+        $('#id_produk_filter option').each(function () {
+            const id = String($(this).val() || '').trim();
+            const text = String($(this).text() || '').trim();
+
+            if (id !== '' && text !== '') {
+                productFilterData.push({
+                    id: id,
+                    text: text
+                });
+            }
+        });
+    }
+
+    function getPaginatedProductResults(searchTerm, page) {
+        const term = String(searchTerm || '').toLowerCase().trim();
+        const currentPage = Math.max(parseInt(page, 10) || 1, 1);
+        const startIndex = (currentPage - 1) * productFilterConfig.pageSize;
+        const endIndex = startIndex + productFilterConfig.pageSize;
+
+        const filtered = term === ''
+            ? productFilterData
+            : productFilterData.filter((product) => product.text.toLowerCase().indexOf(term) !== -1);
+
+        return {
+            items: filtered.slice(startIndex, endIndex),
+            more: endIndex < filtered.length
+        };
+    }
+
+    function ensureSelectedProductOptions(productIds) {
+        productIds.forEach((productId) => {
+            const selector = '#id_produk_filter option[value="' + productId.replace(/"/g, '\\"') + '"]';
+            if ($(selector).length > 0) {
+                return;
+            }
+
+            const found = productFilterData.find((product) => product.id === productId);
+            if (found) {
+                const option = new Option(found.text, found.id, true, true);
+                $('#id_produk_filter').append(option);
+            }
+        });
+    }
+
+    function initializeProductFilterSelect() {
+        buildProductFilterData();
+
+        $('#id_produk_filter').select2({
+            width: '100%',
+            placeholder: 'Cari & pilih produk',
+            multiple: true,
+            allowClear: true,
+            closeOnSelect: false,
+            minimumInputLength: 0,
+            ajax: {
+                delay: 100,
+                transport: function (params, success) {
+                    const data = params.data || {};
+                    const result = getPaginatedProductResults(data.term || '', data.page || 1);
+
+                    success({
+                        items: result.items,
+                        more: result.more
+                    });
+
+                    return {
+                        abort: function () {}
+                    };
+                },
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
+
+                    return {
+                        results: data.items,
+                        pagination: {
+                            more: data.more
+                        }
+                    };
+                }
+            },
+            language: {
+                inputTooShort: function () {
+                    return 'Ketik nama produk';
+                },
+                searching: function () {
+                    return 'Mencari...';
+                },
+                loadingMore: function () {
+                    return 'Memuat produk berikutnya...';
+                },
+                noResults: function () {
+                    return 'Produk tidak ditemukan';
+                }
+            }
+        });
+    }
 
     function collectFilters() {
         const selectedPreset = $('#date_preset').val() || 'all';
         const startDate = $('#start_date').val() || '';
         const endDate = $('#end_date').val() || '';
+        const selectedProducts = normalizeProductFilterValues($('#id_produk_filter').val());
 
         const effectivePreset = (selectedPreset !== 'custom' && (startDate !== '' || endDate !== ''))
             ? 'custom'
@@ -275,7 +432,7 @@
             date_preset: effectivePreset,
             start_date: startDate,
             end_date: endDate,
-            id_produk: $('#id_produk_filter').val() || ''
+            id_produk: selectedProducts
         };
     }
 
@@ -290,8 +447,21 @@
 
         Object.keys(filters).forEach((key) => {
             const value = filters[key];
+
+            params.delete(key);
+            params.delete(key + '[]');
+
+            if (Array.isArray(value)) {
+                if (value.length > 0) {
+                    value.forEach((item) => {
+                        params.append(key + '[]', item);
+                    });
+                }
+                return;
+            }
+
             if (value === '' || value === 'all') {
-                params.delete(key);
+                return;
             } else {
                 params.set(key, value);
             }
@@ -304,14 +474,20 @@
 
     function applyInitialFilters() {
         const preset = filterDefaults.date_preset || 'all';
+        const selectedProductIds = normalizeProductFilterValues(filterDefaults.id_produk);
+
         $('#date_preset').val(preset);
         $('#start_date').val(filterDefaults.start_date || '');
         $('#end_date').val(filterDefaults.end_date || '');
-        $('#id_produk_filter').val(filterDefaults.id_produk || '');
+
+        ensureSelectedProductOptions(selectedProductIds);
+        $('#id_produk_filter').val(selectedProductIds).trigger('change');
+
         setCustomDateInputsState();
     }
 
     $(function () {
+        initializeProductFilterSelect();
         applyInitialFilters();
 
         table = $('.table-penjualan').DataTable({
@@ -334,7 +510,7 @@
                     d.date_preset = filters.date_preset;
                     d.start_date = filters.start_date;
                     d.end_date = filters.end_date;
-                    d.id_produk = filters.id_produk;
+                    d.id_produk = filters.id_produk.length > 0 ? filters.id_produk : '';
                 },
                 error: function (xhr) {
                     console.error('Gagal memuat data penjualan:', xhr.responseText || xhr.statusText);
@@ -394,7 +570,7 @@
             $('#date_preset').val('all');
             $('#start_date').val('');
             $('#end_date').val('');
-            $('#id_produk_filter').val('');
+            $('#id_produk_filter').val(null).trigger('change');
             setCustomDateInputsState();
 
             const filters = collectFilters();
