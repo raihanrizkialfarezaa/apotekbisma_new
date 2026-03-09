@@ -19,6 +19,7 @@ class RebuildStockFromBaseline extends Command
     protected $description = 'Rebuild stok berbasis baseline CSV 31 Desember + event valid pasca-cutoff';
 
     private array $excludedManualPatterns = [];
+    private string $csvDelimiter = ',';
 
     public function handle(): int
     {
@@ -152,6 +153,7 @@ class RebuildStockFromBaseline extends Command
         }
 
         $summary = $this->buildSummary($plans, $baselineData, $missingInDb, $apply, $cutoff, $until, $csvPath);
+        $summary = array_merge($summary, $this->collectIntegrityMetrics($cutoff, $until, $baselineIds));
 
         if ($apply) {
             try {
@@ -248,29 +250,36 @@ class RebuildStockFromBaseline extends Command
 
     private function loadBaselineCsv(string $path): array
     {
+        $this->csvDelimiter = $this->detectDelimiter($path);
+
         $handle = fopen($path, 'r');
         if ($handle === false) {
             throw new \RuntimeException('Tidak dapat membuka file CSV');
         }
 
-        $header = fgetcsv($handle);
+        $header = fgetcsv($handle, 0, $this->csvDelimiter);
         if (!$header || count($header) < 3) {
             fclose($handle);
             throw new \RuntimeException('Header CSV tidak valid');
         }
 
+        $header = array_map(function ($value) {
+            return $this->normalizeCsvCell($value);
+        }, $header);
+
         $baselineMap = [];
         $duplicateConflicts = [];
         $rowsRead = 0;
 
-        while (($row = fgetcsv($handle)) !== false) {
+        while (($row = fgetcsv($handle, 0, $this->csvDelimiter)) !== false) {
             if (count($row) < 3) {
                 continue;
             }
 
-            $idProduk = intval($row[0]);
-            $namaProduk = trim((string) $row[1]);
-            $stok = is_numeric($row[2]) ? intval($row[2]) : 0;
+            $idProduk = intval($this->normalizeCsvCell($row[0]));
+            $namaProduk = trim((string) $this->normalizeCsvCell($row[1]));
+            $stokRaw = $this->normalizeCsvCell($row[2]);
+            $stok = is_numeric($stokRaw) ? intval($stokRaw) : 0;
 
             if ($idProduk <= 0) {
                 continue;
@@ -296,11 +305,39 @@ class RebuildStockFromBaseline extends Command
         fclose($handle);
 
         return [
+            'delimiter' => $this->csvDelimiter,
             'rows_read' => $rowsRead,
             'unique_ids' => count($baselineMap),
             'baseline_map' => $baselineMap,
             'duplicate_conflicts' => $duplicateConflicts,
         ];
+    }
+
+    private function detectDelimiter(string $path): string
+    {
+        $sample = file_get_contents($path, false, null, 0, 2048);
+        if ($sample === false) {
+            throw new \RuntimeException('Tidak dapat membaca sampel CSV');
+        }
+
+        $sample = preg_replace('/^\xEF\xBB\xBF/', '', $sample);
+        $firstLine = strtok($sample, "\r\n") ?: '';
+
+        $delimiterScores = [
+            ';' => substr_count($firstLine, ';'),
+            ',' => substr_count($firstLine, ','),
+            "\t" => substr_count($firstLine, "\t"),
+        ];
+
+        arsort($delimiterScores);
+        $delimiter = array_key_first($delimiterScores);
+
+        return $delimiter ?: ',';
+    }
+
+    private function normalizeCsvCell($value): string
+    {
+        return trim((string) preg_replace('/^\xEF\xBB\xBF/', '', (string) $value));
     }
 
     private function collectEventsForProduct(int $productId, string $cutoff, string $until): array
@@ -310,6 +347,12 @@ class RebuildStockFromBaseline extends Command
         $pembelian = DB::table('pembelian_detail as pd')
             ->join('pembelian as p', 'pd.id_pembelian', '=', 'p.id_pembelian')
             ->where('pd.id_produk', $productId)
+            ->where('pd.jumlah', '>', 0)
+            ->whereNotNull('p.no_faktur')
+            ->where('p.no_faktur', '!=', '')
+            ->where('p.no_faktur', '!=', 'o')
+            ->where('p.total_harga', '>', 0)
+            ->where('p.bayar', '>', 0)
             ->whereRaw('COALESCE(p.waktu, p.created_at) > ?', [$cutoff])
             ->whereRaw('COALESCE(p.waktu, p.created_at) <= ?', [$until])
             ->groupBy('pd.id_pembelian', DB::raw('COALESCE(p.waktu, p.created_at)'))
@@ -332,6 +375,11 @@ class RebuildStockFromBaseline extends Command
         $penjualan = DB::table('penjualan_detail as pd')
             ->join('penjualan as p', 'pd.id_penjualan', '=', 'p.id_penjualan')
             ->where('pd.id_produk', $productId)
+            ->where('pd.jumlah', '>', 0)
+            ->where('p.total_item', '>', 0)
+            ->where('p.total_harga', '>', 0)
+            ->where('p.bayar', '>', 0)
+            ->where('p.diterima', '>', 0)
             ->whereRaw('COALESCE(p.waktu, p.created_at) > ?', [$cutoff])
             ->whereRaw('COALESCE(p.waktu, p.created_at) <= ?', [$until])
             ->groupBy('pd.id_penjualan', DB::raw('COALESCE(p.waktu, p.created_at)'))
@@ -402,6 +450,90 @@ class RebuildStockFromBaseline extends Command
         return $events;
     }
 
+    private function collectIntegrityMetrics(string $cutoff, string $until, array $baselineIds): array
+    {
+        $ignoredProducts = DB::table('produk')
+            ->when(!empty($baselineIds), function ($query) use ($baselineIds) {
+                $query->whereNotIn('id_produk', $baselineIds);
+            })
+            ->count();
+
+        $duplicatePembelianPairs = DB::table('rekaman_stoks')
+            ->select('id_produk', 'id_pembelian')
+            ->whereNotNull('id_pembelian')
+            ->groupBy('id_produk', 'id_pembelian')
+            ->havingRaw('COUNT(*) > 1')
+            ->get()
+            ->count();
+
+        $duplicatePenjualanPairs = DB::table('rekaman_stoks')
+            ->select('id_produk', 'id_penjualan')
+            ->whereNotNull('id_penjualan')
+            ->groupBy('id_produk', 'id_penjualan')
+            ->havingRaw('COUNT(*) > 1')
+            ->get()
+            ->count();
+
+        $incompletePembelian = DB::table('pembelian as p')
+            ->leftJoin('pembelian_detail as pd', 'p.id_pembelian', '=', 'pd.id_pembelian')
+            ->where(function ($query) {
+                $query->where('p.no_faktur', 'o')
+                    ->orWhere('p.no_faktur', '')
+                    ->orWhereNull('p.no_faktur')
+                    ->orWhere('p.total_harga', '<=', 0)
+                    ->orWhere('p.bayar', '<=', 0);
+            })
+            ->selectRaw('COUNT(DISTINCT p.id_pembelian) as header_count, COUNT(pd.id_pembelian_detail) as detail_rows, COALESCE(SUM(CASE WHEN pd.jumlah > 0 THEN pd.jumlah ELSE 0 END), 0) as total_qty, COUNT(DISTINCT pd.id_produk) as unique_products')
+            ->first();
+
+        $incompletePenjualan = DB::table('penjualan as p')
+            ->leftJoin('penjualan_detail as pd', 'p.id_penjualan', '=', 'pd.id_penjualan')
+            ->where(function ($query) {
+                $query->where('p.total_item', '<=', 0)
+                    ->orWhere('p.total_harga', '<=', 0)
+                    ->orWhere('p.bayar', '<=', 0)
+                    ->orWhere('p.diterima', '<=', 0);
+            })
+            ->selectRaw('COUNT(DISTINCT p.id_penjualan) as header_count, COUNT(pd.id_penjualan_detail) as detail_rows, COALESCE(SUM(CASE WHEN pd.jumlah > 0 THEN pd.jumlah ELSE 0 END), 0) as total_qty, COUNT(DISTINCT pd.id_produk) as unique_products')
+            ->first();
+
+        $manualRecordsAfterCutoff = DB::table('rekaman_stoks')
+            ->whereNull('id_penjualan')
+            ->whereNull('id_pembelian')
+            ->where('waktu', '>', $cutoff)
+            ->where('waktu', '<=', $until)
+            ->count();
+
+        $syntheticManualRecordsAfterCutoff = DB::table('rekaman_stoks')
+            ->whereNull('id_penjualan')
+            ->whereNull('id_pembelian')
+            ->where('waktu', '>', $cutoff)
+            ->where('waktu', '<=', $until)
+            ->get(['keterangan'])
+            ->filter(function ($record) {
+                return $this->isExcludedManualRecord((string) ($record->keterangan ?? ''));
+            })
+            ->count();
+
+        return [
+            'csv_delimiter' => $this->csvDelimiter,
+            'db_products_total' => DB::table('produk')->count(),
+            'db_products_ignored_not_in_baseline' => $ignoredProducts,
+            'duplicate_rekaman_pembelian_pairs' => $duplicatePembelianPairs,
+            'duplicate_rekaman_penjualan_pairs' => $duplicatePenjualanPairs,
+            'incomplete_pembelian_headers' => intval($incompletePembelian->header_count ?? 0),
+            'incomplete_pembelian_detail_rows' => intval($incompletePembelian->detail_rows ?? 0),
+            'incomplete_pembelian_total_qty' => intval($incompletePembelian->total_qty ?? 0),
+            'incomplete_pembelian_unique_products' => intval($incompletePembelian->unique_products ?? 0),
+            'incomplete_penjualan_headers' => intval($incompletePenjualan->header_count ?? 0),
+            'incomplete_penjualan_detail_rows' => intval($incompletePenjualan->detail_rows ?? 0),
+            'incomplete_penjualan_total_qty' => intval($incompletePenjualan->total_qty ?? 0),
+            'incomplete_penjualan_unique_products' => intval($incompletePenjualan->unique_products ?? 0),
+            'manual_records_after_cutoff' => $manualRecordsAfterCutoff,
+            'synthetic_manual_records_after_cutoff' => $syntheticManualRecordsAfterCutoff,
+        ];
+    }
+
     private function isExcludedManualRecord(string $keterangan): bool
     {
         $needle = mb_strtolower(trim($keterangan));
@@ -453,6 +585,7 @@ class RebuildStockFromBaseline extends Command
             'csv_path' => $csvPath,
             'cutoff' => $cutoff,
             'until' => $until,
+            'csv_delimiter' => $baselineData['delimiter'] ?? $this->csvDelimiter,
             'baseline_rows_read' => intval($baselineData['rows_read'] ?? 0),
             'baseline_unique_ids' => intval($baselineData['unique_ids'] ?? 0),
             'baseline_duplicate_conflict_ids' => count($baselineData['duplicate_conflicts'] ?? []),

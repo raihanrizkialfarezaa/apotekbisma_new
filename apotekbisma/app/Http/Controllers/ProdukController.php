@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Validation\Rule;
 
 class ProdukController extends Controller
 {
@@ -247,6 +248,19 @@ class ProdukController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validated = $request->validate([
+            'nama_produk' => ['required', 'string', 'max:255', Rule::unique('produk', 'nama_produk')->ignore($id, 'id_produk')],
+            'id_kategori' => ['required', 'integer', 'exists:kategori,id_kategori'],
+            'merk' => ['nullable', 'string', 'max:255'],
+            'harga_beli' => ['required', 'integer', 'min:0'],
+            'harga_jual' => ['required', 'integer', 'min:0'],
+            'diskon' => ['nullable', 'integer', 'min:0', 'max:100'],
+            'expired_date' => ['nullable', 'string', 'max:255'],
+            'batch' => ['nullable', 'string', 'max:255'],
+            'stok' => ['required', 'integer', 'min:0'],
+            'keterangan_stok' => ['nullable', 'string', 'max:500'],
+        ]);
+
         DB::beginTransaction();
         
         try {
@@ -258,9 +272,27 @@ class ProdukController extends Controller
             }
 
             $stok_lama = intval($produk->stok);
-            $stok_baru = isset($request->stok) ? intval($request->stok) : $stok_lama;
+            $stok_baru = intval($validated['stok']);
 
-            $produk->update($request->all());
+            if ($stok_baru !== $stok_lama && empty(trim((string) ($validated['keterangan_stok'] ?? '')))) {
+                DB::rollBack();
+                return response()->json([
+                    'message' => 'Keterangan perubahan stok wajib diisi jika stok diubah melalui Edit Produk.'
+                ], 422);
+            }
+
+            $produk->fill([
+                'nama_produk' => $validated['nama_produk'],
+                'id_kategori' => $validated['id_kategori'],
+                'merk' => $validated['merk'] ?? null,
+                'harga_beli' => $validated['harga_beli'],
+                'harga_jual' => $validated['harga_jual'],
+                'diskon' => $validated['diskon'] ?? 0,
+                'expired_date' => $validated['expired_date'] ?? null,
+                'batch' => $validated['batch'] ?? null,
+                'stok' => $stok_baru,
+            ]);
+            $produk->save();
 
             // Jika ada perubahan stok, buat Stock Opname record
             if ($stok_baru !== $stok_lama) {
@@ -268,7 +300,7 @@ class ProdukController extends Controller
                     $produk->id_produk, 
                     $stok_lama, 
                     $stok_baru, 
-                    'Stock Opname: Perubahan Stok via Edit Produk'
+                    'Stock Opname via Edit Produk: ' . trim((string) $validated['keterangan_stok'])
                 );
             }
 
@@ -333,7 +365,8 @@ class ProdukController extends Controller
                 ], 200);
             }
 
-            DB::table('produk')->where('id_produk', $id)->update(['stok' => $stok_baru]);
+            $produk->stok = $stok_baru;
+            $produk->save();
 
             $keteranganFinal = 'Stock Opname (Penyesuaian Stok Manual)';
             if (!empty($request->keterangan)) {
@@ -374,7 +407,7 @@ class ProdukController extends Controller
         $waktuWithMicro = $currentTime->format('Y-m-d H:i:s.u');
         $selisih = $stokBaru - $stokLama;
         
-        DB::table('rekaman_stoks')->insert([
+        RekamanStok::create([
             'id_produk' => $idProduk,
             'waktu' => $waktuWithMicro,
             'stok_awal' => $stokLama,

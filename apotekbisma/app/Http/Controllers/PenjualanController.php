@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
+use App\Services\StockDraftCleanupService;
 
 class PenjualanController extends Controller
 {
@@ -80,25 +81,11 @@ class PenjualanController extends Controller
             })
             ->addColumn('total_harga', function ($penjualan) {
                 $totalHarga = 'Rp. '. format_uang($penjualan->total_harga);
-                
-                // Transaksi sebelum hari ini dianggap selesai semua
-                $today = date('Y-m-d');
-                $transactionDate = date('Y-m-d', strtotime($penjualan->waktu ?? $penjualan->created_at));
-                
-                if ($transactionDate < $today) {
-                    $totalHarga .= ' <span class="label label-success">Selesai</span>';
+
+                if ($this->isPenjualanIncomplete($penjualan)) {
+                    $totalHarga .= ' <span class="label label-warning">Belum Selesai</span>';
                 } else {
-                    $isIncomplete = ($penjualan->total_item <= 0 ||
-                                    $penjualan->total_harga <= 0 ||
-                                    $penjualan->diterima <= 0);
-                    
-                    $isCompleted = !$isIncomplete;
-                    
-                    if ($isIncomplete) {
-                        $totalHarga .= ' <span class="label label-warning">Belum Selesai</span>';
-                    } elseif ($isCompleted) {
-                        $totalHarga .= ' <span class="label label-success">Selesai</span>';
-                    }
+                    $totalHarga .= ' <span class="label label-success">Selesai</span>';
                 }
                 
                 return $totalHarga;
@@ -125,27 +112,7 @@ class PenjualanController extends Controller
                 return $penjualan->user->name ?? '';
             })
             ->addColumn('aksi', function ($penjualan) {
-                // Transaksi sebelum hari ini dianggap selesai semua
-                $today = date('Y-m-d');
-                $transactionDate = date('Y-m-d', strtotime($penjualan->waktu ?? $penjualan->created_at));
-                
-                if ($transactionDate < $today) {
-                    // Transaksi lama - selalu tampilkan tombol edit
-                    $buttons = '
-                    <div class="btn-group">
-                        <button onclick="showDetail(`'. route('penjualan.show', $penjualan->id_penjualan) .'`)" class="btn btn-xs btn-info btn-flat" title="Lihat Detail"><i class="fa fa-eye"></i></button>
-                        <button onclick="editTransaksi('. $penjualan->id_penjualan .')" class="btn btn-xs btn-success btn-flat" title="Edit Transaksi" data-toggle="tooltip"><i class="fa fa-edit"></i></button>
-                        <button onclick="printReceipt('. $penjualan->id_penjualan .')" class="btn btn-xs btn-primary btn-flat" title="Cetak Struk" data-toggle="tooltip"><i class="fa fa-print"></i></button>
-                        <button onclick="deleteData(`'. route('penjualan.destroy', $penjualan->id_penjualan) .'`)" class="btn btn-xs btn-danger btn-flat" title="Hapus Transaksi"><i class="fa fa-trash"></i></button>
-                    </div>';
-                    
-                    return $buttons;
-                }
-                
-                $isIncomplete = ($penjualan->total_item <= 0 ||
-                                $penjualan->total_harga <= 0 ||
-                                $penjualan->diterima <= 0);
-                
+                $isIncomplete = $this->isPenjualanIncomplete($penjualan);
                 $isCompleted = !$isIncomplete;
                 
                 $buttons = '
@@ -273,6 +240,9 @@ class PenjualanController extends Controller
 
     public function create()
     {
+        $currentDraftId = session('id_penjualan');
+        app(StockDraftCleanupService::class)->cleanupStalePenjualanDrafts($currentDraftId ? intval($currentDraftId) : null);
+
         // Pastikan saat membuka halaman 'Transaksi Baru' kita mulai dengan transaksi baru
         // sehingga tidak otomatis diarahkan ke transaksi aktif yang tersimpan di session.
         if (session('id_penjualan')) {
@@ -362,40 +332,46 @@ class PenjualanController extends Controller
             return redirect()->back()->with('error', 'Jumlah yang diterima (Rp. ' . number_format($request->diterima, 0, ',', '.') . ') tidak boleh kurang dari total bayar (Rp. ' . number_format($total_bayar, 0, ',', '.') . ')');
         }
 
-        $penjualan = Penjualan::findOrFail($request->id_penjualan);
-        $penjualan->id_member = $request->id_member;
-        $penjualan->total_item = $request->total_item;
-        $penjualan->total_harga = $request->total;
-        $penjualan->diskon = $request->diskon;
-        $penjualan->bayar = $request->bayar;
-        $penjualan->diterima = $request->diterima;
-        // Pastikan waktu transaksi adalah tanggal hari ini jika tidak diisi
-        $penjualan->waktu = $request->waktu ?? date('Y-m-d');
-        $penjualan->update();
+        DB::beginTransaction();
 
-        $id_penjualan = $penjualan->id_penjualan;
-        
-        // Proses setiap item dalam transaksi
-        foreach ($detail as $item) {
-            $item->diskon = $request->diskon;
-            $item->update();
+        try {
+            $penjualan = Penjualan::findOrFail($request->id_penjualan);
+            $penjualan->id_member = $request->id_member;
+            $penjualan->total_item = $request->total_item;
+            $penjualan->total_harga = $request->total;
+            $penjualan->diskon = $request->diskon;
+            $penjualan->bayar = $request->bayar;
+            $penjualan->diterima = $request->diterima;
+            $penjualan->waktu = $request->waktu ?? date('Y-m-d');
+            $penjualan->update();
 
-            $produk = Produk::find($item->id_produk);
+            $id_penjualan = $penjualan->id_penjualan;
             
-            $existing_rekaman = RekamanStok::where('id_penjualan', $id_penjualan)
-                                          ->where('id_produk', $item->id_produk)
-                                          ->first();
-            
-            if (!$existing_rekaman) {
-                RekamanStok::create([
-                    'id_produk' => $item->id_produk,
-                    'waktu' => $penjualan->waktu ?? Carbon::now(),
-                    'stok_keluar' => $item->jumlah,
-                    'id_penjualan' => $id_penjualan,
-                    'stok_awal' => $produk->stok + $item->jumlah,
-                    'stok_sisa' => $produk->stok,
-                ]);
+            foreach ($detail as $item) {
+                $item->diskon = $request->diskon;
+                $item->update();
+
+                $produk = Produk::find($item->id_produk);
+                $existing_rekaman = RekamanStok::where('id_penjualan', $id_penjualan)
+                    ->where('id_produk', $item->id_produk)
+                    ->first();
+                
+                if (!$existing_rekaman && $produk) {
+                    RekamanStok::create([
+                        'id_produk' => $item->id_produk,
+                        'waktu' => $penjualan->waktu ?? Carbon::now(),
+                        'stok_keluar' => $item->jumlah,
+                        'id_penjualan' => $id_penjualan,
+                        'stok_awal' => $produk->stok + $item->jumlah,
+                        'stok_sisa' => $produk->stok,
+                    ]);
+                }
             }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
 
         // Hapus session setelah transaksi selesai
@@ -521,11 +497,7 @@ class PenjualanController extends Controller
 
     public function destroyEmpty()
     {
-        // Hapus transaksi kosong yang tidak memiliki detail
-        $emptyTransactions = Penjualan::whereDoesntHave('detail')->get();
-        foreach ($emptyTransactions as $transaction) {
-            $transaction->delete();
-        }
+        $summary = app(StockDraftCleanupService::class)->cleanupStalePenjualanDrafts(session('id_penjualan') ? intval(session('id_penjualan')) : null);
         
         // Hapus session jika transaksi yang ada di session sudah dihapus
         if (session('id_penjualan')) {
@@ -535,7 +507,10 @@ class PenjualanController extends Controller
             }
         }
         
-        return response()->json(['message' => 'Empty transactions cleaned up'], 200);
+        return response()->json([
+            'message' => 'Draft transactions cleaned up',
+            'summary' => $summary,
+        ], 200);
     }
 
     public function selesai()
@@ -605,5 +580,20 @@ class PenjualanController extends Controller
             $pdf->setPaper('a4', 'portrait');
             return $pdf->stream('Struk-Transaksi-'. $penjualan->id_penjualan .'-'. date('Y-m-d-His') .'.pdf');
         }
+    }
+
+    private function isPenjualanIncomplete($penjualan): bool
+    {
+        $hasDetail = PenjualanDetail::where('id_penjualan', $penjualan->id_penjualan)->exists();
+        $hasIncompleteDetail = PenjualanDetail::where('id_penjualan', $penjualan->id_penjualan)
+            ->where('jumlah', '<=', 0)
+            ->exists();
+
+        return !$hasDetail
+            || $hasIncompleteDetail
+            || intval($penjualan->total_item ?? 0) <= 0
+            || intval($penjualan->total_harga ?? 0) <= 0
+            || intval($penjualan->bayar ?? 0) <= 0
+            || intval($penjualan->diterima ?? 0) <= 0;
     }
 }

@@ -77,6 +77,13 @@
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label for="keterangan_stok" class="col-lg-2 col-lg-offset-1 control-label">Catatan Stok</label>
+                        <div class="col-lg-6">
+                            <textarea name="keterangan_stok" id="keterangan_stok_edit" class="form-control" rows="2" placeholder="Wajib diisi bila stok diubah melalui Edit Produk"></textarea>
+                            <small class="text-muted">Catatan ini akan masuk ke rekaman stock opname jika nilai stok berubah.</small>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-sm btn-flat btn-primary"><i class="fa fa-save"></i> Simpan</button>

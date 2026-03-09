@@ -1,0 +1,1214 @@
+{
+    "summary": {
+        "mode": "APPLY",
+        "csv_path": "C:\\laragon\\www\\apotekbisma\\apotekbisma\\REKAMAN STOK FINAL 31 DESEMBER 2025_2.csv",
+        "cutoff": "2025-12-31 23:59:59",
+        "until": "2026-03-09 23:59:59",
+        "csv_delimiter": ";",
+        "baseline_rows_read": 802,
+        "baseline_unique_ids": 790,
+        "baseline_duplicate_conflict_ids": 10,
+        "baseline_missing_in_db": 2,
+        "processed_products": 788,
+        "products_stock_changed": 675,
+        "total_abs_delta_stock": 39188,
+        "total_post_cutoff_events": 7981,
+        "products_with_negative_event": 34,
+        "products_eligible_for_apply": 788,
+        "products_skipped_because_negative_event": 0,
+        "generated_at": "2026-03-09 21:22:40",
+        "db_products_total": 959,
+        "db_products_ignored_not_in_baseline": 171,
+        "duplicate_rekaman_pembelian_pairs": 0,
+        "duplicate_rekaman_penjualan_pairs": 715,
+        "incomplete_pembelian_headers": 1,
+        "incomplete_pembelian_detail_rows": 0,
+        "incomplete_pembelian_total_qty": 0,
+        "incomplete_pembelian_unique_products": 0,
+        "incomplete_penjualan_headers": 0,
+        "incomplete_penjualan_detail_rows": 0,
+        "incomplete_penjualan_total_qty": 0,
+        "incomplete_penjualan_unique_products": 0,
+        "manual_records_after_cutoff": 44,
+        "synthetic_manual_records_after_cutoff": 28
+    },
+    "sample_top_delta": [
+        {
+            "id_produk": 994,
+            "nama_produk": "AMOXICILIN 500mg HJ",
+            "stok_db_saat_ini": 1409,
+            "stok_baseline": 140,
+            "stok_hasil_rebuild": 0,
+            "delta_stok": -1409,
+            "post_cutoff_events": 111,
+            "negative_events_detected": 89,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 23,
+            "nama_produk": "ALLOPURINOL 100mg",
+            "stok_db_saat_ini": 1220,
+            "stok_baseline": 310,
+            "stok_hasil_rebuild": 0,
+            "delta_stok": -1220,
+            "post_cutoff_events": 110,
+            "negative_events_detected": 56,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 388,
+            "nama_produk": "KALMETASON",
+            "stok_db_saat_ini": 1330,
+            "stok_baseline": 240,
+            "stok_hasil_rebuild": 110,
+            "delta_stok": -1220,
+            "post_cutoff_events": 85,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 63,
+            "nama_produk": "ASAM MEFENAMAT 500mg",
+            "stok_db_saat_ini": 1100,
+            "stok_baseline": 380,
+            "stok_hasil_rebuild": 0,
+            "delta_stok": -1100,
+            "post_cutoff_events": 110,
+            "negative_events_detected": 58,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 755,
+            "nama_produk": "PIROXICAM 20MG",
+            "stok_db_saat_ini": 1139,
+            "stok_baseline": 210,
+            "stok_hasil_rebuild": 279,
+            "delta_stok": -860,
+            "post_cutoff_events": 106,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 756,
+            "nama_produk": "SIMVASTATIN 10",
+            "stok_db_saat_ini": 1000,
+            "stok_baseline": 650,
+            "stok_hasil_rebuild": 160,
+            "delta_stok": -840,
+            "post_cutoff_events": 60,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 214,
+            "nama_produk": "DEXTEEM PLUS",
+            "stok_db_saat_ini": 1100,
+            "stok_baseline": 350,
+            "stok_hasil_rebuild": 410,
+            "delta_stok": -690,
+            "post_cutoff_events": 104,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 209,
+            "nama_produk": "DEXAMETHASONE 0,5",
+            "stok_db_saat_ini": 809,
+            "stok_baseline": 280,
+            "stok_hasil_rebuild": 120,
+            "delta_stok": -689,
+            "post_cutoff_events": 80,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 795,
+            "nama_produk": "TEOSAL",
+            "stok_db_saat_ini": 890,
+            "stok_baseline": 550,
+            "stok_hasil_rebuild": 220,
+            "delta_stok": -670,
+            "post_cutoff_events": 45,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 689,
+            "nama_produk": "RANITIDINE",
+            "stok_db_saat_ini": 989,
+            "stok_baseline": 230,
+            "stok_hasil_rebuild": 340,
+            "delta_stok": -649,
+            "post_cutoff_events": 23,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 34,
+            "nama_produk": "AMLODIPIN 5mg",
+            "stok_db_saat_ini": 1040,
+            "stok_baseline": 740,
+            "stok_hasil_rebuild": 420,
+            "delta_stok": -620,
+            "post_cutoff_events": 70,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 860,
+            "nama_produk": "VOLTADEX",
+            "stok_db_saat_ini": 619,
+            "stok_baseline": 30,
+            "stok_hasil_rebuild": 0,
+            "delta_stok": -619,
+            "post_cutoff_events": 70,
+            "negative_events_detected": 65,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 33,
+            "nama_produk": "AMLODIPIN 10mg",
+            "stok_db_saat_ini": 1190,
+            "stok_baseline": 480,
+            "stok_hasil_rebuild": 590,
+            "delta_stok": -600,
+            "post_cutoff_events": 63,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 796,
+            "nama_produk": "TERA F",
+            "stok_db_saat_ini": 560,
+            "stok_baseline": 110,
+            "stok_hasil_rebuild": 10,
+            "delta_stok": -550,
+            "post_cutoff_events": 26,
+            "negative_events_detected": 2,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 612,
+            "nama_produk": "OMEPRASOL",
+            "stok_db_saat_ini": 700,
+            "stok_baseline": 300,
+            "stok_hasil_rebuild": 200,
+            "delta_stok": -500,
+            "post_cutoff_events": 36,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 161,
+            "nama_produk": "CETIRIZIN",
+            "stok_db_saat_ini": 740,
+            "stok_baseline": 520,
+            "stok_hasil_rebuild": 300,
+            "delta_stok": -440,
+            "post_cutoff_events": 85,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 757,
+            "nama_produk": "SIMVASTATIN 20",
+            "stok_db_saat_ini": 810,
+            "stok_baseline": 430,
+            "stok_hasil_rebuild": 380,
+            "delta_stok": -430,
+            "post_cutoff_events": 28,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 511,
+            "nama_produk": "METHYLPREDNISOLON 4mg",
+            "stok_db_saat_ini": 1099,
+            "stok_baseline": 690,
+            "stok_hasil_rebuild": 670,
+            "delta_stok": -429,
+            "post_cutoff_events": 52,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 204,
+            "nama_produk": "DEMACOLIN TAB",
+            "stok_db_saat_ini": 1010,
+            "stok_baseline": 450,
+            "stok_hasil_rebuild": 590,
+            "delta_stok": -420,
+            "post_cutoff_events": 111,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 335,
+            "nama_produk": "GRATAZONE",
+            "stok_db_saat_ini": 690,
+            "stok_baseline": 80,
+            "stok_hasil_rebuild": 270,
+            "delta_stok": -420,
+            "post_cutoff_events": 17,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 366,
+            "nama_produk": "IBUPROFEN",
+            "stok_db_saat_ini": 610,
+            "stok_baseline": 310,
+            "stok_hasil_rebuild": 190,
+            "delta_stok": -420,
+            "post_cutoff_events": 36,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 402,
+            "nama_produk": "KETOCONAZOLE TAB",
+            "stok_db_saat_ini": 540,
+            "stok_baseline": 220,
+            "stok_hasil_rebuild": 140,
+            "delta_stok": -400,
+            "post_cutoff_events": 35,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 619,
+            "nama_produk": "OMETILSON",
+            "stok_db_saat_ini": 880,
+            "stok_baseline": 200,
+            "stok_hasil_rebuild": 480,
+            "delta_stok": -400,
+            "post_cutoff_events": 31,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 504,
+            "nama_produk": "MEFINAL",
+            "stok_db_saat_ini": 540,
+            "stok_baseline": 210,
+            "stok_hasil_rebuild": 160,
+            "delta_stok": -380,
+            "post_cutoff_events": 40,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 320,
+            "nama_produk": "GLIMEPIRID 2mg",
+            "stok_db_saat_ini": 590,
+            "stok_baseline": 110,
+            "stok_hasil_rebuild": 220,
+            "delta_stok": -370,
+            "post_cutoff_events": 29,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 147,
+            "nama_produk": "CAVIPLEX TAB",
+            "stok_db_saat_ini": 560,
+            "stok_baseline": 170,
+            "stok_hasil_rebuild": 210,
+            "delta_stok": -350,
+            "post_cutoff_events": 15,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 318,
+            "nama_produk": "GLIBENCLAMID (INDO)",
+            "stok_db_saat_ini": 600,
+            "stok_baseline": 210,
+            "stok_hasil_rebuild": 250,
+            "delta_stok": -350,
+            "post_cutoff_events": 15,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 524,
+            "nama_produk": "MIXALGIN",
+            "stok_db_saat_ini": 450,
+            "stok_baseline": 130,
+            "stok_hasil_rebuild": 100,
+            "delta_stok": -350,
+            "post_cutoff_events": 38,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 210,
+            "nama_produk": "DEXAMETHASONE 0,75",
+            "stok_db_saat_ini": 490,
+            "stok_baseline": 210,
+            "stok_hasil_rebuild": 150,
+            "delta_stok": -340,
+            "post_cutoff_events": 59,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 220,
+            "nama_produk": "DICLOFENAC POTASIUM",
+            "stok_db_saat_ini": 380,
+            "stok_baseline": 160,
+            "stok_hasil_rebuild": 40,
+            "delta_stok": -340,
+            "post_cutoff_events": 54,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 24,
+            "nama_produk": "ALLOPURINOL 300mg",
+            "stok_db_saat_ini": 550,
+            "stok_baseline": 230,
+            "stok_hasil_rebuild": 220,
+            "delta_stok": -330,
+            "post_cutoff_events": 36,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 509,
+            "nama_produk": "METFORMIN 500 mg",
+            "stok_db_saat_ini": 580,
+            "stok_baseline": 300,
+            "stok_hasil_rebuild": 250,
+            "delta_stok": -330,
+            "post_cutoff_events": 30,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 560,
+            "nama_produk": "NEURALGIN",
+            "stok_db_saat_ini": 560,
+            "stok_baseline": 270,
+            "stok_hasil_rebuild": 230,
+            "delta_stok": -330,
+            "post_cutoff_events": 37,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 253,
+            "nama_produk": "ERPHAFLAM",
+            "stok_db_saat_ini": 489,
+            "stok_baseline": 50,
+            "stok_hasil_rebuild": 180,
+            "delta_stok": -309,
+            "post_cutoff_events": 37,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 30,
+            "nama_produk": "AMBROXOL",
+            "stok_db_saat_ini": 620,
+            "stok_baseline": 130,
+            "stok_hasil_rebuild": 330,
+            "delta_stok": -290,
+            "post_cutoff_events": 36,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 507,
+            "nama_produk": "MELOXICAM 7.5mg",
+            "stok_db_saat_ini": 420,
+            "stok_baseline": 190,
+            "stok_hasil_rebuild": 130,
+            "delta_stok": -290,
+            "post_cutoff_events": 6,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 537,
+            "nama_produk": "MOLACORT 0,75",
+            "stok_db_saat_ini": 560,
+            "stok_baseline": 70,
+            "stok_hasil_rebuild": 270,
+            "delta_stok": -290,
+            "post_cutoff_events": 42,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 55,
+            "nama_produk": "ANTASIDA DOEN",
+            "stok_db_saat_ini": 439,
+            "stok_baseline": 460,
+            "stok_hasil_rebuild": 150,
+            "delta_stok": -289,
+            "post_cutoff_events": 57,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 512,
+            "nama_produk": "METHYLPREDNISOLON 8mg",
+            "stok_db_saat_ini": 550,
+            "stok_baseline": 320,
+            "stok_hasil_rebuild": 280,
+            "delta_stok": -270,
+            "post_cutoff_events": 43,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 45,
+            "nama_produk": "ANASTAN",
+            "stok_db_saat_ini": 440,
+            "stok_baseline": 130,
+            "stok_hasil_rebuild": 180,
+            "delta_stok": -260,
+            "post_cutoff_events": 31,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 706,
+            "nama_produk": "SALBUTAMOL 2mg",
+            "stok_db_saat_ini": 630,
+            "stok_baseline": 140,
+            "stok_hasil_rebuild": 370,
+            "delta_stok": -260,
+            "post_cutoff_events": 14,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 27,
+            "nama_produk": "HUFADEXTA-M",
+            "stok_db_saat_ini": 400,
+            "stok_baseline": 20,
+            "stok_hasil_rebuild": 150,
+            "delta_stok": -250,
+            "post_cutoff_events": 8,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 694,
+            "nama_produk": "RENABETIC",
+            "stok_db_saat_ini": 560,
+            "stok_baseline": 310,
+            "stok_hasil_rebuild": 310,
+            "delta_stok": -250,
+            "post_cutoff_events": 9,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 25,
+            "nama_produk": "ALPARA",
+            "stok_db_saat_ini": 360,
+            "stok_baseline": 160,
+            "stok_hasil_rebuild": 120,
+            "delta_stok": -240,
+            "post_cutoff_events": 40,
+            "negative_events_detected": 6,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 152,
+            "nama_produk": "CEFADROXIL 500mg",
+            "stok_db_saat_ini": 240,
+            "stok_baseline": 70,
+            "stok_hasil_rebuild": 0,
+            "delta_stok": -240,
+            "post_cutoff_events": 18,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 886,
+            "nama_produk": "salbutamol 4mg",
+            "stok_db_saat_ini": 510,
+            "stok_baseline": 240,
+            "stok_hasil_rebuild": 270,
+            "delta_stok": -240,
+            "post_cutoff_events": 24,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 321,
+            "nama_produk": "GLIMEPIRID 3mg",
+            "stok_db_saat_ini": 405,
+            "stok_baseline": 260,
+            "stok_hasil_rebuild": 170,
+            "delta_stok": -235,
+            "post_cutoff_events": 6,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 215,
+            "nama_produk": "DEXTRAL",
+            "stok_db_saat_ini": 290,
+            "stok_baseline": 210,
+            "stok_hasil_rebuild": 60,
+            "delta_stok": -230,
+            "post_cutoff_events": 15,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 142,
+            "nama_produk": "CARBIDU 0,5",
+            "stok_db_saat_ini": 290,
+            "stok_baseline": 130,
+            "stok_hasil_rebuild": 70,
+            "delta_stok": -220,
+            "post_cutoff_events": 25,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 319,
+            "nama_produk": "GLIMEPIRID 1mg",
+            "stok_db_saat_ini": 450,
+            "stok_baseline": 110,
+            "stok_hasil_rebuild": 240,
+            "delta_stok": -210,
+            "post_cutoff_events": 13,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 140,
+            "nama_produk": "CAPTOPRIL 25mg",
+            "stok_db_saat_ini": 470,
+            "stok_baseline": 40,
+            "stok_hasil_rebuild": 270,
+            "delta_stok": -200,
+            "post_cutoff_events": 6,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 143,
+            "nama_produk": "CARBIDU 0,75",
+            "stok_db_saat_ini": 350,
+            "stok_baseline": 210,
+            "stok_hasil_rebuild": 150,
+            "delta_stok": -200,
+            "post_cutoff_events": 6,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 444,
+            "nama_produk": "LICOKALK",
+            "stok_db_saat_ini": 300,
+            "stok_baseline": 160,
+            "stok_hasil_rebuild": 100,
+            "delta_stok": -200,
+            "post_cutoff_events": 20,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 609,
+            "nama_produk": "OMEGZOLE",
+            "stok_db_saat_ini": 520,
+            "stok_baseline": 80,
+            "stok_hasil_rebuild": 320,
+            "delta_stok": -200,
+            "post_cutoff_events": 25,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 136,
+            "nama_produk": "CALORTUSIN",
+            "stok_db_saat_ini": 340,
+            "stok_baseline": 240,
+            "stok_hasil_rebuild": 150,
+            "delta_stok": -190,
+            "post_cutoff_events": 8,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 323,
+            "nama_produk": "GLUCOSAMIN MPL",
+            "stok_db_saat_ini": 190,
+            "stok_baseline": 10,
+            "stok_hasil_rebuild": 0,
+            "delta_stok": -190,
+            "post_cutoff_events": 26,
+            "negative_events_detected": 16,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 121,
+            "nama_produk": "BUFACARYL",
+            "stok_db_saat_ini": 360,
+            "stok_baseline": 150,
+            "stok_hasil_rebuild": 180,
+            "delta_stok": -180,
+            "post_cutoff_events": 18,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 717,
+            "nama_produk": "SAMCOFENAC",
+            "stok_db_saat_ini": 610,
+            "stok_baseline": 430,
+            "stok_hasil_rebuild": 430,
+            "delta_stok": -180,
+            "post_cutoff_events": 17,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 290,
+            "nama_produk": "FLUTAMOL",
+            "stok_db_saat_ini": 290,
+            "stok_baseline": 110,
+            "stok_hasil_rebuild": 120,
+            "delta_stok": -170,
+            "post_cutoff_events": 19,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 293,
+            "nama_produk": "FOLAVIT",
+            "stok_db_saat_ini": 170,
+            "stok_baseline": 30,
+            "stok_hasil_rebuild": 0,
+            "delta_stok": -170,
+            "post_cutoff_events": 14,
+            "negative_events_detected": 4,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 506,
+            "nama_produk": "MELOXICAM 15mg",
+            "stok_db_saat_ini": 380,
+            "stok_baseline": 320,
+            "stok_hasil_rebuild": 210,
+            "delta_stok": -170,
+            "post_cutoff_events": 40,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 880,
+            "nama_produk": "HUFARIZINE TAB",
+            "stok_db_saat_ini": 240,
+            "stok_baseline": 60,
+            "stok_hasil_rebuild": 70,
+            "delta_stok": -170,
+            "post_cutoff_events": 15,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 165,
+            "nama_produk": "CIPROFLOXACIN 500mg",
+            "stok_db_saat_ini": 310,
+            "stok_baseline": 120,
+            "stok_hasil_rebuild": 150,
+            "delta_stok": -160,
+            "post_cutoff_events": 16,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 846,
+            "nama_produk": "SAMCODIN",
+            "stok_db_saat_ini": 180,
+            "stok_baseline": 130,
+            "stok_hasil_rebuild": 20,
+            "delta_stok": -160,
+            "post_cutoff_events": 11,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 322,
+            "nama_produk": "GLIMEPIRID 4mg",
+            "stok_db_saat_ini": 280,
+            "stok_baseline": 200,
+            "stok_hasil_rebuild": 130,
+            "delta_stok": -150,
+            "post_cutoff_events": 2,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 985,
+            "nama_produk": "GENXICAM 15MG",
+            "stok_db_saat_ini": 360,
+            "stok_baseline": 230,
+            "stok_hasil_rebuild": 220,
+            "delta_stok": -140,
+            "post_cutoff_events": 17,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 196,
+            "nama_produk": "DANASONE",
+            "stok_db_saat_ini": 250,
+            "stok_baseline": 90,
+            "stok_hasil_rebuild": 120,
+            "delta_stok": -130,
+            "post_cutoff_events": 31,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 225,
+            "nama_produk": "DOLOLICOBION",
+            "stok_db_saat_ini": 290,
+            "stok_baseline": 30,
+            "stok_hasil_rebuild": 160,
+            "delta_stok": -130,
+            "post_cutoff_events": 7,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 275,
+            "nama_produk": "FAXIDEN",
+            "stok_db_saat_ini": 150,
+            "stok_baseline": 180,
+            "stok_hasil_rebuild": 20,
+            "delta_stok": -130,
+            "post_cutoff_events": 12,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 584,
+            "nama_produk": "NOVAPYRON",
+            "stok_db_saat_ini": 320,
+            "stok_baseline": 200,
+            "stok_hasil_rebuild": 190,
+            "delta_stok": -130,
+            "post_cutoff_events": 1,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 606,
+            "nama_produk": "OMEDOM TAB",
+            "stok_db_saat_ini": 330,
+            "stok_baseline": 140,
+            "stok_hasil_rebuild": 200,
+            "delta_stok": -130,
+            "post_cutoff_events": 15,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 954,
+            "nama_produk": "GUAFINESIN",
+            "stok_db_saat_ini": 320,
+            "stok_baseline": 180,
+            "stok_hasil_rebuild": 190,
+            "delta_stok": -130,
+            "post_cutoff_events": 15,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 51,
+            "nama_produk": "ANTANGIN CAIR",
+            "stok_db_saat_ini": 146,
+            "stok_baseline": 113,
+            "stok_hasil_rebuild": 25,
+            "delta_stok": -121,
+            "post_cutoff_events": 72,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 22,
+            "nama_produk": "ALLOFAR 300MG",
+            "stok_db_saat_ini": 170,
+            "stok_baseline": 170,
+            "stok_hasil_rebuild": 50,
+            "delta_stok": -120,
+            "post_cutoff_events": 11,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 260,
+            "nama_produk": "ETABION",
+            "stok_db_saat_ini": 200,
+            "stok_baseline": 140,
+            "stok_hasil_rebuild": 80,
+            "delta_stok": -120,
+            "post_cutoff_events": 6,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 379,
+            "nama_produk": "INTERHISTIN",
+            "stok_db_saat_ini": 210,
+            "stok_baseline": 70,
+            "stok_hasil_rebuild": 90,
+            "delta_stok": -120,
+            "post_cutoff_events": 25,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 385,
+            "nama_produk": "KADITIC",
+            "stok_db_saat_ini": 390,
+            "stok_baseline": 370,
+            "stok_hasil_rebuild": 270,
+            "delta_stok": -120,
+            "post_cutoff_events": 51,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 776,
+            "nama_produk": "SULFADIASIN",
+            "stok_db_saat_ini": 150,
+            "stok_baseline": 160,
+            "stok_hasil_rebuild": 30,
+            "delta_stok": -120,
+            "post_cutoff_events": 13,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 923,
+            "nama_produk": "INFLASON",
+            "stok_db_saat_ini": 310,
+            "stok_baseline": 90,
+            "stok_hasil_rebuild": 190,
+            "delta_stok": -120,
+            "post_cutoff_events": 10,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 808,
+            "nama_produk": "TOLAK ANGIN DEWASA",
+            "stok_db_saat_ini": 151,
+            "stok_baseline": 47,
+            "stok_hasil_rebuild": 37,
+            "delta_stok": -114,
+            "post_cutoff_events": 41,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 406,
+            "nama_produk": "KOMIX ALL VAR",
+            "stok_db_saat_ini": 221,
+            "stok_baseline": 141,
+            "stok_hasil_rebuild": 109,
+            "delta_stok": -112,
+            "post_cutoff_events": 35,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 21,
+            "nama_produk": "ALLOFAR 100MG",
+            "stok_db_saat_ini": 280,
+            "stok_baseline": 90,
+            "stok_hasil_rebuild": 170,
+            "delta_stok": -110,
+            "post_cutoff_events": 11,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 99,
+            "nama_produk": "BINTAMOX",
+            "stok_db_saat_ini": 160,
+            "stok_baseline": 130,
+            "stok_hasil_rebuild": 50,
+            "delta_stok": -110,
+            "post_cutoff_events": 6,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 118,
+            "nama_produk": "BROADAMOX",
+            "stok_db_saat_ini": 210,
+            "stok_baseline": 50,
+            "stok_hasil_rebuild": 100,
+            "delta_stok": -110,
+            "post_cutoff_events": 16,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 362,
+            "nama_produk": "HUFAMAG TAB",
+            "stok_db_saat_ini": 310,
+            "stok_baseline": 140,
+            "stok_hasil_rebuild": 200,
+            "delta_stok": -110,
+            "post_cutoff_events": 12,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 445,
+            "nama_produk": "LICOSTAN",
+            "stok_db_saat_ini": 150,
+            "stok_baseline": 110,
+            "stok_hasil_rebuild": 40,
+            "delta_stok": -110,
+            "post_cutoff_events": 4,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 458,
+            "nama_produk": "LORATADIN",
+            "stok_db_saat_ini": 220,
+            "stok_baseline": 320,
+            "stok_hasil_rebuild": 110,
+            "delta_stok": -110,
+            "post_cutoff_events": 17,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 564,
+            "nama_produk": "NEUROPYRON-V",
+            "stok_db_saat_ini": 160,
+            "stok_baseline": 190,
+            "stok_hasil_rebuild": 50,
+            "delta_stok": -110,
+            "post_cutoff_events": 13,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 586,
+            "nama_produk": "NOVASTAN TAB",
+            "stok_db_saat_ini": 150,
+            "stok_baseline": 130,
+            "stok_hasil_rebuild": 40,
+            "delta_stok": -110,
+            "post_cutoff_events": 7,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 820,
+            "nama_produk": "TRIOCID TAB",
+            "stok_db_saat_ini": 290,
+            "stok_baseline": 170,
+            "stok_hasil_rebuild": 180,
+            "delta_stok": -110,
+            "post_cutoff_events": 12,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 567,
+            "nama_produk": "NEUROSANBE PLUS",
+            "stok_db_saat_ini": 310,
+            "stok_baseline": 110,
+            "stok_hasil_rebuild": 210,
+            "delta_stok": -100,
+            "post_cutoff_events": 18,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 610,
+            "nama_produk": "OMELLEGAR",
+            "stok_db_saat_ini": 480,
+            "stok_baseline": 90,
+            "stok_hasil_rebuild": 380,
+            "delta_stok": -100,
+            "post_cutoff_events": 22,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 623,
+            "nama_produk": "ORPHEN",
+            "stok_db_saat_ini": 180,
+            "stok_baseline": 160,
+            "stok_hasil_rebuild": 80,
+            "delta_stok": -100,
+            "post_cutoff_events": 8,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 764,
+            "nama_produk": "SOLDEXTAM",
+            "stok_db_saat_ini": 260,
+            "stok_baseline": 140,
+            "stok_hasil_rebuild": 160,
+            "delta_stok": -100,
+            "post_cutoff_events": 18,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 365,
+            "nama_produk": "HYSTIGO",
+            "stok_db_saat_ini": 239,
+            "stok_baseline": 130,
+            "stok_hasil_rebuild": 140,
+            "delta_stok": -99,
+            "post_cutoff_events": 19,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 115,
+            "nama_produk": "B1 STRIP",
+            "stok_db_saat_ini": 94,
+            "stok_baseline": 204,
+            "stok_hasil_rebuild": 0,
+            "delta_stok": -94,
+            "post_cutoff_events": 16,
+            "negative_events_detected": 9,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 81,
+            "nama_produk": "BECOM ZET",
+            "stok_db_saat_ini": 150,
+            "stok_baseline": 90,
+            "stok_hasil_rebuild": 60,
+            "delta_stok": -90,
+            "post_cutoff_events": 3,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 145,
+            "nama_produk": "CATAFLAM 50mg",
+            "stok_db_saat_ini": 109,
+            "stok_baseline": 45,
+            "stok_hasil_rebuild": 19,
+            "delta_stok": -90,
+            "post_cutoff_events": 47,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 299,
+            "nama_produk": "FUROSEMIDE",
+            "stok_db_saat_ini": 170,
+            "stok_baseline": 30,
+            "stok_hasil_rebuild": 80,
+            "delta_stok": -90,
+            "post_cutoff_events": 5,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        },
+        {
+            "id_produk": 330,
+            "nama_produk": "GRAFACHLOR",
+            "stok_db_saat_ini": 160,
+            "stok_baseline": 120,
+            "stok_hasil_rebuild": 70,
+            "delta_stok": -90,
+            "post_cutoff_events": 4,
+            "negative_events_detected": 0,
+            "eligible_for_apply": true
+        }
+    ],
+    "skipped_negative_event_products": [],
+    "duplicate_conflicts": {
+        "767": [
+            {
+                "old_stok": 100,
+                "new_stok": 150,
+                "nama_produk": "SPASMINAL"
+            }
+        ],
+        "958": [
+            {
+                "old_stok": 240,
+                "new_stok": 70,
+                "nama_produk": "HUFAGRIP PAMOL TAB"
+            }
+        ],
+        "402": [
+            {
+                "old_stok": 100,
+                "new_stok": 220,
+                "nama_produk": "KETOCONAZOLE TAB"
+            }
+        ],
+        "659": [
+            {
+                "old_stok": 2,
+                "new_stok": 3,
+                "nama_produk": "KANA B"
+            }
+        ],
+        "167": [
+            {
+                "old_stok": 6,
+                "new_stok": 13,
+                "nama_produk": "VITAMIN E IPI"
+            }
+        ],
+        "723": [
+            {
+                "old_stok": 17,
+                "new_stok": 24,
+                "nama_produk": "SANGOBION S'10"
+            }
+        ],
+        "635": [
+            {
+                "old_stok": 50,
+                "new_stok": 69,
+                "nama_produk": "PARAMEX"
+            }
+        ],
+        "639": [
+            {
+                "old_stok": 2,
+                "new_stok": 15,
+                "nama_produk": "PARATUSIN"
+            }
+        ],
+        "369": [
+            {
+                "old_stok": 1,
+                "new_stok": 2,
+                "nama_produk": "IMBOOST FORCE"
+            }
+        ],
+        "263": [
+            {
+                "old_stok": 2,
+                "new_stok": 90,
+                "nama_produk": "ETAFLUSIN TAB"
+            }
+        ]
+    },
+    "missing_baseline_ids_in_db": [
+        824,
+        675
+    ]
+}

@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Pembelian;
 use App\Models\PembelianDetail;
 use App\Models\Produk;
-use App\Models\RekamanStok;
 use App\Models\Supplier;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Services\PembelianBatchService;
+use App\Services\StockDraftCleanupService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
@@ -23,22 +23,9 @@ class PembelianDetailController extends Controller
         $id_pembelian = session('id_pembelian');
         
         if (!$id_pembelian) {
-            $incompletePembelian = Pembelian::where('no_faktur', 'o')
-                ->orWhere('no_faktur', '')
-                ->orWhereNull('no_faktur')
-                ->orWhere('total_harga', 0)
-                ->orWhere('bayar', 0)
-                ->latest()
-                ->first();
-            
-            if ($incompletePembelian) {
-                session(['id_pembelian' => $incompletePembelian->id_pembelian]);
-                session(['id_supplier' => $incompletePembelian->id_supplier]);
-                $id_pembelian = $incompletePembelian->id_pembelian;
-            } else {
-                session()->forget(['id_pembelian', 'id_supplier']);
-                return redirect()->route('pembelian.index')->with('info', 'Silakan pilih supplier terlebih dahulu untuk memulai pembelian.');
-            }
+            app(StockDraftCleanupService::class)->cleanupStalePembelianDrafts();
+            session()->forget(['id_pembelian', 'id_supplier']);
+            return redirect()->route('pembelian.index')->with('info', 'Silakan pilih supplier terlebih dahulu untuk memulai pembelian.');
         }
         
         $pembelian = Pembelian::find($id_pembelian);
@@ -595,7 +582,9 @@ class PembelianDetailController extends Controller
             }
             
             $produkId = $detail->id_produk;
-            $produk = Produk::lockForUpdate()->find($detail->id_produk);
+            $produk = Produk::where('id_produk', $detail->id_produk)
+                ->lockForUpdate()
+                ->first();
             
             if ($produk) {
                 $stokSebelum = intval($produk->stok);

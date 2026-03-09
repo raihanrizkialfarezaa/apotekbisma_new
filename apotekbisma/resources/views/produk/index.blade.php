@@ -676,6 +676,16 @@
 
         $('#modal-form').validator().on('submit', function (e) {
             if (! e.preventDefault()) {
+                const stokAwal = parseInt($('#modal-form').data('stok-awal') || 0, 10);
+                const stokBaru = parseInt($('#modal-form [name=stok]').val() || 0, 10);
+                const keteranganStok = ($('#keterangan_stok_edit').val() || '').trim();
+
+                if (stokAwal !== stokBaru && !keteranganStok) {
+                    alert('Keterangan perubahan stok wajib diisi jika stok diubah melalui Edit Produk.');
+                    $('#keterangan_stok_edit').focus();
+                    return;
+                }
+
                 $.post($('#modal-form form').attr('action'), $('#modal-form form').serialize())
                     .done((response) => {
                         $('#modal-form').modal('hide');
@@ -696,6 +706,7 @@
     function addForm(url) {
         $('#modal-form').modal('show');
         $('#modal-form .modal-title').text('Tambah Produk');
+        $('#modal-form').data('stok-awal', 0);
 
         $('#modal-form form')[0].reset();
         $('#modal-form form').attr('action', url);
@@ -706,6 +717,7 @@
     function editForm(url) {
         $('#modal-form').modal('show');
         $('#modal-form .modal-title').text('Edit Produk');
+        $('#modal-form').data('stok-awal', 0);
 
         $('#modal-form form')[0].reset();
         $('#modal-form form').attr('action', url);
@@ -723,6 +735,8 @@
                 $('#modal-form [name=expired_date]').val(response.expired_date);
                 $('#modal-form [name=batch]').val(response.batch);
                 $('#modal-form [name=stok]').val(response.stok);
+                $('#modal-form').data('stok-awal', parseInt(response.stok || 0, 10));
+                $('#keterangan_stok_edit').val('');
             })
             .fail((errors) => {
                 alert('Tidak dapat menampilkan data');
