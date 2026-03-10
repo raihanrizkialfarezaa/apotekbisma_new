@@ -95,7 +95,7 @@ class KartuStokController extends Controller
             // Keep the same key used by the DataTables view for consistent sorting/rendering
             // (even if this method isn't the primary data source).
             try {
-                $row['waktu_raw'] = Carbon::parse($item->waktu)->toIso8601String();
+                $row['waktu_raw'] = Carbon::parse($item->waktu)->format('Y-m-d H:i:s');
             } catch (\Exception $e) {
                 $row['waktu_raw'] = (string) $item->waktu;
             }
@@ -119,10 +119,11 @@ class KartuStokController extends Controller
             
             // Determine transaction type and add reference with detailed information
             $keterangan = '';
+            $normalizedKeterangan = $this->normalizeStockCardKeterangan($item->keterangan);
             
             // Cek apakah ada keterangan dari database terlebih dahulu
-            if (!empty($item->keterangan)) {
-                $keterangan = $item->keterangan;
+            if (!empty($normalizedKeterangan)) {
+                $keterangan = $normalizedKeterangan;
                 
                 // Tambahkan referensi transaksi jika ada
                 if ($item->id_pembelian) {
@@ -378,7 +379,7 @@ class KartuStokController extends Controller
             // Use rekaman_stoks.waktu for sorting (system timestamp)
             // This ensures correct chronological order based on when stock movement was recorded
             try {
-                $row['waktu_raw'] = Carbon::parse($item->waktu)->toIso8601String();
+                $row['waktu_raw'] = Carbon::parse($item->waktu)->format('Y-m-d H:i:s');
             } catch (\Exception $e) {
                 $row['waktu_raw'] = (string) $item->waktu;
             }
@@ -402,12 +403,13 @@ class KartuStokController extends Controller
             
             // Determine transaction type and add reference with styling
             $keterangan = '';
+            $normalizedKeterangan = $this->normalizeStockCardKeterangan($item->keterangan);
             
             // Cek apakah ada keterangan dari database terlebih dahulu
-            if (!empty($item->keterangan)) {
+            if (!empty($normalizedKeterangan)) {
                 // Parse jenis transaksi dari keterangan untuk styling
-                if (strpos($item->keterangan, 'Pembelian') !== false) {
-                    $keterangan = '<span class="label label-success"><i class="fa fa-arrow-up"></i> ' . $item->keterangan . '</span>';
+                if (stripos($normalizedKeterangan, 'Pembelian') !== false) {
+                    $keterangan = '<span class="label label-success"><i class="fa fa-arrow-up"></i> ' . $normalizedKeterangan . '</span>';
                     
                     // Tambahkan referensi faktur jika ada
                     if ($item->id_pembelian) {
@@ -417,8 +419,8 @@ class KartuStokController extends Controller
                         }
                     }
                     
-                } elseif (strpos($item->keterangan, 'Penjualan') !== false) {
-                    $keterangan = '<span class="label label-warning"><i class="fa fa-arrow-down"></i> ' . $item->keterangan . '</span>';
+                } elseif (stripos($normalizedKeterangan, 'Penjualan') !== false) {
+                    $keterangan = '<span class="label label-warning"><i class="fa fa-arrow-down"></i> ' . $normalizedKeterangan . '</span>';
                     
                     // Tambahkan referensi ID transaksi jika ada
                     if ($item->id_penjualan) {
@@ -428,12 +430,18 @@ class KartuStokController extends Controller
                         }
                     }
                     
-                } elseif (strpos($item->keterangan, 'Perubahan Stok Manual') !== false) {
-                    $keterangan = '<span class="label label-info"><i class="fa fa-edit"></i> ' . $item->keterangan . '</span>';
+                } elseif (
+                    stripos($normalizedKeterangan, 'Perubahan Stok Manual') !== false
+                    || stripos($normalizedKeterangan, 'Stock Opname') !== false
+                    || stripos($normalizedKeterangan, 'Penyesuaian Stok') !== false
+                ) {
+                    $keterangan = '<span class="label label-info"><i class="fa fa-edit"></i> ' . $normalizedKeterangan . '</span>';
+                } elseif (stripos($normalizedKeterangan, 'Saldo Awal Stok') !== false) {
+                    $keterangan = '<span class="label label-default"><i class="fa fa-archive"></i> ' . $normalizedKeterangan . '</span>';
                     
                 } else {
                     // Keterangan lainnya
-                    $keterangan = '<span class="label label-default"><i class="fa fa-cog"></i> ' . $item->keterangan . '</span>';
+                    $keterangan = '<span class="label label-default"><i class="fa fa-cog"></i> ' . $normalizedKeterangan . '</span>';
                 }
             } else {
                 // Fallback untuk data lama yang belum ada keterangan
@@ -519,6 +527,34 @@ class KartuStokController extends Controller
         }
 
         return $data;
+    }
+
+    private function normalizeStockCardKeterangan(?string $keterangan): string
+    {
+        $value = trim((string) $keterangan);
+        if ($value === '') {
+            return '';
+        }
+
+        if (stripos($value, 'rebuild baseline') !== false) {
+            if (stripos($value, 'Pembelian') !== false) {
+                return 'Pembelian';
+            }
+
+            if (stripos($value, 'Penjualan') !== false) {
+                return 'Penjualan';
+            }
+        }
+
+        if (
+            stripos($value, 'BASELINE CSV') !== false
+            || stripos($value, 'source of truth') !== false
+            || stripos($value, 'SEED NON-BASELINE') !== false
+        ) {
+            return 'Saldo Awal Stok';
+        }
+
+        return preg_replace('/\s+/', ' ', $value) ?? $value;
     }
 
     public function exportPDF($id)

@@ -1814,14 +1814,10 @@
                             return data;
                         }
                         if (!data) return '-';
-                        try {
-                            const dt = new Date(data);
-                            if (!isNaN(dt.getTime())) {
-                                const dateStr = dt.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
-                                const timeStr = dt.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-                                return '<div style="line-height: 1.4;"><strong>' + dateStr + '</strong><br><small style="color: #6b7280;">' + timeStr + '</small></div>';
-                            }
-                        } catch (e) {}
+                        const parts = String(data).split(' ');
+                        if (parts.length >= 2) {
+                            return '<div style="line-height: 1.4;"><strong>' + (row.tanggal || parts[0]) + '</strong><br><small style="color: #6b7280;">' + parts[1] + '</small></div>';
+                        }
                         return row.tanggal || data;
                     }
                 },

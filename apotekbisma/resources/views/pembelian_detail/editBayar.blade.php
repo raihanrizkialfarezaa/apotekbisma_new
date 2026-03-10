@@ -147,12 +147,12 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="totalrp" class="col-lg-2 control-label">Tanggal Faktur Dibuat</label>
+                                <label for="waktu_faktur" class="col-lg-2 control-label">Tanggal & Waktu Faktur</label>
                                 <div class="col-lg-8">
                                     @if ($tanggal->waktu != NULL)
-                                        <input type="date" name="waktu" id="totalrp" value="{{ $tanggal->waktu->format('Y-m-d') }}" class="form-control">
+                                        <input type="datetime-local" name="waktu" id="waktu_faktur" value="{{ $tanggal->waktu->format('Y-m-d\TH:i:s') }}" class="form-control" step="1">
                                     @else
-                                        <input type="date" name="waktu" id="totalrp" value="{{ $tanggal->created_at->format('Y-m-d') }}" class="form-control">
+                                        <input type="datetime-local" name="waktu" id="waktu_faktur" value="{{ $tanggal->created_at->format('Y-m-d\TH:i:s') }}" class="form-control" step="1">
                                     @endif
                                 </div>
                             </div>

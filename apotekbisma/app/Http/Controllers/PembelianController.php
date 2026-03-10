@@ -13,6 +13,7 @@ use App\Models\Setting;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade as PDF;
 use App\Services\StockDraftCleanupService;
+use App\Services\TransactionDateMutationService;
 
 class PembelianController extends Controller
 {
@@ -157,7 +158,7 @@ class PembelianController extends Controller
             'nomor_faktur' => 'required|string|max:255',
             'total_item' => 'required|integer|min:1',
             'total' => 'required|numeric|min:0',
-            'waktu' => 'required|date'
+            'waktu' => 'required'
         ], [
             'nomor_faktur.required' => 'Nomor faktur harus diisi',
             'nomor_faktur.max' => 'Nomor faktur maksimal 255 karakter',
@@ -165,8 +166,7 @@ class PembelianController extends Controller
             'total_item.min' => 'Minimal harus ada 1 produk',
             'total.required' => 'Total harga harus diisi',
             'total.min' => 'Total harga tidak boleh negatif',
-            'waktu.required' => 'Tanggal faktur harus diisi',
-            'waktu.date' => 'Format tanggal tidak valid'
+            'waktu.required' => 'Tanggal faktur harus diisi'
         ]);
 
         DB::beginTransaction();
@@ -198,7 +198,10 @@ class PembelianController extends Controller
             $pembelian->total_harga = $request->total;
             $pembelian->diskon = $request->diskon ?? 0;
             $pembelian->bayar = $request->bayar;
-            $pembelian->waktu = $request->waktu;
+            $pembelian->waktu = $this->resolveTransactionWaktu(
+                $request->waktu,
+                $pembelian->waktu ?? $pembelian->created_at ?? Carbon::now()
+            );
             $pembelian->no_faktur = $request->nomor_faktur;
             $pembelian->update();
             
@@ -222,6 +225,8 @@ class PembelianController extends Controller
                 }
             }
 
+            app(TransactionDateMutationService::class)->synchronizeFinalizedPembelian($pembelian);
+
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
@@ -240,7 +245,7 @@ class PembelianController extends Controller
             'nomor_faktur' => 'required|string|max:255',
             'total_item' => 'required|integer|min:1',
             'total' => 'required|numeric|min:0',
-            'waktu' => 'required|date'
+            'waktu' => 'required'
         ], [
             'nomor_faktur.required' => 'Nomor faktur harus diisi',
             'nomor_faktur.max' => 'Nomor faktur maksimal 255 karakter',
@@ -248,14 +253,14 @@ class PembelianController extends Controller
             'total_item.min' => 'Minimal harus ada 1 produk',
             'total.required' => 'Total harga harus diisi',
             'total.min' => 'Total harga tidak boleh negatif',
-            'waktu.required' => 'Tanggal faktur harus diisi',
-            'waktu.date' => 'Format tanggal tidak valid'
+            'waktu.required' => 'Tanggal faktur harus diisi'
         ]);
 
         DB::beginTransaction();
         
         try {
             $pembelian = Pembelian::findOrFail($request->id_pembelian);
+            $waktuLama = Carbon::parse($pembelian->waktu ?? $pembelian->created_at)->format('Y-m-d H:i:s');
             
             $detail = PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)->get();
             if ($detail->isEmpty()) {
@@ -283,13 +288,19 @@ class PembelianController extends Controller
             $pembelian->bayar = $request->bayar;
             $pembelian->no_faktur = $request->nomor_faktur;
             if ($request->waktu != NULL) {
-                $pembelian->waktu = $request->waktu;
+                $pembelian->waktu = $this->resolveTransactionWaktu(
+                    $request->waktu,
+                    $pembelian->waktu ?? $pembelian->created_at ?? Carbon::now()
+                );
             }
             
             $pembelian->update();
 
-            \App\Models\RekamanStok::where('id_pembelian', $pembelian->id_pembelian)
-                ->update(['waktu' => $pembelian->waktu]);
+            app(TransactionDateMutationService::class)->handlePembelianFinalDateChange(
+                $pembelian,
+                $waktuLama,
+                $pembelian->waktu ?? $waktuLama
+            );
             
             DB::commit();
             
@@ -520,6 +531,36 @@ class PembelianController extends Controller
             || $pembelian->no_faktur === 'o'
             || $pembelian->no_faktur === ''
             || $pembelian->no_faktur === null;
+    }
+
+    private function resolveTransactionWaktu($value, $fallback = null): string
+    {
+        $raw = trim((string) $value);
+        if ($raw === '') {
+            throw new \InvalidArgumentException('Tanggal faktur harus diisi');
+        }
+
+        $fallbackCarbon = $fallback ? Carbon::parse($fallback) : Carbon::now();
+
+        if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $raw)) {
+            return Carbon::createFromFormat('Y-m-d', $raw)
+                ->setTimeFrom($fallbackCarbon)
+                ->format('Y-m-d H:i:s');
+        }
+
+        foreach (['Y-m-d\TH:i:s', 'Y-m-d\TH:i', 'Y-m-d H:i:s', 'Y-m-d H:i'] as $format) {
+            try {
+                $parsed = Carbon::createFromFormat($format, $raw);
+                if (in_array($format, ['Y-m-d\TH:i', 'Y-m-d H:i'], true)) {
+                    $parsed->second = $fallbackCarbon->second;
+                }
+
+                return $parsed->format('Y-m-d H:i:s');
+            } catch (\Throwable $e) {
+            }
+        }
+
+        return Carbon::parse($raw)->format('Y-m-d H:i:s');
     }
 }
 

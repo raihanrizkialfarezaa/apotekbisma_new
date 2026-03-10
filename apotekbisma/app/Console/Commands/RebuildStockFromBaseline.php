@@ -103,7 +103,7 @@ class RebuildStockFromBaseline extends Command
                 'stok_masuk' => 0,
                 'stok_keluar' => 0,
                 'stok_sisa' => $baselineStock,
-                'keterangan' => 'BASELINE CSV 31-12-2025 (source of truth)',
+                'keterangan' => 'Saldo Awal Stok per 31-12-2025',
                 'created_at' => $currentTime,
                 'updated_at' => $currentTime,
             ];
@@ -368,7 +368,7 @@ class RebuildStockFromBaseline extends Command
                 'id_pembelian' => intval($row->ref_id),
                 'stok_masuk' => intval($row->qty ?? 0),
                 'stok_keluar' => 0,
-                'keterangan' => 'Pembelian: Rebuild baseline' . (!empty($row->no_faktur) ? ' (Faktur: ' . $row->no_faktur . ')' : ''),
+                'keterangan' => 'Pembelian',
             ];
         }
 
@@ -395,7 +395,7 @@ class RebuildStockFromBaseline extends Command
                 'id_pembelian' => null,
                 'stok_masuk' => 0,
                 'stok_keluar' => intval($row->qty ?? 0),
-                'keterangan' => 'Penjualan: Rebuild baseline (ID: ' . intval($row->ref_id) . ')',
+                'keterangan' => 'Penjualan',
             ];
         }
 

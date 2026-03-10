@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Log;
 use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
 use App\Services\StockDraftCleanupService;
+use App\Services\TransactionDateMutationService;
 
 class PenjualanController extends Controller
 {
@@ -282,13 +283,22 @@ class PenjualanController extends Controller
 
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'waktu' => 'required',
+        ], [
+            'waktu.required' => 'Tanggal transaksi harus diisi',
+        ]);
+
         DB::beginTransaction();
         
         try {
             $penjualan = Penjualan::findOrFail($id);
             
-            $waktu_lama = $penjualan->waktu;
-            $waktu_baru = $request->waktu;
+            $waktu_lama = Carbon::parse($penjualan->waktu ?? $penjualan->created_at)->format('Y-m-d H:i:s');
+            $waktu_baru = $this->resolveTransactionWaktu(
+                $request->waktu,
+                $penjualan->waktu ?? $penjualan->created_at ?? Carbon::now()
+            );
             
             $penjualan->id_member = $request->id_member;
             $penjualan->total_item = $request->total_item;
@@ -298,8 +308,11 @@ class PenjualanController extends Controller
             $penjualan->waktu = $waktu_baru;
             $penjualan->update();
 
-            \App\Models\RekamanStok::where('id_penjualan', $penjualan->id_penjualan)
-                ->update(['waktu' => $waktu_baru]);
+            app(TransactionDateMutationService::class)->handlePenjualanFinalDateChange(
+                $penjualan,
+                $waktu_lama,
+                $waktu_baru
+            );
 
             DB::commit();
             
@@ -318,6 +331,9 @@ class PenjualanController extends Controller
             'id_penjualan' => 'required',
             'diterima' => 'required|numeric|min:0',
             'total' => 'required|numeric|min:0',
+            'waktu' => 'required',
+        ], [
+            'waktu.required' => 'Tanggal transaksi harus diisi',
         ]);
 
         // Cek apakah ada detail penjualan
@@ -342,7 +358,10 @@ class PenjualanController extends Controller
             $penjualan->diskon = $request->diskon;
             $penjualan->bayar = $request->bayar;
             $penjualan->diterima = $request->diterima;
-            $penjualan->waktu = $request->waktu ?? date('Y-m-d');
+            $penjualan->waktu = $this->resolveTransactionWaktu(
+                $request->waktu,
+                $penjualan->waktu ?? $penjualan->created_at ?? Carbon::now()
+            );
             $penjualan->update();
 
             $id_penjualan = $penjualan->id_penjualan;
@@ -367,6 +386,8 @@ class PenjualanController extends Controller
                     ]);
                 }
             }
+
+            app(TransactionDateMutationService::class)->synchronizeFinalizedPenjualan($penjualan);
 
             DB::commit();
         } catch (\Exception $e) {
@@ -595,5 +616,35 @@ class PenjualanController extends Controller
             || intval($penjualan->total_harga ?? 0) <= 0
             || intval($penjualan->bayar ?? 0) <= 0
             || intval($penjualan->diterima ?? 0) <= 0;
+    }
+
+    private function resolveTransactionWaktu($value, $fallback = null): string
+    {
+        $raw = trim((string) $value);
+        if ($raw === '') {
+            throw new \InvalidArgumentException('Tanggal transaksi harus diisi');
+        }
+
+        $fallbackCarbon = $fallback ? Carbon::parse($fallback) : Carbon::now();
+
+        if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $raw)) {
+            return Carbon::createFromFormat('Y-m-d', $raw)
+                ->setTimeFrom($fallbackCarbon)
+                ->format('Y-m-d H:i:s');
+        }
+
+        foreach (['Y-m-d\TH:i:s', 'Y-m-d\TH:i', 'Y-m-d H:i:s', 'Y-m-d H:i'] as $format) {
+            try {
+                $parsed = Carbon::createFromFormat($format, $raw);
+                if (in_array($format, ['Y-m-d\TH:i', 'Y-m-d H:i'], true)) {
+                    $parsed->second = $fallbackCarbon->second;
+                }
+
+                return $parsed->format('Y-m-d H:i:s');
+            } catch (\Throwable $e) {
+            }
+        }
+
+        return Carbon::parse($raw)->format('Y-m-d H:i:s');
     }
 }

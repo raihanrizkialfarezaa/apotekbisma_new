@@ -299,9 +299,9 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="totalrp" class="col-lg-2 control-label">Tanggal Faktur Dibuat</label>
+                                <label for="waktu_faktur" class="col-lg-2 control-label">Tanggal & Waktu Faktur</label>
                                 <div class="col-lg-8">
-                                    <input type="date" name="waktu" id="totalrp" class="form-control waktu">
+                                    <input type="datetime-local" name="waktu" id="waktu_faktur" class="form-control waktu" step="1">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -371,10 +371,21 @@
     document.addEventListener('DOMContentLoaded', checkMobileView);
     window.addEventListener('resize', checkMobileView);
     
-    const date = new Date();
-    const today = date.toISOString().substring(0, 10);
-    console.log(today);
-    document.querySelector('.waktu').value = today; 
+    function formatDateTimeLocal(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hour = String(date.getHours()).padStart(2, '0');
+        const minute = String(date.getMinutes()).padStart(2, '0');
+        const second = String(date.getSeconds()).padStart(2, '0');
+
+        return `${year}-${month}-${day}T${hour}:${minute}:${second}`;
+    }
+
+    const waktuInput = document.querySelector('.waktu');
+    if (waktuInput && !waktuInput.value) {
+        waktuInput.value = formatDateTimeLocal(new Date());
+    }
     let table, table2;
     
     // Declare table2 as global variable

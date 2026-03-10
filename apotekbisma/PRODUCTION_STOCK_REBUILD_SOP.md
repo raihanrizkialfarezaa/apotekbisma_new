@@ -68,3 +68,7 @@ Jangan pakai `now()` yang berbeda-beda per command untuk flow `audit -> dry-run 
 - Flow ini menganggap data sebelum baseline tidak lagi dipakai sebagai sumber kebenaran.
 - Source of truth awal adalah CSV baseline.
 - Flow ini aman dipakai ulang, selama semua command dalam satu sesi memakai nilai `until` yang sama.
+- Edit tanggal final transaksi pembelian/penjualan pasca-cutoff sekarang menyimpan metadata otomatis ke tabel `transaction_date_change_audits`; admin tidak perlu menulis alasan bebas teks.
+- Edit tanggal final yang mencoba menyentuh cutoff atau memindahkan transaksi ke periode `<= 2025-12-31 23:59:59` akan diblokir untuk menjaga integritas baseline.
+- Finalisasi transaksi baru yang diinput terlambat tetapi memakai tanggal kejadian pasca-cutoff juga akan memicu sinkronisasi historis otomatis untuk produk terdampak.
+- Produk yang tidak ada di baseline CSV tidak diblokir; sistem akan memakai seed stok aman dari rekaman terakhir sebelum cutoff, atau `0` bila produk memang baru muncul pasca-cutoff.
