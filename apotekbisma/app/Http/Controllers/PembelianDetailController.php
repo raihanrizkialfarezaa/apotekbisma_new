@@ -160,7 +160,7 @@ class PembelianDetailController extends Controller
                 
                 $pembelian = Pembelian::find($request->id_pembelian);
                 $this->ensurePembelianHasWaktu($pembelian);
-                $waktuWithMicro = Carbon::now()->format('Y-m-d H:i:s.u');
+                $waktuTransaksi = $this->resolvePembelianStockWaktu($pembelian);
                 
                 if ($existing_detail) {
                     $old_jumlah = intval($existing_detail->jumlah);
@@ -195,7 +195,7 @@ class PembelianDetailController extends Controller
                         DB::table('rekaman_stoks')->insert([
                             'id_produk' => $produk->id_produk,
                             'id_pembelian' => $request->id_pembelian,
-                            'waktu' => $waktuWithMicro,
+                            'waktu' => $waktuTransaksi,
                             'stok_masuk' => $new_jumlah,
                             'stok_keluar' => 0,
                             'stok_awal' => $stok_sebelum,
@@ -222,7 +222,7 @@ class PembelianDetailController extends Controller
                     DB::table('rekaman_stoks')->insert([
                         'id_produk' => $produk->id_produk,
                         'id_pembelian' => $request->id_pembelian,
-                        'waktu' => $waktuWithMicro,
+                        'waktu' => $waktuTransaksi,
                         'stok_masuk' => $jumlah_tambahan,
                         'stok_keluar' => 0,
                         'stok_awal' => $stok_sebelum,
@@ -367,7 +367,7 @@ class PembelianDetailController extends Controller
                 $detail->save();
                 
                 $pembelian = Pembelian::find($detail->id_pembelian);
-                $waktu_transaksi = $pembelian && $pembelian->waktu ? $pembelian->waktu : Carbon::now();
+                $waktu_transaksi = $this->resolvePembelianStockWaktu($pembelian);
                 
                 $rekaman_stok = DB::table('rekaman_stoks')
                     ->where('id_pembelian', $detail->id_pembelian)
@@ -390,12 +390,11 @@ class PembelianDetailController extends Controller
                         ]);
                 } else {
                     $stokAwal = $stok_baru - $new_jumlah;
-                    $waktuWithMicro = Carbon::now()->format('Y-m-d H:i:s.u');
                     
                     DB::table('rekaman_stoks')->insert([
                         'id_produk' => $produk->id_produk,
                         'id_pembelian' => $detail->id_pembelian,
-                        'waktu' => $waktuWithMicro,
+                        'waktu' => $waktu_transaksi,
                         'stok_masuk' => $new_jumlah,
                         'stok_keluar' => 0,
                         'stok_awal' => $stokAwal,
@@ -495,7 +494,7 @@ class PembelianDetailController extends Controller
             DB::table('produk')->where('id_produk', $produk->id_produk)->update(['stok' => $new_stok]);
             
             $pembelian = Pembelian::find($detail->id_pembelian);
-            $waktu_transaksi = $pembelian && $pembelian->waktu ? $pembelian->waktu : Carbon::now();
+            $waktu_transaksi = $this->resolvePembelianStockWaktu($pembelian);
             
             $rekaman_stok = DB::table('rekaman_stoks')
                 ->where('id_pembelian', $detail->id_pembelian)
@@ -517,12 +516,11 @@ class PembelianDetailController extends Controller
                     ]);
             } else {
                 $stokAwal = $new_stok - $new_jumlah;
-                $waktuWithMicro = Carbon::now()->format('Y-m-d H:i:s.u');
                 
                 DB::table('rekaman_stoks')->insert([
                     'id_produk' => $detail->id_produk,
                     'id_pembelian' => $detail->id_pembelian,
-                    'waktu' => $waktuWithMicro,
+                    'waktu' => $waktu_transaksi,
                     'stok_masuk' => $new_jumlah,
                     'stok_keluar' => 0,
                     'stok_awal' => $stokAwal,
@@ -677,10 +675,39 @@ class PembelianDetailController extends Controller
 
     private function ensurePembelianHasWaktu($pembelian)
     {
+        if (!$pembelian) {
+            return;
+        }
+
+        $shouldSave = false;
+
         if (!$pembelian->waktu) {
             $pembelian->waktu = $pembelian->created_at ?? Carbon::now();
+            $shouldSave = true;
+        }
+
+        if (!$pembelian->waktu_datang) {
+            $pembelian->waktu_datang = $pembelian->created_at ?? $pembelian->waktu ?? Carbon::now();
+            $shouldSave = true;
+        }
+
+        if ($shouldSave) {
             $pembelian->save();
         }
+    }
+
+    private function resolvePembelianStockWaktu($pembelian): string
+    {
+        if (!$pembelian) {
+            return Carbon::now()->format('Y-m-d H:i:s');
+        }
+
+        $candidate = $pembelian->waktu_datang
+            ?? $pembelian->waktu
+            ?? $pembelian->created_at
+            ?? Carbon::now();
+
+        return Carbon::parse($candidate)->format('Y-m-d H:i:s');
     }
     
     private function atomicRecalculateAndSync($produkId)

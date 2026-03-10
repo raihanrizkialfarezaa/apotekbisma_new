@@ -46,14 +46,18 @@ class SyncRekamanStok extends Command
             
             foreach ($pembelian_records as $rekaman) {
                 $pembelian = Pembelian::find($rekaman->id_pembelian);
-                if ($pembelian && $pembelian->waktu && $rekaman->waktu != $pembelian->waktu) {
+                $targetWaktu = $pembelian
+                    ? ($pembelian->waktu_datang ?? $pembelian->waktu ?? $pembelian->created_at)
+                    : null;
+
+                if ($targetWaktu && $rekaman->waktu != $targetWaktu) {
                     $old_waktu = $rekaman->waktu;
-                    $rekaman->waktu = $pembelian->waktu;
+                    $rekaman->waktu = $targetWaktu;
                     $rekaman->save();
-                    $this->line("  Updated RekamanStok ID {$rekaman->id_rekaman_stok}: {$old_waktu} -> {$pembelian->waktu}");
+                    $this->line("  Updated RekamanStok ID {$rekaman->id_rekaman_stok}: {$old_waktu} -> {$targetWaktu}");
                     $pembelian_updated++;
-                } elseif ($pembelian && !$pembelian->waktu) {
-                    $this->line("  Skipped RekamanStok ID {$rekaman->id_rekaman_stok}: Pembelian {$pembelian->id_pembelian} has null waktu");
+                } elseif ($pembelian && !$targetWaktu) {
+                    $this->line("  Skipped RekamanStok ID {$rekaman->id_rekaman_stok}: Pembelian {$pembelian->id_pembelian} has no effective stock time");
                 }
             }
             $this->info("  Total Pembelian records updated: {$pembelian_updated}");
@@ -113,8 +117,9 @@ class SyncRekamanStok extends Command
                 if ($r->id_pembelian) {
                     $pembelian = Pembelian::find($r->id_pembelian);
                     if ($pembelian) {
-                        $status = ($r->waktu == $pembelian->waktu) ? "SYNC ✓" : "MISMATCH ✗";
-                        $this->line("  Pembelian waktu: {$pembelian->waktu} | Status: {$status}");
+                        $targetWaktu = $pembelian->waktu_datang ?? $pembelian->waktu ?? $pembelian->created_at;
+                        $status = ($r->waktu == $targetWaktu) ? "SYNC ✓" : "MISMATCH ✗";
+                        $this->line("  Pembelian waktu stok: {$targetWaktu} | Status: {$status}");
                     }
                 }
             }

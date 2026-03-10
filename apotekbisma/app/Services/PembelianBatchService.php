@@ -95,7 +95,9 @@ class PembelianBatchService
         $detail->save();
         
         $pembelian = Pembelian::find($detail->id_pembelian);
-        $waktu_transaksi = $pembelian && $pembelian->waktu ? $pembelian->waktu : Carbon::now();
+        $waktu_transaksi = $pembelian && $pembelian->waktu_datang
+            ? $pembelian->waktu_datang
+            : ($pembelian && $pembelian->waktu ? $pembelian->waktu : Carbon::now());
         
         RekamanStok::updateOrCreate(
             [

@@ -12,10 +12,15 @@ class Pembelian extends Model
     protected $table = 'pembelian';
     protected $primaryKey = 'id_pembelian';
     protected $guarded = [];
-    protected $dates = ['waktu'];
+    protected $dates = ['waktu', 'waktu_datang'];
 
     public function supplier()
     {
         return $this->belongsTo(Supplier::class, 'id_supplier', 'id_supplier');
+    }
+
+    public function detail()
+    {
+        return $this->hasMany(PembelianDetail::class, 'id_pembelian', 'id_pembelian');
     }
 }

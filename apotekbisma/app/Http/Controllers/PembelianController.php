@@ -17,19 +17,98 @@ use App\Services\TransactionDateMutationService;
 
 class PembelianController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $supplier = Supplier::orderBy('nama')->get();
+        $supplier = Supplier::select('id_supplier', 'nama')->orderBy('nama')->get();
+        $products = Produk::select('id_produk', 'nama_produk', 'kode_produk')
+            ->orderBy('nama_produk', 'asc')
+            ->get();
 
-        return view('pembelian.index', compact('supplier'));
+        $filterDefaults = [
+            'arrival_date_preset' => $request->get('arrival_date_preset', 'all'),
+            'arrival_start_date' => $request->get('arrival_start_date'),
+            'arrival_end_date' => $request->get('arrival_end_date'),
+            'invoice_start_datetime' => $request->get('invoice_start_datetime'),
+            'invoice_end_datetime' => $request->get('invoice_end_datetime'),
+            'id_supplier' => $request->get('id_supplier'),
+            'id_produk' => $request->get('id_produk'),
+            'search_text' => $request->get('search_text', ''),
+        ];
+
+        return view('pembelian.index', compact('supplier', 'products', 'filterDefaults'));
     }
 
-    public function data()
+    public function data(Request $request)
     {
-        $pembelian = Pembelian::with('supplier')->orderBy('id_pembelian', 'desc')->get();
-        
+        $pembelian = Pembelian::query()
+            ->leftJoin('supplier as supplier_ref', 'supplier_ref.id_supplier', '=', 'pembelian.id_supplier')
+            ->select('pembelian.*', 'supplier_ref.nama as supplier_nama')
+            ->withCount([
+                'detail',
+                'detail as incomplete_detail_count' => function ($query) {
+                    $query->where('jumlah', '<=', 0);
+                },
+            ])
+            ->orderBy('pembelian.id_pembelian', 'desc');
+
+        [$arrivalStartDate, $arrivalEndDate] = $this->resolveDateRange(
+            $request->input('arrival_date_preset', 'all'),
+            $request->input('arrival_start_date'),
+            $request->input('arrival_end_date')
+        );
+
+        if ($arrivalStartDate && $arrivalEndDate) {
+            $pembelian->whereRaw('DATE(COALESCE(pembelian.waktu_datang, pembelian.created_at)) >= ?', [$arrivalStartDate])
+                ->whereRaw('DATE(COALESCE(pembelian.waktu_datang, pembelian.created_at)) <= ?', [$arrivalEndDate]);
+        }
+
+        $invoiceStartDateTime = $this->parseDateTimeInput($request->input('invoice_start_datetime'), true);
+        $invoiceEndDateTime = $this->parseDateTimeInput($request->input('invoice_end_datetime'), false);
+
+        if ($invoiceStartDateTime) {
+            $pembelian->whereRaw('COALESCE(pembelian.waktu, pembelian.created_at) >= ?', [$invoiceStartDateTime]);
+        }
+
+        if ($invoiceEndDateTime) {
+            $pembelian->whereRaw('COALESCE(pembelian.waktu, pembelian.created_at) <= ?', [$invoiceEndDateTime]);
+        }
+
+        $supplierIds = $this->normalizeIdFilter($request->input('id_supplier'));
+        if ($supplierIds->isNotEmpty()) {
+            $pembelian->whereIn('pembelian.id_supplier', $supplierIds->all());
+        }
+
+        $productIds = $this->normalizeIdFilter($request->input('id_produk'));
+        if ($productIds->isNotEmpty()) {
+            $pembelian->whereHas('detail', function ($query) use ($productIds) {
+                $query->whereIn('id_produk', $productIds->all());
+            });
+        }
+
         return datatables()
-            ->of($pembelian)
+            ->eloquent($pembelian)
+            ->filter(function ($query) use ($request) {
+                $searchValue = trim((string) data_get($request->input('search'), 'value', ''));
+                if ($searchValue === '') {
+                    return;
+                }
+
+                $likeValue = '%' . str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $searchValue) . '%';
+
+                $query->where(function ($builder) use ($searchValue, $likeValue) {
+                    $builder->where('pembelian.no_faktur', 'like', $likeValue)
+                        ->orWhere('supplier_ref.nama', 'like', $likeValue)
+                        ->orWhereHas('detail.produk', function ($productQuery) use ($likeValue) {
+                            $productQuery->where('produk.nama_produk', 'like', $likeValue)
+                                ->orWhere('produk.kode_produk', 'like', $likeValue);
+                        });
+
+                    if (is_numeric($searchValue)) {
+                        $builder->orWhere('pembelian.id_pembelian', intval($searchValue))
+                            ->orWhere('pembelian.total_item', intval($searchValue));
+                    }
+                });
+            }, true)
             ->addIndexColumn()
             ->addColumn('total_item', function ($pembelian) {
                 return format_uang($pembelian->total_item ?? 0);
@@ -49,13 +128,13 @@ class PembelianController extends Controller
                 return 'Rp. '. format_uang($pembelian->bayar ?? 0);
             })
             ->addColumn('tanggal', function ($pembelian) {
-                return tanggal_indonesia($pembelian->created_at, false);
+                return tanggal_indonesia(($pembelian->waktu_datang != NULL ? $pembelian->waktu_datang : $pembelian->created_at), false);
             })
             ->addColumn('waktu', function ($pembelian) {
                 return tanggal_indonesia(($pembelian->waktu != NULL ? $pembelian->waktu : $pembelian->created_at), false);
             })
             ->addColumn('supplier', function ($pembelian) {
-                return $pembelian->supplier ? $pembelian->supplier->nama : 'N/A';
+                return $pembelian->supplier_nama ?: 'N/A';
             })
             ->editColumn('diskon', function ($pembelian) {
                 return ($pembelian->diskon ?? 0) . '%';
@@ -63,7 +142,7 @@ class PembelianController extends Controller
             ->addColumn('aksi', function ($pembelian) {
                 $isIncomplete = $this->isPembelianIncomplete($pembelian);
                 $isCompleted = !$isIncomplete;
-                $hasDetail = PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)->exists();
+                $hasDetail = intval($pembelian->detail_count ?? 0) > 0;
                 
                 $buttons = '
                 <div class="btn-group">
@@ -89,6 +168,13 @@ class PembelianController extends Controller
                 </div>';
                 
                 return $buttons;
+            })
+            ->orderColumn('supplier', 'supplier_ref.nama $1')
+            ->orderColumn('tanggal', function ($query, $direction) {
+                $query->orderByRaw('COALESCE(pembelian.waktu_datang, pembelian.created_at) ' . $direction);
+            })
+            ->orderColumn('waktu', function ($query, $direction) {
+                $query->orderByRaw('COALESCE(pembelian.waktu, pembelian.created_at) ' . $direction);
             })
             ->rawColumns(['aksi', 'total_harga'])
             ->make(true);
@@ -123,6 +209,7 @@ class PembelianController extends Controller
             $pembelian->diskon      = 0;
             $pembelian->bayar       = 0;
             $pembelian->waktu       = Carbon::now();
+            $pembelian->waktu_datang = Carbon::now();
             $pembelian->no_faktur   = 'o'; // Temporary value to indicate incomplete transaction
             $pembelian->save();
 
@@ -198,10 +285,12 @@ class PembelianController extends Controller
             $pembelian->total_harga = $request->total;
             $pembelian->diskon = $request->diskon ?? 0;
             $pembelian->bayar = $request->bayar;
-            $pembelian->waktu = $this->resolveTransactionWaktu(
+            $resolvedInvoiceWaktu = $this->resolveTransactionWaktu(
                 $request->waktu,
                 $pembelian->waktu ?? $pembelian->created_at ?? Carbon::now()
             );
+            $pembelian->waktu = $resolvedInvoiceWaktu;
+            $pembelian->waktu_datang = $resolvedInvoiceWaktu;
             $pembelian->no_faktur = $request->nomor_faktur;
             $pembelian->update();
             
@@ -216,7 +305,7 @@ class PembelianController extends Controller
                 if (!$existing_rekaman && $produk) {
                     RekamanStok::create([
                         'id_produk' => $item->id_produk,
-                        'waktu' => $pembelian->waktu ?? Carbon::now(),
+                        'waktu' => $this->resolvePembelianStockWaktu($pembelian),
                         'stok_masuk' => $item->jumlah,
                         'id_pembelian' => $id_pembelian,
                         'stok_awal' => $produk->stok - $item->jumlah,
@@ -260,7 +349,7 @@ class PembelianController extends Controller
         
         try {
             $pembelian = Pembelian::findOrFail($request->id_pembelian);
-            $waktuLama = Carbon::parse($pembelian->waktu ?? $pembelian->created_at)->format('Y-m-d H:i:s');
+            $waktuLama = $this->resolvePembelianStockWaktu($pembelian);
             
             $detail = PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)->get();
             if ($detail->isEmpty()) {
@@ -288,10 +377,12 @@ class PembelianController extends Controller
             $pembelian->bayar = $request->bayar;
             $pembelian->no_faktur = $request->nomor_faktur;
             if ($request->waktu != NULL) {
-                $pembelian->waktu = $this->resolveTransactionWaktu(
+                $resolvedInvoiceWaktu = $this->resolveTransactionWaktu(
                     $request->waktu,
                     $pembelian->waktu ?? $pembelian->created_at ?? Carbon::now()
                 );
+                $pembelian->waktu = $resolvedInvoiceWaktu;
+                $pembelian->waktu_datang = $resolvedInvoiceWaktu;
             }
             
             $pembelian->update();
@@ -299,7 +390,7 @@ class PembelianController extends Controller
             app(TransactionDateMutationService::class)->handlePembelianFinalDateChange(
                 $pembelian,
                 $waktuLama,
-                $pembelian->waktu ?? $waktuLama
+                $this->resolvePembelianStockWaktu($pembelian)
             );
             
             DB::commit();
@@ -519,10 +610,15 @@ class PembelianController extends Controller
 
     private function isPembelianIncomplete($pembelian): bool
     {
-        $hasDetail = PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)->exists();
-        $hasIncompleteDetail = PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)
-            ->where('jumlah', '<=', 0)
-            ->exists();
+        $hasDetail = isset($pembelian->detail_count)
+            ? intval($pembelian->detail_count) > 0
+            : PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)->exists();
+
+        $hasIncompleteDetail = isset($pembelian->incomplete_detail_count)
+            ? intval($pembelian->incomplete_detail_count) > 0
+            : PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)
+                ->where('jumlah', '<=', 0)
+                ->exists();
 
         return !$hasDetail
             || $hasIncompleteDetail
@@ -531,6 +627,164 @@ class PembelianController extends Controller
             || $pembelian->no_faktur === 'o'
             || $pembelian->no_faktur === ''
             || $pembelian->no_faktur === null;
+    }
+
+    private function resolveDateRange(string $preset, ?string $startDate, ?string $endDate): array
+    {
+        $today = Carbon::today();
+        $start = null;
+        $end = null;
+
+        switch ($preset) {
+            case 'today':
+                $start = $today->copy();
+                $end = $today->copy();
+                break;
+            case 'yesterday':
+                $start = $today->copy()->subDay();
+                $end = $today->copy()->subDay();
+                break;
+            case 'last_7_days':
+                $start = $today->copy()->subDays(6);
+                $end = $today->copy();
+                break;
+            case 'last_30_days':
+                $start = $today->copy()->subDays(29);
+                $end = $today->copy();
+                break;
+            case 'this_week':
+                $start = $today->copy()->startOfWeek(Carbon::MONDAY);
+                $end = $today->copy()->endOfWeek(Carbon::SUNDAY);
+                break;
+            case 'last_week':
+                $start = $today->copy()->subWeek()->startOfWeek(Carbon::MONDAY);
+                $end = $today->copy()->subWeek()->endOfWeek(Carbon::SUNDAY);
+                break;
+            case 'this_month':
+                $start = $today->copy()->startOfMonth();
+                $end = $today->copy()->endOfMonth();
+                break;
+            case 'last_month':
+                $start = $today->copy()->subMonthNoOverflow()->startOfMonth();
+                $end = $today->copy()->subMonthNoOverflow()->endOfMonth();
+                break;
+            case 'this_year':
+                $start = $today->copy()->startOfYear();
+                $end = $today->copy()->endOfYear();
+                break;
+            case 'custom':
+            case 'all':
+            default:
+                break;
+        }
+
+        if ($preset === 'custom') {
+            $parsedStart = $this->parseDateInput($startDate);
+            $parsedEnd = $this->parseDateInput($endDate);
+
+            if ($parsedStart) {
+                $start = $parsedStart;
+            }
+
+            if ($parsedEnd) {
+                $end = $parsedEnd;
+            }
+
+            if ($start && !$end) {
+                $end = $start->copy();
+            }
+
+            if ($end && !$start) {
+                $start = $end->copy();
+            }
+
+            if ($start && $end && $start->greaterThan($end)) {
+                [$start, $end] = [$end, $start];
+            }
+        }
+
+        return [
+            $start?->toDateString(),
+            $end?->toDateString(),
+        ];
+    }
+
+    private function parseDateInput(?string $date): ?Carbon
+    {
+        if (!$date) {
+            return null;
+        }
+
+        try {
+            $parsed = Carbon::createFromFormat('Y-m-d', $date);
+            return $parsed && $parsed->format('Y-m-d') === $date ? $parsed : null;
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
+
+    private function parseDateTimeInput(?string $dateTime, bool $isStart): ?string
+    {
+        if (!$dateTime) {
+            return null;
+        }
+
+        $raw = trim($dateTime);
+        if ($raw === '') {
+            return null;
+        }
+
+        if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $raw)) {
+            $parsed = Carbon::createFromFormat('Y-m-d', $raw);
+            return ($isStart ? $parsed->startOfDay() : $parsed->endOfDay())->format('Y-m-d H:i:s');
+        }
+
+        foreach (['Y-m-d\TH:i:s', 'Y-m-d\TH:i', 'Y-m-d H:i:s', 'Y-m-d H:i'] as $format) {
+            try {
+                $parsed = Carbon::createFromFormat($format, $raw);
+                if (in_array($format, ['Y-m-d\TH:i', 'Y-m-d H:i'], true) && !$isStart) {
+                    $parsed->second = 59;
+                }
+
+                return $parsed->format('Y-m-d H:i:s');
+            } catch (\Throwable $e) {
+            }
+        }
+
+        try {
+            return Carbon::parse($raw)->format('Y-m-d H:i:s');
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
+
+    private function normalizeIdFilter($rawValue)
+    {
+        return collect(is_array($rawValue) ? $rawValue : [$rawValue])
+            ->flatMap(function ($value) {
+                return explode(',', (string) $value);
+            })
+            ->map(function ($value) {
+                return trim((string) $value);
+            })
+            ->filter(function ($value) {
+                return $value !== '' && is_numeric($value) && (int) $value > 0;
+            })
+            ->map(function ($value) {
+                return (int) $value;
+            })
+            ->unique()
+            ->values();
+    }
+
+    private function resolvePembelianStockWaktu(Pembelian $pembelian): string
+    {
+        $candidate = $pembelian->waktu_datang
+            ?? $pembelian->waktu
+            ?? $pembelian->created_at
+            ?? Carbon::now();
+
+        return Carbon::parse($candidate)->format('Y-m-d H:i:s');
     }
 
     private function resolveTransactionWaktu($value, $fallback = null): string

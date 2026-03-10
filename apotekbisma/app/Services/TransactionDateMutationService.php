@@ -48,7 +48,7 @@ class TransactionDateMutationService
 
     public function synchronizeFinalizedPembelian(Pembelian $pembelian): array
     {
-        $this->assertTransactionIsPostCutoff($pembelian->waktu ?? $pembelian->created_at);
+        $this->assertTransactionIsPostCutoff($this->resolvePembelianStockWaktu($pembelian));
 
         return $this->baselineStockReflowService->rebuildProducts(
             $this->getPembelianProductIds($pembelian),
@@ -160,6 +160,16 @@ class TransactionDateMutationService
                 return intval($productId);
             })
             ->all();
+    }
+
+    private function resolvePembelianStockWaktu(Pembelian $pembelian): string
+    {
+        $candidate = $pembelian->waktu_datang
+            ?? $pembelian->waktu
+            ?? $pembelian->created_at
+            ?? Carbon::now();
+
+        return Carbon::parse($candidate)->format('Y-m-d H:i:s');
     }
 
     private function getPenjualanProductIds(Penjualan $penjualan): array

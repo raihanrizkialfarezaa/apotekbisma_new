@@ -353,10 +353,10 @@ class RebuildStockFromBaseline extends Command
             ->where('p.no_faktur', '!=', 'o')
             ->where('p.total_harga', '>', 0)
             ->where('p.bayar', '>', 0)
-            ->whereRaw('COALESCE(p.waktu, p.created_at) > ?', [$cutoff])
-            ->whereRaw('COALESCE(p.waktu, p.created_at) <= ?', [$until])
-            ->groupBy('pd.id_pembelian', DB::raw('COALESCE(p.waktu, p.created_at)'))
-            ->selectRaw('pd.id_pembelian as ref_id, COALESCE(p.waktu, p.created_at) as waktu_event, SUM(pd.jumlah) as qty, MAX(pd.id_pembelian_detail) as sort_key, MAX(p.no_faktur) as no_faktur')
+            ->whereRaw('COALESCE(p.waktu_datang, p.waktu, p.created_at) > ?', [$cutoff])
+            ->whereRaw('COALESCE(p.waktu_datang, p.waktu, p.created_at) <= ?', [$until])
+            ->groupBy('pd.id_pembelian', DB::raw('COALESCE(p.waktu_datang, p.waktu, p.created_at)'))
+            ->selectRaw('pd.id_pembelian as ref_id, COALESCE(p.waktu_datang, p.waktu, p.created_at) as waktu_event, SUM(pd.jumlah) as qty, MAX(pd.id_pembelian_detail) as sort_key, MAX(p.no_faktur) as no_faktur')
             ->get();
 
         foreach ($pembelian as $row) {

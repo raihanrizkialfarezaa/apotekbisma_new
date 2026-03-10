@@ -147,12 +147,22 @@
                                 </div>
                             </div>
                             <div class="form-group row">
+                                <label for="waktu_datang" class="col-lg-2 control-label">Tanggal & Waktu Obat Datang</label>
+                                <div class="col-lg-8">
+                                    @if ($tanggal->waktu_datang != NULL)
+                                        <input type="datetime-local" name="waktu_datang" id="waktu_datang" value="{{ $tanggal->waktu_datang->format('Y-m-d\TH:i:s') }}" class="form-control" step="1" readonly>
+                                    @else
+                                        <input type="datetime-local" name="waktu_datang" id="waktu_datang" value="{{ $tanggal->created_at->format('Y-m-d\TH:i:s') }}" class="form-control" step="1" readonly>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label for="waktu_faktur" class="col-lg-2 control-label">Tanggal & Waktu Faktur</label>
                                 <div class="col-lg-8">
                                     @if ($tanggal->waktu != NULL)
-                                        <input type="datetime-local" name="waktu" id="waktu_faktur" value="{{ $tanggal->waktu->format('Y-m-d\TH:i:s') }}" class="form-control" step="1">
+                                        <input type="datetime-local" name="waktu" id="waktu_faktur" value="{{ $tanggal->waktu->format('Y-m-d\TH:i:s') }}" class="form-control waktu-faktur" step="1">
                                     @else
-                                        <input type="datetime-local" name="waktu" id="waktu_faktur" value="{{ $tanggal->created_at->format('Y-m-d\TH:i:s') }}" class="form-control" step="1">
+                                        <input type="datetime-local" name="waktu" id="waktu_faktur" value="{{ $tanggal->created_at->format('Y-m-d\TH:i:s') }}" class="form-control waktu-faktur" step="1">
                                     @endif
                                 </div>
                             </div>
@@ -198,6 +208,19 @@
 <script>
     let table, table2;
 
+    function syncWaktuDatangWithFaktur() {
+        const waktuFakturInput = document.getElementById('waktu_faktur');
+        const waktuDatangInput = document.getElementById('waktu_datang');
+
+        if (!waktuFakturInput || !waktuDatangInput) {
+            return;
+        }
+
+        if (waktuFakturInput.value) {
+            waktuDatangInput.value = waktuFakturInput.value;
+        }
+    }
+
     // Helper function untuk format angka seperti format_uang di PHP
     function formatUang(angka) {
         return new Intl.NumberFormat('id-ID').format(angka);
@@ -205,6 +228,8 @@
 
     $(function () {
         $('body').addClass('sidebar-collapse');
+        syncWaktuDatangWithFaktur();
+        $('#waktu_faktur').on('input change', syncWaktuDatangWithFaktur);
 
         table = $('.table-pembelian').DataTable({
             responsive: true,

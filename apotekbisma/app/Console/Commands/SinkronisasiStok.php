@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Models\Produk;
 use App\Models\RekamanStok;
 use App\Models\Penjualan;
 use App\Models\Pembelian;
@@ -59,16 +58,26 @@ class SinkronisasiStok extends Command
                 $fixedPenjualan++;
             }
             
-            $pembelianNull = Pembelian::whereNull('waktu')->get();
+            $pembelianNull = Pembelian::where(function ($query) {
+                $query->whereNull('waktu')
+                    ->orWhereNull('waktu_datang');
+            })->get();
             $fixedPembelian = 0;
             
             foreach ($pembelianNull as $pembelian) {
                 $waktuDefault = $pembelian->created_at ?? Carbon::today();
-                $pembelian->waktu = $waktuDefault;
+                if (!$pembelian->waktu) {
+                    $pembelian->waktu = $waktuDefault;
+                }
+                if (!$pembelian->waktu_datang) {
+                    $pembelian->waktu_datang = $waktuDefault;
+                }
                 $pembelian->save();
+
+                $targetWaktu = $pembelian->waktu_datang ?? $pembelian->waktu ?? $waktuDefault;
                 
                 RekamanStok::where('id_pembelian', $pembelian->id_pembelian)
-                           ->update(['waktu' => $waktuDefault]);
+                           ->update(['waktu' => $targetWaktu]);
                 
                 $fixedPembelian++;
             }

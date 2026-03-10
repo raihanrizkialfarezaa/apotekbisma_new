@@ -299,9 +299,15 @@
                                 </div>
                             </div>
                             <div class="form-group row">
+                                <label for="waktu_datang" class="col-lg-2 control-label">Tanggal & Waktu Obat Datang</label>
+                                <div class="col-lg-8">
+                                    <input type="datetime-local" name="waktu_datang" id="waktu_datang" class="form-control waktu-datang" step="1" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label for="waktu_faktur" class="col-lg-2 control-label">Tanggal & Waktu Faktur</label>
                                 <div class="col-lg-8">
-                                    <input type="datetime-local" name="waktu" id="waktu_faktur" class="form-control waktu" step="1">
+                                    <input type="datetime-local" name="waktu" id="waktu_faktur" class="form-control waktu-faktur" step="1">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -382,9 +388,30 @@
         return `${year}-${month}-${day}T${hour}:${minute}:${second}`;
     }
 
-    const waktuInput = document.querySelector('.waktu');
-    if (waktuInput && !waktuInput.value) {
-        waktuInput.value = formatDateTimeLocal(new Date());
+    function syncWaktuDatangWithFaktur() {
+        if (!waktuDatangInput || !waktuFakturInput) {
+            return;
+        }
+
+        if (waktuFakturInput.value) {
+            waktuDatangInput.value = waktuFakturInput.value;
+            return;
+        }
+
+        if (waktuDatangInput.value) {
+            waktuFakturInput.value = waktuDatangInput.value;
+        }
+    }
+
+    const waktuDatangInput = document.querySelector('.waktu-datang');
+    const waktuFakturInput = document.querySelector('.waktu-faktur');
+    if (waktuFakturInput && !waktuFakturInput.value) {
+        waktuFakturInput.value = formatDateTimeLocal(new Date());
+    }
+    syncWaktuDatangWithFaktur();
+    if (waktuFakturInput) {
+        waktuFakturInput.addEventListener('input', syncWaktuDatangWithFaktur);
+        waktuFakturInput.addEventListener('change', syncWaktuDatangWithFaktur);
     }
     let table, table2;
     
