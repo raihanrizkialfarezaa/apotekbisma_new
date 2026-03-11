@@ -5,6 +5,12 @@ Dokumen ini mengikuti flow final yang dipakai dan tervalidasi di lingkungan kerj
 ## Prasyarat
 
 - Deploy file kode yang sudah diperbaiki.
+- Jika database production masih berasal dari struktur lama, jalankan migration terlebih dahulu:
+
+```powershell
+php artisan migrate
+```
+
 - Upload file `REKAMAN STOK FINAL 31 DESEMBER 2025_2.csv` ke root project.
 - Pastikan `.env` production memiliki nilai ini:
 
@@ -17,6 +23,50 @@ STOCK_STALE_DRAFT_MINUTES=30
 - Backup database sebelum menjalankan apply.
 - Jangan jalankan cleanup draft lama atau script ad hoc lain di root project.
 - Jangan jalankan `migrate:fresh`.
+
+## Flow Reset Pembelian Pasca-Cutoff
+
+Pakai flow ini hanya jika domain pembelian pasca-cutoff memang diputuskan akan direset total, sementara penjualan dan event stok non-pembelian tetap dipertahankan. Tujuannya adalah menghapus semua pembelian dengan waktu efektif `> cutoff` lalu input ulang faktur asli yang sudah divalidasi admin dari awal cutoff sampai hari ini.
+
+Urutan aman:
+
+1. Backup database penuh.
+2. Freeze input transaksi baru selama reset berjalan.
+3. Jalankan dry-run purge pembelian pasca-cutoff.
+4. Jalankan apply purge pembelian pasca-cutoff.
+5. Input ulang seluruh faktur pembelian asli yang valid dari awal cutoff sampai hari ini.
+6. Jalankan flow rebuild presisi untuk verifikasi akhir.
+
+Dry-run:
+
+```powershell
+php artisan stock:purge-post-cutoff-purchases
+```
+
+Apply:
+
+```powershell
+php artisan stock:purge-post-cutoff-purchases --apply --force
+```
+
+Jika juga ingin menghapus audit perubahan tanggal pembelian yang terkait dengan data yang dipurge: (optional)
+
+```powershell
+php artisan stock:purge-post-cutoff-purchases --apply --force --delete-audits
+```
+One-line command:
+
+```powershell
+php artisan stock:purge-post-cutoff-purchases; php artisan stock:purge-post-cutoff-purchases --apply --force
+```
+
+Command ini:
+
+- hanya menyentuh `pembelian`, `pembelian_detail`, dan `rekaman_stoks` yang terkait `id_pembelian`
+- tidak menghapus transaksi penjualan
+- tidak menghapus event manual stok yang tidak terkait `id_pembelian`
+- merecalculate stok produk terdampak berdasarkan `id_produk` unik agar tidak double-hit karena duplicate id
+- membuat report JSON `post_cutoff_purchase_purge_report_*.json` di root project
 
 ## Flow Rebuild Presisi
 
@@ -34,6 +84,7 @@ php artisan stock:baseline-rebuild --until="$until" --include-negative-events
 ```
 
 Versi dijadikan satu command:
+
 ```powershell
 $until=(Get-Date -Format "yyyy-MM-dd HH:mm:ss"); php artisan optimize:clear; php generate_negative_stock_audit_markdown.php --until="$until"; php artisan stock:baseline-rebuild --until="$until"; php artisan stock:baseline-rebuild --until="$until" --include-negative-events; php artisan stock:baseline-rebuild --apply --until="$until" --include-negative-events; php artisan stock:baseline-rebuild --until="$until" --include-negative-events
 ```
@@ -59,6 +110,7 @@ php artisan stock:baseline-rebuild --until="$until" --include-negative-events
 ```
 
 Versi dijadikan satu command:
+
 ```powershell
 $until="2026-03-09 23:59:59"; php artisan optimize:clear; php generate_negative_stock_audit_markdown.php --until="$until"; php artisan stock:baseline-rebuild --until="$until"; php artisan stock:baseline-rebuild --until="$until" --include-negative-events; php artisan stock:baseline-rebuild --apply --until="$until" --include-negative-events; php artisan stock:baseline-rebuild --until="$until" --include-negative-events
 ```
