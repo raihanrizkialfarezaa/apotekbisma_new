@@ -149,11 +149,7 @@
                             <div class="form-group row">
                                 <label for="waktu_datang" class="col-lg-2 control-label">Tanggal & Waktu Obat Datang</label>
                                 <div class="col-lg-8">
-                                    @if ($tanggal->waktu_datang != NULL)
-                                        <input type="datetime-local" name="waktu_datang" id="waktu_datang" value="{{ $tanggal->waktu_datang->format('Y-m-d\TH:i:s') }}" class="form-control" step="1" readonly>
-                                    @else
-                                        <input type="datetime-local" name="waktu_datang" id="waktu_datang" value="{{ $tanggal->created_at->format('Y-m-d\TH:i:s') }}" class="form-control" step="1" readonly>
-                                    @endif
+                                    <input type="datetime-local" name="waktu_datang" id="waktu_datang" value="{{ optional($tanggal->waktu_datang ?? $tanggal->waktu ?? $tanggal->created_at)->format('Y-m-d\TH:i:s') }}" class="form-control" step="1" readonly>
                                 </div>
                             </div>
                             <div class="form-group row">

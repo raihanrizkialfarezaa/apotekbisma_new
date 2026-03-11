@@ -84,6 +84,13 @@
         <p>Tanggal Cetak: {{ date('d-m-Y H:i:s') }}</p>
     </div>
 
+    @if (($preCutoffAuditPurchaseCount ?? 0) > 0)
+        <div style="margin-bottom: 15px; padding: 10px 12px; border: 1px solid #9ec5fe; background: #eef6ff; color: #174ea6;">
+            Riwayat pembelian pra-cutoff ditampilkan sebagai referensi audit sebanyak {{ $preCutoffAuditPurchaseCount }} baris.
+            Baris tersebut tidak mengubah stok aktif karena kuantitasnya sudah tercermin pada saldo awal baseline per {{ $stockCutoff }}.
+        </div>
+    @endif
+
     <div class="product-info">
         <div class="info-section">
             <h4>Informasi Produk</h4>

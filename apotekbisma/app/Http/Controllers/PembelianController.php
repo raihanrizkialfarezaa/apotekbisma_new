@@ -57,9 +57,11 @@ class PembelianController extends Controller
             $request->input('arrival_end_date')
         );
 
+        $arrivalDateExpression = $this->getPembelianArrivalDateSqlExpression();
+
         if ($arrivalStartDate && $arrivalEndDate) {
-            $pembelian->whereRaw('DATE(COALESCE(pembelian.waktu_datang, pembelian.created_at)) >= ?', [$arrivalStartDate])
-                ->whereRaw('DATE(COALESCE(pembelian.waktu_datang, pembelian.created_at)) <= ?', [$arrivalEndDate]);
+            $pembelian->whereRaw('DATE(' . $arrivalDateExpression . ') >= ?', [$arrivalStartDate])
+                ->whereRaw('DATE(' . $arrivalDateExpression . ') <= ?', [$arrivalEndDate]);
         }
 
         $invoiceStartDateTime = $this->parseDateTimeInput($request->input('invoice_start_datetime'), true);
@@ -128,7 +130,7 @@ class PembelianController extends Controller
                 return 'Rp. '. format_uang($pembelian->bayar ?? 0);
             })
             ->addColumn('tanggal', function ($pembelian) {
-                return tanggal_indonesia(($pembelian->waktu_datang != NULL ? $pembelian->waktu_datang : $pembelian->created_at), false);
+                return tanggal_indonesia($this->resolvePembelianArrivalDisplayWaktu($pembelian), false);
             })
             ->addColumn('waktu', function ($pembelian) {
                 return tanggal_indonesia(($pembelian->waktu != NULL ? $pembelian->waktu : $pembelian->created_at), false);
@@ -171,7 +173,7 @@ class PembelianController extends Controller
             })
             ->orderColumn('supplier', 'supplier_ref.nama $1')
             ->orderColumn('tanggal', function ($query, $direction) {
-                $query->orderByRaw('COALESCE(pembelian.waktu_datang, pembelian.created_at) ' . $direction);
+                $query->orderByRaw($this->getPembelianArrivalDateSqlExpression() . ' ' . $direction);
             })
             ->orderColumn('waktu', function ($query, $direction) {
                 $query->orderByRaw('COALESCE(pembelian.waktu, pembelian.created_at) ' . $direction);
@@ -777,7 +779,12 @@ class PembelianController extends Controller
             ->values();
     }
 
-    private function resolvePembelianStockWaktu(Pembelian $pembelian): string
+    private function getPembelianArrivalDateSqlExpression(): string
+    {
+        return 'COALESCE(pembelian.waktu_datang, pembelian.waktu, pembelian.created_at)';
+    }
+
+    private function resolvePembelianArrivalDisplayWaktu(Pembelian $pembelian): string
     {
         $candidate = $pembelian->waktu_datang
             ?? $pembelian->waktu
@@ -785,6 +792,11 @@ class PembelianController extends Controller
             ?? Carbon::now();
 
         return Carbon::parse($candidate)->format('Y-m-d H:i:s');
+    }
+
+    private function resolvePembelianStockWaktu(Pembelian $pembelian): string
+    {
+        return $this->resolvePembelianArrivalDisplayWaktu($pembelian);
     }
 
     private function resolveTransactionWaktu($value, $fallback = null): string

@@ -1515,6 +1515,13 @@
             
             <!-- Enhanced Table Tools Section -->
             <div class="table-tools-section">
+                @if (($preCutoffAuditPurchaseCount ?? 0) > 0)
+                    <div class="alert alert-info" style="margin: 16px 16px 0 16px; border-radius: 10px; border: none; background: #eaf4ff; color: #1f4f7a;">
+                        <strong>Mode Audit Aktif.</strong>
+                        Riwayat pembelian pra-cutoff ditampilkan sebagai referensi audit sebanyak {{ $preCutoffAuditPurchaseCount }} baris.
+                        Baris ini tidak mengubah stok aktif; kuantitasnya sudah tercermin pada saldo awal baseline per {{ $stockCutoff }}.
+                    </div>
+                @endif
                 <div class="tools-row">
                     <!-- Enhanced Search Box -->
                     <div class="search-container">

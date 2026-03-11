@@ -54,6 +54,7 @@ Jika juga ingin menghapus audit perubahan tanggal pembelian yang terkait dengan 
 ```powershell
 php artisan stock:purge-post-cutoff-purchases --apply --force --delete-audits
 ```
+
 One-line command:
 
 ```powershell
@@ -67,6 +68,41 @@ Command ini:
 - tidak menghapus event manual stok yang tidak terkait `id_pembelian`
 - merecalculate stok produk terdampak berdasarkan `id_produk` unik agar tidak double-hit karena duplicate id
 - membuat report JSON `post_cutoff_purchase_purge_report_*.json` di root project
+
+## Normalisasi Tampilan Tanggal Datang Legacy
+
+Langkah ini aman dipakai setelah flow reset pembelian pasca-cutoff bila daftar pembelian masih menampilkan `Tanggal Obat Datang` seolah-olah `> cutoff`, padahal `Waktu Faktur Dibuat` transaksi lama tersebut masih `<= cutoff`.
+
+Tujuan langkah ini adalah menyamakan fallback tampilan dan filter daftar pembelian dengan logika stok, yaitu memakai urutan:
+
+`waktu_datang -> waktu -> created_at`
+
+Dengan begitu, transaksi legacy yang belum punya `waktu_datang` tidak lagi terlihat seolah-olah datang setelah cutoff hanya karena `created_at` baru tercatat belakangan.
+
+Karakteristik langkah ini:
+
+- tidak mengubah stok
+- tidak mengubah `rekaman_stoks`
+- tidak mengubah data `pembelian`
+- hanya memperbaiki display, filter, dan sorting daftar pembelian agar konsisten dengan logika stok pembelian
+
+Langkah aman:
+
+1. Deploy perubahan kode ini.
+2. Jalankan cache clear aplikasi.
+3. Hard refresh browser admin.
+4. Verifikasi beberapa transaksi legacy: `Tanggal Obat Datang` sekarang harus mengikuti `waktu` bila `waktu_datang` masih `null`.
+
+Command:
+
+```powershell
+php artisan optimize:clear
+```
+
+Catatan:
+
+- langkah ini tidak menggantikan input ulang pembelian valid pasca-cutoff
+- langkah ini hanya mencegah salah baca UI pada transaksi legacy yang faktur efektifnya masih pre-cutoff
 
 ## Flow Rebuild Presisi
 
