@@ -33,6 +33,11 @@ php artisan stock:baseline-rebuild --apply --until="$until" --include-negative-e
 php artisan stock:baseline-rebuild --until="$until" --include-negative-events
 ```
 
+Versi dijadikan satu command:
+```powershell
+$until=(Get-Date -Format "yyyy-MM-dd HH:mm:ss"); php artisan optimize:clear; php generate_negative_stock_audit_markdown.php --until="$until"; php artisan stock:baseline-rebuild --until="$until"; php artisan stock:baseline-rebuild --until="$until" --include-negative-events; php artisan stock:baseline-rebuild --apply --until="$until" --include-negative-events; php artisan stock:baseline-rebuild --until="$until" --include-negative-events
+```
+
 Hasil verifikasi akhir harus menunjukkan:
 
 - `products_stock_changed = 0`
@@ -51,6 +56,11 @@ php artisan stock:baseline-rebuild --until="$until"
 php artisan stock:baseline-rebuild --until="$until" --include-negative-events
 php artisan stock:baseline-rebuild --apply --until="$until" --include-negative-events
 php artisan stock:baseline-rebuild --until="$until" --include-negative-events
+```
+
+Versi dijadikan satu command:
+```powershell
+$until="2026-03-09 23:59:59"; php artisan optimize:clear; php generate_negative_stock_audit_markdown.php --until="$until"; php artisan stock:baseline-rebuild --until="$until"; php artisan stock:baseline-rebuild --until="$until" --include-negative-events; php artisan stock:baseline-rebuild --apply --until="$until" --include-negative-events; php artisan stock:baseline-rebuild --until="$until" --include-negative-events
 ```
 
 Jangan pakai `now()` yang berbeda-beda per command untuk flow `audit -> dry-run -> apply -> verify`, karena hasilnya bisa bergeser saat transaksi baru masuk.
