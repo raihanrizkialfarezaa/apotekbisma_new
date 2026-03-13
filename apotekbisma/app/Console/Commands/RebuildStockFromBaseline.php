@@ -46,6 +46,11 @@ class RebuildStockFromBaseline extends Command
             return 1;
         }
 
+        if (!is_file($csvPath) || !is_readable($csvPath)) {
+            $this->error('CSV baseline bukan file yang valid atau tidak dapat dibaca: ' . $csvPath);
+            return 1;
+        }
+
         try {
             $baselineData = $this->loadBaselineCsv($csvPath);
         } catch (\Throwable $e) {
@@ -315,7 +320,11 @@ class RebuildStockFromBaseline extends Command
 
     private function detectDelimiter(string $path): string
     {
-        $sample = file_get_contents($path, false, null, 0, 2048);
+        if (!is_file($path) || !is_readable($path)) {
+            throw new \RuntimeException('Path CSV tidak valid atau tidak dapat dibaca: ' . $path);
+        }
+
+        $sample = @file_get_contents($path, false, null, 0, 2048);
         if ($sample === false) {
             throw new \RuntimeException('Tidak dapat membaca sampel CSV');
         }

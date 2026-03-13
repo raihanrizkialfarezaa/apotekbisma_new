@@ -387,7 +387,36 @@ class PenjualanController extends Controller
                 }
             }
 
-            app(TransactionDateMutationService::class)->synchronizeFinalizedPenjualan($penjualan);
+            try {
+                app(TransactionDateMutationService::class)->synchronizeFinalizedPenjualan($penjualan);
+            } catch (\Throwable $syncException) {
+                Log::warning('Sinkronisasi finalized penjualan gagal, fallback ke recalculate per produk', [
+                    'id_penjualan' => $penjualan->id_penjualan,
+                    'message' => $syncException->getMessage(),
+                ]);
+
+                $affectedProductIds = $detail->pluck('id_produk')
+                    ->map(function ($id) {
+                        return intval($id);
+                    })
+                    ->filter(function ($id) {
+                        return $id > 0;
+                    })
+                    ->unique()
+                    ->values();
+
+                foreach ($affectedProductIds as $produkId) {
+                    try {
+                        RekamanStok::recalculateStock($produkId);
+                    } catch (\Throwable $recalcException) {
+                        Log::warning('Fallback recalculate penjualan gagal', [
+                            'id_penjualan' => $penjualan->id_penjualan,
+                            'id_produk' => $produkId,
+                            'message' => $recalcException->getMessage(),
+                        ]);
+                    }
+                }
+            }
 
             DB::commit();
         } catch (\Exception $e) {

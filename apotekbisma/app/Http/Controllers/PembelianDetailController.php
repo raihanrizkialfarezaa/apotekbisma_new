@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Pembelian;
 use App\Models\PembelianDetail;
 use App\Models\Produk;
+use App\Models\RekamanStok;
 use App\Models\Supplier;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -237,10 +238,8 @@ class PembelianDetailController extends Controller
             }, 3);
             
             Cache::forget($idempotencyKey);
-            
-            // PENTING: Jangan panggil atomicRecalculateAndSync setelah pembelian!
-            // Stok dan rekaman sudah dihitung dengan benar di dalam transaction.
-            // Memanggil recalculate akan menimpa nilai yang sudah tepat.
+
+            $this->syncAffectedProdukHistory([$result['produk_id'] ?? null]);
             
             return response()->json('Data berhasil disimpan', 200);
             
@@ -382,7 +381,6 @@ class PembelianDetailController extends Controller
                     DB::table('rekaman_stoks')
                         ->where('id_rekaman_stok', $rekaman_stok->id_rekaman_stok)
                         ->update([
-                            'waktu' => $waktu_transaksi,
                             'stok_masuk' => $new_jumlah,
                             'stok_sisa' => $newStokSisa,
                             'keterangan' => 'Pembelian: Update jumlah transaksi',
@@ -414,10 +412,8 @@ class PembelianDetailController extends Controller
             }, 5);
             
             Cache::forget($idempotencyKey);
-            
-            // PENTING: Jangan panggil atomicRecalculateAndSync setelah update pembelian!
-            // Stok dan rekaman sudah dihitung dengan benar di dalam transaction.
-            // Memanggil recalculate akan menimpa nilai yang sudah tepat.
+
+            $this->syncAffectedProdukHistory([$result['produk_id'] ?? null]);
             
             return response()->json([
                 'message' => 'Data berhasil diperbarui',
@@ -509,7 +505,6 @@ class PembelianDetailController extends Controller
                 DB::table('rekaman_stoks')
                     ->where('id_rekaman_stok', $rekaman_stok->id_rekaman_stok)
                     ->update([
-                        'waktu' => $waktu_transaksi,
                         'stok_masuk' => $new_jumlah,
                         'stok_sisa' => $newStokSisa,
                         'updated_at' => now()
@@ -538,10 +533,8 @@ class PembelianDetailController extends Controller
             DB::commit();
             
             Cache::forget($idempotencyKey);
-            
-            // PENTING: Jangan panggil atomicRecalculateAndSync setelah update edit!
-            // Stok dan rekaman sudah dihitung dengan benar di dalam transaction.
-            // Memanggil recalculate akan menimpa nilai yang sudah tepat.
+
+            $this->syncAffectedProdukHistory([$detail->id_produk ?? null]);
             
             return response()->json('Data berhasil diperbarui', 200);
             
@@ -610,10 +603,8 @@ class PembelianDetailController extends Controller
             DB::commit();
             
             Cache::forget($idempotencyKey);
-            
-            // PENTING: Jangan panggil atomicRecalculateAndSync setelah delete!
-            // Stok dan rekaman sudah dihitung dengan benar di dalam transaction.
-            // Memanggil recalculate akan menimpa nilai yang sudah tepat.
+
+            $this->syncAffectedProdukHistory([$produkId ?? null]);
             
         } catch (\Exception $e) {
             DB::rollBack();
@@ -708,6 +699,24 @@ class PembelianDetailController extends Controller
             ?? Carbon::now();
 
         return Carbon::parse($candidate)->format('Y-m-d H:i:s');
+    }
+
+    private function syncAffectedProdukHistory(array $produkIds): void
+    {
+        $normalizedIds = array_values(array_unique(array_filter(array_map('intval', $produkIds), function ($id) {
+            return $id > 0;
+        })));
+
+        foreach ($normalizedIds as $produkId) {
+            try {
+                RekamanStok::recalculateStock($produkId);
+            } catch (\Throwable $e) {
+                Log::warning('Recalculate stok gagal setelah mutasi detail pembelian', [
+                    'id_produk' => $produkId,
+                    'message' => $e->getMessage(),
+                ]);
+            }
+        }
     }
     
     private function atomicRecalculateAndSync($produkId)

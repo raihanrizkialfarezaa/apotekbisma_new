@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Cache\Lock;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class BaselineStockReflowService
 {
@@ -239,6 +240,22 @@ class BaselineStockReflowService
             return $this->cachedBaselineData;
         }
 
+        if (!$this->isReadableFilePath($path)) {
+            $this->cachedBaselineData = [
+                'delimiter' => $this->csvDelimiter,
+                'rows_read' => 0,
+                'unique_ids' => 0,
+                'baseline_map' => [],
+                'duplicate_conflicts' => [],
+            ];
+
+            Log::warning('Baseline CSV path is invalid or unreadable, fallback to pre-cutoff seed', [
+                'path' => $path,
+            ]);
+
+            return $this->cachedBaselineData;
+        }
+
         $this->csvDelimiter = $this->detectDelimiter($path);
 
         $handle = fopen($path, 'r');
@@ -302,7 +319,11 @@ class BaselineStockReflowService
 
     private function detectDelimiter(string $path): string
     {
-        $sample = file_get_contents($path, false, null, 0, 2048);
+        if (!$this->isReadableFilePath($path)) {
+            throw new \RuntimeException('Path CSV baseline tidak valid atau tidak dapat dibaca: ' . $path);
+        }
+
+        $sample = @file_get_contents($path, false, null, 0, 2048);
         if ($sample === false) {
             throw new \RuntimeException('Tidak dapat membaca sampel CSV baseline.');
         }
@@ -320,6 +341,16 @@ class BaselineStockReflowService
         $delimiter = array_key_first($delimiterScores);
 
         return $delimiter ?: ',';
+    }
+
+    private function isReadableFilePath(?string $path): bool
+    {
+        $normalizedPath = trim((string) $path);
+        if ($normalizedPath === '') {
+            return false;
+        }
+
+        return is_file($normalizedPath) && is_readable($normalizedPath);
     }
 
     private function normalizeCsvCell($value): string

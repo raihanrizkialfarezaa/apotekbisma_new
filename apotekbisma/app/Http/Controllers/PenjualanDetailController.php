@@ -195,13 +195,14 @@ class PenjualanDetailController extends Controller
             } else {
                 $stok_sebelum = $stokSaatIni;
                 $stok_baru = $stok_sebelum - $jumlah_tambahan;
-                
-                $waktuWithMicro = Carbon::now()->format('Y-m-d H:i:s.u');
+                $rekamanWaktu = $penjualan && $penjualan->waktu
+                    ? Carbon::parse($penjualan->waktu)->format('Y-m-d H:i:s')
+                    : Carbon::now()->format('Y-m-d H:i:s');
                 
                 DB::table('rekaman_stoks')->insert([
                     'id_produk' => $produk->id_produk,
                     'id_penjualan' => $id_penjualan,
-                    'waktu' => $waktuWithMicro,
+                    'waktu' => $rekamanWaktu,
                     'stok_masuk' => 0,
                     'stok_keluar' => $jumlah_tambahan,
                     'stok_awal' => $stok_sebelum,
@@ -223,10 +224,8 @@ class PenjualanDetailController extends Controller
             DB::commit();
             
             Cache::forget($idempotencyKey);
-            
-            // PENTING: Jangan panggil atomicRecalculateAndSync setelah penjualan!
-            // Stok dan rekaman sudah dihitung dengan benar di dalam transaction.
-            // Memanggil recalculate akan menimpa nilai yang sudah tepat.
+
+            $this->syncAffectedProdukHistory([$produk->id_produk ?? null]);
             
             return response()->json([
                 'success' => true,
@@ -337,19 +336,18 @@ class PenjualanDetailController extends Controller
                 DB::table('rekaman_stoks')
                     ->where('id_rekaman_stok', $existingRekaman->id_rekaman_stok)
                     ->update([
-                        'waktu' => $waktu_transaksi,
                         'stok_keluar' => $totalQtyInTransaction,
                         'stok_sisa' => $newStokSisa,
                         'updated_at' => now()
                     ]);
             } else {
                 $stokAwalRekaman = $stok_baru + $totalQtyInTransaction;
-                $waktuWithMicro = Carbon::now()->format('Y-m-d H:i:s.u');
+                $rekamanWaktu = Carbon::parse($waktu_transaksi)->format('Y-m-d H:i:s');
                 
                 DB::table('rekaman_stoks')->insert([
                     'id_produk' => $produk->id_produk,
                     'id_penjualan' => $detail->id_penjualan,
-                    'waktu' => $waktuWithMicro,
+                    'waktu' => $rekamanWaktu,
                     'stok_masuk' => 0,
                     'stok_keluar' => $totalQtyInTransaction,
                     'stok_awal' => $stokAwalRekaman,
@@ -363,10 +361,8 @@ class PenjualanDetailController extends Controller
             DB::commit();
             
             Cache::forget($idempotencyKey);
-            
-            // PENTING: Jangan panggil atomicRecalculateAndSync setelah update penjualan!
-            // Stok dan rekaman sudah dihitung dengan benar di dalam transaction.
-            // Memanggil recalculate akan menimpa nilai yang sudah tepat.
+
+            $this->syncAffectedProdukHistory([$produk->id_produk ?? null]);
             
             return response()->json([
                 'message' => 'Jumlah berhasil diperbarui. Stok tersisa: ' . $stok_baru,
@@ -406,7 +402,10 @@ class PenjualanDetailController extends Controller
             $detail = DB::table('penjualan_detail')->where('id_penjualan_detail', $id)->first();
             
             if ($detail) {
-                $produk = Produk::lockForUpdate()->find($detail->id_produk);
+                $produk = Produk::query()
+                    ->where('id_produk', $detail->id_produk)
+                    ->lockForUpdate()
+                    ->first();
                 $produkId = $detail->id_produk;
                 $idPenjualan = $detail->id_penjualan;
                 $jumlahDeleted = intval($detail->jumlah);
@@ -442,6 +441,21 @@ class PenjualanDetailController extends Controller
                                     'stok_sisa' => $newStokSisa,
                                     'updated_at' => now()
                                 ]);
+                        } else {
+                            $stokAwalRekaman = $stokBaru + $remainingQty;
+
+                            DB::table('rekaman_stoks')->insert([
+                                'id_produk' => $produkId,
+                                'id_penjualan' => $idPenjualan,
+                                'waktu' => Carbon::now()->format('Y-m-d H:i:s.u'),
+                                'stok_masuk' => 0,
+                                'stok_keluar' => $remainingQty,
+                                'stok_awal' => $stokAwalRekaman,
+                                'stok_sisa' => $stokBaru,
+                                'keterangan' => 'Penjualan: Rekaman dipulihkan setelah hapus detail',
+                                'created_at' => now(),
+                                'updated_at' => now()
+                            ]);
                         }
                     } else {
                         DB::table('rekaman_stoks')
@@ -456,10 +470,8 @@ class PenjualanDetailController extends Controller
                 DB::commit();
                 
                 Cache::forget($idempotencyKey);
-                
-                // PENTING: Jangan panggil atomicRecalculateAndSync setelah delete!
-                // Stok dan rekaman sudah dihitung dengan benar di dalam transaction.
-                // Memanggil recalculate akan menimpa nilai yang sudah tepat.
+
+                $this->syncAffectedProdukHistory([$produkId ?? null]);
             } else {
                 DB::commit();
                 Cache::forget($idempotencyKey);
@@ -536,6 +548,24 @@ class PenjualanDetailController extends Controller
         if (!$penjualan->waktu) {
             $penjualan->waktu = $penjualan->created_at ?? Carbon::now();
             $penjualan->save();
+        }
+    }
+
+    private function syncAffectedProdukHistory(array $produkIds): void
+    {
+        $normalizedIds = array_values(array_unique(array_filter(array_map('intval', $produkIds), function ($id) {
+            return $id > 0;
+        })));
+
+        foreach ($normalizedIds as $produkId) {
+            try {
+                RekamanStok::recalculateStock($produkId);
+            } catch (\Throwable $e) {
+                Log::warning('Recalculate stok gagal setelah mutasi detail penjualan', [
+                    'id_produk' => $produkId,
+                    'message' => $e->getMessage(),
+                ]);
+            }
         }
     }
     

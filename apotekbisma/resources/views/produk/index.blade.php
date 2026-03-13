@@ -648,7 +648,7 @@
             scrollX: true,
             scrollCollapse: true,
             ajax: {
-                url: '{{ route('produk.data') }}',
+                url: '{{ route('produk.data', [], false) }}',
                 data: function (d) {
                     d.filter_stok = $('#filter_stok').val();
                 }

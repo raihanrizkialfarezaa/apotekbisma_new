@@ -12,6 +12,7 @@ use App\Models\Supplier;
 use App\Models\Setting;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Support\Facades\Log;
 use App\Services\StockDraftCleanupService;
 use App\Services\TransactionDateMutationService;
 
@@ -30,6 +31,8 @@ class PembelianController extends Controller
             'arrival_end_date' => $request->get('arrival_end_date'),
             'invoice_start_datetime' => $request->get('invoice_start_datetime'),
             'invoice_end_datetime' => $request->get('invoice_end_datetime'),
+            'id_pembelian' => $request->get('id_pembelian', ''),
+            'no_faktur' => $request->get('no_faktur', ''),
             'id_supplier' => $request->get('id_supplier'),
             'id_produk' => $request->get('id_produk'),
             'search_text' => $request->get('search_text', ''),
@@ -87,6 +90,20 @@ class PembelianController extends Controller
             });
         }
 
+        $purchaseIds = $this->normalizeIdFilter($request->input('id_pembelian'));
+        if ($purchaseIds->isNotEmpty()) {
+            $pembelian->whereIn('pembelian.id_pembelian', $purchaseIds->all());
+        }
+
+        $invoiceFilters = $this->normalizeTextFilter($request->input('no_faktur'));
+        if ($invoiceFilters->isNotEmpty()) {
+            $pembelian->where(function ($query) use ($invoiceFilters) {
+                foreach ($invoiceFilters as $invoiceValue) {
+                    $query->orWhere('pembelian.no_faktur', 'like', '%' . $this->escapeLikeValue($invoiceValue) . '%');
+                }
+            });
+        }
+
         return datatables()
             ->eloquent($pembelian)
             ->filter(function ($query) use ($request) {
@@ -112,6 +129,12 @@ class PembelianController extends Controller
                 });
             }, true)
             ->addIndexColumn()
+            ->addColumn('id_pembelian', function ($pembelian) {
+                return intval($pembelian->id_pembelian);
+            })
+            ->addColumn('no_faktur', function ($pembelian) {
+                return trim((string) ($pembelian->no_faktur ?? '')) !== '' ? $pembelian->no_faktur : '-';
+            })
             ->addColumn('total_item', function ($pembelian) {
                 return format_uang($pembelian->total_item ?? 0);
             })
@@ -316,7 +339,36 @@ class PembelianController extends Controller
                 }
             }
 
-            app(TransactionDateMutationService::class)->synchronizeFinalizedPembelian($pembelian);
+            try {
+                app(TransactionDateMutationService::class)->synchronizeFinalizedPembelian($pembelian);
+            } catch (\Throwable $syncException) {
+                Log::warning('Sinkronisasi finalized pembelian gagal, fallback ke recalculate per produk', [
+                    'id_pembelian' => $pembelian->id_pembelian,
+                    'message' => $syncException->getMessage(),
+                ]);
+
+                $affectedProductIds = $detail->pluck('id_produk')
+                    ->map(function ($id) {
+                        return intval($id);
+                    })
+                    ->filter(function ($id) {
+                        return $id > 0;
+                    })
+                    ->unique()
+                    ->values();
+
+                foreach ($affectedProductIds as $produkId) {
+                    try {
+                        RekamanStok::recalculateStock($produkId);
+                    } catch (\Throwable $recalcException) {
+                        Log::warning('Fallback recalculate pembelian gagal', [
+                            'id_pembelian' => $pembelian->id_pembelian,
+                            'id_produk' => $produkId,
+                            'message' => $recalcException->getMessage(),
+                        ]);
+                    }
+                }
+            }
 
             DB::commit();
         } catch (\Exception $e) {
@@ -777,6 +829,27 @@ class PembelianController extends Controller
             })
             ->unique()
             ->values();
+    }
+
+    private function normalizeTextFilter($rawValue)
+    {
+        return collect(is_array($rawValue) ? $rawValue : [$rawValue])
+            ->flatMap(function ($value) {
+                return preg_split('/[\r\n,]+/', (string) $value) ?: [];
+            })
+            ->map(function ($value) {
+                return trim((string) $value);
+            })
+            ->filter(function ($value) {
+                return $value !== '';
+            })
+            ->unique()
+            ->values();
+    }
+
+    private function escapeLikeValue(string $value): string
+    {
+        return str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $value);
     }
 
     private function getPembelianArrivalDateSqlExpression(): string

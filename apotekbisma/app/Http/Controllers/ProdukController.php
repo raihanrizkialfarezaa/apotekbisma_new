@@ -168,13 +168,13 @@ class ProdukController extends Controller
             ->addColumn('aksi', function ($produk) {
                 $buttons = '<div class="btn-group btn-group-xs" role="group">';
                 
-                $buttons .= '<button type="button" onclick="editForm(`'. route('produk.update', $produk->id_produk) .'`)" class="btn btn-info" title="Edit Produk"><i class="fa fa-pencil"></i></button>';
+                $buttons .= '<button type="button" onclick="editForm(`'. route('produk.update', $produk->id_produk, false) .'`)" class="btn btn-info" title="Edit Produk"><i class="fa fa-pencil"></i></button>';
                 
                 $buttons .= '<button type="button" onclick="updateStokManual('. $produk->id_produk .', \''. addslashes($produk->nama_produk) .'\', '. $produk->stok .')" class="btn btn-success" title="Update Stok"><i class="fa fa-cubes"></i></button>';
                 
-                $buttons .= '<a href="'. route('kartu_stok.detail', $produk->id_produk) .'" class="btn btn-primary" title="Kartu Stok" target="_blank"><i class="fa fa-list-alt"></i></a>';
+                $buttons .= '<a href="'. route('kartu_stok.detail', $produk->id_produk, false) .'" class="btn btn-primary" title="Kartu Stok" target="_blank"><i class="fa fa-list-alt"></i></a>';
                 
-                $buttons .= '<button type="button" onclick="deleteData(`'. route('produk.destroy', $produk->id_produk) .'`)" class="btn btn-danger" title="Hapus"><i class="fa fa-trash"></i></button>';
+                $buttons .= '<button type="button" onclick="deleteData(`'. route('produk.destroy', $produk->id_produk, false) .'`)" class="btn btn-danger" title="Hapus"><i class="fa fa-trash"></i></button>';
                 
                 if ($produk->stok <= 1) {
                     $buttons .= '<button type="button" onclick="beliProduk('. $produk->id_produk .')" class="btn btn-warning" title="Beli Sekarang"><i class="fa fa-cart-plus"></i></button>';

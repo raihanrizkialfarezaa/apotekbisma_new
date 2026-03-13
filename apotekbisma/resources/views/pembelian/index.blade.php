@@ -178,7 +178,7 @@
                                 <label for="purchase_search">Search Audit</label>
                                 <div class="audit-search-input">
                                     <i class="fa fa-search"></i>
-                                    <input type="text" id="purchase_search" class="form-control input-sm" placeholder="Cari faktur, supplier, atau produk...">
+                                    <input type="text" id="purchase_search" class="form-control input-sm" placeholder="Cari ID, faktur, supplier, atau produk...">
                                 </div>
                             </div>
                         </div>
@@ -227,6 +227,20 @@
                     </div>
 
                     <div class="row">
+                        <div class="col-md-3 col-sm-6">
+                            <div class="form-group">
+                                <label for="id_pembelian_filter">Filter ID Pembelian</label>
+                                <input type="text" id="id_pembelian_filter" class="form-control input-sm" placeholder="Contoh: 1258, 1268">
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 col-sm-6">
+                            <div class="form-group">
+                                <label for="no_faktur_filter">Filter Nomor Faktur</label>
+                                <input type="text" id="no_faktur_filter" class="form-control input-sm" placeholder="Contoh: FK-2026-01, INV-77">
+                            </div>
+                        </div>
+
                         <div class="col-md-3 col-sm-6">
                             <div class="form-group">
                                 <label for="arrival_start_date">Tanggal Datang Mulai</label>
@@ -280,6 +294,8 @@
                     <table class="table table-stiped table-bordered table-pembelian">
                         <thead>
                             <th width="5%">No</th>
+                            <th>ID Pembelian</th>
+                            <th>No Faktur</th>
                             <th>Tanggal Obat Datang</th>
                             <th>Supplier</th>
                             <th>Total Item</th>
@@ -446,6 +462,8 @@
 
         return {
             search_text: $('#purchase_search').val() || '',
+            id_pembelian: $('#id_pembelian_filter').val() || '',
+            no_faktur: $('#no_faktur_filter').val() || '',
             arrival_date_preset: (selectedPreset !== 'custom' && (arrivalStartDate !== '' || arrivalEndDate !== ''))
                 ? 'custom'
                 : selectedPreset,
@@ -499,6 +517,8 @@
         }).get();
 
         $('#purchase_search').val(filterDefaults.search_text || '');
+        $('#id_pembelian_filter').val(filterDefaults.id_pembelian || '');
+        $('#no_faktur_filter').val(filterDefaults.no_faktur || '');
         $('#arrival_date_preset').val(filterDefaults.arrival_date_preset || 'all');
         $('#arrival_start_date').val(filterDefaults.arrival_start_date || '');
         $('#arrival_end_date').val(filterDefaults.arrival_end_date || '');
@@ -554,6 +574,8 @@
                 url: '{{ route('pembelian.data') }}',
                 data: function (d) {
                     const filters = collectFilters();
+                    d.id_pembelian = filters.id_pembelian;
+                    d.no_faktur = filters.no_faktur;
                     d.arrival_date_preset = filters.arrival_date_preset;
                     d.arrival_start_date = filters.arrival_start_date;
                     d.arrival_end_date = filters.arrival_end_date;
@@ -570,6 +592,8 @@
             },
             columns: [
                 {data: 'DT_RowIndex', name: 'pembelian.id_pembelian', searchable: false, orderable: false},
+                {data: 'id_pembelian', name: 'pembelian.id_pembelian', searchable: false, orderable: true},
+                {data: 'no_faktur', name: 'pembelian.no_faktur', searchable: false, orderable: true},
                 {data: 'tanggal', name: 'pembelian.created_at', searchable: false, orderable: true},
                 {data: 'supplier', name: 'supplier', searchable: false, orderable: true},
                 {data: 'total_item', name: 'pembelian.total_item', searchable: false, orderable: true},
@@ -651,6 +675,8 @@
 
         $('#btnResetFilter').on('click', function () {
             $('#purchase_search').val('');
+            $('#id_pembelian_filter').val('');
+            $('#no_faktur_filter').val('');
             $('#arrival_date_preset').val('all');
             $('#arrival_start_date').val('');
             $('#arrival_end_date').val('');
@@ -670,6 +696,11 @@
             table.search(value);
             updateFilterUrl(collectFilters());
             table.draw();
+        }, 350));
+
+        $('#id_pembelian_filter, #no_faktur_filter').on('input', debounce(function () {
+            updateFilterUrl(collectFilters());
+            table.ajax.reload();
         }, 350));
     });
 
