@@ -334,6 +334,7 @@
             </div>
 
             <div class="box-footer">
+                <button type="button" class="btn btn-default btn-sm btn-flat pull-left" onclick="cancelPembelianTransaksi()"><i class="fa fa-times"></i> Batal</button>
                 <button type="button" class="btn btn-info btn-sm btn-flat pull-left btn-cetak" onclick="printReceipt()" style="display: none;"><i class="fa fa-print"></i> Cetak Bukti</button>
                 <button type="submit" class="btn btn-primary btn-sm btn-flat pull-right btn-simpan"><i class="fa fa-floppy-o"></i> Simpan Transaksi</button>
             </div>
@@ -1296,6 +1297,39 @@
         } else {
             alert('Transaksi belum lengkap. Pastikan ada produk dan nomor faktur sudah diisi.');
         }
+    }
+
+    function cancelPembelianTransaksi() {
+        let idPembelian = $('#id_pembelian').val();
+
+        if (!confirm('Batalkan form pembelian ini? Draft transaksi akan ditutup.')) {
+            return;
+        }
+
+        // Cegah auto-cleanup beforeunload berjalan ganda
+        window.isFormSubmitted = true;
+
+        if (!idPembelian) {
+            window.location.href = '{{ route("pembelian.index") }}';
+            return;
+        }
+
+        $.post('{{ route("pembelian.cancel", ":id") }}'.replace(':id', idPembelian), {
+                '_token': $('[name=csrf-token]').attr('content')
+            })
+            .done(() => {
+                window.location.href = '{{ route("pembelian.index") }}';
+            })
+            .fail((xhr) => {
+                let errorMessage = 'Tidak dapat membatalkan transaksi';
+
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMessage = xhr.responseJSON.message;
+                }
+
+                alert(errorMessage);
+                window.isFormSubmitted = false;
+            });
     }
 </script>
 @endpush

@@ -314,6 +314,7 @@
             </div>
 
             <div class="box-footer">
+                <button type="button" class="btn btn-default btn-sm btn-flat pull-left" onclick="cancelPenjualanTransaksi()"><i class="fa fa-times"></i> Batal</button>
                 <button type="submit" class="btn btn-primary btn-sm btn-flat pull-right btn-simpan"><i class="fa fa-floppy-o"></i> Simpan Transaksi</button>
             </div>
         </div>
@@ -1187,6 +1188,35 @@
             callback();
         }
         @endif
+    }
+
+    function cancelPenjualanTransaksi() {
+        let idPenjualan = $('input[name="id_penjualan"]').first().val();
+
+        if (!confirm('Batalkan form penjualan ini? Draft transaksi akan ditutup.')) {
+            return;
+        }
+
+        if (!idPenjualan) {
+            window.location.href = '{{ route("penjualan.index") }}';
+            return;
+        }
+
+        $.post('{{ route("transaksi.cancel", ":id") }}'.replace(':id', idPenjualan), {
+                '_token': $('[name=csrf-token]').attr('content')
+            })
+            .done(() => {
+                window.location.href = '{{ route("penjualan.index") }}';
+            })
+            .fail((xhr) => {
+                let errorMessage = 'Tidak dapat membatalkan transaksi';
+
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMessage = xhr.responseJSON.message;
+                }
+
+                alert(errorMessage);
+            });
     }
 </script>
 @endpush

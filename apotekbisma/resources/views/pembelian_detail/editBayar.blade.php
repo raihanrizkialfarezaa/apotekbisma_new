@@ -190,6 +190,7 @@
             </div>
 
             <div class="box-footer">
+                <button type="button" class="btn btn-default btn-sm btn-flat pull-left" onclick="cancelPembelianTransaksi()"><i class="fa fa-times"></i> Batal</button>
                 <button type="button" class="btn btn-info btn-sm btn-flat pull-left btn-cetak" onclick="printReceipt()"><i class="fa fa-print"></i> Cetak Bukti</button>
                 <button type="submit" class="btn btn-primary btn-sm btn-flat pull-right btn-simpan"><i class="fa fa-floppy-o"></i> Simpan Transaksi</button>
             </div>
@@ -318,35 +319,90 @@
             }
         });
 
+        let quantityTimeout;
+
+        $(document).on('focus', '.quantity', function () {
+            $(this).data('original-value', parseInt($(this).val(), 10) || 1);
+            $(this).select();
+        });
+
         $(document).on('input', '.quantity', function () {
-            let id = $(this).data('id');
-            let jumlah = parseInt($(this).val());
+            let $input = $(this);
+            let inputValue = $input.val();
 
-            if (jumlah < 1) {
-                $(this).val(1);
-                alert('Jumlah tidak boleh kurang dari 1');
+            if (inputValue === '' || inputValue === '0') {
                 return;
             }
-            if (jumlah > 10000) {
-                $(this).val(10000);
+
+            let jumlah = parseInt(inputValue, 10);
+            if (!Number.isNaN(jumlah) && jumlah > 10000) {
+                $input.val(10000);
                 alert('Jumlah tidak boleh lebih dari 10000');
+            }
+        });
+
+        $(document).on('change', '.quantity', function () {
+            let $input = $(this);
+            let id = $input.data('id');
+            let inputValue = $input.val();
+
+            clearTimeout(quantityTimeout);
+
+            if (inputValue === '' || inputValue === '0') {
+                $input.val($input.data('original-value') || 1);
                 return;
             }
 
-            $.post(`{{ url('/pembelian_detail/updateEdit') }}/${id}`, {
-                    '_token': $('[name=csrf-token]').attr('content'),
-                    '_method': 'put',
-                    'jumlah': jumlah
-                })
-                .done(response => {
-                    $(this).on('mouseout', function () {
-                        table.ajax.reload(() => loadForm($('#diskon').val()));
-                    });
-                })
-                .fail(errors => {
-                    alert('Tidak dapat menyimpan data');
+            let jumlah = parseInt(inputValue, 10);
+            if (Number.isNaN(jumlah) || jumlah < 1) {
+                $input.val($input.data('original-value') || 1);
+                alert('Jumlah harus minimal 1');
+                return;
+            }
+
+            if (jumlah > 10000) {
+                $input.val(10000);
+                jumlah = 10000;
+                alert('Jumlah tidak boleh lebih dari 10000');
+            }
+
+            let originalValue = $input.data('original-value') || 1;
+            if (jumlah === originalValue) {
+                return;
+            }
+
+            quantityTimeout = setTimeout(() => {
+                if ($input.data('updating')) {
                     return;
-                });
+                }
+
+                $input.data('updating', true).prop('disabled', true);
+
+                $.post(`{{ url('/pembelian_detail/updateEdit') }}/${id}`, {
+                        '_token': $('[name=csrf-token]').attr('content'),
+                        '_method': 'put',
+                        'jumlah': jumlah
+                    })
+                    .done(() => {
+                        $input.data('original-value', jumlah);
+                        table.ajax.reload(() => loadForm($('#diskon').val()));
+                    })
+                    .fail((xhr) => {
+                        $input.val(originalValue);
+                        let errorMessage = 'Tidak dapat menyimpan data';
+
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        } else if (xhr.responseText) {
+                            errorMessage = xhr.responseText;
+                        }
+
+                        alert(errorMessage);
+                    })
+                    .always(() => {
+                        $input.data('updating', false).prop('disabled', false);
+                    });
+            }, 250);
         });
         $(document).on('input', '.harga_jual', function () {
             let id = $(this).data('id');
@@ -584,6 +640,35 @@
         } else {
             alert('ID pembelian tidak ditemukan.');
         }
+    }
+
+    function cancelPembelianTransaksi() {
+        let idPembelian = $('#id_pembelian').val();
+
+        if (!confirm('Batalkan form pembelian ini? Draft transaksi akan ditutup.')) {
+            return;
+        }
+
+        if (!idPembelian) {
+            window.location.href = '{{ route("pembelian.index") }}';
+            return;
+        }
+
+        $.post('{{ route("pembelian.cancel", ":id") }}'.replace(':id', idPembelian), {
+                '_token': $('[name=csrf-token]').attr('content')
+            })
+            .done(() => {
+                window.location.href = '{{ route("pembelian.index") }}';
+            })
+            .fail((xhr) => {
+                let errorMessage = 'Tidak dapat membatalkan transaksi';
+
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMessage = xhr.responseJSON.message;
+                }
+
+                alert(errorMessage);
+            });
     }
 </script>
 @endpush

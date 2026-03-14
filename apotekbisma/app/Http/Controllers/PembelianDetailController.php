@@ -474,9 +474,35 @@ class PembelianDetailController extends Controller
                 Cache::forget($idempotencyKey);
                 return response()->json('Produk tidak ditemukan', 404);
             }
+
+            $input_jumlah = $request->input('jumlah');
+            if ($input_jumlah === null || $input_jumlah === '') {
+                DB::rollBack();
+                Cache::forget($idempotencyKey);
+                return response()->json('Jumlah harus diisi', 400);
+            }
+
+            if (!is_numeric($input_jumlah)) {
+                DB::rollBack();
+                Cache::forget($idempotencyKey);
+                return response()->json('Jumlah harus berupa angka', 400);
+            }
             
             $old_jumlah = intval($detail->jumlah);
-            $new_jumlah = intval($request->jumlah);
+            $new_jumlah = intval($input_jumlah);
+
+            if ($new_jumlah < 1) {
+                DB::rollBack();
+                Cache::forget($idempotencyKey);
+                return response()->json('Jumlah harus minimal 1', 400);
+            }
+
+            if ($new_jumlah > 10000) {
+                DB::rollBack();
+                Cache::forget($idempotencyKey);
+                return response()->json('Jumlah tidak boleh lebih dari 10000', 400);
+            }
+
             $selisih = $new_jumlah - $old_jumlah;
             
             $new_stok = intval($produk->stok) + $selisih;

@@ -563,6 +563,82 @@ class PenjualanController extends Controller
         ], 200);
     }
 
+    public function cancelTransaction($id)
+    {
+        DB::beginTransaction();
+
+        try {
+            $penjualan = Penjualan::where('id_penjualan', $id)
+                ->lockForUpdate()
+                ->first();
+
+            $deleted = false;
+
+            if ($penjualan && $this->isPenjualanIncomplete($penjualan)) {
+                $details = PenjualanDetail::where('id_penjualan', $id)
+                    ->lockForUpdate()
+                    ->get();
+
+                $groupedDetails = [];
+                foreach ($details as $detail) {
+                    $qty = max(0, intval($detail->jumlah ?? 0));
+                    if ($qty === 0) {
+                        continue;
+                    }
+
+                    $productId = intval($detail->id_produk);
+                    $groupedDetails[$productId] = ($groupedDetails[$productId] ?? 0) + $qty;
+                }
+
+                foreach ($groupedDetails as $productId => $qty) {
+                    $produk = Produk::where('id_produk', $productId)
+                        ->lockForUpdate()
+                        ->first();
+
+                    if (!$produk) {
+                        continue;
+                    }
+
+                    DB::table('produk')
+                        ->where('id_produk', $productId)
+                        ->update([
+                            'stok' => intval($produk->stok) + $qty,
+                            'updated_at' => now(),
+                        ]);
+                }
+
+                DB::table('rekaman_stoks')->where('id_penjualan', $id)->delete();
+                PenjualanDetail::where('id_penjualan', $id)->delete();
+                Penjualan::where('id_penjualan', $id)->delete();
+                $deleted = true;
+            }
+
+            DB::commit();
+
+            if (intval(session('id_penjualan')) === intval($id)) {
+                session()->forget('id_penjualan');
+            }
+
+            return response()->json([
+                'success' => true,
+                'deleted' => $deleted,
+                'message' => $deleted
+                    ? 'Draft penjualan dibatalkan dan dihapus.'
+                    : 'Edit penjualan dibatalkan. Tidak ada draft baru yang dihapus.',
+            ], 200);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('Cancel penjualan transaction gagal: ' . $e->getMessage(), [
+                'id_penjualan' => $id,
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat membatalkan transaksi.',
+            ], 500);
+        }
+    }
+
     public function selesai()
     {
         $setting = Setting::first();

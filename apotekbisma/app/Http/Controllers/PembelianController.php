@@ -558,6 +558,93 @@ class PembelianController extends Controller
         ]);
     }
 
+    public function cancelTransaction($id)
+    {
+        DB::beginTransaction();
+
+        try {
+            $pembelian = Pembelian::where('id_pembelian', $id)
+                ->lockForUpdate()
+                ->first();
+
+            $deleted = false;
+
+            if ($pembelian && $this->isPembelianIncomplete($pembelian)) {
+                $details = PembelianDetail::where('id_pembelian', $id)
+                    ->lockForUpdate()
+                    ->get();
+
+                $groupedDetails = [];
+                foreach ($details as $detail) {
+                    $qty = max(0, intval($detail->jumlah ?? 0));
+                    if ($qty === 0) {
+                        continue;
+                    }
+
+                    $productId = intval($detail->id_produk);
+                    $groupedDetails[$productId] = ($groupedDetails[$productId] ?? 0) + $qty;
+                }
+
+                foreach ($groupedDetails as $productId => $qty) {
+                    $produk = Produk::where('id_produk', $productId)
+                        ->lockForUpdate()
+                        ->first();
+
+                    if (!$produk || intval($produk->stok) < $qty) {
+                        DB::rollBack();
+
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Draft pembelian tidak bisa dibatalkan otomatis karena stok produk sudah berubah. Silakan sinkronisasi dulu lalu coba lagi.',
+                        ], 409);
+                    }
+                }
+
+                foreach ($groupedDetails as $productId => $qty) {
+                    $produk = Produk::where('id_produk', $productId)
+                        ->lockForUpdate()
+                        ->first();
+
+                    DB::table('produk')
+                        ->where('id_produk', $productId)
+                        ->update([
+                            'stok' => intval($produk->stok) - $qty,
+                            'updated_at' => now(),
+                        ]);
+                }
+
+                RekamanStok::where('id_pembelian', $id)->delete();
+                PembelianDetail::where('id_pembelian', $id)->delete();
+                Pembelian::where('id_pembelian', $id)->delete();
+                $deleted = true;
+            }
+
+            DB::commit();
+
+            if (intval(session('id_pembelian')) === intval($id)) {
+                session()->forget(['id_pembelian', 'id_supplier']);
+            }
+
+            return response()->json([
+                'success' => true,
+                'deleted' => $deleted,
+                'message' => $deleted
+                    ? 'Draft pembelian dibatalkan dan dihapus.'
+                    : 'Edit pembelian dibatalkan. Tidak ada draft baru yang dihapus.',
+            ], 200);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('Cancel pembelian transaction gagal: ' . $e->getMessage(), [
+                'id_pembelian' => $id,
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat membatalkan transaksi.',
+            ], 500);
+        }
+    }
+
     public function destroyEmpty($id)
     {
         $pembelian = Pembelian::where('id_pembelian', $id)->first();

@@ -17,7 +17,6 @@ use App\Http\Controllers\{
     UserController,
 };
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 /*
@@ -116,6 +115,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/pembelian/nota-besar', [PembelianController::class, 'notaBesar'])->name('pembelian.nota_besar');
         Route::get('/pembelian/{id}/print', [PembelianController::class, 'printReceipt'])->name('pembelian.print');
         Route::post('/pembelian/cleanup', [PembelianController::class, 'cleanupIncompleteTransactions'])->name('pembelian.cleanup');
+        Route::post('/pembelian/{id}/cancel', [PembelianController::class, 'cancelTransaction'])->name('pembelian.cancel');
         Route::delete('/pembelian/{id}', [PembelianController::class, 'destroy'])->name('pembelian.destroy');
         Route::delete('/pembelian/{id}/empty', [PembelianController::class, 'destroyEmpty'])->name('pembelian.destroyEmpty');
         Route::resource('/pembelian', PembelianController::class)
@@ -157,6 +157,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/transaksi_detail/{id}/data', [PenjualanDetailController::class, 'data'])->name('transaksi_detail.data');
         Route::get('/transaksi/loadform/{diskon}/{total}/{diterima}', [PenjualanDetailController::class, 'loadForm'])->name('transaksi.load_form');
         Route::get('/transaksi/produk-data', [PenjualanDetailController::class, 'getProdukData'])->name('transaksi.produk_data');
+        Route::post('/transaksi/{id}/cancel', [PenjualanController::class, 'cancelTransaction'])->name('transaksi.cancel');
         Route::resource('/transaksi', PenjualanDetailController::class)
             ->except('create', 'show', 'edit', 'update');
     });
