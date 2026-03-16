@@ -1,0 +1,2852 @@
+{
+    "generated_at": "2026-03-17 02:49:24",
+    "mode": "DRY_RUN",
+    "allow_partial": false,
+    "cutoff": "2025-12-31 23:59:59",
+    "from": "2026-01-01 00:00:00",
+    "until": "2026-02-28 23:59:59",
+    "source_label": "markdown-reinput-admin",
+    "input_files": [
+        "C:\\laragon\\www\\apotekbisma\\apotekbisma\\INPUT_FAKTUR_PEMBELIAN_JANUARI.md",
+        "C:\\laragon\\www\\apotekbisma\\apotekbisma\\INPUT_FAKTUR_PEMBELIAN_FEBRUARI.md"
+    ],
+    "summary": {
+        "parsed_sections": 98,
+        "raw_invoice_groups": 95,
+        "invoices_in_range": 71,
+        "invoices_ready_for_mapping": 3,
+        "invoices_existing_same": 0,
+        "invoices_insertable": 3,
+        "issues_total": 359
+    },
+    "issues": [
+        {
+            "type": "missing_invoice_date",
+            "no_faktur": "NP-00348-C3351",
+            "message": "Tanggal faktur tidak ditemukan."
+        },
+        {
+            "type": "missing_invoice_date",
+            "no_faktur": "NP-00349-C3351",
+            "message": "Tanggal faktur tidak ditemukan."
+        },
+        {
+            "type": "missing_invoice_date",
+            "no_faktur": "NP-00350-C3351",
+            "message": "Tanggal faktur tidak ditemukan."
+        },
+        {
+            "type": "missing_invoice_date",
+            "no_faktur": "JM1-2602-01469",
+            "message": "Tanggal faktur tidak ditemukan."
+        },
+        {
+            "type": "missing_invoice_date",
+            "no_faktur": "TMP-INV-2444044",
+            "message": "Tanggal faktur tidak ditemukan."
+        },
+        {
+            "type": "missing_invoice_date",
+            "no_faktur": "NPS-2602-629901",
+            "message": "Tanggal faktur tidak ditemukan."
+        },
+        {
+            "type": "missing_invoice_date",
+            "no_faktur": "NPS-2602-629903",
+            "message": "Tanggal faktur tidak ditemukan."
+        },
+        {
+            "type": "missing_invoice_date",
+            "no_faktur": "JM1-2602-01892",
+            "message": "Tanggal faktur tidak ditemukan."
+        },
+        {
+            "type": "missing_invoice_date",
+            "no_faktur": "AJA-2602-006835",
+            "message": "Tanggal faktur tidak ditemukan."
+        },
+        {
+            "type": "missing_invoice_date",
+            "no_faktur": "JM1-2602-02924",
+            "message": "Tanggal faktur tidak ditemukan."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00495",
+            "line": 12,
+            "nama_produk_raw": "Lactacyd Liq Baby 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00495",
+            "line": 13,
+            "nama_produk_raw": "Sangobion Kap 40's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00495",
+            "line": 14,
+            "nama_produk_raw": "JF Dermamed 90gr (Kng)",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00495",
+            "line": 15,
+            "nama_produk_raw": "Primolut N 5mg 30's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00495",
+            "line": 18,
+            "nama_produk_raw": "Fimestan 500mg Kaplet",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00495",
+            "line": 19,
+            "nama_produk_raw": "Andalan Pil KB 15x2(28)",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00495",
+            "line": 21,
+            "nama_produk_raw": "Gludepatic 500mg Tab",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00496",
+            "line": 37,
+            "nama_produk_raw": "Gludepatic 500mg Tab",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00496",
+            "line": 38,
+            "nama_produk_raw": "Bioplacenton Jelly 15gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00496",
+            "line": 40,
+            "nama_produk_raw": "Erlamycetin SM 3.5gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00496",
+            "line": 41,
+            "nama_produk_raw": "Genoint SM 3.5gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00496",
+            "line": 42,
+            "nama_produk_raw": "Kalmethasone 200's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00496",
+            "line": 44,
+            "nama_produk_raw": "Vicks Inhaler 0.5ml KC",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00496",
+            "line": 45,
+            "nama_produk_raw": "Stimuno F Cap 10's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00496",
+            "line": 46,
+            "nama_produk_raw": "HP Kain Box 100's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00496",
+            "line": 47,
+            "nama_produk_raw": "Transpulmin Baby Bals",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JMR-2601-00165",
+            "line": 63,
+            "nama_produk_raw": "OBH Combi Batuk Flu Menthol 100ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JMR-2601-00165",
+            "line": 64,
+            "nama_produk_raw": "OBH Combi Batuk Flu Menthol 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JMR-2601-00165",
+            "line": 65,
+            "nama_produk_raw": "OBH Combi Batuk Flu Menthol 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "POSPST260100684",
+            "line": 81,
+            "nama_produk_raw": "Lagesil Susp 100ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "POSPST260100684",
+            "line": 82,
+            "nama_produk_raw": "Imunos Syrup 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "POSPST260100684",
+            "line": 84,
+            "nama_produk_raw": "Salicyl Menthol Kng 100gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "POSPST260100684",
+            "line": 86,
+            "nama_produk_raw": "Contrexyn Demam Tab",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "POSPST260100684",
+            "line": 87,
+            "nama_produk_raw": "Kuldon Sariawan 40",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "POSPST260100684",
+            "line": 100,
+            "nama_produk_raw": "Kapas One Med 25gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "POSPST260100684",
+            "line": 101,
+            "nama_produk_raw": "Kapas One Med 50gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "14*2601.0266",
+            "line": 118,
+            "nama_produk_raw": "Gencinolon Krim",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "14*2601.0266",
+            "line": 120,
+            "nama_produk_raw": "Omegesic 10x10 Kap",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "14*2601.0266",
+            "line": 121,
+            "nama_produk_raw": "Omedrinat 10x10 Tab",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "14*2601.0266",
+            "line": 122,
+            "nama_produk_raw": "Omegzole 10x10 Tab",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "14*2601.0266",
+            "line": 124,
+            "nama_produk_raw": "Omellegar 10x10 Kap",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/01/07/2302665",
+            "line": 141,
+            "nama_produk_raw": "Bodrexin Flu Batuk Pe",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/01/07/2302665",
+            "line": 142,
+            "nama_produk_raw": "Elkana CL Emulsi",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/01/07/2302665",
+            "line": 145,
+            "nama_produk_raw": "Elkana Suspensi 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/01/07/2302665",
+            "line": 148,
+            "nama_produk_raw": "Forumen Tetes Telinga",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/01/07/2302665",
+            "line": 150,
+            "nama_produk_raw": "Proris Triple Action",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/01/07/2302665",
+            "line": 152,
+            "nama_produk_raw": "Betahistine Mesilate",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/01/07/2302665",
+            "line": 153,
+            "nama_produk_raw": "Siladex Mucolytic 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/01/07/2302665",
+            "line": 154,
+            "nama_produk_raw": "Listerine Cool Mint",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/01/07/2302665",
+            "line": 164,
+            "nama_produk_raw": "Listerine Green Tea",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00939",
+            "line": 181,
+            "nama_produk_raw": "Plantacid Syr 100ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00939",
+            "line": 182,
+            "nama_produk_raw": "Danasone 0.5mg Tab",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00939",
+            "line": 183,
+            "nama_produk_raw": "Erphaflam 50mg Tab",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00939",
+            "line": 184,
+            "nama_produk_raw": "Silex Syr 100ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00939",
+            "line": 186,
+            "nama_produk_raw": "Koolfever Adult/Lbr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00939",
+            "line": 187,
+            "nama_produk_raw": "Counterpain Cr 30gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00939",
+            "line": 188,
+            "nama_produk_raw": "Counterpain Cr 60gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00939",
+            "line": 190,
+            "nama_produk_raw": "Cbrofot Gold 100ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00940",
+            "line": 207,
+            "nama_produk_raw": "Sucralfate Syr 100ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00940",
+            "line": 208,
+            "nama_produk_raw": "Incidal OD 10mg",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00940",
+            "line": 209,
+            "nama_produk_raw": "M. Kayu Putih 15ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00940",
+            "line": 211,
+            "nama_produk_raw": "Sanmol Syr 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00940",
+            "line": 212,
+            "nama_produk_raw": "Betadine Gargle 100ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00940",
+            "line": 213,
+            "nama_produk_raw": "Betadine Solution 5ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00940",
+            "line": 214,
+            "nama_produk_raw": "Microlax Supp 5ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00940",
+            "line": 215,
+            "nama_produk_raw": "Imboost Tab 5x4's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-00940",
+            "line": 218,
+            "nama_produk_raw": "Ranitidin 150mg (HJ)",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2601-001677/13-01-2026/LF",
+            "line": 234,
+            "nama_produk_raw": "Lacto-B 1g x 40 Sach",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2601-001677/13-01-2026/LF",
+            "line": 235,
+            "nama_produk_raw": "Daktarin Cr 5gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2601-001677/13-01-2026/LF",
+            "line": 236,
+            "nama_produk_raw": "Benoson N Cr 5gr (Kng)",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2601-001677/13-01-2026/LF",
+            "line": 237,
+            "nama_produk_raw": "Fresh Care Strong 10ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2601-001677/13-01-2026/LF",
+            "line": 238,
+            "nama_produk_raw": "Sanmag Susp 120ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2601-001677/13-01-2026/LF",
+            "line": 239,
+            "nama_produk_raw": "Pharmaton Go 60's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2601-001677/13-01-2026/LF",
+            "line": 240,
+            "nama_produk_raw": "Hotin Cr Tube 120gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2601-001677/13-01-2026/LF",
+            "line": 242,
+            "nama_produk_raw": "Counterpain Cr 5gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2601-001677/13-01-2026/LF",
+            "line": 244,
+            "nama_produk_raw": "Ibuprofen 400mg",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-01590",
+            "line": 261,
+            "nama_produk_raw": "Mycorall Cream 5 gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-01590",
+            "line": 264,
+            "nama_produk_raw": "Panadol Elixir 30ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-01591",
+            "line": 284,
+            "nama_produk_raw": "Yusimox DS 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-01591",
+            "line": 285,
+            "nama_produk_raw": "Thrombophob Gel 20gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-01591",
+            "line": 286,
+            "nama_produk_raw": "Benomix Cr 10gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-01591",
+            "line": 287,
+            "nama_produk_raw": "Tolak Angin Cair 12's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-01591",
+            "line": 288,
+            "nama_produk_raw": "Antangin JRG 12's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-01591",
+            "line": 289,
+            "nama_produk_raw": "Acyclovir Krim 5gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-01591",
+            "line": 290,
+            "nama_produk_raw": "Acyclovir Krim 5gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JMR-2601-00507",
+            "line": 307,
+            "nama_produk_raw": "OBH Com Anak Straw",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JMR-2601-00508",
+            "line": 324,
+            "nama_produk_raw": "Vicks F 44 Dewasa 54ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "2.701.311 / NPS-2601-624009",
+            "line": 343,
+            "nama_produk_raw": "Sakatonik ABC Antariksa",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "2.701.311 / NPS-2601-624009",
+            "line": 344,
+            "nama_produk_raw": "Fitkom Hi-C Grape",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "2.701.311 / NPS-2601-624009",
+            "line": 346,
+            "nama_produk_raw": "Scabimite Cream 10gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "2.701.311 / NPS-2601-624009",
+            "line": 348,
+            "nama_produk_raw": "Siladex Mucolytic Exp 30ml (H)",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "2.701.311 / NPS-2601-624009",
+            "line": 349,
+            "nama_produk_raw": "Siladex Mucolytic Exp 60ml (H)",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "2.701.311 / NPS-2601-624009",
+            "line": 351,
+            "nama_produk_raw": "Lerzin 100 Kapl",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "2.701.311 / NPS-2601-624009",
+            "line": 353,
+            "nama_produk_raw": "Promag Tab 4x30",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "2.701.311 / NPS-2601-624009",
+            "line": 354,
+            "nama_produk_raw": "Salep Kulit 88 12pot",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-624011",
+            "line": 370,
+            "nama_produk_raw": "Cavicur Plus DHA Jeruk",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-624011",
+            "line": 371,
+            "nama_produk_raw": "Ambroxol Tab 30mg",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-624011",
+            "line": 372,
+            "nama_produk_raw": "Cetirizine HCl Tab",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-624011",
+            "line": 373,
+            "nama_produk_raw": "Batugin Elixir 120ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-624011",
+            "line": 374,
+            "nama_produk_raw": "Biolysin Active Straw",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-624011",
+            "line": 375,
+            "nama_produk_raw": "Cazetin Drops 15ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-624011",
+            "line": 377,
+            "nama_produk_raw": "Freshcare Smash Matcha",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-624011",
+            "line": 378,
+            "nama_produk_raw": "Freshcare Smash Fruity",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-624011",
+            "line": 381,
+            "nama_produk_raw": "Crathazon 0,5mg Capl",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-624011",
+            "line": 382,
+            "nama_produk_raw": "Hansaplast 4,5m x 1,25m",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-624011",
+            "line": 383,
+            "nama_produk_raw": "Hydrocortisone Kalbe 2,5%",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-624013",
+            "line": 399,
+            "nama_produk_raw": "Hypafix 5cm x 1m",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-624013",
+            "line": 400,
+            "nama_produk_raw": "Insto Cool 7.5ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-624013",
+            "line": 402,
+            "nama_produk_raw": "Keji Beling Seahorse",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-624013",
+            "line": 404,
+            "nama_produk_raw": "Milton Pastilles Apple",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-624013",
+            "line": 405,
+            "nama_produk_raw": "Milton Pastilles Pineap",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-624013",
+            "line": 406,
+            "nama_produk_raw": "Lancar Asi 200mg Capl",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-624013",
+            "line": 407,
+            "nama_produk_raw": "MKP Gajah 60ml Plst",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-624015",
+            "line": 424,
+            "nama_produk_raw": "OBH Trop + Anak Orange",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-624015",
+            "line": 425,
+            "nama_produk_raw": "OBH Trop + Anak Straw",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-624015",
+            "line": 426,
+            "nama_produk_raw": "Pimtracol Cherry 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/01/24/2359834",
+            "line": 442,
+            "nama_produk_raw": "Ultraflu PE Kaplet",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/01/24/2359834",
+            "line": 443,
+            "nama_produk_raw": "Medi-Klin TR Gel",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/01/24/2359834",
+            "line": 445,
+            "nama_produk_raw": "Elkana Suspensi",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/01/24/2359834",
+            "line": 451,
+            "nama_produk_raw": "Hydrocortisone Acetate",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/01/24/2359834",
+            "line": 452,
+            "nama_produk_raw": "Medi-Klin Gel 1%",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/01/24/2359834",
+            "line": 453,
+            "nama_produk_raw": "Siladex Mucolytic 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/01/24/2359834",
+            "line": 454,
+            "nama_produk_raw": "Bodrexin Demam Tab",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2601-003019/24-01-2026/LF",
+            "line": 470,
+            "nama_produk_raw": "Neurosanbe Plus Cap 100's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2601-003019/24-01-2026/LF",
+            "line": 471,
+            "nama_produk_raw": "Sagestam Cream 10gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2601-003019/24-01-2026/LF",
+            "line": 472,
+            "nama_produk_raw": "Copal Chest Rub 25gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2601-003019/24-01-2026/LF",
+            "line": 473,
+            "nama_produk_raw": "Dumin Syr 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2601-003019/24-01-2026/LF",
+            "line": 474,
+            "nama_produk_raw": "Hotin Cr Tube 60gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2601-003019/24-01-2026/LF",
+            "line": 475,
+            "nama_produk_raw": "Fresh Care Lavender 10ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2601-003019/24-01-2026/LF",
+            "line": 476,
+            "nama_produk_raw": "Fresh Care Strong 10ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2601-003019/24-01-2026/LF",
+            "line": 477,
+            "nama_produk_raw": "Safe Care Aromaterapi 10ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2601-003019/24-01-2026/LF",
+            "line": 478,
+            "nama_produk_raw": "Cortidex 0.5mg 100's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2601-003019/24-01-2026/LF",
+            "line": 479,
+            "nama_produk_raw": "Sanmag Susp 120ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2601-003020/24-01-2026/LF",
+            "line": 495,
+            "nama_produk_raw": "Folavit 400mg 100's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2601-003020/24-01-2026/LF",
+            "line": 496,
+            "nama_produk_raw": "Asepso Soap Original 80gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2601-003020/24-01-2026/LF",
+            "line": 497,
+            "nama_produk_raw": "Ketoconazole 200mg/Nova",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2601-003020/24-01-2026/LF",
+            "line": 498,
+            "nama_produk_raw": "Acetylcysteine 200mg/Gdn",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2601-003020/24-01-2026/LF",
+            "line": 499,
+            "nama_produk_raw": "Ketoconazole 200mg/Hexp",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2601-003020/24-01-2026/LF",
+            "line": 500,
+            "nama_produk_raw": "Simvastatin 10mg/Nova",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2601-003020/24-01-2026/LF",
+            "line": 501,
+            "nama_produk_raw": "Lactulosa Generik 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2601-003020/24-01-2026/LF",
+            "line": 502,
+            "nama_produk_raw": "Metronidazole 500mg/Nova",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2601-003020/24-01-2026/LF",
+            "line": 503,
+            "nama_produk_raw": "Sanbe Tears 8ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2601-003020/24-01-2026/LF",
+            "line": 504,
+            "nama_produk_raw": "Sanmol Syr 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02290",
+            "line": 521,
+            "nama_produk_raw": "Super Tetra 20x6's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02290",
+            "line": 522,
+            "nama_produk_raw": "Neuralgin RX 100's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02290",
+            "line": 525,
+            "nama_produk_raw": "Divoltar 50mg Tab 50's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02290",
+            "line": 527,
+            "nama_produk_raw": "M. Kayu Putih 120ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02290",
+            "line": 528,
+            "nama_produk_raw": "Furosemide 40mg 100's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02290",
+            "line": 529,
+            "nama_produk_raw": "Vicks Babybalm 8gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JMR-2601-00746",
+            "line": 548,
+            "nama_produk_raw": "OBH Combi Batuk Flu Menthol 100ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JMR-2601-00747",
+            "line": 565,
+            "nama_produk_raw": "Paratusin Tab 200's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JMR-2601-00806A",
+            "line": 582,
+            "nama_produk_raw": "Paratusin Syr 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02586",
+            "line": 600,
+            "nama_produk_raw": "Glucosamin 500mg Tab 100's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02586",
+            "line": 601,
+            "nama_produk_raw": "Genoint SK 15gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02586",
+            "line": 602,
+            "nama_produk_raw": "Insto Eye Drops 7.5 ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02586",
+            "line": 603,
+            "nama_produk_raw": "Andalan Pil KB 15x2(28)'s",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02586",
+            "line": 604,
+            "nama_produk_raw": "ByeBye Fever Baby 10lbr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02586",
+            "line": 605,
+            "nama_produk_raw": "Combantrin 250mg 50's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02586",
+            "line": 606,
+            "nama_produk_raw": "Kaditic 50mg Tab 100's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02586",
+            "line": 607,
+            "nama_produk_raw": "Voltaren Emugel 1% 10gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02586",
+            "line": 610,
+            "nama_produk_raw": "Erlamycetin TT 10ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02587",
+            "line": 628,
+            "nama_produk_raw": "Proris Syr 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02587",
+            "line": 629,
+            "nama_produk_raw": "Lactacyd Liq Baby 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02587",
+            "line": 630,
+            "nama_produk_raw": "Microlax Supp 5ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02587",
+            "line": 632,
+            "nama_produk_raw": "Dulcolax 5mg 10's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "04985/SJA/01/26",
+            "line": 650,
+            "nama_produk_raw": "Alofar 100 mg Box 100's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "04985/SJA/01/26",
+            "line": 653,
+            "nama_produk_raw": "Infus Sodium Chloride 0.9%",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "04985/SJA/01/26",
+            "line": 654,
+            "nama_produk_raw": "Renadinac 50mg Tab (Fr)",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "04988/SJA/01/26",
+            "line": 670,
+            "nama_produk_raw": "Coparcetin 60 ml Sirup",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "04988/SJA/01/26",
+            "line": 671,
+            "nama_produk_raw": "Flucadex Kaplet",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "T56C3351.20260129008",
+            "line": 688,
+            "nama_produk_raw": "Siladex Antitusive 30 ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "T56C3351.20260129008",
+            "line": 689,
+            "nama_produk_raw": "Siladex Antitusive 60 ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/01/30/2379654",
+            "line": 703,
+            "nama_produk_raw": "Xonce Vit C-500 mg Jeruk",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/01/30/2379654",
+            "line": 706,
+            "nama_produk_raw": "Komix OBH Sirup",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/01/30/2379654",
+            "line": 707,
+            "nama_produk_raw": "Erladerm-N Krim 5 g",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02971B",
+            "line": 723,
+            "nama_produk_raw": "Incidal OD 10mg 10's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02971B",
+            "line": 724,
+            "nama_produk_raw": "Neurobion Forte 50's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02971B",
+            "line": 725,
+            "nama_produk_raw": "Voltadex 50mg Tab 100's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02971B",
+            "line": 726,
+            "nama_produk_raw": "Sangobion Kap 40's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02971B",
+            "line": 727,
+            "nama_produk_raw": "G. Pijat Urut 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02971B",
+            "line": 728,
+            "nama_produk_raw": "Vicks Inhaler 0.5ml KC",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02971B",
+            "line": 729,
+            "nama_produk_raw": "Salonpas Super 10x10/Ds",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02971B",
+            "line": 730,
+            "nama_produk_raw": "Antangin JRG 12's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02971B",
+            "line": 731,
+            "nama_produk_raw": "JF Dermamed 90gr (Kng)",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02972A",
+            "line": 748,
+            "nama_produk_raw": "Sensodyne Fmint 40gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02972A",
+            "line": 749,
+            "nama_produk_raw": "Stpsl Cool 2x6's (Biru)",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02972A",
+            "line": 750,
+            "nama_produk_raw": "Stpsl Orig 2x6's (Merah)",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02972A",
+            "line": 751,
+            "nama_produk_raw": "Stpsl Sooth 2x6's (Lmn)",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02972A",
+            "line": 752,
+            "nama_produk_raw": "Polident Cr 20gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JMR-2601-00994A",
+            "line": 788,
+            "nama_produk_raw": "Woods Antitussive 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-623056",
+            "line": 804,
+            "nama_produk_raw": "OBH C Btk Flu Ank Madu 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-623056",
+            "line": 805,
+            "nama_produk_raw": "OBH Trop + Anak Straw",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-623058",
+            "line": 822,
+            "nama_produk_raw": "Keji Beling (Balatif)",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-623058",
+            "line": 823,
+            "nama_produk_raw": "Pi Kang Shuang Krim 5 gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-623058",
+            "line": 824,
+            "nama_produk_raw": "GPU Krim Sereh 60gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-623058",
+            "line": 825,
+            "nama_produk_raw": "Rheumason Cream 18gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-623058",
+            "line": 826,
+            "nama_produk_raw": "Tolak Linu Cair",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-623058",
+            "line": 827,
+            "nama_produk_raw": "Promag Gazero Herbal",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-623058",
+            "line": 828,
+            "nama_produk_raw": "Bevalex Cr 5g",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-623058",
+            "line": 830,
+            "nama_produk_raw": "Vitacimin Lemon 100's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-623058",
+            "line": 831,
+            "nama_produk_raw": "Vit B Complex IPI",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-623058",
+            "line": 832,
+            "nama_produk_raw": "Na Diklo 50mg (Php)",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-623058",
+            "line": 833,
+            "nama_produk_raw": "Santadex Tetes Telinga",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-623058",
+            "line": 835,
+            "nama_produk_raw": "Kaotin Syr 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-623060",
+            "line": 852,
+            "nama_produk_raw": "Sucralfate (Dx) Susp 100ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2601-623060",
+            "line": 853,
+            "nama_produk_raw": "Salicyl Spiritus Gajah",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "02333/SJA/01/26",
+            "line": 869,
+            "nama_produk_raw": "Acifar Cream 5% 5 gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "02333/SJA/01/26",
+            "line": 872,
+            "nama_produk_raw": "Dolo Licobion Box 100 s",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "02333/SJA/01/26",
+            "line": 873,
+            "nama_produk_raw": "Hufamag Plus Sirup",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "02333/SJA/01/26",
+            "line": 878,
+            "nama_produk_raw": "Zenirex Sirup",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "02335/SJA/01/26",
+            "line": 895,
+            "nama_produk_raw": "Dexaharsen 0,5 mg 200's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "02335/SJA/01/26",
+            "line": 896,
+            "nama_produk_raw": "Dexaharsen 0,75 mg 200's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "02335/SJA/01/26",
+            "line": 897,
+            "nama_produk_raw": "Hufarizine-R Box 50's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "02335/SJA/01/26",
+            "line": 898,
+            "nama_produk_raw": "OBH Surya 100ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "02337/SJA/01/26",
+            "line": 917,
+            "nama_produk_raw": "Hufagripp Forte 100's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-01589A",
+            "line": 934,
+            "nama_produk_raw": "Neurobion Forte 50's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-01589A",
+            "line": 935,
+            "nama_produk_raw": "Glucodex 80mg Tab 100's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-01589A",
+            "line": 936,
+            "nama_produk_raw": "M. Kayu Putih 60ml (No.2)",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-01589A",
+            "line": 937,
+            "nama_produk_raw": "G. Pijat Urut 30ml (No.2)",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-01589A",
+            "line": 940,
+            "nama_produk_raw": "Plantacid Forte Susp 100ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-01589A",
+            "line": 942,
+            "nama_produk_raw": "Dettol Antiseptik Liq 95ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-01589A",
+            "line": 943,
+            "nama_produk_raw": "Dettol Antiseptik Liq 45ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-01589A",
+            "line": 944,
+            "nama_produk_raw": "Laxing 10x10's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02291A",
+            "line": 961,
+            "nama_produk_raw": "ByeBye Fever Anak 10's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02291A",
+            "line": 962,
+            "nama_produk_raw": "Koolfever Adult/Lbr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02291A",
+            "line": 963,
+            "nama_produk_raw": "Polysilane Tab 5x8's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02291A",
+            "line": 967,
+            "nama_produk_raw": "Yusimox 500mg Kap 100's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02291A",
+            "line": 968,
+            "nama_produk_raw": "Bioplacenton Jelly 15gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02291A",
+            "line": 969,
+            "nama_produk_raw": "Histigo 6mg Kap 100's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-02291A",
+            "line": 970,
+            "nama_produk_raw": "Diane 35-1x21 Tab",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "04984/SJA/01/26",
+            "line": 987,
+            "nama_produk_raw": "Amlodipin 5 mg Samco 100's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "04984/SJA/01/26",
+            "line": 990,
+            "nama_produk_raw": "Grafamik Box 100's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "04984/SJA/01/26",
+            "line": 991,
+            "nama_produk_raw": "Helixim Dry Syr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "04984/SJA/01/26",
+            "line": 994,
+            "nama_produk_raw": "Salbutamol 2 mg Mulia 100's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "04984/SJA/01/26",
+            "line": 995,
+            "nama_produk_raw": "Salbutamol 4 mg Mulia 100's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "04984/SJA/01/26",
+            "line": 996,
+            "nama_produk_raw": "Yusimox Dry Sirup",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "00115-C3351",
+            "line": 1022,
+            "nama_produk_raw": "Siladex Cough & Cold 30 ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "00115-C3351",
+            "line": 1023,
+            "nama_produk_raw": "Siladex CC 60 ml (New)",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "00116-C3351",
+            "line": 1037,
+            "nama_produk_raw": "Femifax Lancar Haid 12 Sch",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-03003",
+            "line": 1052,
+            "nama_produk_raw": "Koolfever Kid/Lbr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-03003",
+            "line": 1053,
+            "nama_produk_raw": "Dramamine 50mg Tab 100's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-03003",
+            "line": 1056,
+            "nama_produk_raw": "Kandistatin Susp 12ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2601-03003",
+            "line": 1057,
+            "nama_produk_raw": "Vitaquin CR 15gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "POSPST260200547",
+            "line": 10,
+            "nama_produk_raw": "Amlodipine 5 mg HJ",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "POSPST260200547",
+            "line": 11,
+            "nama_produk_raw": "Amlodipine 10 mg HJ",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "POSPST260200547",
+            "line": 13,
+            "nama_produk_raw": "Lapisiv-T Tablet",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "POSPST260200547",
+            "line": 14,
+            "nama_produk_raw": "Antacida Doen Sirup 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "POSPST260200547",
+            "line": 15,
+            "nama_produk_raw": "Diclofenac Pot. 50 mg",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "POSPST260200547",
+            "line": 16,
+            "nama_produk_raw": "Cetirizine 10 mg HJ",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "POSPST260200547",
+            "line": 17,
+            "nama_produk_raw": "Apialys Drop 10ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "POSPST260200547",
+            "line": 18,
+            "nama_produk_raw": "Apialys Sirup 100ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "POSPST260200547",
+            "line": 19,
+            "nama_produk_raw": "Atorvastatin 20 mg Dexa",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "POSPST260200547",
+            "line": 21,
+            "nama_produk_raw": "Tawon EE 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "POSPST260200547",
+            "line": 22,
+            "nama_produk_raw": "Tawon FF 90ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "POSPST260200547",
+            "line": 24,
+            "nama_produk_raw": "Neo Entrostop Tab 120",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "POSPST260200547",
+            "line": 26,
+            "nama_produk_raw": "Thermo One Alpha",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "POSPST260200547",
+            "line": 28,
+            "nama_produk_raw": "Ultrafix 5x1 (isi 10)",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "POSPST260200547",
+            "line": 1015,
+            "nama_produk_raw": "Tawon EE 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "POSPST260200547",
+            "line": 1016,
+            "nama_produk_raw": "Tawon FF 90ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "POSPST260200547",
+            "line": 1018,
+            "nama_produk_raw": "Neo Entrostop Tab",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "POSPST260200547",
+            "line": 1020,
+            "nama_produk_raw": "Thermo One Alpha 1",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "POSPST260200547",
+            "line": 1021,
+            "nama_produk_raw": "Dermafix T 10 x 25 cm",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "POSPST260200549",
+            "line": 43,
+            "nama_produk_raw": "Dermatix Ultra 5gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "POSPST260200550",
+            "line": 60,
+            "nama_produk_raw": "Lacoldin Syr 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/02/04/2396190",
+            "line": 74,
+            "nama_produk_raw": "Tempra Drop Anggur",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/02/04/2396190",
+            "line": 76,
+            "nama_produk_raw": "Proris Triple Action",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/02/04/2396190",
+            "line": 78,
+            "nama_produk_raw": "Baby Oil Johnson 50ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/02/04/2396190",
+            "line": 79,
+            "nama_produk_raw": "Tempra Drop Strawberry",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "02.02296",
+            "line": 93,
+            "nama_produk_raw": "Siladex Cough & Flu 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-00415",
+            "line": 107,
+            "nama_produk_raw": "M. Kayu Putih 30ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-00415",
+            "line": 108,
+            "nama_produk_raw": "G. Pijat Urut 30ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-00415",
+            "line": 109,
+            "nama_produk_raw": "Gandapura Lang 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-00415",
+            "line": 110,
+            "nama_produk_raw": "Curvit CL Emul 175ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-00415",
+            "line": 111,
+            "nama_produk_raw": "OBH Combi Batuk Berdahak",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-00415",
+            "line": 113,
+            "nama_produk_raw": "Ventolin Inhaler 100mcg",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-00415",
+            "line": 114,
+            "nama_produk_raw": "Kalmethasone 200's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-00415",
+            "line": 115,
+            "nama_produk_raw": "Tolak Angin Cair 12's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-00415",
+            "line": 117,
+            "nama_produk_raw": "Ventolin Nebules 2.5mg",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JMR-2602-00156",
+            "line": 131,
+            "nama_produk_raw": "Komix Jeruk Nipis 30x7ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-628174",
+            "line": 146,
+            "nama_produk_raw": "Pimtracol Cherry Syr 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-628174",
+            "line": 149,
+            "nama_produk_raw": "OBH Trop + Extra Anak 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-628175",
+            "line": 163,
+            "nama_produk_raw": "Na Diklo 50mg (Nat. Diclo)",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-628175",
+            "line": 164,
+            "nama_produk_raw": "Obat Sakit Gigi Kakak Tua",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-628175",
+            "line": 165,
+            "nama_produk_raw": "OBH Itrasal 100ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-628175",
+            "line": 166,
+            "nama_produk_raw": "Pi Kang Shuang Krim 5 gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-628175",
+            "line": 167,
+            "nama_produk_raw": "Promag Tab Kunyah (4x30)",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-628175",
+            "line": 168,
+            "nama_produk_raw": "Sutra Fiesta Straw 3's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-628175",
+            "line": 169,
+            "nama_produk_raw": "Sutra Merah 3's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-628175",
+            "line": 170,
+            "nama_produk_raw": "Test Kehamilan Onemed",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-628175",
+            "line": 171,
+            "nama_produk_raw": "Salep Sriti Fu Qing",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-628176",
+            "line": 185,
+            "nama_produk_raw": "Alletrol Comp Eye Drop",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-628176",
+            "line": 186,
+            "nama_produk_raw": "Rohto Cool Tetes Mata",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-628176",
+            "line": 187,
+            "nama_produk_raw": "Entrostop Anak 10ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-628176",
+            "line": 188,
+            "nama_produk_raw": "Balsem Geliga 20gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-628176",
+            "line": 190,
+            "nama_produk_raw": "Gentamicin SK KF",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-628176",
+            "line": 191,
+            "nama_produk_raw": "Hansaplast 4,5m x 1,25m",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-628176",
+            "line": 192,
+            "nama_produk_raw": "Betadine Solution 15ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-628176",
+            "line": 193,
+            "nama_produk_raw": "Betadine Gargle 100ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-628176",
+            "line": 194,
+            "nama_produk_raw": "Insto Dry Eyes 7.5ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-628176",
+            "line": 195,
+            "nama_produk_raw": "Insto Red Eyes 7.5ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-628176",
+            "line": 196,
+            "nama_produk_raw": "Insto Regular 7.5ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-628177",
+            "line": 213,
+            "nama_produk_raw": "Glibenclamide 5mg (Indo)",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-628177",
+            "line": 214,
+            "nama_produk_raw": "Betametason 0,1% Cr 5gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-628177",
+            "line": 215,
+            "nama_produk_raw": "Methylprednisolone 8mg",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-628177",
+            "line": 216,
+            "nama_produk_raw": "MKP Gajah 30ml Plst",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "01549/SJA/02/26",
+            "line": 234,
+            "nama_produk_raw": "Caviplex Box 100's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "01549/SJA/02/26",
+            "line": 235,
+            "nama_produk_raw": "Dexaharsen 0,5 mg 200's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "01549/SJA/02/26",
+            "line": 236,
+            "nama_produk_raw": "Dexaharsen 0,75 mg 200's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "01549/SJA/02/26",
+            "line": 238,
+            "nama_produk_raw": "Isosorbide Dinitrate 100's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "01552/SJA/02/26",
+            "line": 258,
+            "nama_produk_raw": "Amlodipin 10 mg Samco 100's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "01547/SJA/02/26",
+            "line": 294,
+            "nama_produk_raw": "Carbidu 0,5 mg 200's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "01547/SJA/02/26",
+            "line": 295,
+            "nama_produk_raw": "Diclofenac Sodium 50 mg",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "01547/SJA/02/26",
+            "line": 299,
+            "nama_produk_raw": "Hufamag Plus Box 100's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "01547/SJA/02/26",
+            "line": 302,
+            "nama_produk_raw": "Parafen Kaplet 100's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2602-004949",
+            "line": 318,
+            "nama_produk_raw": "Paracetamol 500mg Nova",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2602-004949",
+            "line": 319,
+            "nama_produk_raw": "Omeprazole 20mg Nova",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2602-004949",
+            "line": 321,
+            "nama_produk_raw": "Lodia Tab 2mg",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2602-004949",
+            "line": 323,
+            "nama_produk_raw": "Mefenamic Acid 500mg Nova",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2602-004949",
+            "line": 324,
+            "nama_produk_raw": "X-Flam 50mg 30's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2602-004949",
+            "line": 325,
+            "nama_produk_raw": "Amoxicillin 500mg Nova",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2602-004949",
+            "line": 326,
+            "nama_produk_raw": "Copal Chest Rub 25gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2602-004949",
+            "line": 327,
+            "nama_produk_raw": "Hotin Cr Strong 60gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2602-004949",
+            "line": 328,
+            "nama_produk_raw": "Fresh Care Citrus 10ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2602-004950",
+            "line": 344,
+            "nama_produk_raw": "Hotin Cr Strong 120gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2602-004950",
+            "line": 345,
+            "nama_produk_raw": "Benoson N Cr 5gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2602-004950",
+            "line": 346,
+            "nama_produk_raw": "Sanmol Drops 15ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2602-004950",
+            "line": 347,
+            "nama_produk_raw": "Sanmol Syr 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01176A",
+            "line": 670,
+            "nama_produk_raw": "Proris Syr 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01176A",
+            "line": 672,
+            "nama_produk_raw": "Yusimox DS 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01176A",
+            "line": 673,
+            "nama_produk_raw": "Koolfever Adult/Lbr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01176A",
+            "line": 674,
+            "nama_produk_raw": "Natur E SC 16's Small",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01176A",
+            "line": 675,
+            "nama_produk_raw": "Dulcolax 5mg 10's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01176A",
+            "line": 677,
+            "nama_produk_raw": "Betadine Fem Hygiene 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01176A",
+            "line": 678,
+            "nama_produk_raw": "Genalten Cr 5gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01176A",
+            "line": 679,
+            "nama_produk_raw": "Mycorall 200mg 50's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01180",
+            "line": 698,
+            "nama_produk_raw": "Antangin JRG 12's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01180",
+            "line": 699,
+            "nama_produk_raw": "Tolak Angin Cair 12's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01178",
+            "line": 717,
+            "nama_produk_raw": "Bronchitin Exp Syr 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JMR-2602-00451",
+            "line": 735,
+            "nama_produk_raw": "OBH Combi Batuk Flu Menthol 100ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JMR-2602-00451",
+            "line": 736,
+            "nama_produk_raw": "OBH Combi Batuk Flu Menthol 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01177",
+            "line": 752,
+            "nama_produk_raw": "Glibenclamide 5mg 100's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01177",
+            "line": 753,
+            "nama_produk_raw": "Lactacyd All Day Care 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01177",
+            "line": 754,
+            "nama_produk_raw": "Ventolin Inhaler 100mcg",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01177",
+            "line": 757,
+            "nama_produk_raw": "Bioplacenton Jelly 15gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01177",
+            "line": 758,
+            "nama_produk_raw": "Betason N Cr 5gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01177",
+            "line": 759,
+            "nama_produk_raw": "Acyclovir Krim 5gr (FM)",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01177",
+            "line": 760,
+            "nama_produk_raw": "Transpulmin Kids Bals 10gr",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01468",
+            "line": 811,
+            "nama_produk_raw": "Super Tetra 20x6's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01468",
+            "line": 814,
+            "nama_produk_raw": "Cbrofot Gold Straw 100ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01468",
+            "line": 815,
+            "nama_produk_raw": "Betadine Solution 5ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01468",
+            "line": 816,
+            "nama_produk_raw": "OBH Combi Batuk Berdahak 100ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01468",
+            "line": 817,
+            "nama_produk_raw": "Diapet Kap 12x10's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01468",
+            "line": 818,
+            "nama_produk_raw": "Neurobion Forte 50's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01468",
+            "line": 819,
+            "nama_produk_raw": "Andalan Pil KB 15x2",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01468",
+            "line": 820,
+            "nama_produk_raw": "ByeBye Fever Anak 10's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01468",
+            "line": 821,
+            "nama_produk_raw": "Emturnas Kap 100's",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-02925",
+            "line": 989,
+            "nama_produk_raw": "M. Kayu Putih 30ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-02925",
+            "line": 990,
+            "nama_produk_raw": "Vicks Inhaler 0.5ml KC",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-02925",
+            "line": 991,
+            "nama_produk_raw": "Fimestan 500mg Kap",
+            "message": "Produk tidak ditemukan di tabel produk."
+        }
+    ],
+    "unresolved_product_names": [
+        "Lactacyd Liq Baby 60ml",
+        "Sangobion Kap 40's",
+        "JF Dermamed 90gr (Kng)",
+        "Primolut N 5mg 30's",
+        "Fimestan 500mg Kaplet",
+        "Andalan Pil KB 15x2(28)",
+        "Gludepatic 500mg Tab",
+        "Bioplacenton Jelly 15gr",
+        "Erlamycetin SM 3.5gr",
+        "Genoint SM 3.5gr",
+        "Kalmethasone 200's",
+        "Vicks Inhaler 0.5ml KC",
+        "Stimuno F Cap 10's",
+        "HP Kain Box 100's",
+        "Transpulmin Baby Bals",
+        "OBH Combi Batuk Flu Menthol 100ml",
+        "OBH Combi Batuk Flu Menthol 60ml",
+        "Lagesil Susp 100ml",
+        "Imunos Syrup 60ml",
+        "Salicyl Menthol Kng 100gr",
+        "Contrexyn Demam Tab",
+        "Kuldon Sariawan 40",
+        "Kapas One Med 25gr",
+        "Kapas One Med 50gr",
+        "Gencinolon Krim",
+        "Omegesic 10x10 Kap",
+        "Omedrinat 10x10 Tab",
+        "Omegzole 10x10 Tab",
+        "Omellegar 10x10 Kap",
+        "Bodrexin Flu Batuk Pe",
+        "Elkana CL Emulsi",
+        "Elkana Suspensi 60ml",
+        "Forumen Tetes Telinga",
+        "Proris Triple Action",
+        "Betahistine Mesilate",
+        "Siladex Mucolytic 60ml",
+        "Listerine Cool Mint",
+        "Listerine Green Tea",
+        "Plantacid Syr 100ml",
+        "Danasone 0.5mg Tab",
+        "Erphaflam 50mg Tab",
+        "Silex Syr 100ml",
+        "Koolfever Adult/Lbr",
+        "Counterpain Cr 30gr",
+        "Counterpain Cr 60gr",
+        "Cbrofot Gold 100ml",
+        "Sucralfate Syr 100ml",
+        "Incidal OD 10mg",
+        "M. Kayu Putih 15ml",
+        "Sanmol Syr 60ml",
+        "Betadine Gargle 100ml",
+        "Betadine Solution 5ml",
+        "Microlax Supp 5ml",
+        "Imboost Tab 5x4's",
+        "Ranitidin 150mg (HJ)",
+        "Lacto-B 1g x 40 Sach",
+        "Daktarin Cr 5gr",
+        "Benoson N Cr 5gr (Kng)",
+        "Fresh Care Strong 10ml",
+        "Sanmag Susp 120ml",
+        "Pharmaton Go 60's",
+        "Hotin Cr Tube 120gr",
+        "Counterpain Cr 5gr",
+        "Ibuprofen 400mg",
+        "Mycorall Cream 5 gr",
+        "Panadol Elixir 30ml",
+        "Yusimox DS 60ml",
+        "Thrombophob Gel 20gr",
+        "Benomix Cr 10gr",
+        "Tolak Angin Cair 12's",
+        "Antangin JRG 12's",
+        "Acyclovir Krim 5gr",
+        "OBH Com Anak Straw",
+        "Vicks F 44 Dewasa 54ml",
+        "Sakatonik ABC Antariksa",
+        "Fitkom Hi-C Grape",
+        "Scabimite Cream 10gr",
+        "Siladex Mucolytic Exp 30ml (H)",
+        "Siladex Mucolytic Exp 60ml (H)",
+        "Lerzin 100 Kapl",
+        "Promag Tab 4x30",
+        "Salep Kulit 88 12pot",
+        "Cavicur Plus DHA Jeruk",
+        "Ambroxol Tab 30mg",
+        "Cetirizine HCl Tab",
+        "Batugin Elixir 120ml",
+        "Biolysin Active Straw",
+        "Cazetin Drops 15ml",
+        "Freshcare Smash Matcha",
+        "Freshcare Smash Fruity",
+        "Crathazon 0,5mg Capl",
+        "Hansaplast 4,5m x 1,25m",
+        "Hydrocortisone Kalbe 2,5%",
+        "Hypafix 5cm x 1m",
+        "Insto Cool 7.5ml",
+        "Keji Beling Seahorse",
+        "Milton Pastilles Apple",
+        "Milton Pastilles Pineap",
+        "Lancar Asi 200mg Capl",
+        "MKP Gajah 60ml Plst",
+        "OBH Trop + Anak Orange",
+        "OBH Trop + Anak Straw",
+        "Pimtracol Cherry 60ml",
+        "Ultraflu PE Kaplet",
+        "Medi-Klin TR Gel",
+        "Elkana Suspensi",
+        "Hydrocortisone Acetate",
+        "Medi-Klin Gel 1%",
+        "Bodrexin Demam Tab",
+        "Neurosanbe Plus Cap 100's",
+        "Sagestam Cream 10gr",
+        "Copal Chest Rub 25gr",
+        "Dumin Syr 60ml",
+        "Hotin Cr Tube 60gr",
+        "Fresh Care Lavender 10ml",
+        "Safe Care Aromaterapi 10ml",
+        "Cortidex 0.5mg 100's",
+        "Folavit 400mg 100's",
+        "Asepso Soap Original 80gr",
+        "Ketoconazole 200mg/Nova",
+        "Acetylcysteine 200mg/Gdn",
+        "Ketoconazole 200mg/Hexp",
+        "Simvastatin 10mg/Nova",
+        "Lactulosa Generik 60ml",
+        "Metronidazole 500mg/Nova",
+        "Sanbe Tears 8ml",
+        "Super Tetra 20x6's",
+        "Neuralgin RX 100's",
+        "Divoltar 50mg Tab 50's",
+        "M. Kayu Putih 120ml",
+        "Furosemide 40mg 100's",
+        "Vicks Babybalm 8gr",
+        "Paratusin Tab 200's",
+        "Paratusin Syr 60ml",
+        "Glucosamin 500mg Tab 100's",
+        "Genoint SK 15gr",
+        "Insto Eye Drops 7.5 ml",
+        "Andalan Pil KB 15x2(28)'s",
+        "ByeBye Fever Baby 10lbr",
+        "Combantrin 250mg 50's",
+        "Kaditic 50mg Tab 100's",
+        "Voltaren Emugel 1% 10gr",
+        "Erlamycetin TT 10ml",
+        "Proris Syr 60ml",
+        "Dulcolax 5mg 10's",
+        "Alofar 100 mg Box 100's",
+        "Infus Sodium Chloride 0.9%",
+        "Renadinac 50mg Tab (Fr)",
+        "Coparcetin 60 ml Sirup",
+        "Flucadex Kaplet",
+        "Siladex Antitusive 30 ml",
+        "Siladex Antitusive 60 ml",
+        "Xonce Vit C-500 mg Jeruk",
+        "Komix OBH Sirup",
+        "Erladerm-N Krim 5 g",
+        "Incidal OD 10mg 10's",
+        "Neurobion Forte 50's",
+        "Voltadex 50mg Tab 100's",
+        "G. Pijat Urut 60ml",
+        "Salonpas Super 10x10/Ds",
+        "Sensodyne Fmint 40gr",
+        "Stpsl Cool 2x6's (Biru)",
+        "Stpsl Orig 2x6's (Merah)",
+        "Stpsl Sooth 2x6's (Lmn)",
+        "Polident Cr 20gr",
+        "Woods Antitussive 60ml",
+        "OBH C Btk Flu Ank Madu 60ml",
+        "Keji Beling (Balatif)",
+        "Pi Kang Shuang Krim 5 gr",
+        "GPU Krim Sereh 60gr",
+        "Rheumason Cream 18gr",
+        "Tolak Linu Cair",
+        "Promag Gazero Herbal",
+        "Bevalex Cr 5g",
+        "Vitacimin Lemon 100's",
+        "Vit B Complex IPI",
+        "Na Diklo 50mg (Php)",
+        "Santadex Tetes Telinga",
+        "Kaotin Syr 60ml",
+        "Sucralfate (Dx) Susp 100ml",
+        "Salicyl Spiritus Gajah",
+        "Acifar Cream 5% 5 gr",
+        "Dolo Licobion Box 100 s",
+        "Hufamag Plus Sirup",
+        "Zenirex Sirup",
+        "Dexaharsen 0,5 mg 200's",
+        "Dexaharsen 0,75 mg 200's",
+        "Hufarizine-R Box 50's",
+        "OBH Surya 100ml",
+        "Hufagripp Forte 100's",
+        "Glucodex 80mg Tab 100's",
+        "M. Kayu Putih 60ml (No.2)",
+        "G. Pijat Urut 30ml (No.2)",
+        "Plantacid Forte Susp 100ml",
+        "Dettol Antiseptik Liq 95ml",
+        "Dettol Antiseptik Liq 45ml",
+        "Laxing 10x10's",
+        "ByeBye Fever Anak 10's",
+        "Polysilane Tab 5x8's",
+        "Yusimox 500mg Kap 100's",
+        "Histigo 6mg Kap 100's",
+        "Diane 35-1x21 Tab",
+        "Amlodipin 5 mg Samco 100's",
+        "Grafamik Box 100's",
+        "Helixim Dry Syr",
+        "Salbutamol 2 mg Mulia 100's",
+        "Salbutamol 4 mg Mulia 100's",
+        "Yusimox Dry Sirup",
+        "Siladex Cough & Cold 30 ml",
+        "Siladex CC 60 ml (New)",
+        "Femifax Lancar Haid 12 Sch",
+        "Koolfever Kid/Lbr",
+        "Dramamine 50mg Tab 100's",
+        "Kandistatin Susp 12ml",
+        "Vitaquin CR 15gr",
+        "Amlodipine 5 mg HJ",
+        "Amlodipine 10 mg HJ",
+        "Lapisiv-T Tablet",
+        "Antacida Doen Sirup 60ml",
+        "Diclofenac Pot. 50 mg",
+        "Cetirizine 10 mg HJ",
+        "Apialys Drop 10ml",
+        "Apialys Sirup 100ml",
+        "Atorvastatin 20 mg Dexa",
+        "Tawon EE 60ml",
+        "Tawon FF 90ml",
+        "Neo Entrostop Tab 120",
+        "Thermo One Alpha",
+        "Ultrafix 5x1 (isi 10)",
+        "Neo Entrostop Tab",
+        "Thermo One Alpha 1",
+        "Dermafix T 10 x 25 cm",
+        "Dermatix Ultra 5gr",
+        "Lacoldin Syr 60ml",
+        "Tempra Drop Anggur",
+        "Baby Oil Johnson 50ml",
+        "Tempra Drop Strawberry",
+        "Siladex Cough & Flu 60ml",
+        "M. Kayu Putih 30ml",
+        "G. Pijat Urut 30ml",
+        "Gandapura Lang 60ml",
+        "Curvit CL Emul 175ml",
+        "OBH Combi Batuk Berdahak",
+        "Ventolin Inhaler 100mcg",
+        "Ventolin Nebules 2.5mg",
+        "Komix Jeruk Nipis 30x7ml",
+        "Pimtracol Cherry Syr 60ml",
+        "OBH Trop + Extra Anak 60ml",
+        "Na Diklo 50mg (Nat. Diclo)",
+        "Obat Sakit Gigi Kakak Tua",
+        "OBH Itrasal 100ml",
+        "Promag Tab Kunyah (4x30)",
+        "Sutra Fiesta Straw 3's",
+        "Sutra Merah 3's",
+        "Test Kehamilan Onemed",
+        "Salep Sriti Fu Qing",
+        "Alletrol Comp Eye Drop",
+        "Rohto Cool Tetes Mata",
+        "Entrostop Anak 10ml",
+        "Balsem Geliga 20gr",
+        "Gentamicin SK KF",
+        "Betadine Solution 15ml",
+        "Insto Dry Eyes 7.5ml",
+        "Insto Red Eyes 7.5ml",
+        "Insto Regular 7.5ml",
+        "Glibenclamide 5mg (Indo)",
+        "Betametason 0,1% Cr 5gr",
+        "Methylprednisolone 8mg",
+        "MKP Gajah 30ml Plst",
+        "Caviplex Box 100's",
+        "Isosorbide Dinitrate 100's",
+        "Amlodipin 10 mg Samco 100's",
+        "Carbidu 0,5 mg 200's",
+        "Diclofenac Sodium 50 mg",
+        "Hufamag Plus Box 100's",
+        "Parafen Kaplet 100's",
+        "Paracetamol 500mg Nova",
+        "Omeprazole 20mg Nova",
+        "Lodia Tab 2mg",
+        "Mefenamic Acid 500mg Nova",
+        "X-Flam 50mg 30's",
+        "Amoxicillin 500mg Nova",
+        "Hotin Cr Strong 60gr",
+        "Fresh Care Citrus 10ml",
+        "Hotin Cr Strong 120gr",
+        "Benoson N Cr 5gr",
+        "Sanmol Drops 15ml",
+        "Natur E SC 16's Small",
+        "Betadine Fem Hygiene 60ml",
+        "Genalten Cr 5gr",
+        "Mycorall 200mg 50's",
+        "Bronchitin Exp Syr 60ml",
+        "Glibenclamide 5mg 100's",
+        "Lactacyd All Day Care 60ml",
+        "Betason N Cr 5gr",
+        "Acyclovir Krim 5gr (FM)",
+        "Transpulmin Kids Bals 10gr",
+        "Cbrofot Gold Straw 100ml",
+        "OBH Combi Batuk Berdahak 100ml",
+        "Diapet Kap 12x10's",
+        "Andalan Pil KB 15x2",
+        "Emturnas Kap 100's",
+        "Fimestan 500mg Kap"
+    ],
+    "already_existing_same": [],
+    "insertable_preview": [
+        {
+            "no_faktur": "JMR-2601-00993A",
+            "supplier": "PT. SAKAJAJA MAKMUR ABADI",
+            "supplier_id": 1,
+            "waktu": "2026-01-31 12:00:00",
+            "total_item": 1,
+            "total_harga": 58200,
+            "detail_count": 1
+        },
+        {
+            "no_faktur": "04989/SJA/01/26",
+            "supplier": "PT. SEHAT JAYA ANUGERAH",
+            "supplier_id": 10,
+            "waktu": "2026-01-27 12:00:00",
+            "total_item": 1,
+            "total_harga": 40991,
+            "detail_count": 1
+        },
+        {
+            "no_faktur": "01553/SJA/02/26",
+            "supplier": "PT. SEHAT JAYA ANUGERAH",
+            "supplier_id": 10,
+            "waktu": "2026-02-09 12:00:00",
+            "total_item": 4,
+            "total_harga": 254124,
+            "detail_count": 2
+        }
+    ]
+}
