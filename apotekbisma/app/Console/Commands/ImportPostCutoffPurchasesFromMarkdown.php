@@ -18,6 +18,8 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
                             {--alias-template= : Path output template JSON untuk alias produk unresolved}
                             {--alias-suggestions= : Path output JSON kandidat alias produk unresolved}
                             {--alias-autofill : Isi alias-template dengan kandidat ber-confidence tinggi}
+                            {--force-map-all-products : Paksa mapping semua produk unresolved ke kandidat terbaik database (agresif)}
+                            {--force-map-min-score=50 : Skor minimum mode force-map-all-products}
                             {--apply : Terapkan insert ke database}
                             {--allow-partial : Tetap apply walau ada baris gagal mapping}
                             {--cutoff= : Cutoff baseline datetime}
@@ -35,10 +37,12 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
     private array $productById = [];
     private array $productAliasMap = [];
     private array $productRows = [];
+    private array $forcedProductMappings = [];
 
     public function handle(BaselineStockReflowService $reflowService): int
     {
         $startedAt = microtime(true);
+        $this->forcedProductMappings = [];
 
         if (!Schema::hasColumn('pembelian', 'no_faktur')) {
             $this->error('Kolom pembelian.no_faktur tidak ditemukan. Import dibatalkan demi keamanan.');
@@ -57,6 +61,8 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
 
         $apply = (bool) $this->option('apply');
         $allowPartial = (bool) $this->option('allow-partial');
+        $forceMapAllProducts = (bool) $this->option('force-map-all-products');
+        $forceMapMinScore = (float) $this->option('force-map-min-score');
         $sourceLabel = trim((string) $this->option('source')) !== ''
             ? trim((string) $this->option('source'))
             : 'markdown-reinput-admin';
@@ -68,6 +74,7 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
         $this->line('From          : ' . $from);
         $this->line('Until         : ' . $until);
         $this->line('Source label  : ' . $sourceLabel);
+        $this->line('Force map     : ' . ($forceMapAllProducts ? 'YES (min score ' . round($forceMapMinScore, 2) . ')' : 'NO'));
         $this->line('Files         : ' . count($filePaths));
 
         try {
@@ -136,10 +143,14 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
                 'invoices_existing_same' => count($existingAsSame),
                 'invoices_insertable' => count($insertableInvoices),
                 'issues_total' => count($issues),
+                'forced_product_mappings_total' => count($this->forcedProductMappings),
+                'force_map_enabled' => $forceMapAllProducts,
+                'force_map_min_score' => $forceMapMinScore,
             ],
             'issues' => $issues,
             'unresolved_product_names' => $unresolvedProductNames,
             'already_existing_same' => $existingAsSame,
+            'forced_product_mappings' => $this->forcedProductMappings,
             'insertable_preview' => array_map(function (array $invoice): array {
                 return [
                     'no_faktur' => $invoice['no_faktur'],
@@ -1224,7 +1235,9 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
                     'tokens' => $tokens,
                     'token_key' => $this->buildTokenKey($tokens),
                     'measure_tokens' => $this->extractMeasureTokens($productName),
+                    'measure_details' => $this->extractMeasureDetails($productName),
                     'pack_count_tokens' => $this->extractPackCountTokens($productName),
+                    'aggressive_tokens' => $this->extractAggressiveTokens($productName),
                 ];
             })
             ->all();
@@ -1489,9 +1502,452 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
             ];
         }
 
+        if ((bool) $this->option('force-map-all-products')) {
+            $forceMapped = $this->resolveProductByAggressiveSimilarity($productName, $normalized, $queryTokens, $queryMeasures, $queryPackCounts);
+            if ($forceMapped !== null) {
+                $this->forcedProductMappings[] = [
+                    'nama_produk_raw' => $productName,
+                    'id_produk' => (int) $forceMapped['id_produk'],
+                    'nama_produk_db' => (string) $forceMapped['nama_produk'],
+                    'score' => round((float) $forceMapped['score'], 2),
+                    'similarity' => round((float) $forceMapped['similarity'], 2),
+                    'token_overlap' => round((float) $forceMapped['token_overlap'], 2),
+                    'measure_match' => round((float) $forceMapped['measure_match'], 2),
+                    'pack_count_match' => round((float) $forceMapped['pack_count_match'], 2),
+                    'gap' => round((float) $forceMapped['gap'], 2),
+                    'strategy' => 'force_map_all_products',
+                ];
+
+                return [
+                    'ok' => true,
+                    'id_produk' => (int) $forceMapped['id_produk'],
+                    'nama_produk' => (string) $forceMapped['nama_produk'],
+                ];
+            }
+        }
+
         return [
             'ok' => false,
             'message' => 'Produk tidak ditemukan di tabel produk.',
+        ];
+    }
+
+    private function resolveProductByAggressiveSimilarity(
+        string $rawName,
+        string $normalized,
+        array $queryTokens,
+        array $queryMeasures,
+        array $queryPackCounts
+    ): ?array {
+        if ($normalized === '' || empty($this->productRows)) {
+            return null;
+        }
+
+        $queryAggressiveTokens = $this->extractAggressiveTokens($rawName);
+        if (empty($queryAggressiveTokens) && !empty($queryTokens)) {
+            $queryAggressiveTokens = $queryTokens;
+        }
+        $queryMeasureDetails = $this->extractMeasureDetails($rawName);
+
+        $candidates = [];
+
+        foreach ($this->productRows as $row) {
+            $candidateNormalized = (string) ($row['normalized'] ?? '');
+            if ($candidateNormalized === '') {
+                continue;
+            }
+
+            similar_text($normalized, $candidateNormalized, $similarity);
+            $similarity = (float) $similarity;
+
+            $rowTokens = $row['tokens'] ?? [];
+            $shared = array_values(array_intersect($queryTokens, $rowTokens));
+            $queryTokenCount = count($queryTokens);
+            $tokenOverlap = $queryTokenCount > 0 ? (count($shared) / $queryTokenCount) * 100.0 : 0.0;
+
+            $candidateAggressiveTokens = $row['aggressive_tokens'] ?? [];
+            $softTokenScore = $this->computeSoftTokenScore($queryAggressiveTokens, $candidateAggressiveTokens);
+
+            $anchorToken = '';
+            if (!empty($queryAggressiveTokens)) {
+                usort($queryAggressiveTokens, function (string $left, string $right): int {
+                    return mb_strlen($right) <=> mb_strlen($left);
+                });
+                $anchorToken = (string) $queryAggressiveTokens[0];
+            }
+
+            $anchorMatch = 0.0;
+            if ($anchorToken !== '' && !empty($candidateAggressiveTokens)) {
+                foreach ($candidateAggressiveTokens as $candidateToken) {
+                    if ($candidateToken === '') {
+                        continue;
+                    }
+
+                    if ($candidateToken === $anchorToken) {
+                        $anchorMatch = 100.0;
+                        break;
+                    }
+
+                    if (str_contains($candidateToken, $anchorToken) || str_contains($anchorToken, $candidateToken)) {
+                        $anchorMatch = max($anchorMatch, 95.0);
+                        continue;
+                    }
+
+                    similar_text($anchorToken, $candidateToken, $anchorSim);
+                    $anchorMatch = max($anchorMatch, (float) $anchorSim);
+                }
+            }
+
+            $anchorBonus = $anchorMatch >= 75.0 ? (($anchorMatch - 75.0) * 0.4) : 0.0;
+            $anchorPenalty = ($anchorToken !== '' && $anchorMatch < 45.0) ? 18.0 : 0.0;
+
+            $candidateMeasures = $row['measure_tokens'] ?? [];
+            $measureMatch = 100.0;
+            $measureAllExact = true;
+            $measureHasSameUnit = false;
+            $measureDistanceScore = 100.0;
+            if (!empty($queryMeasures)) {
+                $measureHit = 0;
+                foreach ($queryMeasures as $measure) {
+                    if (in_array($measure, $candidateMeasures, true)) {
+                        $measureHit++;
+                    }
+                }
+                $measureMatch = ($measureHit / count($queryMeasures)) * 100.0;
+
+                $measureCompatibility = $this->evaluateMeasureCompatibility(
+                    $queryMeasureDetails,
+                    $row['measure_details'] ?? []
+                );
+                $measureAllExact = (bool) $measureCompatibility['all_exact'];
+                $measureHasSameUnit = (bool) $measureCompatibility['has_same_unit'];
+                $measureDistanceScore = (float) $measureCompatibility['distance_score'];
+
+                $measureMatch = ($measureMatch * 0.40)
+                    + (((float) $measureCompatibility['exact_ratio']) * 0.35)
+                    + ($measureDistanceScore * 0.25);
+            }
+
+            $candidatePackCounts = $row['pack_count_tokens'] ?? [];
+            $packCountMatch = 100.0;
+            if (!empty($queryPackCounts)) {
+                $packHit = 0;
+                foreach ($queryPackCounts as $packCount) {
+                    if (in_array($packCount, $candidatePackCounts, true)) {
+                        $packHit++;
+                    }
+                }
+                $packCountMatch = ($packHit / count($queryPackCounts)) * 100.0;
+            }
+
+            $score = ($similarity * 0.28)
+                + ($softTokenScore * 0.52)
+                + ($measureMatch * 0.14)
+                + ($packCountMatch * 0.08)
+                + $anchorBonus
+                - $anchorPenalty;
+
+            if ($score < 0) {
+                $score = 0;
+            }
+
+            $candidates[] = [
+                'id_produk' => (int) $row['id_produk'],
+                'nama_produk' => (string) $row['nama_produk'],
+                'score' => $score,
+                'similarity' => $similarity,
+                'token_overlap' => $softTokenScore,
+                'measure_match' => $measureMatch,
+                'measure_distance_score' => $measureDistanceScore,
+                'measure_all_exact' => $measureAllExact,
+                'measure_has_same_unit' => $measureHasSameUnit,
+                'pack_count_match' => $packCountMatch,
+                'anchor_match' => $anchorMatch,
+            ];
+        }
+
+        if (empty($candidates)) {
+            return null;
+        }
+
+        usort($candidates, function (array $left, array $right): int {
+            return $right['score'] <=> $left['score'];
+        });
+
+        if (!empty($queryMeasureDetails)) {
+            $exactMeasureCandidates = array_values(array_filter($candidates, function (array $candidate): bool {
+                return ($candidate['measure_all_exact'] ?? false) === true;
+            }));
+
+            if (!empty($exactMeasureCandidates)) {
+                usort($exactMeasureCandidates, function (array $left, array $right): int {
+                    return $right['score'] <=> $left['score'];
+                });
+
+                $currentBest = $candidates[0];
+                $exactBest = $exactMeasureCandidates[0];
+
+                // Keep exact-dose preference for close/ambiguous matches without hard-pruning broad fallback coverage.
+                $preferExact = ($currentBest['measure_all_exact'] ?? false) === true;
+                if (!$preferExact) {
+                    $scoreGap = (float) $currentBest['score'] - (float) $exactBest['score'];
+                    $preferExact = $scoreGap <= 18.0
+                        && ((float) ($exactBest['token_overlap'] ?? 0.0)) >= 72.0
+                        && ((float) ($exactBest['similarity'] ?? 0.0)) >= 58.0;
+                }
+
+                if ($preferExact) {
+                    $candidates = $exactMeasureCandidates;
+                }
+            }
+        }
+
+        $best = $candidates[0];
+        $secondScore = $candidates[1]['score'] ?? 0.0;
+        $gap = (float) ($best['score'] - $secondScore);
+
+        $minScore = (float) $this->option('force-map-min-score');
+        if ($best['score'] < $minScore) {
+            return null;
+        }
+
+        $best['gap'] = $gap;
+        $best['raw_name'] = $rawName;
+
+        return $best;
+    }
+
+    private function computeSoftTokenScore(array $queryTokens, array $candidateTokens): float
+    {
+        if (empty($queryTokens) || empty($candidateTokens)) {
+            return 0.0;
+        }
+
+        $weightedScoreSum = 0.0;
+        $weightSum = 0.0;
+        foreach ($queryTokens as $queryToken) {
+            if ($queryToken === '') {
+                continue;
+            }
+
+            $best = 0.0;
+            foreach ($candidateTokens as $candidateToken) {
+                if ($candidateToken === '') {
+                    continue;
+                }
+
+                if ($queryToken === $candidateToken) {
+                    $best = 100.0;
+                    break;
+                }
+
+                if (str_contains($candidateToken, $queryToken) || str_contains($queryToken, $candidateToken)) {
+                    $best = max($best, 92.0);
+                    continue;
+                }
+
+                similar_text($queryToken, $candidateToken, $tokenSimilarity);
+                $best = max($best, (float) $tokenSimilarity);
+            }
+
+            $weight = (float) max(1, mb_strlen($queryToken));
+            $weightedScoreSum += $best * $weight;
+            $weightSum += $weight;
+        }
+
+        if ($weightSum <= 0.0) {
+            return 0.0;
+        }
+
+        return $weightedScoreSum / $weightSum;
+    }
+
+    private function extractAggressiveTokens(string $value): array
+    {
+        $normalized = $this->normalizeProductName($value);
+        if ($normalized === '') {
+            return [];
+        }
+
+        $parts = preg_split('/\s+/u', $normalized) ?: [];
+        $tokens = [];
+        $drop = [
+            'mg', 'ml', 'gr', 'g', 'mcg', 'tab', 'tabs', 'kap', 'kapl', 'caps',
+            'syr', 'susp', 'cr', 'gel', 'drop', 'drops', 'liq', 'box', 'strip', 'sach',
+            'sachet', 'lbr', 'new', 'adult', 'anak', 'baby', 'small', 'plus', 'forte',
+            'exp', 'od', 'dx', 'hj', 'kng', 'nova', 'hexp', 'gdn', 'ifi', 'no',
+            'chest', 'rub', 'liquid', 'ori', 'original', 'all', 'var', 'extra',
+            'cool', 'mint', 'green', 'tea', 'straw', 'orange', 'jeruk', 'madu',
+        ];
+
+        foreach ($parts as $token) {
+            $token = trim((string) $token);
+            if ($token === '' || mb_strlen($token) < 2) {
+                continue;
+            }
+
+            if (in_array($token, $drop, true)) {
+                continue;
+            }
+
+            if (preg_match('/^[0-9]+$/', $token)) {
+                continue;
+            }
+
+            $token = $this->normalizeAggressiveToken($token);
+            if ($token === '' || mb_strlen($token) < 2) {
+                continue;
+            }
+
+            $tokens[] = $token;
+        }
+
+        $tokens = array_values(array_unique($tokens));
+        sort($tokens);
+
+        return $tokens;
+    }
+
+    private function normalizeAggressiveToken(string $token): string
+    {
+        $map = [
+            'cetirizine' => 'cetirizin',
+            'cetirizinehcl' => 'cetirizin',
+            'amlodipine' => 'amlodipin',
+            'amlodipin' => 'amlodipin',
+            'amoxicillin' => 'amoxicilin',
+            'amoxicilin' => 'amoxicilin',
+            'chloride' => 'klorida',
+            'sodium' => 'natrium',
+            'dinitrate' => 'dinitrat',
+            'diklo' => 'diclofenac',
+            'diclo' => 'diclofenac',
+            'nadiklo' => 'natriumdiclofenac',
+            'na' => 'natrium',
+            'stpsl' => 'strepsil',
+            'strepsils' => 'strepsil',
+            'histigo' => 'hystigo',
+            'jrg' => 'junior',
+            'sirup' => 'syr',
+            'onemed' => 'one med',
+            'kehamilan' => 'testpack',
+            'krim' => 'cream',
+            'bals' => 'balm',
+        ];
+
+        if (isset($map[$token])) {
+            $token = (string) $map[$token];
+        }
+
+        $token = str_replace(' ', '', $token);
+        $token = preg_replace('/[^a-z0-9]+/u', '', $token);
+
+        return trim((string) $token);
+    }
+
+    private function extractMeasureDetails(string $value): array
+    {
+        $text = mb_strtolower($value);
+        preg_match_all('/\b([0-9]+(?:[\.,][0-9]+)?)\s*(mg|ml|gr|g|mcg|%)\b/u', $text, $matches, PREG_SET_ORDER);
+
+        $details = [];
+        foreach ($matches as $match) {
+            $rawValue = str_replace(',', '.', (string) ($match[1] ?? ''));
+            $unit = (string) ($match[2] ?? '');
+
+            if (!is_numeric($rawValue) || $unit === '') {
+                continue;
+            }
+
+            $normalizedUnit = $this->normalizeMeasureUnit($unit);
+            $numericValue = (float) $rawValue;
+            $key = $normalizedUnit . ':' . $numericValue;
+
+            $details[$key] = [
+                'value' => $numericValue,
+                'unit' => $normalizedUnit,
+            ];
+        }
+
+        return array_values($details);
+    }
+
+    private function normalizeMeasureUnit(string $unit): string
+    {
+        $unit = trim(mb_strtolower($unit));
+        if ($unit === 'gr') {
+            return 'g';
+        }
+        return $unit;
+    }
+
+    private function evaluateMeasureCompatibility(array $queryDetails, array $candidateDetails): array
+    {
+        if (empty($queryDetails)) {
+            return [
+                'all_exact' => true,
+                'has_same_unit' => true,
+                'exact_ratio' => 100.0,
+                'unit_ratio' => 100.0,
+                'distance_score' => 100.0,
+            ];
+        }
+
+        $queryCount = count($queryDetails);
+        $exactCount = 0;
+        $unitMatchCount = 0;
+        $distanceSum = 0.0;
+
+        foreach ($queryDetails as $queryDetail) {
+            $queryUnit = (string) ($queryDetail['unit'] ?? '');
+            $queryValue = (float) ($queryDetail['value'] ?? 0.0);
+
+            $sameUnitCandidates = array_values(array_filter($candidateDetails, function (array $candidateDetail) use ($queryUnit): bool {
+                return (string) ($candidateDetail['unit'] ?? '') === $queryUnit;
+            }));
+
+            if (empty($sameUnitCandidates)) {
+                continue;
+            }
+
+            $unitMatchCount++;
+            $bestDistanceScore = 0.0;
+            $isExact = false;
+
+            foreach ($sameUnitCandidates as $candidateDetail) {
+                $candidateValue = (float) ($candidateDetail['value'] ?? 0.0);
+                $diff = abs($queryValue - $candidateValue);
+                if ($diff < 0.00001) {
+                    $isExact = true;
+                    $bestDistanceScore = 100.0;
+                    break;
+                }
+
+                $denominator = max(abs($queryValue), 1.0);
+                $relativeErrorPercent = ($diff / $denominator) * 100.0;
+                $distanceScore = max(0.0, 100.0 - min(100.0, $relativeErrorPercent));
+                if ($distanceScore > $bestDistanceScore) {
+                    $bestDistanceScore = $distanceScore;
+                }
+            }
+
+            if ($isExact) {
+                $exactCount++;
+            }
+
+            $distanceSum += $bestDistanceScore;
+        }
+
+        $unitRatio = ($unitMatchCount / $queryCount) * 100.0;
+        $exactRatio = ($exactCount / $queryCount) * 100.0;
+        $distanceScore = $distanceSum / $queryCount;
+
+        return [
+            'all_exact' => $exactCount === $queryCount,
+            'has_same_unit' => $unitMatchCount > 0,
+            'exact_ratio' => $exactRatio,
+            'unit_ratio' => $unitRatio,
+            'distance_score' => $distanceScore,
         ];
     }
 
@@ -1929,6 +2385,13 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
         $value = str_replace(['&', "'", '"', '`'], ' ', $value);
         $value = preg_replace('/\([^\)]*\)/', ' ', $value);
         $value = preg_replace('/[^a-z0-9]+/u', ' ', $value);
+        $value = preg_replace('/\s+/', ' ', $value);
+        $value = trim((string) $value);
+
+        // Canonicalize common shorthand phrases found in supplier invoices.
+        $value = preg_replace('/\bg\s*pijat\s*urut\b/u', ' gpu ', $value);
+        $value = preg_replace('/\bm\s*kayu\s*putih\b/u', ' mkp ', $value);
+        $value = preg_replace('/\bminyak\s*kayu\s*putih\b/u', ' mkp ', $value);
         $value = preg_replace('/\s+/', ' ', $value);
         $value = trim((string) $value);
 
