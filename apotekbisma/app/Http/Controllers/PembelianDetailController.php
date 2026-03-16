@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Pembelian;
 use App\Models\PembelianDetail;
 use App\Models\Produk;
-use App\Models\RekamanStok;
 use App\Models\Supplier;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Services\PembelianBatchService;
+use App\Services\PembelianStockSyncService;
 use App\Services\StockDraftCleanupService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
@@ -239,7 +239,9 @@ class PembelianDetailController extends Controller
             
             Cache::forget($idempotencyKey);
 
-            $this->syncAffectedProdukHistory([$result['produk_id'] ?? null]);
+            $this->syncAffectedProdukHistory([
+                $result['produk_id'] ?? null,
+            ], intval($request->id_pembelian));
             
             return response()->json('Data berhasil disimpan', 200);
             
@@ -413,7 +415,9 @@ class PembelianDetailController extends Controller
             
             Cache::forget($idempotencyKey);
 
-            $this->syncAffectedProdukHistory([$result['produk_id'] ?? null]);
+            $this->syncAffectedProdukHistory([
+                $result['produk_id'] ?? null,
+            ], intval($detail->id_pembelian));
             
             return response()->json([
                 'message' => 'Data berhasil diperbarui',
@@ -560,7 +564,9 @@ class PembelianDetailController extends Controller
             
             Cache::forget($idempotencyKey);
 
-            $this->syncAffectedProdukHistory([$detail->id_produk ?? null]);
+            $this->syncAffectedProdukHistory([
+                $detail->id_produk ?? null,
+            ], intval($detail->id_pembelian));
             
             return response()->json('Data berhasil diperbarui', 200);
             
@@ -599,6 +605,7 @@ class PembelianDetailController extends Controller
             }
             
             $produkId = $detail->id_produk;
+            $idPembelian = intval($detail->id_pembelian);
             $produk = Produk::where('id_produk', $detail->id_produk)
                 ->lockForUpdate()
                 ->first();
@@ -630,7 +637,9 @@ class PembelianDetailController extends Controller
             
             Cache::forget($idempotencyKey);
 
-            $this->syncAffectedProdukHistory([$produkId ?? null]);
+            $this->syncAffectedProdukHistory([
+                $produkId ?? null,
+            ], $idPembelian);
             
         } catch (\Exception $e) {
             DB::rollBack();
@@ -727,21 +736,36 @@ class PembelianDetailController extends Controller
         return Carbon::parse($candidate)->format('Y-m-d H:i:s');
     }
 
-    private function syncAffectedProdukHistory(array $produkIds): void
+    private function syncAffectedProdukHistory(array $produkIds, ?int $idPembelian = null): void
     {
-        $normalizedIds = array_values(array_unique(array_filter(array_map('intval', $produkIds), function ($id) {
-            return $id > 0;
-        })));
+        try {
+            app(PembelianStockSyncService::class)->syncAffectedProducts($produkIds, $idPembelian);
+        } catch (\Throwable $e) {
+            Log::warning('Sinkronisasi stok gagal setelah mutasi detail pembelian', [
+                'id_pembelian' => $idPembelian,
+                'product_ids' => array_values($produkIds),
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
 
-        foreach ($normalizedIds as $produkId) {
-            try {
-                RekamanStok::recalculateStock($produkId);
-            } catch (\Throwable $e) {
-                Log::warning('Recalculate stok gagal setelah mutasi detail pembelian', [
-                    'id_produk' => $produkId,
-                    'message' => $e->getMessage(),
-                ]);
+    private function syncBatchAffectedProdukHistory(array $successRows): void
+    {
+        $grouped = [];
+
+        foreach ($successRows as $row) {
+            $produkId = intval($row['id_produk'] ?? 0);
+            if ($produkId <= 0) {
+                continue;
             }
+
+            $idPembelian = intval($row['id_pembelian'] ?? 0);
+            $bucket = $idPembelian > 0 ? $idPembelian : 0;
+            $grouped[$bucket][] = $produkId;
+        }
+
+        foreach ($grouped as $idPembelian => $produkIds) {
+            $this->syncAffectedProdukHistory($produkIds, $idPembelian > 0 ? $idPembelian : null);
         }
     }
     
@@ -837,6 +861,8 @@ class PembelianDetailController extends Controller
             
             $batchService = new PembelianBatchService();
             $result = $batchService->bulkUpdateStok($updates);
+
+            $this->syncBatchAffectedProdukHistory($result['success'] ?? []);
             
             if (!empty($result['errors'])) {
                 Log::warning('Batch update completed with errors', $result['errors']);

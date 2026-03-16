@@ -74,6 +74,8 @@ class PembelianBatchService
         if ($selisih == 0) {
             return [
                 'id' => $data['id'],
+                'id_pembelian' => intval($detail->id_pembelian),
+                'id_produk' => intval($detail->id_produk),
                 'message' => 'Tidak ada perubahan',
                 'jumlah' => $new_jumlah,
                 'stok' => $produk->stok
@@ -115,6 +117,8 @@ class PembelianBatchService
         
         return [
             'id' => $data['id'],
+            'id_pembelian' => intval($detail->id_pembelian),
+            'id_produk' => intval($detail->id_produk),
             'message' => 'Berhasil diperbarui',
             'jumlah' => $new_jumlah,
             'subtotal' => $detail->subtotal,

@@ -13,6 +13,7 @@ use App\Models\Setting;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Log;
+use App\Services\PembelianStockSyncService;
 use App\Services\StockDraftCleanupService;
 use App\Services\TransactionDateMutationService;
 
@@ -355,19 +356,10 @@ class PembelianController extends Controller
                         return $id > 0;
                     })
                     ->unique()
-                    ->values();
+                    ->values()
+                    ->all();
 
-                foreach ($affectedProductIds as $produkId) {
-                    try {
-                        RekamanStok::recalculateStock($produkId);
-                    } catch (\Throwable $recalcException) {
-                        Log::warning('Fallback recalculate pembelian gagal', [
-                            'id_pembelian' => $pembelian->id_pembelian,
-                            'id_produk' => $produkId,
-                            'message' => $recalcException->getMessage(),
-                        ]);
-                    }
-                }
+                $this->syncAffectedPembelianProducts($affectedProductIds, intval($pembelian->id_pembelian));
             }
 
             DB::commit();
@@ -494,53 +486,45 @@ class PembelianController extends Controller
     public function destroy($id)
     {
         DB::beginTransaction();
+        $affectedProductIds = [];
+        $pembelianSnapshot = null;
         
         try {
-            $pembelian = Pembelian::find($id);
+            $pembelian = Pembelian::where('id_pembelian', $id)
+                ->lockForUpdate()
+                ->first();
             
             if (!$pembelian) {
                 DB::rollBack();
                 return response()->json(['success' => false, 'message' => 'Pembelian tidak ditemukan'], 404);
             }
 
-            $detail = PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)->get();
-            $affectedProductIds = [];
-            
-            foreach ($detail as $item) {
-                $produk = Produk::where('id_produk', $item->id_produk)
-                    ->lockForUpdate()
-                    ->first();
-                if ($produk) {
-                    $affectedProductIds[] = $produk->id_produk;
-                    $stokSebelum = $produk->stok;
-                    $stokBaru = $stokSebelum - $item->jumlah;
-                    $produk->stok = $stokBaru;
-                    $produk->save();
-                    
-                    RekamanStok::create([
-                        'id_produk' => $item->id_produk,
-                        'waktu' => now(),
-                        'stok_keluar' => $item->jumlah,
-                        'stok_awal' => $stokSebelum,
-                        'stok_sisa' => $stokBaru,
-                        'keterangan' => 'Penghapusan transaksi pembelian: Pengurangan stok'
-                    ]);
-                }
-                
-                $item->delete();
-            }
+            $pembelianSnapshot = $this->buildPembelianSnapshot($pembelian);
+
+            $affectedProductIds = PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)
+                ->lockForUpdate()
+                ->pluck('id_produk')
+                ->map(function ($idProduk) {
+                    return intval($idProduk);
+                })
+                ->filter(function ($idProduk) {
+                    return $idProduk > 0;
+                })
+                ->unique()
+                ->values()
+                ->all();
 
             RekamanStok::where('id_pembelian', $pembelian->id_pembelian)->delete();
-
+            PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)->delete();
             $pembelian->delete();
 
-            foreach (array_unique($affectedProductIds) as $produkId) {
-                RekamanStok::recalculateStock($produkId);
-            }
-
             DB::commit();
-            
-            return response()->json(['success' => true, 'message' => 'Pembelian berhasil dihapus dan stok disesuaikan'], 200);
+
+            $this->syncAffectedPembelianProducts($affectedProductIds, null, [
+                'pembelian_snapshot' => $pembelianSnapshot,
+            ]);
+
+            return response()->json(['success' => true, 'message' => 'Pembelian berhasil dihapus dan stok disinkronkan'], 200);
             
         } catch (\Exception $e) {
             DB::rollBack();
@@ -561,6 +545,9 @@ class PembelianController extends Controller
     public function cancelTransaction($id)
     {
         DB::beginTransaction();
+        $affectedProductIds = [];
+        $pembelianSnapshot = null;
+        $forceReflow = false;
 
         try {
             $pembelian = Pembelian::where('id_pembelian', $id)
@@ -570,56 +557,39 @@ class PembelianController extends Controller
             $deleted = false;
 
             if ($pembelian && $this->isPembelianIncomplete($pembelian)) {
+                $pembelianSnapshot = $this->buildPembelianSnapshot($pembelian);
+
                 $details = PembelianDetail::where('id_pembelian', $id)
                     ->lockForUpdate()
                     ->get();
 
-                $groupedDetails = [];
-                foreach ($details as $detail) {
-                    $qty = max(0, intval($detail->jumlah ?? 0));
-                    if ($qty === 0) {
-                        continue;
-                    }
-
-                    $productId = intval($detail->id_produk);
-                    $groupedDetails[$productId] = ($groupedDetails[$productId] ?? 0) + $qty;
-                }
-
-                foreach ($groupedDetails as $productId => $qty) {
-                    $produk = Produk::where('id_produk', $productId)
-                        ->lockForUpdate()
-                        ->first();
-
-                    if (!$produk || intval($produk->stok) < $qty) {
-                        DB::rollBack();
-
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'Draft pembelian tidak bisa dibatalkan otomatis karena stok produk sudah berubah. Silakan sinkronisasi dulu lalu coba lagi.',
-                        ], 409);
-                    }
-                }
-
-                foreach ($groupedDetails as $productId => $qty) {
-                    $produk = Produk::where('id_produk', $productId)
-                        ->lockForUpdate()
-                        ->first();
-
-                    DB::table('produk')
-                        ->where('id_produk', $productId)
-                        ->update([
-                            'stok' => intval($produk->stok) - $qty,
-                            'updated_at' => now(),
-                        ]);
-                }
+                $affectedProductIds = $details->pluck('id_produk')
+                    ->map(function ($idProduk) {
+                        return intval($idProduk);
+                    })
+                    ->filter(function ($idProduk) {
+                        return $idProduk > 0;
+                    })
+                    ->unique()
+                    ->values()
+                    ->all();
 
                 RekamanStok::where('id_pembelian', $id)->delete();
                 PembelianDetail::where('id_pembelian', $id)->delete();
                 Pembelian::where('id_pembelian', $id)->delete();
                 $deleted = true;
+
+                $forceReflow = $this->isPostCutoffWaktu($pembelianSnapshot['waktu_datang'] ?? $pembelianSnapshot['waktu'] ?? null);
             }
 
             DB::commit();
+
+            if ($deleted) {
+                $this->syncAffectedPembelianProducts($affectedProductIds, null, [
+                    'force_reflow' => $forceReflow,
+                    'pembelian_snapshot' => $pembelianSnapshot,
+                ]);
+            }
 
             if (intval(session('id_pembelian')) === intval($id)) {
                 session()->forget(['id_pembelian', 'id_supplier']);
@@ -629,7 +599,7 @@ class PembelianController extends Controller
                 'success' => true,
                 'deleted' => $deleted,
                 'message' => $deleted
-                    ? 'Draft pembelian dibatalkan dan dihapus.'
+                    ? 'Draft pembelian dibatalkan, dihapus, dan stok disinkronkan.'
                     : 'Edit pembelian dibatalkan. Tidak ada draft baru yang dihapus.',
             ], 200);
         } catch (\Throwable $e) {
@@ -654,34 +624,38 @@ class PembelianController extends Controller
         }
 
         // Hanya hapus jika transaksi benar-benar kosong atau belum selesai
-        $pembelian_detail = PembelianDetail::where('id_pembelian', $id)->get();
         $isEmpty = ($pembelian->no_faktur === 'o' || $pembelian->no_faktur === '' || $pembelian->no_faktur === null) &&
                    $pembelian->total_harga == 0;
         
         if ($isEmpty) {
-            // Hapus detail dan rekaman stok jika ada
-            foreach ($pembelian_detail as $detail) {
-                $rekaman_stok = RekamanStok::where('id_pembelian', $id)
-                                           ->where('id_produk', $detail->id_produk)
-                                           ->first();
-                if ($rekaman_stok) {
-                    $produk = Produk::find($detail->id_produk);
-                    if ($produk) {
-                        $produk->stok -= $rekaman_stok->stok_masuk;
-                        $produk->update();
-                    }
-                    $rekaman_stok->delete();
-                }
-                $detail->delete();
-            }
-            
+            $pembelianSnapshot = $this->buildPembelianSnapshot($pembelian);
+
+            $affectedProductIds = PembelianDetail::where('id_pembelian', $id)
+                ->pluck('id_produk')
+                ->map(function ($idProduk) {
+                    return intval($idProduk);
+                })
+                ->filter(function ($idProduk) {
+                    return $idProduk > 0;
+                })
+                ->unique()
+                ->values()
+                ->all();
+
+            RekamanStok::where('id_pembelian', $id)->delete();
+            PembelianDetail::where('id_pembelian', $id)->delete();
             $pembelian->delete();
+
+            $this->syncAffectedPembelianProducts($affectedProductIds, null, [
+                'force_reflow' => $this->isPostCutoffWaktu($pembelianSnapshot['waktu_datang'] ?? $pembelianSnapshot['waktu'] ?? null),
+                'pembelian_snapshot' => $pembelianSnapshot,
+            ]);
             
             // Hapus session terkait
             session()->forget('id_pembelian');
             session()->forget('id_supplier');
             
-            return response()->json(['message' => 'Empty transaction deleted']);
+            return response()->json(['message' => 'Empty transaction deleted and stock synchronized']);
         }
 
         return response()->json(['message' => 'Transaction not empty, not deleted']);
@@ -768,6 +742,48 @@ class PembelianController extends Controller
             || $pembelian->no_faktur === 'o'
             || $pembelian->no_faktur === ''
             || $pembelian->no_faktur === null;
+    }
+
+    private function syncAffectedPembelianProducts(array $productIds, ?int $idPembelian = null, array $options = []): void
+    {
+        try {
+            app(PembelianStockSyncService::class)->syncAffectedProducts($productIds, $idPembelian, $options);
+        } catch (\Throwable $e) {
+            Log::warning('Sinkronisasi stok pembelian gagal pada controller', [
+                'id_pembelian' => $idPembelian,
+                'product_ids' => array_values($productIds),
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    private function buildPembelianSnapshot(Pembelian $pembelian): array
+    {
+        return [
+            'id_pembelian' => intval($pembelian->id_pembelian),
+            'no_faktur' => $pembelian->no_faktur,
+            'total_harga' => $pembelian->total_harga,
+            'bayar' => $pembelian->bayar,
+            'waktu' => $pembelian->waktu,
+            'waktu_datang' => $pembelian->waktu_datang,
+            'created_at' => $pembelian->created_at,
+        ];
+    }
+
+    private function isPostCutoffWaktu($waktu): bool
+    {
+        if (!$waktu) {
+            return false;
+        }
+
+        try {
+            $resolvedWaktu = Carbon::parse($waktu)->format('Y-m-d H:i:s');
+            $cutoff = (string) config('stock.cutoff_datetime', '2025-12-31 23:59:59');
+
+            return $resolvedWaktu > $cutoff;
+        } catch (\Throwable $e) {
+            return false;
+        }
     }
 
     private function resolveDateRange(string $preset, ?string $startDate, ?string $endDate): array

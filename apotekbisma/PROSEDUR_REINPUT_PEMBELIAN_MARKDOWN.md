@@ -101,7 +101,43 @@ Aturan:
 - Reflow stok hanya untuk produk terdampak.
 - Jika --alias dan --alias-template menunjuk file yang sama, penulisan template otomatis di-skip agar alias aktif tidak tertimpa.
 
+## Catatan Sinkronisasi CRUD UI
+
+- Sinkronisasi stok pembelian UI kini terpusat untuk mutasi detail/batch/hapus/cancel draft pada produk terdampak.
+- Untuk transaksi finalized pasca cut-off, sistem memprioritaskan reflow baseline per produk terdampak agar kartu stok tetap konsisten.
+- Jika reflow gagal, sistem fallback ke recalculate berurutan per produk agar operasi tetap berlanjut dengan aman.
+
+## Catatan Operasional Shared Hosting
+
+- Tetap kompatibel di shared hosting, namun hindari operasi besar di jam sibuk karena batas CPU/memori/timeout.
+- Untuk import besar lintas banyak faktur/produk, prioritaskan eksekusi via CLI/cron agar lebih stabil dibanding request web biasa.
+- Jika ada timeout di web, ulangi via dry-run + apply bertahap per periode lebih kecil.
+
 ## Catatan Audit
 
 - Simpan report JSON setiap run.
 - Missing invoice date tetap harus diselesaikan agar invoice tersebut bisa ikut insert.
+
+## Eksekusi Aktual Jan-Feb (17-03-2026)
+
+Command yang dipakai:
+
+1. Cek file input:
+
+Get-ChildItem -Path . -File -Filter "INPUT_FAKTUR_PEMBELIAN\*.md" | Select-Object -ExpandProperty Name
+
+2. Dry-run validasi:
+
+php artisan stock:import-post-cutoff-purchases --from="2026-01-01 00:00:00" --until="2026-02-28 23:59:59" --file="INPUT_FAKTUR_PEMBELIAN_JANUARI.md" --file="INPUT_FAKTUR_PEMBELIAN_FEBRUARI.md" --alias="storage/app/product_alias_auto_deadline.json"
+
+3. Apply robust (parsial terkontrol karena masih ada missing_invoice_date):
+
+php artisan stock:import-post-cutoff-purchases --apply --allow-partial --from="2026-01-01 00:00:00" --until="2026-02-28 23:59:59" --file="INPUT_FAKTUR_PEMBELIAN_JANUARI.md" --file="INPUT_FAKTUR_PEMBELIAN_FEBRUARI.md" --alias="storage/app/product_alias_auto_deadline.json"
+
+Ringkasan hasil run:
+
+- Invoice inserted: 71
+- Detail inserted: 479
+- Produk terdampak: 342
+- Issue tersisa: 10 (type: missing_invoice_date)
+- Report apply: post_cutoff_purchase_reinput_report_20260317_051303.json

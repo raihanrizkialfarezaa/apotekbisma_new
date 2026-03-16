@@ -2,11 +2,19 @@
 
 namespace App\Services;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class StockDraftCleanupService
 {
+    private PembelianStockSyncService $pembelianStockSyncService;
+
+    public function __construct(PembelianStockSyncService $pembelianStockSyncService)
+    {
+        $this->pembelianStockSyncService = $pembelianStockSyncService;
+    }
+
     public function cleanupStalePembelianDrafts(?int $excludeId = null): array
     {
         $threshold = now()->subMinutes((int) config('stock.stale_draft_minutes', 30));
@@ -39,7 +47,12 @@ class StockDraftCleanupService
         foreach ($draftIds as $draftId) {
             $summary['checked']++;
 
-            DB::transaction(function () use ($draftId, &$summary) {
+            $shouldSync = false;
+            $syncProductIds = [];
+            $syncForceReflow = false;
+            $syncSnapshot = null;
+
+            DB::transaction(function () use ($draftId, &$summary, &$shouldSync, &$syncProductIds, &$syncForceReflow, &$syncSnapshot) {
                 $draft = DB::table('pembelian')
                     ->where('id_pembelian', $draftId)
                     ->lockForUpdate()
@@ -65,45 +78,42 @@ class StockDraftCleanupService
                     $groupedDetails[$productId] = ($groupedDetails[$productId] ?? 0) + $qty;
                 }
 
-                foreach ($groupedDetails as $productId => $qty) {
-                    $produk = DB::table('produk')
-                        ->where('id_produk', $productId)
-                        ->lockForUpdate()
-                        ->first();
+                $syncProductIds = array_values(array_keys($groupedDetails));
+                $summary['reverted_stock_qty'] += array_sum($groupedDetails);
 
-                    if (!$produk || intval($produk->stok) < $qty) {
-                        $summary['skipped_headers']++;
-                        Log::warning('Skip cleanup draft pembelian karena stok tidak cukup untuk rollback aman.', [
-                            'id_pembelian' => $draftId,
-                            'id_produk' => $productId,
-                            'stok_saat_ini' => intval($produk->stok ?? 0),
-                            'qty_rollback' => $qty,
-                        ]);
-                        return;
-                    }
-                }
-
-                foreach ($groupedDetails as $productId => $qty) {
-                    $produk = DB::table('produk')
-                        ->where('id_produk', $productId)
-                        ->lockForUpdate()
-                        ->first();
-
-                    DB::table('produk')
-                        ->where('id_produk', $productId)
-                        ->update([
-                            'stok' => intval($produk->stok) - $qty,
-                            'updated_at' => now(),
-                        ]);
-
-                    $summary['reverted_stock_qty'] += $qty;
-                }
+                $resolvedWaktu = $this->resolveDraftWaktu($draft);
+                $syncForceReflow = $this->isPostCutoffWaktu($resolvedWaktu);
+                $syncSnapshot = [
+                    'id_pembelian' => intval($draft->id_pembelian),
+                    'no_faktur' => $draft->no_faktur,
+                    'total_harga' => $draft->total_harga,
+                    'bayar' => $draft->bayar,
+                    'waktu' => $draft->waktu ?? null,
+                    'waktu_datang' => $draft->waktu_datang ?? null,
+                    'created_at' => $draft->created_at ?? null,
+                ];
 
                 DB::table('rekaman_stoks')->where('id_pembelian', $draftId)->delete();
                 $summary['deleted_detail_rows'] += DB::table('pembelian_detail')->where('id_pembelian', $draftId)->delete();
                 DB::table('pembelian')->where('id_pembelian', $draftId)->delete();
                 $summary['deleted_headers']++;
+                $shouldSync = true;
             }, 3);
+
+            if ($shouldSync && !empty($syncProductIds)) {
+                try {
+                    $this->pembelianStockSyncService->syncAffectedProducts($syncProductIds, null, [
+                        'force_reflow' => $syncForceReflow,
+                        'pembelian_snapshot' => $syncSnapshot,
+                    ]);
+                } catch (\Throwable $e) {
+                    Log::warning('Sinkronisasi stok setelah cleanup draft pembelian gagal', [
+                        'id_pembelian' => $draftId,
+                        'product_ids' => $syncProductIds,
+                        'message' => $e->getMessage(),
+                    ]);
+                }
+            }
         }
 
         return $summary;
@@ -209,5 +219,33 @@ class StockDraftCleanupService
             || intval($draft->total_harga ?? 0) <= 0
             || intval($draft->bayar ?? 0) <= 0
             || intval($draft->diterima ?? 0) <= 0;
+    }
+
+    private function resolveDraftWaktu($draft): ?string
+    {
+        $candidate = $draft->waktu_datang
+            ?? $draft->waktu
+            ?? $draft->created_at
+            ?? null;
+
+        if (!$candidate) {
+            return null;
+        }
+
+        try {
+            return Carbon::parse($candidate)->format('Y-m-d H:i:s');
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
+
+    private function isPostCutoffWaktu(?string $waktu): bool
+    {
+        if (!$waktu) {
+            return false;
+        }
+
+        $cutoff = (string) config('stock.cutoff_datetime', '2025-12-31 23:59:59');
+        return $waktu > $cutoff;
     }
 }
