@@ -1,0 +1,817 @@
+{
+    "generated_at": "2026-03-17 13:09:45",
+    "mode": "DRY_RUN",
+    "allow_partial": false,
+    "cutoff": "2025-12-31 23:59:59",
+    "from": "2026-01-01 00:00:00",
+    "until": "2026-02-28 23:59:59",
+    "source_label": "markdown-reinput-admin",
+    "input_files": [
+        "INPUT_FAKTUR_PEMBELIAN_JANUARI.md",
+        "INPUT_FAKTUR_PEMBELIAN_FEBRUARI.md"
+    ],
+    "summary": {
+        "parsed_sections": 98,
+        "raw_invoice_groups": 95,
+        "invoices_in_range": 81,
+        "invoices_ready_for_mapping": 71,
+        "invoices_existing_same": 70,
+        "invoices_insertable": 1,
+        "issues_total": 53,
+        "forced_product_mappings_total": 0,
+        "force_map_enabled": false,
+        "force_map_min_score": 50
+    },
+    "issues": [
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NP-00348-13001",
+            "line": 777,
+            "nama_produk_raw": "Siladex Antitusive 60ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NP-00348-13001",
+            "line": 778,
+            "nama_produk_raw": "Siladex Antitusive 100ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NP-00349-13002",
+            "line": 790,
+            "nama_produk_raw": "Siladex Mucolytic 30ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NP-00350-12004",
+            "line": 802,
+            "nama_produk_raw": "LPC Badak 200ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NP-00350-12004",
+            "line": 803,
+            "nama_produk_raw": "LPC Badak 500ml",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01469",
+            "line": 842,
+            "nama_produk_raw": "ALLOPURINOL 300MG TAB 1 E24955",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01469",
+            "line": 844,
+            "nama_produk_raw": "DENOMIX CR 10GR",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01469",
+            "line": 845,
+            "nama_produk_raw": "DARYANT TULLE STERIL 10'S",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01469",
+            "line": 846,
+            "nama_produk_raw": "NEURODEX TAB 200'S E42630",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/02/18/2444044",
+            "line": 868,
+            "nama_produk_raw": "ENERVON C MEDIFARMA TABLET",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/02/18/2444044",
+            "line": 869,
+            "nama_produk_raw": "MYWELL VITAMIN D3 1000 IU ULTRASAKTI TABLET",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/02/18/2444044",
+            "line": 870,
+            "nama_produk_raw": "ELKANA SANBE SUSPENSI",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/02/18/2444044",
+            "line": 872,
+            "nama_produk_raw": "LACTO-B NOVELL SERBUK",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/02/18/2444044",
+            "line": 873,
+            "nama_produk_raw": "BENZOLAC 2.5 SURYA DERMATO GEL 2.5 %",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/02/18/2444044",
+            "line": 874,
+            "nama_produk_raw": "INCIDAL-OD BAYER KAPSUL",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "TMP-INV-2026/02/18/2444044",
+            "line": 875,
+            "nama_produk_raw": "VITAMIN B COMPLEX IPI SUPRA FERBINDO TABLET",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-629901",
+            "line": 891,
+            "nama_produk_raw": "COLDREXIN SYRUP NORETUR ;BTL,60ML",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-629901",
+            "line": 892,
+            "nama_produk_raw": "LISTERINE COOLMINT 100ML NORET ;FLS/100ML",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-629901",
+            "line": 894,
+            "nama_produk_raw": "METHYLPREDNISOLONE 4MG DEXA(NR ;BOX100'S",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-629901",
+            "line": 895,
+            "nama_produk_raw": "METHYLPREDNISOLONE 16MGDEXA(NR ;BOX100'S",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-629901",
+            "line": 896,
+            "nama_produk_raw": "DESOXIMETASONE CR DEXA NORET ;TUBE/15GR",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-629901",
+            "line": 899,
+            "nama_produk_raw": "SALEP KULIT 88 NORETUR ;BX/12POT",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-629901",
+            "line": 900,
+            "nama_produk_raw": "STREPSILS REG 2X6'S MERAH NR ;PAK/2X6'S",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-629901",
+            "line": 902,
+            "nama_produk_raw": "HEMAVITON ACTION KAPSUL NORET ;BX/50KAPS",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-629901",
+            "line": 903,
+            "nama_produk_raw": "BALSEM HIJAU LANG 20GR BSR NR ;TUBE20GR",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-629901",
+            "line": 904,
+            "nama_produk_raw": "TISSUE MAGIC POWER HITAM NORET ;PAK/6SACH",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-629903",
+            "line": 920,
+            "nama_produk_raw": "SAFE CARE ROLL \"MIND&SPIRIT\"NR",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-629903",
+            "line": 921,
+            "nama_produk_raw": "BODREX TAB NORETUR ;BX/20TAB",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-629903",
+            "line": 922,
+            "nama_produk_raw": "SUPERHOID SUPP NORETUR ;BX/6",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-629903",
+            "line": 923,
+            "nama_produk_raw": "CAVIPLEX SYRUP NORETUR ;BTL,60ML",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-629903",
+            "line": 924,
+            "nama_produk_raw": "SALICYL SPIRITUS GAJAH 50ML NR ;BTL/50ML",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-629903",
+            "line": 925,
+            "nama_produk_raw": "CETIRIZINE HCL TAB./NOVA NORET ;BOX,100TAB",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-629903",
+            "line": 926,
+            "nama_produk_raw": "BEVALEX CR 5G NORETUR ;TUBE/5G",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-629903",
+            "line": 927,
+            "nama_produk_raw": "CAZETIN DROPS NORETUR ;BTL15ML",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-629903",
+            "line": 928,
+            "nama_produk_raw": "FARSIFEN PLUS TAB NORETUR ;BOX100",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-629903",
+            "line": 930,
+            "nama_produk_raw": "GUAIFNESIN TAB / GG TRIMAN NR ;BOX100",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-629903",
+            "line": 931,
+            "nama_produk_raw": "OBH ITRASAL 100ML NORETUR ;FL/100ML",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-629903",
+            "line": 932,
+            "nama_produk_raw": "KETOCONAZOLE CR DEXA(NORET)HT ;TUBE10GR",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "NPS-2602-629903",
+            "line": 933,
+            "nama_produk_raw": "LASERIN SYR 30ML NORETUR ;FL/30ML",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01892",
+            "line": 961,
+            "nama_produk_raw": "IMBOOST TAB 50'S",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-01892",
+            "line": 966,
+            "nama_produk_raw": "CALLUSOL 10ML",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2602-006835/24-02-2026/LF",
+            "line": 990,
+            "nama_produk_raw": "HOTIN DCL CREAM 120GR",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2602-006835/24-02-2026/LF",
+            "line": 991,
+            "nama_produk_raw": "FRESH CARE SMASH 8ML",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2602-006835/24-02-2026/LF",
+            "line": 992,
+            "nama_produk_raw": "LOMATUELL-H 10X10 CM",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2602-006835/24-02-2026/LF",
+            "line": 993,
+            "nama_produk_raw": "AMBROXOL 30MG 100'S/NOVA (NO RETUR)",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2602-006835/24-02-2026/LF",
+            "line": 995,
+            "nama_produk_raw": "PONSTAN FCT 500MG 100'S",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2602-006835/24-02-2026/LF",
+            "line": 997,
+            "nama_produk_raw": "FUNGIDERM KRIM 5GR",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "AJA-2602-006835/24-02-2026/LF",
+            "line": 998,
+            "nama_produk_raw": "DOMPERIDONE 10MG 100'S/HEXP",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-02924",
+            "line": 1023,
+            "nama_produk_raw": "SUCRALFATE SYR 100ML E3887",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-02924",
+            "line": 1024,
+            "nama_produk_raw": "DEXANTA TAB 100'S E4729",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-02924",
+            "line": 1028,
+            "nama_produk_raw": "VOLTAREN EC 50MG 50'S",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-02924",
+            "line": 1030,
+            "nama_produk_raw": "GASTRUCID SYR 60ML E3652",
+            "message": "Produk tidak ditemukan di tabel produk."
+        },
+        {
+            "type": "product_mapping_failed",
+            "no_faktur": "JM1-2602-02924",
+            "line": 1031,
+            "nama_produk_raw": "DECADRYL EXP SYR 60ML",
+            "message": "Produk tidak ditemukan di tabel produk."
+        }
+    ],
+    "unresolved_product_names": [
+        "Siladex Antitusive 60ml",
+        "Siladex Antitusive 100ml",
+        "Siladex Mucolytic 30ml",
+        "LPC Badak 200ml",
+        "LPC Badak 500ml",
+        "ALLOPURINOL 300MG TAB 1 E24955",
+        "DENOMIX CR 10GR",
+        "DARYANT TULLE STERIL 10'S",
+        "NEURODEX TAB 200'S E42630",
+        "ENERVON C MEDIFARMA TABLET",
+        "MYWELL VITAMIN D3 1000 IU ULTRASAKTI TABLET",
+        "ELKANA SANBE SUSPENSI",
+        "LACTO-B NOVELL SERBUK",
+        "BENZOLAC 2.5 SURYA DERMATO GEL 2.5 %",
+        "INCIDAL-OD BAYER KAPSUL",
+        "VITAMIN B COMPLEX IPI SUPRA FERBINDO TABLET",
+        "COLDREXIN SYRUP NORETUR ;BTL,60ML",
+        "LISTERINE COOLMINT 100ML NORET ;FLS/100ML",
+        "METHYLPREDNISOLONE 4MG DEXA(NR ;BOX100'S",
+        "METHYLPREDNISOLONE 16MGDEXA(NR ;BOX100'S",
+        "DESOXIMETASONE CR DEXA NORET ;TUBE/15GR",
+        "SALEP KULIT 88 NORETUR ;BX/12POT",
+        "STREPSILS REG 2X6'S MERAH NR ;PAK/2X6'S",
+        "HEMAVITON ACTION KAPSUL NORET ;BX/50KAPS",
+        "BALSEM HIJAU LANG 20GR BSR NR ;TUBE20GR",
+        "TISSUE MAGIC POWER HITAM NORET ;PAK/6SACH",
+        "SAFE CARE ROLL \"MIND&SPIRIT\"NR",
+        "BODREX TAB NORETUR ;BX/20TAB",
+        "SUPERHOID SUPP NORETUR ;BX/6",
+        "CAVIPLEX SYRUP NORETUR ;BTL,60ML",
+        "SALICYL SPIRITUS GAJAH 50ML NR ;BTL/50ML",
+        "CETIRIZINE HCL TAB./NOVA NORET ;BOX,100TAB",
+        "BEVALEX CR 5G NORETUR ;TUBE/5G",
+        "CAZETIN DROPS NORETUR ;BTL15ML",
+        "FARSIFEN PLUS TAB NORETUR ;BOX100",
+        "GUAIFNESIN TAB / GG TRIMAN NR ;BOX100",
+        "OBH ITRASAL 100ML NORETUR ;FL/100ML",
+        "KETOCONAZOLE CR DEXA(NORET)HT ;TUBE10GR",
+        "LASERIN SYR 30ML NORETUR ;FL/30ML",
+        "IMBOOST TAB 50'S",
+        "CALLUSOL 10ML",
+        "HOTIN DCL CREAM 120GR",
+        "FRESH CARE SMASH 8ML",
+        "LOMATUELL-H 10X10 CM",
+        "AMBROXOL 30MG 100'S/NOVA (NO RETUR)",
+        "PONSTAN FCT 500MG 100'S",
+        "FUNGIDERM KRIM 5GR",
+        "DOMPERIDONE 10MG 100'S/HEXP",
+        "SUCRALFATE SYR 100ML E3887",
+        "DEXANTA TAB 100'S E4729",
+        "VOLTAREN EC 50MG 50'S",
+        "GASTRUCID SYR 60ML E3652",
+        "DECADRYL EXP SYR 60ML"
+    ],
+    "already_existing_same": [
+        {
+            "no_faktur": "JM1-2601-00495",
+            "id_pembelian": 641,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2601-00496",
+            "id_pembelian": 642,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JMR-2601-00165",
+            "id_pembelian": 643,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "POSPST260100684",
+            "id_pembelian": 644,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "14*2601.0266",
+            "id_pembelian": 645,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "TMP-INV-2026/01/07/2302665",
+            "id_pembelian": 646,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2601-00939",
+            "id_pembelian": 647,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2601-00940",
+            "id_pembelian": 648,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "AJA-2601-001677/13-01-2026/LF",
+            "id_pembelian": 649,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2601-01590",
+            "id_pembelian": 650,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2601-01591",
+            "id_pembelian": 651,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JMR-2601-00507",
+            "id_pembelian": 652,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JMR-2601-00508",
+            "id_pembelian": 653,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "NPS-2601-624011",
+            "id_pembelian": 655,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "NPS-2601-624013",
+            "id_pembelian": 656,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "NPS-2601-624015",
+            "id_pembelian": 657,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "TMP-INV-2026/01/24/2359834",
+            "id_pembelian": 658,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "AJA-2601-003019/24-01-2026/LF",
+            "id_pembelian": 659,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "AJA-2601-003020/24-01-2026/LF",
+            "id_pembelian": 660,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2601-02290",
+            "id_pembelian": 661,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JMR-2601-00746",
+            "id_pembelian": 662,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JMR-2601-00747",
+            "id_pembelian": 663,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JMR-2601-00806A",
+            "id_pembelian": 664,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2601-02586",
+            "id_pembelian": 665,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2601-02587",
+            "id_pembelian": 666,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "04985/SJA/01/26",
+            "id_pembelian": 667,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "04988/SJA/01/26",
+            "id_pembelian": 668,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "T56C3351.20260129008",
+            "id_pembelian": 669,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "TMP-INV-2026/01/30/2379654",
+            "id_pembelian": 670,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2601-02971B",
+            "id_pembelian": 671,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2601-02972A",
+            "id_pembelian": 672,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JMR-2601-00993A",
+            "id_pembelian": 673,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JMR-2601-00994A",
+            "id_pembelian": 674,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "NPS-2601-623056",
+            "id_pembelian": 675,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "NPS-2601-623058",
+            "id_pembelian": 676,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "NPS-2601-623060",
+            "id_pembelian": 677,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "02333/SJA/01/26",
+            "id_pembelian": 678,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "02335/SJA/01/26",
+            "id_pembelian": 679,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "02337/SJA/01/26",
+            "id_pembelian": 680,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2601-01589A",
+            "id_pembelian": 681,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2601-02291A",
+            "id_pembelian": 682,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "04984/SJA/01/26",
+            "id_pembelian": 683,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "04989/SJA/01/26",
+            "id_pembelian": 684,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "00115-C3351",
+            "id_pembelian": 685,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "00116-C3351",
+            "id_pembelian": 686,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2601-03003",
+            "id_pembelian": 687,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "POSPST260200547",
+            "id_pembelian": 688,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "POSPST260200549",
+            "id_pembelian": 689,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "POSPST260200550",
+            "id_pembelian": 690,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "TMP-INV-2026/02/04/2396190",
+            "id_pembelian": 691,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "02.02296",
+            "id_pembelian": 692,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2602-00415",
+            "id_pembelian": 693,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JMR-2602-00156",
+            "id_pembelian": 694,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "NPS-2602-628174",
+            "id_pembelian": 695,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "NPS-2602-628175",
+            "id_pembelian": 696,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "NPS-2602-628176",
+            "id_pembelian": 697,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "NPS-2602-628177",
+            "id_pembelian": 698,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "01549/SJA/02/26",
+            "id_pembelian": 699,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "01552/SJA/02/26",
+            "id_pembelian": 700,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "01553/SJA/02/26",
+            "id_pembelian": 701,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "01547/SJA/02/26",
+            "id_pembelian": 702,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "AJA-2602-004949",
+            "id_pembelian": 703,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "AJA-2602-004950",
+            "id_pembelian": 704,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2602-01176A",
+            "id_pembelian": 705,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2602-01180",
+            "id_pembelian": 706,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2602-01178",
+            "id_pembelian": 707,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JMR-2602-00451",
+            "id_pembelian": 708,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2602-01177",
+            "id_pembelian": 709,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2602-01468",
+            "id_pembelian": 710,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2602-02925",
+            "id_pembelian": 711,
+            "status": "already_imported_same_signature"
+        }
+    ],
+    "forced_product_mappings": [],
+    "insertable_preview": [
+        {
+            "no_faktur": "2.701.311",
+            "supplier": "PT. LANCAR JAYA SEHAT",
+            "supplier_id": 6,
+            "waktu": "2026-01-19 12:00:00",
+            "total_item": 38,
+            "total_harga": 1412266,
+            "detail_count": 12
+        }
+    ]
+}

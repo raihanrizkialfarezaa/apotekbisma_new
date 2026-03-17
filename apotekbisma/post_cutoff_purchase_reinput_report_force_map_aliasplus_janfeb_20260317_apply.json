@@ -1,0 +1,1118 @@
+{
+    "generated_at": "2026-03-17 13:10:27",
+    "mode": "APPLY",
+    "allow_partial": false,
+    "cutoff": "2025-12-31 23:59:59",
+    "from": "2026-01-01 00:00:00",
+    "until": "2026-02-28 23:59:59",
+    "source_label": "markdown-reinput-admin",
+    "input_files": [
+        "INPUT_FAKTUR_PEMBELIAN_JANUARI.md",
+        "INPUT_FAKTUR_PEMBELIAN_FEBRUARI.md"
+    ],
+    "summary": {
+        "parsed_sections": 98,
+        "raw_invoice_groups": 95,
+        "invoices_in_range": 81,
+        "invoices_ready_for_mapping": 81,
+        "invoices_existing_same": 70,
+        "invoices_insertable": 11,
+        "issues_total": 0,
+        "forced_product_mappings_total": 53,
+        "force_map_enabled": true,
+        "force_map_min_score": 50
+    },
+    "issues": [],
+    "unresolved_product_names": [],
+    "already_existing_same": [
+        {
+            "no_faktur": "JM1-2601-00495",
+            "id_pembelian": 641,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2601-00496",
+            "id_pembelian": 642,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JMR-2601-00165",
+            "id_pembelian": 643,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "POSPST260100684",
+            "id_pembelian": 644,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "14*2601.0266",
+            "id_pembelian": 645,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "TMP-INV-2026/01/07/2302665",
+            "id_pembelian": 646,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2601-00939",
+            "id_pembelian": 647,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2601-00940",
+            "id_pembelian": 648,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "AJA-2601-001677/13-01-2026/LF",
+            "id_pembelian": 649,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2601-01590",
+            "id_pembelian": 650,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2601-01591",
+            "id_pembelian": 651,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JMR-2601-00507",
+            "id_pembelian": 652,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JMR-2601-00508",
+            "id_pembelian": 653,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "NPS-2601-624011",
+            "id_pembelian": 655,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "NPS-2601-624013",
+            "id_pembelian": 656,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "NPS-2601-624015",
+            "id_pembelian": 657,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "TMP-INV-2026/01/24/2359834",
+            "id_pembelian": 658,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "AJA-2601-003019/24-01-2026/LF",
+            "id_pembelian": 659,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "AJA-2601-003020/24-01-2026/LF",
+            "id_pembelian": 660,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2601-02290",
+            "id_pembelian": 661,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JMR-2601-00746",
+            "id_pembelian": 662,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JMR-2601-00747",
+            "id_pembelian": 663,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JMR-2601-00806A",
+            "id_pembelian": 664,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2601-02586",
+            "id_pembelian": 665,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2601-02587",
+            "id_pembelian": 666,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "04985/SJA/01/26",
+            "id_pembelian": 667,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "04988/SJA/01/26",
+            "id_pembelian": 668,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "T56C3351.20260129008",
+            "id_pembelian": 669,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "TMP-INV-2026/01/30/2379654",
+            "id_pembelian": 670,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2601-02971B",
+            "id_pembelian": 671,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2601-02972A",
+            "id_pembelian": 672,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JMR-2601-00993A",
+            "id_pembelian": 673,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JMR-2601-00994A",
+            "id_pembelian": 674,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "NPS-2601-623056",
+            "id_pembelian": 675,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "NPS-2601-623058",
+            "id_pembelian": 676,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "NPS-2601-623060",
+            "id_pembelian": 677,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "02333/SJA/01/26",
+            "id_pembelian": 678,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "02335/SJA/01/26",
+            "id_pembelian": 679,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "02337/SJA/01/26",
+            "id_pembelian": 680,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2601-01589A",
+            "id_pembelian": 681,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2601-02291A",
+            "id_pembelian": 682,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "04984/SJA/01/26",
+            "id_pembelian": 683,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "04989/SJA/01/26",
+            "id_pembelian": 684,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "00115-C3351",
+            "id_pembelian": 685,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "00116-C3351",
+            "id_pembelian": 686,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2601-03003",
+            "id_pembelian": 687,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "POSPST260200547",
+            "id_pembelian": 688,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "POSPST260200549",
+            "id_pembelian": 689,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "POSPST260200550",
+            "id_pembelian": 690,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "TMP-INV-2026/02/04/2396190",
+            "id_pembelian": 691,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "02.02296",
+            "id_pembelian": 692,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2602-00415",
+            "id_pembelian": 693,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JMR-2602-00156",
+            "id_pembelian": 694,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "NPS-2602-628174",
+            "id_pembelian": 695,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "NPS-2602-628175",
+            "id_pembelian": 696,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "NPS-2602-628176",
+            "id_pembelian": 697,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "NPS-2602-628177",
+            "id_pembelian": 698,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "01549/SJA/02/26",
+            "id_pembelian": 699,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "01552/SJA/02/26",
+            "id_pembelian": 700,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "01553/SJA/02/26",
+            "id_pembelian": 701,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "01547/SJA/02/26",
+            "id_pembelian": 702,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "AJA-2602-004949",
+            "id_pembelian": 703,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "AJA-2602-004950",
+            "id_pembelian": 704,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2602-01176A",
+            "id_pembelian": 705,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2602-01180",
+            "id_pembelian": 706,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2602-01178",
+            "id_pembelian": 707,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JMR-2602-00451",
+            "id_pembelian": 708,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2602-01177",
+            "id_pembelian": 709,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2602-01468",
+            "id_pembelian": 710,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JM1-2602-02925",
+            "id_pembelian": 711,
+            "status": "already_imported_same_signature"
+        }
+    ],
+    "forced_product_mappings": [
+        {
+            "nama_produk_raw": "Siladex Antitusive 60ml",
+            "id_produk": 869,
+            "nama_produk_db": "SILADEX ATT 100ML",
+            "score": 65.53,
+            "similarity": 75,
+            "token_overlap": 68.01,
+            "measure_match": 8.33,
+            "pack_count_match": 100,
+            "gap": 3.99,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "Siladex Antitusive 100ml",
+            "id_produk": 869,
+            "nama_produk_db": "SILADEX ATT 100ML",
+            "score": 84.49,
+            "similarity": 82.93,
+            "token_overlap": 75.52,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 21.06,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "Siladex Mucolytic 30ml",
+            "id_produk": 745,
+            "nama_produk_db": "SILADEX ALL VAR 30ml",
+            "score": 58.47,
+            "similarity": 66.67,
+            "token_overlap": 68.85,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 12.76,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "LPC Badak 200ml",
+            "id_produk": 734,
+            "nama_produk_db": "SCOTT EMULSION 200mL",
+            "score": 66.2,
+            "similarity": 40,
+            "token_overlap": 44.23,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 66.2,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "LPC Badak 500ml",
+            "id_produk": 976,
+            "nama_produk_db": "MADU TJ EXTRA 500ML",
+            "score": 69.82,
+            "similarity": 52.94,
+            "token_overlap": 44.23,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 0.82,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "ALLOPURINOL 300MG TAB 1 E24955",
+            "id_produk": 24,
+            "nama_produk_db": "ALLOPURINOL 300mg",
+            "score": 90.07,
+            "similarity": 72.34,
+            "token_overlap": 72.73,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 27.49,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "DENOMIX CR 10GR",
+            "id_produk": 205,
+            "nama_produk_db": "DENOMIX KRIM 10g",
+            "score": 100.37,
+            "similarity": 83.87,
+            "token_overlap": 97.09,
+            "measure_match": 60,
+            "pack_count_match": 100,
+            "gap": 63.11,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "DARYANT TULLE STERIL 10'S",
+            "id_produk": 197,
+            "nama_produk_db": "DARYANTULLE",
+            "score": 75.08,
+            "similarity": 61.11,
+            "token_overlap": 69.18,
+            "measure_match": 100,
+            "pack_count_match": 0,
+            "gap": 27.65,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "NEURODEX TAB 200'S E42630",
+            "id_produk": 563,
+            "nama_produk_db": "NEURODEX",
+            "score": 70.47,
+            "similarity": 48.48,
+            "token_overlap": 63.27,
+            "measure_match": 100,
+            "pack_count_match": 0,
+            "gap": 15.96,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "ENERVON C MEDIFARMA TABLET",
+            "id_produk": 606,
+            "nama_produk_db": "OMEDOM TAB",
+            "score": 59.87,
+            "similarity": 54.55,
+            "token_overlap": 43.46,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 1.96,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "MYWELL VITAMIN D3 1000 IU ULTRASAKTI TABLET",
+            "id_produk": 503,
+            "nama_produk_db": "MEDIKLIN TR",
+            "score": 68.39,
+            "similarity": 31.37,
+            "token_overlap": 56.93,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 16.63,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "ELKANA SANBE SUSPENSI",
+            "id_produk": 236,
+            "nama_produk_db": "ELKANA TAB",
+            "score": 87.63,
+            "similarity": 66.67,
+            "token_overlap": 71.07,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 1.87,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "LACTO-B NOVELL SERBUK",
+            "id_produk": 553,
+            "nama_produk_db": "NELLCO SPESIAL B",
+            "score": 60.33,
+            "similarity": 43.24,
+            "token_overlap": 50.43,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 0,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "BENZOLAC 2.5 SURYA DERMATO GEL 2.5 %",
+            "id_produk": 982,
+            "nama_produk_db": "BENZOLAC SALP",
+            "score": 77.73,
+            "similarity": 51.06,
+            "token_overlap": 60.44,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 20.92,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "INCIDAL-OD BAYER KAPSUL",
+            "id_produk": 375,
+            "nama_produk_db": "INCIDAL",
+            "score": 73.03,
+            "similarity": 46.67,
+            "token_overlap": 53.77,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 0.37,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "VITAMIN B COMPLEX IPI SUPRA FERBINDO TABLET",
+            "id_produk": 953,
+            "nama_produk_db": "VICKS IN HALER",
+            "score": 70.07,
+            "similarity": 29.63,
+            "token_overlap": 61.11,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 1.19,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "COLDREXIN SYRUP NORETUR ;BTL,60ML",
+            "id_produk": 130,
+            "nama_produk_db": "CALADINE LOT 60mL",
+            "score": 67.09,
+            "similarity": 55.32,
+            "token_overlap": 56.93,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 3.88,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "LISTERINE COOLMINT 100ML NORET ;FLS/100ML",
+            "id_produk": 448,
+            "nama_produk_db": "LISTERINE COOLMINT 100mL",
+            "score": 95.53,
+            "similarity": 75,
+            "token_overlap": 81.79,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 12.89,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "METHYLPREDNISOLONE 4MG DEXA(NR ;BOX100'S",
+            "id_produk": 511,
+            "nama_produk_db": "METHYLPREDNISOLON 4mg",
+            "score": 82.18,
+            "similarity": 70,
+            "token_overlap": 62.65,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 50.57,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "METHYLPREDNISOLONE 16MGDEXA(NR ;BOX100'S",
+            "id_produk": 510,
+            "nama_produk_db": "METHYLPREDNISOLON 16mg",
+            "score": 88.94,
+            "similarity": 72.13,
+            "token_overlap": 74.5,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 9.37,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "DESOXIMETASONE CR DEXA NORET ;TUBE/15GR",
+            "id_produk": 1006,
+            "nama_produk_db": "DESOXIMETASONE CR",
+            "score": 65.91,
+            "similarity": 61.82,
+            "token_overlap": 58.86,
+            "measure_match": 0,
+            "pack_count_match": 100,
+            "gap": 8.37,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "SALEP KULIT 88 NORETUR ;BX/12POT",
+            "id_produk": 597,
+            "nama_produk_db": "OB HERBAL JUNIOR",
+            "score": 50.48,
+            "similarity": 29.79,
+            "token_overlap": 38.73,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 1.36,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "STREPSILS REG 2X6'S MERAH NR ;PAK/2X6'S",
+            "id_produk": 774,
+            "nama_produk_db": "STREPSIL",
+            "score": 65.15,
+            "similarity": 34.78,
+            "token_overlap": 45.02,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 7.39,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "HEMAVITON ACTION KAPSUL NORET ;BX/50KAPS",
+            "id_produk": 344,
+            "nama_produk_db": "HEMAVITON ACTION",
+            "score": 75.68,
+            "similarity": 58.18,
+            "token_overlap": 52.67,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 3.51,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "BALSEM HIJAU LANG 20GR BSR NR ;TUBE20GR",
+            "id_produk": 74,
+            "nama_produk_db": "BALSEM LANG 20g",
+            "score": 79.49,
+            "similarity": 56.6,
+            "token_overlap": 75.47,
+            "measure_match": 60,
+            "pack_count_match": 100,
+            "gap": 9.5,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "TISSUE MAGIC POWER HITAM NORET ;PAK/6SACH",
+            "id_produk": 805,
+            "nama_produk_db": "TISU MAGIC ALL",
+            "score": 51.04,
+            "similarity": 44.44,
+            "token_overlap": 43.45,
+            "measure_match": 100,
+            "pack_count_match": 0,
+            "gap": 10.05,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "SAFE CARE ROLL \"MIND&SPIRIT\"NR",
+            "id_produk": 274,
+            "nama_produk_db": "FATIGON SPIRIT",
+            "score": 67.46,
+            "similarity": 46.51,
+            "token_overlap": 43.14,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 1.49,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "BODREX TAB NORETUR ;BX/20TAB",
+            "id_produk": 110,
+            "nama_produk_db": "BODREX FB ALL VAR",
+            "score": 57.04,
+            "similarity": 45.45,
+            "token_overlap": 58.3,
+            "measure_match": 100,
+            "pack_count_match": 0,
+            "gap": 1.15,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "SUPERHOID SUPP NORETUR ;BX/6",
+            "id_produk": 777,
+            "nama_produk_db": "SUPERHOID",
+            "score": 73.7,
+            "similarity": 50,
+            "token_overlap": 53.28,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 5.78,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "CAVIPLEX SYRUP NORETUR ;BTL,60ML",
+            "id_produk": 130,
+            "nama_produk_db": "CALADINE LOT 60mL",
+            "score": 63.28,
+            "similarity": 47.83,
+            "token_overlap": 53.64,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 6.14,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "SALICYL SPIRITUS GAJAH 50ML NR ;BTL/50ML",
+            "id_produk": 710,
+            "nama_produk_db": "SALICYL SPIRITUS",
+            "score": 65.78,
+            "similarity": 58.18,
+            "token_overlap": 60.55,
+            "measure_match": 0,
+            "pack_count_match": 100,
+            "gap": 19.62,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "CETIRIZINE HCL TAB./NOVA NORET ;BOX,100TAB",
+            "id_produk": 999,
+            "nama_produk_db": "HOT IN DCL 120 GR",
+            "score": 62.75,
+            "similarity": 31.58,
+            "token_overlap": 61.36,
+            "measure_match": 100,
+            "pack_count_match": 0,
+            "gap": 0.7,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "BEVALEX CR 5G NORETUR ;TUBE/5G",
+            "id_produk": 98,
+            "nama_produk_db": "BEVALEX",
+            "score": 53.47,
+            "similarity": 38.89,
+            "token_overlap": 47.27,
+            "measure_match": 0,
+            "pack_count_match": 100,
+            "gap": 10.49,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "CAZETIN DROPS NORETUR ;BTL15ML",
+            "id_produk": 92,
+            "nama_produk_db": "BETADINE SOL 15mL",
+            "score": 73.2,
+            "similarity": 47.83,
+            "token_overlap": 57.33,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 0.95,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "FARSIFEN PLUS TAB NORETUR ;BOX100",
+            "id_produk": 270,
+            "nama_produk_db": "FARSIFEN PLUS",
+            "score": 70.3,
+            "similarity": 57.78,
+            "token_overlap": 42.54,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 0.91,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "GUAIFNESIN TAB / GG TRIMAN NR ;BOX100",
+            "id_produk": 355,
+            "nama_produk_db": "HOT IN 120GR ALL VAR",
+            "score": 68.13,
+            "similarity": 22.22,
+            "token_overlap": 61.36,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 0.87,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "OBH ITRASAL 100ML NORETUR ;FL/100ML",
+            "id_produk": 595,
+            "nama_produk_db": "OB HERBAL 100mL",
+            "score": 64.14,
+            "similarity": 48.98,
+            "token_overlap": 54.66,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 23.56,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "KETOCONAZOLE CR DEXA(NORET)HT ;TUBE10GR",
+            "id_produk": 400,
+            "nama_produk_db": "KETOCONAZOLE CR DEXA",
+            "score": 89.31,
+            "similarity": 76.92,
+            "token_overlap": 68.79,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 10.04,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "LASERIN SYR 30ML NORETUR ;FL/30ML",
+            "id_produk": 431,
+            "nama_produk_db": "LASERIN MADU 30ML",
+            "score": 79.79,
+            "similarity": 53.06,
+            "token_overlap": 63.33,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 5.66,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "IMBOOST TAB 50'S",
+            "id_produk": 370,
+            "nama_produk_db": "IMBOOST KIDS",
+            "score": 94,
+            "similarity": 64.29,
+            "token_overlap": 100,
+            "measure_match": 100,
+            "pack_count_match": 0,
+            "gap": 1.79,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "CALLUSOL 10ML",
+            "id_produk": 92,
+            "nama_produk_db": "BETADINE SOL 15mL",
+            "score": 77.58,
+            "similarity": 53.33,
+            "token_overlap": 86.33,
+            "measure_match": 12.5,
+            "pack_count_match": 100,
+            "gap": 0.69,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "HOTIN DCL CREAM 120GR",
+            "id_produk": 355,
+            "nama_produk_db": "HOT IN 120GR ALL VAR",
+            "score": 77.65,
+            "similarity": 53.66,
+            "token_overlap": 58.89,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 12.46,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "FRESH CARE SMASH 8ML",
+            "id_produk": 296,
+            "nama_produk_db": "FRESH CARE ALL",
+            "score": 73.06,
+            "similarity": 76.47,
+            "token_overlap": 64.71,
+            "measure_match": 0,
+            "pack_count_match": 100,
+            "gap": 24.86,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "LOMATUELL-H 10X10 CM",
+            "id_produk": 456,
+            "nama_produk_db": "LOMATUL",
+            "score": 68.56,
+            "similarity": 51.85,
+            "token_overlap": 52,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 0.1,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "AMBROXOL 30MG 100'S/NOVA (NO RETUR)",
+            "id_produk": 31,
+            "nama_produk_db": "AMBROXOL SYR",
+            "score": 63.11,
+            "similarity": 55.56,
+            "token_overlap": 72.22,
+            "measure_match": 0,
+            "pack_count_match": 0,
+            "gap": 1.56,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "PONSTAN FCT 500MG 100'S",
+            "id_produk": 36,
+            "nama_produk_db": "AMOXAN 500mg",
+            "score": 56.93,
+            "similarity": 51.43,
+            "token_overlap": 54.87,
+            "measure_match": 100,
+            "pack_count_match": 0,
+            "gap": 19.59,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "FUNGIDERM KRIM 5GR",
+            "id_produk": 298,
+            "nama_produk_db": "FUNGIDREM K",
+            "score": 66.95,
+            "similarity": 68.97,
+            "token_overlap": 65.55,
+            "measure_match": 0,
+            "pack_count_match": 100,
+            "gap": 1.93,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "DOMPERIDONE 10MG 100'S/HEXP",
+            "id_produk": 316,
+            "nama_produk_db": "DOMPERIDON",
+            "score": 60.2,
+            "similarity": 54.05,
+            "token_overlap": 71.28,
+            "measure_match": 0,
+            "pack_count_match": 0,
+            "gap": 5.91,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "SUCRALFATE SYR 100ML E3887",
+            "id_produk": 775,
+            "nama_produk_db": "SUCRALFAT SYR",
+            "score": 60.44,
+            "similarity": 66.67,
+            "token_overlap": 49.57,
+            "measure_match": 0,
+            "pack_count_match": 100,
+            "gap": 11.16,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "DEXANTA TAB 100'S E4729",
+            "id_produk": 211,
+            "nama_produk_db": "DEXANTA",
+            "score": 71.01,
+            "similarity": 46.67,
+            "token_overlap": 65.28,
+            "measure_match": 100,
+            "pack_count_match": 0,
+            "gap": 11.08,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "VOLTAREN EC 50MG 50'S",
+            "id_produk": 862,
+            "nama_produk_db": "VOLTAREN 50mg",
+            "score": 91.47,
+            "similarity": 76.47,
+            "token_overlap": 88.57,
+            "measure_match": 100,
+            "pack_count_match": 0,
+            "gap": 57.51,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "GASTRUCID SYR 60ML E3652",
+            "id_produk": 435,
+            "nama_produk_db": "LASERIN SYR 60ML",
+            "score": 67.97,
+            "similarity": 65,
+            "token_overlap": 53.4,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 5.91,
+            "strategy": "force_map_all_products"
+        },
+        {
+            "nama_produk_raw": "DECADRYL EXP SYR 60ML",
+            "id_produk": 887,
+            "nama_produk_db": "SANADRYL EXP 60ML",
+            "score": 81.63,
+            "similarity": 73.68,
+            "token_overlap": 75,
+            "measure_match": 100,
+            "pack_count_match": 100,
+            "gap": 11.34,
+            "strategy": "force_map_all_products"
+        }
+    ],
+    "insertable_preview": [
+        {
+            "no_faktur": "2.701.311",
+            "supplier": "PT. LANCAR JAYA SEHAT",
+            "supplier_id": 6,
+            "waktu": "2026-01-19 12:00:00",
+            "total_item": 38,
+            "total_harga": 1412266,
+            "detail_count": 12
+        },
+        {
+            "no_faktur": "NP-00348-13001",
+            "supplier": "PT MARGA NUSANTARA JAYA",
+            "supplier_id": 8,
+            "waktu": "2026-02-12 12:00:00",
+            "total_item": 6,
+            "total_harga": 95604,
+            "detail_count": 1
+        },
+        {
+            "no_faktur": "NP-00349-13002",
+            "supplier": "PT MARGA NUSANTARA JAYA",
+            "supplier_id": 8,
+            "waktu": "2026-02-13 12:00:00",
+            "total_item": 56,
+            "total_harga": 161332,
+            "detail_count": 2
+        },
+        {
+            "no_faktur": "NP-00350-12004",
+            "supplier": "PT MARGA NUSANTARA JAYA",
+            "supplier_id": 8,
+            "waktu": "2026-02-14 12:00:00",
+            "total_item": 27,
+            "total_harga": 210402,
+            "detail_count": 3
+        },
+        {
+            "no_faktur": "JM1-2602-01469",
+            "supplier": "PT. SAKAJAJA MAKMUR ABADI",
+            "supplier_id": 1,
+            "waktu": "2026-02-14 12:00:00",
+            "total_item": 10,
+            "total_harga": 565504,
+            "detail_count": 5
+        },
+        {
+            "no_faktur": "TMP-INV-2026/02/18/2444044",
+            "supplier": "PT. TEKNOLOGI MEDIKA PRATAMA",
+            "supplier_id": 5,
+            "waktu": "2026-02-18 12:00:00",
+            "total_item": 24,
+            "total_harga": 749903,
+            "detail_count": 8
+        },
+        {
+            "no_faktur": "NPS-2602-629901",
+            "supplier": "PT. LANCAR JAYA SEHAT",
+            "supplier_id": 6,
+            "waktu": "2026-02-18 12:00:00",
+            "total_item": 47,
+            "total_harga": 893571,
+            "detail_count": 14
+        },
+        {
+            "no_faktur": "NPS-2602-629903",
+            "supplier": "PT. LANCAR JAYA SEHAT",
+            "supplier_id": 6,
+            "waktu": "2026-02-18 12:00:00",
+            "total_item": 63,
+            "total_harga": 714614,
+            "detail_count": 14
+        },
+        {
+            "no_faktur": "JM1-2602-01892",
+            "supplier": "PT. SAKAJAJA MAKMUR ABADI",
+            "supplier_id": 1,
+            "waktu": "2026-02-19 12:00:00",
+            "total_item": 33,
+            "total_harga": 1604181,
+            "detail_count": 11
+        },
+        {
+            "no_faktur": "AJA-2602-006835/24-02-2026/LF",
+            "supplier": "PT ACACIA JAYA ABADI",
+            "supplier_id": 4,
+            "waktu": "2026-02-24 12:00:00",
+            "total_item": 47,
+            "total_harga": 1169977,
+            "detail_count": 11
+        },
+        {
+            "no_faktur": "JM1-2602-02924",
+            "supplier": "PT. SAKAJAJA MAKMUR ABADI",
+            "supplier_id": 1,
+            "waktu": "2026-02-28 12:00:00",
+            "total_item": 115,
+            "total_harga": 1534250,
+            "detail_count": 12
+        }
+    ]
+}

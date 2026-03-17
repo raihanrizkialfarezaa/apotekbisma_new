@@ -141,3 +141,37 @@ Ringkasan hasil run:
 - Produk terdampak: 342
 - Issue tersisa: 10 (type: missing_invoice_date)
 - Report apply: post_cutoff_purchase_reinput_report_20260317_051303.json
+
+## Eksekusi Lanjutan Perbaikan Februari (17-03-2026)
+
+Tujuan:
+
+- Menormalkan data faktur Februari yang sempat terbaca missing date/produk tidak terpetakan.
+
+Command yang dipakai:
+
+1. Dry-run verifikasi setelah perbaikan section Februari:
+
+php artisan stock:import-post-cutoff-purchases --from="2026-01-01 00:00:00" --until="2026-02-28 23:59:59" --file="INPUT_FAKTUR_PEMBELIAN_JANUARI.md" --file="INPUT_FAKTUR_PEMBELIAN_FEBRUARI.md" --alias="storage/app/product_alias_auto_deadline.json"
+
+2. Siapkan alias gabungan untuk produk panjang/no-retur (file baru):
+
+storage/app/product_alias_auto_deadline_plus_feb.json
+
+3. Dry-run final (konfigurasi yang dipakai untuk apply):
+
+php artisan stock:import-post-cutoff-purchases --from="2026-01-01 00:00:00" --until="2026-02-28 23:59:59" --file="INPUT_FAKTUR_PEMBELIAN_JANUARI.md" --file="INPUT_FAKTUR_PEMBELIAN_FEBRUARI.md" --alias="storage/app/product_alias_auto_deadline_plus_feb.json" --force-map-all-products --force-map-min-score=50 --report="post_cutoff_purchase_reinput_report_force_map_aliasplus_janfeb_20260317_dryrun.json"
+
+4. Apply final:
+
+php artisan stock:import-post-cutoff-purchases --apply --from="2026-01-01 00:00:00" --until="2026-02-28 23:59:59" --file="INPUT_FAKTUR_PEMBELIAN_JANUARI.md" --file="INPUT_FAKTUR_PEMBELIAN_FEBRUARI.md" --alias="storage/app/product_alias_auto_deadline_plus_feb.json" --force-map-all-products --force-map-min-score=50 --report="post_cutoff_purchase_reinput_report_force_map_aliasplus_janfeb_20260317_apply.json"
+
+5. Post-check idempotent:
+
+php artisan stock:import-post-cutoff-purchases --from="2026-01-01 00:00:00" --until="2026-02-28 23:59:59" --file="INPUT_FAKTUR_PEMBELIAN_JANUARI.md" --file="INPUT_FAKTUR_PEMBELIAN_FEBRUARI.md" --alias="storage/app/product_alias_auto_deadline_plus_feb.json" --force-map-all-products --force-map-min-score=50 --report="post_cutoff_purchase_reinput_report_force_map_aliasplus_janfeb_20260317_postcheck.json"
+
+Ringkasan hasil:
+
+- Dry-run final sebelum apply: Insertable 11, Existing Same 70, Issues 0.
+- Apply final: Invoice inserted 11, Detail inserted 93, Produk terdampak 85.
+- Post-check: Insertable 0, Existing Same 81, Issues 0.
