@@ -301,7 +301,7 @@
                             <th>Total Item</th>
                             <th>Total Harga</th>
                             <th>Diskon</th>
-                            <th>Total Bayar</th>
+                            <th>Total Bayar (+PPN 11%)</th>
                             <th>Waktu Faktur Dibuat</th>
                             <th width="15%"><i class="fa fa-cog"></i></th>
                         </thead>

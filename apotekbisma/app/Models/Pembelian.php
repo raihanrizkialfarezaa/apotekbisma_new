@@ -9,6 +9,8 @@ class Pembelian extends Model
 {
     use HasFactory;
 
+    public const DEFAULT_PPN_PERCENT = 11.0;
+
     protected $table = 'pembelian';
     protected $primaryKey = 'id_pembelian';
     protected $guarded = [];
@@ -22,5 +24,28 @@ class Pembelian extends Model
     public function detail()
     {
         return $this->hasMany(PembelianDetail::class, 'id_pembelian', 'id_pembelian');
+    }
+
+    public static function calculateFinancialSummary($totalHarga, $diskonPersen = 0, $ppnPersen = self::DEFAULT_PPN_PERCENT): array
+    {
+        $totalHarga = max(0.0, (float) $totalHarga);
+        $diskonPersen = max(0.0, (float) $diskonPersen);
+        $ppnPersen = max(0.0, (float) $ppnPersen);
+
+        $roundedTotal = (int) round($totalHarga);
+        $diskonNominal = (int) round($roundedTotal * ($diskonPersen / 100));
+        $dpp = max(0, $roundedTotal - $diskonNominal);
+        $ppnNominal = (int) round($dpp * ($ppnPersen / 100));
+        $grandTotal = $dpp + $ppnNominal;
+
+        return [
+            'total_harga' => $roundedTotal,
+            'diskon_persen' => $diskonPersen,
+            'diskon_nominal' => $diskonNominal,
+            'dpp' => $dpp,
+            'ppn_persen' => $ppnPersen,
+            'ppn_nominal' => $ppnNominal,
+            'grand_total' => $grandTotal,
+        ];
     }
 }

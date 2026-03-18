@@ -42,18 +42,13 @@ class ProdukController extends Controller
     public function updateHargaJual(Request $request, $id)
     {
         $produk = Produk::where('id_produk', $id)->first();
-        $produk->update([
-            'harga_jual' => $request->harga_jual
-        ]);
-        $detail = PembelianDetail::find($request->id_pembelian_detail);
-        if ($request->jumlah == NULL || $request->jumlah == 0) {
-            $detail->jumlah = 0;
-            $detail->subtotal = $detail->harga_beli * $request->jumlah;
-        } else {
-            $detail->jumlah = $request->jumlah;
-            $detail->subtotal = $detail->harga_beli * $request->jumlah;
+        if ($produk) {
+            $produk->update([
+                'harga_jual' => $request->harga_jual
+            ]);
         }
-        $detail->update();
+
+        return response()->json(['success' => true]);
     }
     public function updateExpiredDate(Request $request, $id)
     {
@@ -73,19 +68,22 @@ class ProdukController extends Controller
     public function updateHargaBeli(Request $request, $id)
     {
         $produk = Produk::where('id_produk', $id)->first();
-        $produk->update([
-            'harga_beli' => $request->harga_beli
-        ]);
-        // $id_pembelian = $request->id_pembelian_detail;
+        if ($produk) {
+            $produk->update([
+                'harga_beli' => $request->harga_beli
+            ]);
+        }
+
         $detail = PembelianDetail::where('id_pembelian_detail', $request->id_pembayaran_detail)->first();
-        // dd($request->all());
-        // dd($request->jumlah);
-        $jumlah = (int)$request->jumlah;
-        $detail->update([
-            'jumlah' => $jumlah,
-            'harga_beli' => $produk->harga_beli,
-            'subtotal' => $produk->harga_beli * $jumlah,
-        ]);
+        if ($detail) {
+            $detail->update([
+                'harga_beli' => $produk ? $produk->harga_beli : $request->harga_beli,
+                // In purchase form, harga_beli is entered as line total, so subtotal must match it directly.
+                'subtotal' => $produk ? $produk->harga_beli : $request->harga_beli,
+            ]);
+        }
+
+        return response()->json(['success' => true]);
     }
 
     public function importPage()

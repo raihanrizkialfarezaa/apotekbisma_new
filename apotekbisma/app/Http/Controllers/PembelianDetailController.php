@@ -82,7 +82,8 @@ class PembelianDetailController extends Controller
         $detail = PembelianDetail::with('produk')
             ->where('id_pembelian', $id)
             ->join('produk', 'pembelian_detail.id_produk', '=', 'produk.id_produk')
-            ->orderBy('produk.nama_produk', 'asc')
+            // Keep row order aligned with insertion sequence in this transaction.
+            ->orderBy('pembelian_detail.id_pembelian_detail', 'asc')
             ->select('pembelian_detail.*')
             ->get();
         $data = array();
@@ -90,6 +91,7 @@ class PembelianDetailController extends Controller
         $total_item = 0;
 
         foreach ($detail as $item) {
+            $lineSubtotal = (int) ($item->harga_beli ?? 0);
             $row = array();
             $row['kode_produk'] = '<span class="label label-success">'. $item->produk['kode_produk'] .'</span';
             $row['nama_produk'] = $item->produk['nama_produk'];
@@ -98,13 +100,13 @@ class PembelianDetailController extends Controller
             $row['jumlah']      = '<input type="number" class="form-control input-sm quantity" data-id="'. $item->id_pembelian_detail .'" value="'. $item->jumlah .'">';
             $row['expired_date']      = '<input type="date" class="form-control input-sm expired_date" data-id="'. $item->produk['id_produk'] .'" value="'. $item->produk['expired_date'] .'">';
             $row['batch']      = '<input type="text" class="form-control input-sm batch" data-id="'. $item->produk['id_produk'] .'" value="'. $item->produk['batch'] .'">';
-            $row['subtotal']    = 'Rp. '. format_uang($item->subtotal);
+            $row['subtotal']    = 'Rp. '. format_uang($lineSubtotal);
             $row['aksi']        = '<div class="btn-group">
                                     <button onclick="deleteData(`'. route('pembelian_detail.destroy', $item->id_pembelian_detail) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
                                 </div>';
             $data[] = $row;
 
-            $total += $item->harga_beli * $item->jumlah;
+            $total += $lineSubtotal;
             $total_item += $item->jumlah;
         }
         $data[] = [
@@ -168,7 +170,7 @@ class PembelianDetailController extends Controller
                     $new_jumlah = $old_jumlah + $jumlah_tambahan;
                     
                     $existing_detail->jumlah = $new_jumlah;
-                    $existing_detail->subtotal = $existing_detail->harga_beli * $new_jumlah;
+                    $existing_detail->subtotal = $existing_detail->harga_beli;
                     $existing_detail->save();
                     
                     $stok_baru = $stok_sebelum + $jumlah_tambahan;
@@ -364,7 +366,7 @@ class PembelianDetailController extends Controller
                 DB::table('produk')->where('id_produk', $produk->id_produk)->update(['stok' => $stok_baru]);
                 
                 $detail->jumlah = $new_jumlah;
-                $detail->subtotal = $detail->harga_beli * $new_jumlah;
+                $detail->subtotal = $detail->harga_beli;
                 $detail->save();
                 
                 $pembelian = Pembelian::find($detail->id_pembelian);
@@ -557,7 +559,7 @@ class PembelianDetailController extends Controller
             }
             
             $detail->jumlah = $new_jumlah;
-            $detail->subtotal = $detail->harga_beli * $new_jumlah;
+            $detail->subtotal = $detail->harga_beli;
             $detail->update();
             
             DB::commit();
@@ -688,12 +690,22 @@ class PembelianDetailController extends Controller
 
     public function loadForm($diskon, $total)
     {
-        $bayar = $total - ($diskon / 100 * $total);
+        $summary = Pembelian::calculateFinancialSummary($total, $diskon);
+
         $data  = [
-            'totalrp' => format_uang($total),
-            'bayar' => $bayar,
-            'bayarrp' => format_uang($bayar),
-            'terbilang' => ucwords(terbilang($bayar). ' Rupiah')
+            'total' => $summary['total_harga'],
+            'totalrp' => format_uang($summary['total_harga']),
+            'diskon_persen' => $summary['diskon_persen'],
+            'diskon_nominal' => $summary['diskon_nominal'],
+            'diskon_nominal_rp' => format_uang($summary['diskon_nominal']),
+            'dpp' => $summary['dpp'],
+            'dpprp' => format_uang($summary['dpp']),
+            'ppn_persen' => $summary['ppn_persen'],
+            'ppn_nominal' => $summary['ppn_nominal'],
+            'ppnrp' => format_uang($summary['ppn_nominal']),
+            'bayar' => $summary['grand_total'],
+            'bayarrp' => format_uang($summary['grand_total']),
+            'terbilang' => ucwords(terbilang($summary['grand_total']). ' Rupiah')
         ];
 
         return response()->json($data);

@@ -151,7 +151,8 @@ class PembelianController extends Controller
                 return $totalHarga;
             })
             ->addColumn('bayar', function ($pembelian) {
-                return 'Rp. '. format_uang($pembelian->bayar ?? 0);
+                $summary = Pembelian::calculateFinancialSummary($pembelian->total_harga ?? 0, $pembelian->diskon ?? 0);
+                return 'Rp. '. format_uang($summary['grand_total']);
             })
             ->addColumn('tanggal', function ($pembelian) {
                 return tanggal_indonesia($this->resolvePembelianArrivalDisplayWaktu($pembelian), false);
@@ -271,6 +272,7 @@ class PembelianController extends Controller
             'nomor_faktur' => 'required|string|max:255',
             'total_item' => 'required|integer|min:1',
             'total' => 'required|numeric|min:0',
+            'diskon' => 'nullable|integer|min:0|max:100',
             'waktu' => 'required'
         ], [
             'nomor_faktur.required' => 'Nomor faktur harus diisi',
@@ -279,6 +281,9 @@ class PembelianController extends Controller
             'total_item.min' => 'Minimal harus ada 1 produk',
             'total.required' => 'Total harga harus diisi',
             'total.min' => 'Total harga tidak boleh negatif',
+            'diskon.integer' => 'Diskon harus berupa angka bulat',
+            'diskon.min' => 'Diskon tidak boleh kurang dari 0%',
+            'diskon.max' => 'Diskon tidak boleh lebih dari 100%',
             'waktu.required' => 'Tanggal faktur harus diisi'
         ]);
 
@@ -307,10 +312,12 @@ class PembelianController extends Controller
                 return redirect()->back()->with('error', 'Nomor faktur sudah digunakan untuk transaksi lain');
             }
 
+            $financialSummary = Pembelian::calculateFinancialSummary($request->total, $request->diskon ?? 0);
+
             $pembelian->total_item = $request->total_item;
-            $pembelian->total_harga = $request->total;
-            $pembelian->diskon = $request->diskon ?? 0;
-            $pembelian->bayar = $request->bayar;
+            $pembelian->total_harga = $financialSummary['total_harga'];
+            $pembelian->diskon = intval($financialSummary['diskon_persen']);
+            $pembelian->bayar = $financialSummary['grand_total'];
             $resolvedInvoiceWaktu = $this->resolveTransactionWaktu(
                 $request->waktu,
                 $pembelian->waktu ?? $pembelian->created_at ?? Carbon::now()
@@ -380,6 +387,7 @@ class PembelianController extends Controller
             'nomor_faktur' => 'required|string|max:255',
             'total_item' => 'required|integer|min:1',
             'total' => 'required|numeric|min:0',
+            'diskon' => 'nullable|integer|min:0|max:100',
             'waktu' => 'required'
         ], [
             'nomor_faktur.required' => 'Nomor faktur harus diisi',
@@ -388,6 +396,9 @@ class PembelianController extends Controller
             'total_item.min' => 'Minimal harus ada 1 produk',
             'total.required' => 'Total harga harus diisi',
             'total.min' => 'Total harga tidak boleh negatif',
+            'diskon.integer' => 'Diskon harus berupa angka bulat',
+            'diskon.min' => 'Diskon tidak boleh kurang dari 0%',
+            'diskon.max' => 'Diskon tidak boleh lebih dari 100%',
             'waktu.required' => 'Tanggal faktur harus diisi'
         ]);
 
@@ -417,10 +428,12 @@ class PembelianController extends Controller
                 return redirect()->back()->with('error', 'Nomor faktur sudah digunakan untuk transaksi lain');
             }
 
+            $financialSummary = Pembelian::calculateFinancialSummary($request->total, $request->diskon ?? 0);
+
             $pembelian->total_item = $request->total_item;
-            $pembelian->total_harga = $request->total;
-            $pembelian->diskon = $request->diskon ?? 0;
-            $pembelian->bayar = $request->bayar;
+            $pembelian->total_harga = $financialSummary['total_harga'];
+            $pembelian->diskon = intval($financialSummary['diskon_persen']);
+            $pembelian->bayar = $financialSummary['grand_total'];
             $pembelian->no_faktur = $request->nomor_faktur;
             if ($request->waktu != NULL) {
                 $resolvedInvoiceWaktu = $this->resolveTransactionWaktu(

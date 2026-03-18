@@ -72,6 +72,9 @@
     <p>Supplier: {{ $pembelian->supplier->nama ?? 'N/A' }}</p>
     <p>Tanggal: {{ tanggal_indonesia($pembelian->waktu ?? $pembelian->created_at, false) }}</p>
     <p class="text-center">===================================</p>
+    @php
+        $ringkasan = \App\Models\Pembelian::calculateFinancialSummary($pembelian->total_harga, $pembelian->diskon);
+    @endphp
     
     <br>
     <table width="100%" style="border: 0;">
@@ -80,9 +83,9 @@
                 <td colspan="3">{{ $item->produk->nama_produk }}</td>
             </tr>
             <tr>
-                <td>{{ $item->jumlah }} x {{ format_uang($item->harga_beli) }}</td>
+                <td>{{ format_uang($item->jumlah) }} item</td>
                 <td></td>
-                <td class="text-right">{{ format_uang($item->jumlah * $item->harga_beli) }}</td>
+                <td class="text-right">{{ format_uang($item->subtotal) }}</td>
             </tr>
         @endforeach
     </table>
@@ -94,6 +97,14 @@
             <td class="text-right">{{ format_uang($pembelian->total_harga) }}</td>
         </tr>
         <tr>
+            <td>DPP:</td>
+            <td class="text-right">{{ format_uang($ringkasan['dpp']) }}</td>
+        </tr>
+        <tr>
+            <td>PPN 11%:</td>
+            <td class="text-right">{{ format_uang($ringkasan['ppn_nominal']) }}</td>
+        </tr>
+        <tr>
             <td>Total Item:</td>
             <td class="text-right">{{ format_uang($pembelian->total_item) }}</td>
         </tr>
@@ -103,7 +114,7 @@
         </tr>
         <tr>
             <td>Total Bayar:</td>
-            <td class="text-right">{{ format_uang($pembelian->bayar) }}</td>
+            <td class="text-right">{{ format_uang($ringkasan['grand_total']) }}</td>
         </tr>
     </table>
     <p class="text-center">===================================</p>

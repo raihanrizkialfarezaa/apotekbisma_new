@@ -54,6 +54,9 @@
     </table>
 
     <h3 class="text-center">BUKTI PEMBELIAN</h3>
+    @php
+        $ringkasan = \App\Models\Pembelian::calculateFinancialSummary($pembelian->total_harga, $pembelian->diskon);
+    @endphp
 
     <table class="data" width="100%">
         <thead>
@@ -88,8 +91,16 @@
                 <td class="text-right"><b>{{ format_uang($pembelian->diskon) }}%</b></td>
             </tr>
             <tr>
+                <td colspan="5" class="text-right"><b>DPP</b></td>
+                <td class="text-right"><b>{{ format_uang($ringkasan['dpp']) }}</b></td>
+            </tr>
+            <tr>
+                <td colspan="5" class="text-right"><b>PPN 11%</b></td>
+                <td class="text-right"><b>{{ format_uang($ringkasan['ppn_nominal']) }}</b></td>
+            </tr>
+            <tr>
                 <td colspan="5" class="text-right"><b>Total Bayar</b></td>
-                <td class="text-right"><b>{{ format_uang($pembelian->bayar) }}</b></td>
+                <td class="text-right"><b>{{ format_uang($ringkasan['grand_total']) }}</b></td>
             </tr>
             <tr>
                 <td colspan="5" class="text-right"><b>Total Item</b></td>

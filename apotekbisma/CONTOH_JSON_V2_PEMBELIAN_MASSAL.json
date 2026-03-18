@@ -1,0 +1,66 @@
+{
+    "schema_version": "2.0",
+    "source": "manual-admin-import",
+    "generated_at": "2026-03-18 23:45:00",
+    "ppn_persen": 11,
+    "purchases": [
+        {
+            "nomor_faktur": "JM1-2601-00495",
+            "id_supplier": 1,
+            "tanggal_waktu_faktur": "2026-01-26 09:11:00",
+            "tanggal_waktu_obat_datang": "2026-01-26 09:11:00",
+            "total": 1097873,
+            "diskon": 0,
+            "bayar": 1218639,
+            "detail": [
+                {
+                    "no": 1,
+                    "id_produk": 524,
+                    "kode_produk": "MIX-524",
+                    "nama_produk": "MIXALGIN",
+                    "harga_beli": 1097873,
+                    "harga_jual": 35000,
+                    "expired_date": "2027-12-31",
+                    "batch": "JM1-2601-00495",
+                    "jumlah": 36,
+                    "subtotal": 1097873
+                }
+            ]
+        },
+        {
+            "nomor_faktur": "JM1-2602-00001",
+            "id_supplier": 3,
+            "tanggal_waktu_faktur": "2026-02-01 10:30:00",
+            "tanggal_waktu_obat_datang": "2026-02-01 10:30:00",
+            "total": 1250000,
+            "diskon": 5,
+            "bayar": 1318125,
+            "detail": [
+                {
+                    "no": 1,
+                    "id_produk": 998,
+                    "kode_produk": "BOD-998",
+                    "nama_produk": "BODREX",
+                    "harga_beli": 500000,
+                    "harga_jual": 12000,
+                    "expired_date": "2027-08-31",
+                    "batch": "BOD-2602-A",
+                    "jumlah": 20,
+                    "subtotal": 500000
+                },
+                {
+                    "no": 2,
+                    "id_produk": 999,
+                    "kode_produk": "PAR-999",
+                    "nama_produk": "PARAMEX",
+                    "harga_beli": 750000,
+                    "harga_jual": 15000,
+                    "expired_date": "2027-09-30",
+                    "batch": "PAR-2602-B",
+                    "jumlah": 15,
+                    "subtotal": 750000
+                }
+            ]
+        }
+    ]
+}

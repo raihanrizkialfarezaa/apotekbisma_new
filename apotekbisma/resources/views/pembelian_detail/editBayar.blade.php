@@ -179,9 +179,22 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="bayar" class="col-lg-2 control-label">Bayar</label>
+                                <label for="dpprp" class="col-lg-2 control-label">DPP</label>
                                 <div class="col-lg-8">
-                                    <input type="text" id="bayarrp" class="form-control">
+                                    <input type="text" id="dpprp" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="ppnrp" class="col-lg-2 control-label">PPN 11%</label>
+                                <div class="col-lg-8">
+                                    <input type="text" id="ppnrp" class="form-control" readonly>
+                                    <small class="text-muted">Rumus: DPP = Total - Diskon(%), PPN = 11% x DPP, Total Bayar = DPP + PPN.</small>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="bayarrp" class="col-lg-2 control-label">Bayar</label>
+                                <div class="col-lg-8">
+                                    <input type="text" id="bayarrp" class="form-control" readonly>
                                 </div>
                             </div>
                         </form>
@@ -620,6 +633,8 @@
         $.get(`{{ url('/pembelian_detail/loadform') }}/${diskon}/${$('.total').text()}`)
             .done(response => {
                 $('#totalrp').val('Rp. '+ response.totalrp);
+                $('#dpprp').val('Rp. '+ response.dpprp);
+                $('#ppnrp').val('Rp. '+ response.ppnrp);
                 $('#bayarrp').val('Rp. '+ response.bayarrp);
                 $('#bayar').val(response.bayar);
                 $('.tampil-bayar').text('Rp. '+ response.bayarrp);

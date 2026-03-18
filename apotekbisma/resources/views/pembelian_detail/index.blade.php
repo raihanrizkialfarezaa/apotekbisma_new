@@ -323,9 +323,22 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="bayar" class="col-lg-2 control-label">Bayar</label>
+                                <label for="dpprp" class="col-lg-2 control-label">DPP</label>
                                 <div class="col-lg-8">
-                                    <input type="text" id="bayarrp" class="form-control">
+                                    <input type="text" id="dpprp" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="ppnrp" class="col-lg-2 control-label">PPN 11%</label>
+                                <div class="col-lg-8">
+                                    <input type="text" id="ppnrp" class="form-control" readonly>
+                                    <small class="text-muted">Rumus: DPP = Total - Diskon(%), PPN = 11% x DPP, Total Bayar = DPP + PPN.</small>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="bayarrp" class="col-lg-2 control-label">Bayar</label>
+                                <div class="col-lg-8">
+                                    <input type="text" id="bayarrp" class="form-control" readonly>
                                 </div>
                             </div>
                         </form>
@@ -846,9 +859,10 @@
                 if ($quantityInput.length && $hargaBeliInput.length) {
                     let jumlah = parseNumber($quantityInput.val()) || 0;
                     let harga_beli = parseNumber($hargaBeliInput.val()) || 0;
-                    if (jumlah > 0 && harga_beli > 0) {
-                        let subtotal = jumlah * harga_beli;
-                        total += subtotal;
+                    if (harga_beli > 0) {
+                        total += harga_beli;
+                    }
+                    if (jumlah > 0) {
                         total_item += jumlah;
                     }
                 }
@@ -933,7 +947,7 @@
                     .done(response => {
                         let $quantityInput = $row.find('.quantity');
                         let currentJumlah = parseNumber($quantityInput.val()) || 0;
-                        let newSubtotal = harga_beli * currentJumlah;
+                        let newSubtotal = harga_beli;
                         let $subtotalCell = $row.find('td').eq(8);
                         if ($subtotalCell.length) {
                             $subtotalCell.text('Rp. ' + formatUang(newSubtotal));
@@ -1206,7 +1220,7 @@
             let $rowToDelete = $(event.target).closest('tr');
             let deletedQuantity = parseInt($rowToDelete.find('.quantity').val()) || 0;
             let deletedHargaBeli = parseInt($rowToDelete.find('.harga_beli').val()) || 0;
-            let deletedSubtotal = deletedQuantity * deletedHargaBeli;
+            let deletedSubtotal = deletedHargaBeli;
             
             // Hitung total baru secara langsung (tanpa menunggu reload)
             let currentTotal = parseInt($('#total').val()) || 0;
@@ -1269,6 +1283,8 @@
             .done(response => {
                 // Update semua field form secara bersamaan untuk efisiensi
                 $('#totalrp').val('Rp. '+ response.totalrp);
+                $('#dpprp').val('Rp. '+ response.dpprp);
+                $('#ppnrp').val('Rp. '+ response.ppnrp);
                 $('#bayarrp').val('Rp. '+ response.bayarrp);
                 $('#bayar').val(response.bayar);
                 $('.tampil-bayar').text('Rp. '+ response.bayarrp);

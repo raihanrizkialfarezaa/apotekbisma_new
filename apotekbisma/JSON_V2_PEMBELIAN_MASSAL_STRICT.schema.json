@@ -1,0 +1,147 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://apotekbisma.local/schema/json-v2-pembelian-massal-strict",
+    "title": "JSON V2 Pembelian Massal Strict",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["schema_version", "ppn_persen", "purchases"],
+    "properties": {
+        "schema_version": {
+            "type": "string",
+            "const": "2.0"
+        },
+        "source": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+        },
+        "generated_at": {
+            "type": "string",
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$"
+        },
+        "ppn_persen": {
+            "type": "number",
+            "const": 11
+        },
+        "purchases": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+                "$ref": "#/$defs/purchase"
+            }
+        }
+    },
+    "$defs": {
+        "purchase": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "nomor_faktur",
+                "id_supplier",
+                "tanggal_waktu_faktur",
+                "diskon",
+                "detail"
+            ],
+            "properties": {
+                "nomor_faktur": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                },
+                "id_supplier": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "tanggal_waktu_faktur": {
+                    "type": "string",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$"
+                },
+                "tanggal_waktu_obat_datang": {
+                    "type": ["string", "null"],
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$"
+                },
+                "total": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "diskon": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 100
+                },
+                "bayar": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "detail": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "$ref": "#/$defs/purchaseDetail"
+                    }
+                }
+            }
+        },
+        "purchaseDetail": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["no", "harga_beli", "jumlah"],
+            "properties": {
+                "no": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "id_produk": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "kode_produk": {
+                    "type": ["string", "null"],
+                    "minLength": 1,
+                    "maxLength": 255
+                },
+                "nama_produk": {
+                    "type": ["string", "null"],
+                    "minLength": 1,
+                    "maxLength": 255
+                },
+                "harga_beli": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "harga_jual": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "expired_date": {
+                    "type": ["string", "null"],
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+                },
+                "batch": {
+                    "type": ["string", "null"],
+                    "maxLength": 255
+                },
+                "jumlah": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 1000000
+                },
+                "subtotal": {
+                    "type": "integer",
+                    "minimum": 1
+                }
+            },
+            "anyOf": [
+                {
+                    "required": ["id_produk"]
+                },
+                {
+                    "required": ["kode_produk"]
+                },
+                {
+                    "required": ["nama_produk"]
+                }
+            ]
+        }
+    }
+}
