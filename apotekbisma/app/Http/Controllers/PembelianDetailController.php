@@ -93,7 +93,7 @@ class PembelianDetailController extends Controller
         foreach ($detail as $item) {
             $lineSubtotal = (int) ($item->harga_beli ?? 0);
             $row = array();
-            $row['kode_produk'] = '<span class="label label-success">'. $item->produk['kode_produk'] .'</span';
+            $row['kode_produk'] = '<span class="label label-primary">ID: '. intval($item->produk['id_produk']) .'</span>';
             $row['nama_produk'] = $item->produk['nama_produk'];
             $row['harga_jual']  = '<input type="number" class="form-control input-sm harga_jual" data-id="'. $item->produk['id_produk'] .'" value="'. $item->produk['harga_jual'] .'">';
             $row['harga_beli']  = '<input type="number" class="form-control input-sm harga_beli" data-id="'. $item->produk['id_produk'] .'" data-uid="'. $item->id_pembelian_detail .'" value="'. $item->produk['harga_beli'] .'">';

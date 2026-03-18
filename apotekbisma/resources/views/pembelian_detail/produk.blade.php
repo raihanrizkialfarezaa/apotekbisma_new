@@ -67,7 +67,7 @@
                     <table class="table table-striped table-bordered table-produk" id="table-produk-pembelian">
                         <thead>
                             <th width="5%">No</th>
-                            <th>Kode</th>
+                            <th>ID Produk</th>
                             <th>Nama</th>
                             <th>Stok Saat Ini</th>
                             <th>Harga Beli</th>

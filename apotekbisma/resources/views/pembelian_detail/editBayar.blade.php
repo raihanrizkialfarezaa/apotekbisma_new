@@ -97,7 +97,7 @@
                 <form class="form-produk">
                     @csrf
                     <div class="form-group row">
-                        <label for="kode_produk" class="col-lg-2">Kode Produk</label>
+                        <label for="kode_produk" class="col-lg-2">ID Produk</label>
                         <div class="col-lg-5">
                             <div class="input-group">
                                 <input type="hidden" name="id_pembelian" id="id_pembelian" value="{{ $id_pembelian }}">
@@ -114,7 +114,7 @@
                 <table class="table table-stiped table-bordered table-pembelian">
                     <thead>
                         <th width="5%">No</th>
-                        <th>Kode</th>
+                        <th>ID Produk</th>
                         <th>Nama</th>
                         <th>Harga Beli</th>
                         <th>Harga Jual</th>
@@ -280,9 +280,9 @@
             columns: [
                 {data: 'no', searchable: false, sortable: false},
                 {
-                    data: 'kode_produk',
+                    data: 'id',
                     render: function(data) {
-                        return '<span class="label label-success">' + data + '</span>';
+                        return '<span class="label label-primary">ID: ' + data + '</span>';
                     }
                 },
                 {data: 'nama_produk'},
@@ -310,7 +310,7 @@
                     data: null,
                     render: function(data) {
                         return '<a href="#" class="btn btn-primary btn-xs btn-flat" ' +
-                               'onclick="pilihProduk(\'' + data.id + '\', \'' + data.kode_produk + '\')">' +
+                               'onclick="pilihProduk(\'' + data.id + '\', \'' + data.id + '\')">' +
                                '<i class="fa fa-check-circle"></i> Pilih</a>';
                     },
                     searchable: false,
