@@ -91,7 +91,7 @@ class PembelianDetailController extends Controller
         $total_item = 0;
 
         foreach ($detail as $item) {
-            $lineSubtotal = (int) ($item->harga_beli ?? 0);
+            $lineSubtotal = (int) (($item->harga_beli ?? 0) * ($item->jumlah ?? 0));
             $row = array();
             $row['kode_produk'] = '<span class="label label-primary">ID: '. intval($item->produk['id_produk']) .'</span>';
             $row['nama_produk'] = $item->produk['nama_produk'];
@@ -170,7 +170,7 @@ class PembelianDetailController extends Controller
                     $new_jumlah = $old_jumlah + $jumlah_tambahan;
                     
                     $existing_detail->jumlah = $new_jumlah;
-                    $existing_detail->subtotal = $existing_detail->harga_beli;
+                    $existing_detail->subtotal = $existing_detail->harga_beli * $new_jumlah;
                     $existing_detail->save();
                     
                     $stok_baru = $stok_sebelum + $jumlah_tambahan;
@@ -216,7 +216,7 @@ class PembelianDetailController extends Controller
                     $detail->id_produk = $produk->id_produk;
                     $detail->harga_beli = $produk->harga_beli;
                     $detail->jumlah = $jumlah_tambahan;
-                    $detail->subtotal = $produk->harga_beli;
+                    $detail->subtotal = $produk->harga_beli * $jumlah_tambahan;
                     $detail->save();
                     
                     $stok_baru = $stok_sebelum + $jumlah_tambahan;
@@ -366,7 +366,7 @@ class PembelianDetailController extends Controller
                 DB::table('produk')->where('id_produk', $produk->id_produk)->update(['stok' => $stok_baru]);
                 
                 $detail->jumlah = $new_jumlah;
-                $detail->subtotal = $detail->harga_beli;
+                $detail->subtotal = $detail->harga_beli * $new_jumlah;
                 $detail->save();
                 
                 $pembelian = Pembelian::find($detail->id_pembelian);
@@ -559,7 +559,7 @@ class PembelianDetailController extends Controller
             }
             
             $detail->jumlah = $new_jumlah;
-            $detail->subtotal = $detail->harga_beli;
+            $detail->subtotal = $detail->harga_beli * $new_jumlah;
             $detail->update();
             
             DB::commit();

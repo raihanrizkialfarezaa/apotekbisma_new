@@ -185,10 +185,10 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="ppnrp" class="col-lg-2 control-label">PPN 11%</label>
+                                <label for="ppnrp" class="col-lg-2 control-label">PPN (Nonaktif)</label>
                                 <div class="col-lg-8">
                                     <input type="text" id="ppnrp" class="form-control" readonly>
-                                    <small class="text-muted">Rumus: DPP = Total - Diskon(%), PPN = 11% x DPP, Total Bayar = DPP + PPN.</small>
+                                    <small class="text-muted">PPN supplier sudah termasuk. Rumus: DPP = Total - Diskon(%), Total Bayar = DPP.</small>
                                 </div>
                             </div>
                             <div class="form-group row">

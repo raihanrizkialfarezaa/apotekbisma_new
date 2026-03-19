@@ -101,7 +101,7 @@
             <td class="text-right">{{ format_uang($ringkasan['dpp']) }}</td>
         </tr>
         <tr>
-            <td>PPN 11%:</td>
+            <td>PPN (Nonaktif):</td>
             <td class="text-right">{{ format_uang($ringkasan['ppn_nominal']) }}</td>
         </tr>
         <tr>

@@ -329,10 +329,10 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="ppnrp" class="col-lg-2 control-label">PPN 11%</label>
+                                <label for="ppnrp" class="col-lg-2 control-label">PPN (Nonaktif)</label>
                                 <div class="col-lg-8">
                                     <input type="text" id="ppnrp" class="form-control" readonly>
-                                    <small class="text-muted">Rumus: DPP = Total - Diskon(%), PPN = 11% x DPP, Total Bayar = DPP + PPN.</small>
+                                    <small class="text-muted">PPN supplier sudah termasuk. Rumus: DPP = Total - Diskon(%), Total Bayar = DPP.</small>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -859,8 +859,8 @@
                 if ($quantityInput.length && $hargaBeliInput.length) {
                     let jumlah = parseNumber($quantityInput.val()) || 0;
                     let harga_beli = parseNumber($hargaBeliInput.val()) || 0;
-                    if (harga_beli > 0) {
-                        total += harga_beli;
+                    if (harga_beli > 0 && jumlah > 0) {
+                        total += (harga_beli * jumlah);
                     }
                     if (jumlah > 0) {
                         total_item += jumlah;
@@ -947,7 +947,7 @@
                     .done(response => {
                         let $quantityInput = $row.find('.quantity');
                         let currentJumlah = parseNumber($quantityInput.val()) || 0;
-                        let newSubtotal = harga_beli;
+                        let newSubtotal = harga_beli * currentJumlah;
                         let $subtotalCell = $row.find('td').eq(8);
                         if ($subtotalCell.length) {
                             $subtotalCell.text('Rp. ' + formatUang(newSubtotal));

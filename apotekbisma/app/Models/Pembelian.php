@@ -9,7 +9,7 @@ class Pembelian extends Model
 {
     use HasFactory;
 
-    public const DEFAULT_PPN_PERCENT = 11.0;
+    public const DEFAULT_PPN_PERCENT = 0.0;
 
     protected $table = 'pembelian';
     protected $primaryKey = 'id_pembelian';
@@ -35,8 +35,8 @@ class Pembelian extends Model
         $roundedTotal = (int) round($totalHarga);
         $diskonNominal = (int) round($roundedTotal * ($diskonPersen / 100));
         $dpp = max(0, $roundedTotal - $diskonNominal);
-        $ppnNominal = (int) round($dpp * ($ppnPersen / 100));
-        $grandTotal = $dpp + $ppnNominal;
+        $ppnNominal = 0;
+        $grandTotal = $dpp;
 
         return [
             'total_harga' => $roundedTotal,

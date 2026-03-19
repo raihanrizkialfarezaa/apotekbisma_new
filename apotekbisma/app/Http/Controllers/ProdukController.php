@@ -76,10 +76,12 @@ class ProdukController extends Controller
 
         $detail = PembelianDetail::where('id_pembelian_detail', $request->id_pembayaran_detail)->first();
         if ($detail) {
+            $hargaBeli = (int) ($produk ? $produk->harga_beli : $request->harga_beli);
+            $jumlah = (int) ($detail->jumlah ?? $request->jumlah ?? 0);
+
             $detail->update([
-                'harga_beli' => $produk ? $produk->harga_beli : $request->harga_beli,
-                // In purchase form, harga_beli is entered as line total, so subtotal must match it directly.
-                'subtotal' => $produk ? $produk->harga_beli : $request->harga_beli,
+                'harga_beli' => $hargaBeli,
+                'subtotal' => $hargaBeli * $jumlah,
             ]);
         }
 
