@@ -1,0 +1,5833 @@
+# INPUT DATA FEBRUARI JSON FIXED YAALLAH
+
+## HALAMAN 1
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-gehael-merged",
+  "generated_at": "2026-03-19 15:37:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "POSPST260200547",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-04 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-04 00:00:00",
+      "total": 2022374.92,
+      "diskon": 0,
+      "bayar": 2244836.16,
+      "detail": [
+        {
+          "no": 1,
+          "nama_produk": "AMLODIPINE 5 MG TAB HJ 100",
+          "harga_beli": 24150,
+          "expired_date": "2027-11-30",
+          "batch": "56031",
+          "jumlah": 300,
+          "subtotal": 72450
+        },
+        {
+          "no": 2,
+          "nama_produk": "AMLODIPINE 10 MG TAB HJ 100",
+          "harga_beli": 44850,
+          "expired_date": "2027-10-31",
+          "batch": "55068",
+          "jumlah": 300,
+          "subtotal": 134550
+        },
+        {
+          "no": 3,
+          "nama_produk": "ALLUPURINOL 100 MG HJ 100",
+          "harga_beli": 18000,
+          "expired_date": "2027-10-31",
+          "batch": "55424",
+          "jumlah": 300,
+          "subtotal": 54000
+        },
+        {
+          "no": 4,
+          "nama_produk": "LAPISIV-T TABLET.. 100",
+          "harga_beli": 255300,
+          "expired_date": "2027-12-31",
+          "batch": "64505",
+          "jumlah": 100,
+          "subtotal": 242535
+        },
+        {
+          "no": 5,
+          "nama_produk": "ANTACIDA DOEN SIRUP FM 60ML",
+          "harga_beli": 4500,
+          "expired_date": "2027-12-31",
+          "batch": "007852",
+          "jumlah": 6,
+          "subtotal": 27000
+        },
+        {
+          "no": 6,
+          "nama_produk": "DICLOFENAC POTASSIUM 50 MG TAB HJ..",
+          "harga_beli": 66600,
+          "expired_date": "2027-09-30",
+          "batch": "55286",
+          "jumlah": 200,
+          "subtotal": 99900
+        },
+        {
+          "no": 7,
+          "nama_produk": "CETIRIZINE TAB 10 MG TAB HJ 100",
+          "harga_beli": 33300,
+          "expired_date": "2027-10-31",
+          "batch": "50485",
+          "jumlah": 200,
+          "subtotal": 37962
+        },
+        {
+          "no": 8,
+          "nama_produk": "APIALYS DROP 10ML",
+          "harga_beli": 58275,
+          "expired_date": "2027-09-30",
+          "batch": "A0565",
+          "jumlah": 3,
+          "subtotal": 166083.75
+        },
+        {
+          "no": 9,
+          "nama_produk": "APIALYS SIRUP 100ML",
+          "harga_beli": 48285,
+          "expired_date": "2027-11-30",
+          "batch": "30535",
+          "jumlah": 3,
+          "subtotal": 137612.25
+        },
+        {
+          "no": 10,
+          "nama_produk": "ATORVASTATIN 20 MG DEXA 100",
+          "harga_beli": 444000,
+          "expired_date": "2027-04-30",
+          "batch": "56C0594",
+          "jumlah": 100,
+          "subtotal": 88800
+        },
+        {
+          "no": 11,
+          "nama_produk": "NEO RHEUMACYL TAB (BESAR) 480",
+          "harga_beli": 199200,
+          "expired_date": "2028-09-30",
+          "batch": "100795",
+          "jumlah": 100,
+          "subtotal": 199200
+        },
+        {
+          "no": 12,
+          "nama_produk": "TAWON EE 60ML",
+          "harga_beli": 50801,
+          "expired_date": "2030-04-30",
+          "batch": "25042",
+          "jumlah": 3,
+          "subtotal": 140972.78
+        },
+        {
+          "no": 13,
+          "nama_produk": "TAWON FF 90ML",
+          "harga_beli": 71761.50,
+          "expired_date": "2030-02-28",
+          "batch": "25022",
+          "jumlah": 3,
+          "subtotal": 199138.17
+        },
+        {
+          "no": 14,
+          "nama_produk": "METHYLPREDNISOLON 4 MG TAB DEX..",
+          "harga_beli": 44455.50,
+          "expired_date": "2027-05-31",
+          "batch": "56F4088",
+          "jumlah": 200,
+          "subtotal": 44455.50
+        },
+        {
+          "no": 15,
+          "nama_produk": "NEO ENTROSTOP TAB 120",
+          "harga_beli": 94798.44,
+          "expired_date": "2030-05-31",
+          "batch": "K53742",
+          "jumlah": 120,
+          "subtotal": 92902.47
+        },
+        {
+          "no": 16,
+          "nama_produk": "WELMOVE KAPLET 60",
+          "harga_beli": 219780,
+          "expired_date": "2028-09-30",
+          "batch": "25K06470",
+          "jumlah": 60,
+          "subtotal": 186813
+        },
+        {
+          "no": 17,
+          "nama_produk": "THERMO ONE ALPHA 1 1",
+          "harga_beli": 21090,
+          "expired_date": "0000-00-00",
+          "batch": "",
+          "jumlah": 6,
+          "subtotal": 94905
+        },
+        {
+          "no": 18,
+          "nama_produk": "DERMAFIX T 10 X 25 CM 10'S 10",
+          "harga_beli": 168498,
+          "expired_date": "2030-10-31",
+          "batch": "01112588",
+          "jumlah": 10,
+          "subtotal": 126373.50
+        },
+        {
+          "no": 19,
+          "nama_produk": "ULTRAFIX 5 X 1 (ISI 10) 10",
+          "harga_beli": 35298,
+          "expired_date": "2030-10-31",
+          "batch": "01112588",
+          "jumlah": 10,
+          "subtotal": 26473.50
+        },
+        {
+          "no": 20,
+          "nama_produk": "LEUKOPLAST 2.5X4.5 -1622 1",
+          "harga_beli": 24986,
+          "expired_date": "2030-06-30",
+          "batch": "52323509",
+          "jumlah": 3,
+          "subtotal": 72709.26
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 2
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 04:24:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "POSPSE260200549",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-04 14:05:28",
+      "tanggal_waktu_obat_datang": "2026-02-04 14:05:28",
+      "total": 243920.00,
+      "diskon": 0,
+      "bayar": 270751.20,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "DERMATIX ULTRA 5 GR KECIL 5GR",
+          "harga_beli": 114330,
+          "harga_jual": 0,
+          "expired_date": "2028-07-31",
+          "batch": "PG5301",
+          "jumlah": 2,
+          "subtotal": 221800.20
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "MEDICREPE 3 1",
+          "harga_beli": 10878,
+          "harga_jual": 0,
+          "expired_date": "2030-12-31",
+          "batch": "CMPE1201",
+          "jumlah": 6,
+          "subtotal": 48951
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 3
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 04:26:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "POSPST260200550",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-04 14:05:49",
+      "tanggal_waktu_obat_datang": "2026-02-04 14:05:49",
+      "total": 412429.95,
+      "diskon": 0,
+      "bayar": 457797.24,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "ULTRAFLU KAPLET. 100",
+          "harga_beli": 77650,
+          "harga_jual": 0,
+          "expired_date": "2030-10-31",
+          "batch": "019418",
+          "jumlah": 100,
+          "subtotal": 77650
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "LACOLDIN TABLET. 100",
+          "harga_beli": 305250,
+          "harga_jual": 0,
+          "expired_date": "2027-11-30",
+          "batch": "47505",
+          "jumlah": 100,
+          "subtotal": 289987.50
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "LACOLDIN SYRUP. 60ML",
+          "harga_beli": 31635,
+          "harga_jual": 0,
+          "expired_date": "2027-11-30",
+          "batch": "48045",
+          "jumlah": 3,
+          "subtotal": 90159.75
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 4
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 04:27:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "TMP-INV-2026/02/04/2396190",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-04 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-04 00:00:00",
+      "total": 376881.34,
+      "diskon": 0,
+      "bayar": 418338,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "ID120560-1",
+          "nama_produk": "TEMPRA (RASA ANGGUR) Taisho DROPS",
+          "harga_beli": 41500,
+          "harga_jual": 0,
+          "expired_date": "2027-10-31",
+          "batch": "202710-5K6461",
+          "jumlah": 2,
+          "subtotal": 81755
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "ID102536-1",
+          "nama_produk": "BODREX Tempo Scan TABLET 600/50 MG",
+          "harga_beli": 7477.47,
+          "harga_jual": 0,
+          "expired_date": "2030-11-30",
+          "batch": "203011-120625",
+          "jumlah": 240,
+          "subtotal": 89729.64
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "ID117205-1",
+          "nama_produk": "PRORIS TRIPLE ACTION Pharos KAPLET",
+          "harga_beli": 8008,
+          "harga_jual": 0,
+          "expired_date": "2028-08-31",
+          "batch": "202808-D5H959L",
+          "jumlah": 50,
+          "subtotal": 34234.20
+        },
+        {
+          "no": 4,
+          "id_produk": null,
+          "kode_produk": "ID122252-3",
+          "nama_produk": "VITAMIN C IPI Supra Ferbindo TABLET",
+          "harga_beli": 61500,
+          "harga_jual": 0,
+          "expired_date": "2027-12-31",
+          "batch": "202712-120725",
+          "jumlah": 12,
+          "subtotal": 61192.50
+        },
+        {
+          "no": 5,
+          "id_produk": null,
+          "kode_produk": "ID124513-1",
+          "nama_produk": "BABY OIL Johnson CAIRAN KENTAL",
+          "harga_beli": 9900,
+          "harga_jual": 0,
+          "expired_date": "2028-10-31",
+          "batch": "202810-06-10-2025D2",
+          "jumlah": 3,
+          "subtotal": 28215
+        },
+        {
+          "no": 6,
+          "id_produk": null,
+          "kode_produk": "ID126421-1",
+          "nama_produk": "TEMPRA (RASA STRAWBERRY) Taisho DROPS",
+          "harga_beli": 41500,
+          "harga_jual": 0,
+          "expired_date": "2027-12-31",
+          "batch": "202712-5M1631",
+          "jumlah": 2,
+          "subtotal": 81755
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 5
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 04:30:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "T5603351.20260205003",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-05 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-05 00:00:00",
+      "total": 78600,
+      "diskon": 0,
+      "bayar": 86329,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "SILADEX COUGH & FLU 60 ML",
+          "harga_beli": 13100,
+          "harga_jual": 0,
+          "expired_date": "2028-01-31",
+          "batch": "A26A05",
+          "jumlah": 6,
+          "subtotal": 78600
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 6
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 04:30:30",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "JM1-2602-00415",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-05 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-05 00:00:00",
+      "total": 1088714,
+      "diskon": 0,
+      "bayar": 1207520,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "M.KAYU PUTIH 30ML(NO.3)",
+          "harga_beli": 9460,
+          "harga_jual": 0,
+          "expired_date": "2030-09-30",
+          "batch": "PD00317",
+          "jumlah": 12,
+          "subtotal": 113520
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "G.PIJAT URUT 30ML(NO.2)",
+          "harga_beli": 7928,
+          "harga_jual": 0,
+          "expired_date": "2030-09-30",
+          "batch": "PD006806",
+          "jumlah": 6,
+          "subtotal": 47568
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "GANDAPURA(1)LANG 60ML",
+          "harga_beli": 11262,
+          "harga_jual": 0,
+          "expired_date": "2030-08-31",
+          "batch": "P000807",
+          "jumlah": 6,
+          "subtotal": 67572
+        },
+        {
+          "no": 4,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "CURVIT CL EMUL 175ML",
+          "harga_beli": 50900,
+          "harga_jual": 0,
+          "expired_date": "2027-09-30",
+          "batch": "25J0047",
+          "jumlah": 1,
+          "subtotal": 50900
+        },
+        {
+          "no": 5,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "OBH COM BTUK BDHAK MTHOL 100ML",
+          "harga_beli": 14200,
+          "harga_jual": 0,
+          "expired_date": "2027-10-31",
+          "batch": "5NK021",
+          "jumlah": 6,
+          "subtotal": 85200
+        },
+        {
+          "no": 6,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "MIXALGIN KAP 100'S",
+          "harga_beli": 86900,
+          "harga_jual": 0,
+          "expired_date": "2027-10-31",
+          "batch": "0860284",
+          "jumlah": 200,
+          "subtotal": 173800
+        },
+        {
+          "no": 7,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "VENTOLIN INH 100MCG",
+          "harga_beli": 146074,
+          "harga_jual": 0,
+          "expired_date": "2027-03-31",
+          "batch": "N39K",
+          "jumlah": 1,
+          "subtotal": 146074
+        },
+        {
+          "no": 8,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "KALMETHASONE 200'S",
+          "harga_beli": 25000,
+          "harga_jual": 0,
+          "expired_date": "2027-08-31",
+          "batch": "ED54091",
+          "jumlah": 600,
+          "subtotal": 75000
+        },
+        {
+          "no": 9,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "TOLAKANGIN CAIR 12'S",
+          "harga_beli": 40541,
+          "harga_jual": 0,
+          "expired_date": "2027-08-31",
+          "batch": "TACD12",
+          "jumlah": 36,
+          "subtotal": 121623
+        },
+        {
+          "no": 10,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "WOODS EXP 60ML",
+          "harga_beli": 19909,
+          "harga_jual": 0,
+          "expired_date": "2027-09-30",
+          "batch": "55547",
+          "jumlah": 3,
+          "subtotal": 59727
+        },
+        {
+          "no": 11,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "VENTOLIN NEBULES 2.5MG 4X5 AMP",
+          "harga_beli": 329048,
+          "harga_jual": 0,
+          "expired_date": "2027-02-28",
+          "batch": "25B0004",
+          "jumlah": 20,
+          "subtotal": 329048
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 7
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 04:31:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "JMR-2602-00156",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-05 10:08:54",
+      "tanggal_waktu_obat_datang": "2026-02-05 10:08:54",
+      "total": 39937,
+      "diskon": 0,
+      "bayar": 44330,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "KOMIX JRKNPS 30X7ML",
+          "harga_beli": 39937,
+          "harga_jual": 0,
+          "expired_date": "2027-06-30",
+          "batch": "HF392",
+          "jumlah": 30,
+          "subtotal": 39937
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 8
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 04:32:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "NPS-2602-628174",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-09 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-09 00:00:00",
+      "total": 412713.89,
+      "diskon": 0,
+      "bayar": 462239.89,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "DEMACOLIN TAB HARGA KHUSUS ;BOX/100",
+          "harga_beli": 47175,
+          "harga_jual": 0,
+          "expired_date": "2029-10-31",
+          "batch": "25KA028",
+          "jumlah": 600,
+          "subtotal": 283050
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "PIMTRACOL CHERRY SYR 60ML NR ;FL/60ML",
+          "harga_beli": 17802.18,
+          "harga_jual": 0,
+          "expired_date": "2027-10-31",
+          "batch": "83510006",
+          "jumlah": 6,
+          "subtotal": 85450
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "ANAKONIDIN OBH SYR 30ML NORET ;FL/30ML",
+          "harga_beli": 8991,
+          "harga_jual": 0,
+          "expired_date": "2028-01-31",
+          "batch": "A26A03",
+          "jumlah": 3,
+          "subtotal": 26164
+        },
+        {
+          "no": 4,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "OBH CORI ANAK MADU BTK+FLU NR ;BTL60ML",
+          "harga_beli": 16467.96,
+          "harga_jual": 0,
+          "expired_date": "2027-10-31",
+          "batch": "5NK044",
+          "jumlah": 3,
+          "subtotal": 47922
+        },
+        {
+          "no": 5,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "OBH TROP * EXTRA ANAK STRAW NR ;BTL,60ML",
+          "harga_beli": 19647,
+          "harga_jual": 0,
+          "expired_date": "2027-09-30",
+          "batch": "CI0251",
+          "jumlah": 3,
+          "subtotal": 57173
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 9
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 04:35:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "NPS-2602-628175",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-09 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-09 00:00:00",
+      "total": 1121199.79,
+      "diskon": 0,
+      "bayar": 1255743.79,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "NA DIKLO 50MG/DIKLO SOD PHP NR ;BX/50TAB",
+          "harga_beli": 11100,
+          "harga_jual": 0,
+          "expired_date": "2029-08-31",
+          "batch": "86365012",
+          "jumlah": 400,
+          "subtotal": 44400
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "OBAT SAKIT GIGI /KAKAK TUA/ NR ;TUBE/2ML",
+          "harga_beli": 12543,
+          "harga_jual": 0,
+          "expired_date": "2028-01-31",
+          "batch": "1602EA",
+          "jumlah": 3,
+          "subtotal": 34807
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "OBH (PUTIH) ITRASAL 100ML NR ;FL/100ML",
+          "harga_beli": 7037.40,
+          "harga_jual": 0,
+          "expired_date": "2029-06-30",
+          "batch": "506056/59",
+          "jumlah": 6,
+          "subtotal": 32724
+        },
+        {
+          "no": 4,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "PROMAG TAB KUNYAH 4X30\" NORET ;BOX/120TAB",
+          "harga_beli": 98004.12,
+          "harga_jual": 0,
+          "expired_date": "2028-07-31",
+          "batch": "KTPRER5457",
+          "jumlah": 2160,
+          "subtotal": 540983
+        },
+        {
+          "no": 5,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "SUTRA FIESTA STRAW 3'S ;PAK/3",
+          "harga_beli": 13919.40,
+          "harga_jual": 0,
+          "expired_date": "2030-06-30",
+          "batch": "RS574701",
+          "jumlah": 6,
+          "subtotal": 77252
+        },
+        {
+          "no": 6,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "SUTRA 3'S CLASSIC /MERAH ;PAK/3",
+          "harga_beli": 6293.70,
+          "harga_jual": 0,
+          "expired_date": "2030-07-31",
+          "batch": "M01250804",
+          "jumlah": 24,
+          "subtotal": 120839
+        },
+        {
+          "no": 7,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "SUTRA GERIGI 12'S/BIRU NORETUR ;PAK/12",
+          "harga_beli": 29781.30,
+          "harga_jual": 0,
+          "expired_date": "2030-08-31",
+          "batch": "M42250905",
+          "jumlah": 3,
+          "subtotal": 75942
+        },
+        {
+          "no": 8,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "SUTRA OKE 12'S NORETUR ;PAK/12",
+          "harga_beli": 29781.30,
+          "harga_jual": 0,
+          "expired_date": "2030-01-31",
+          "batch": "M46250205",
+          "jumlah": 3,
+          "subtotal": 71475
+        },
+        {
+          "no": 9,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "HYPAFIX 5CM X 1M KECIL NORETUR ;ROL",
+          "harga_beli": 23698.50,
+          "harga_jual": 0,
+          "expired_date": "2030-01-31",
+          "batch": "52320230",
+          "jumlah": 3,
+          "subtotal": 65764
+        },
+        {
+          "no": 10,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "SALEP SRITI FU QING NORETUR ;TUBE,10GR",
+          "harga_beli": 8750.13,
+          "harga_jual": 0,
+          "expired_date": "2028-10-31",
+          "batch": "23120122",
+          "jumlah": 10,
+          "subtotal": 78751
+        },
+        {
+          "no": 11,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "RAPET WANGI KAPLET NORETUR ;BX/10CAP",
+          "harga_beli": 10624.92,
+          "harga_jual": 0,
+          "expired_date": "2028-08-31",
+          "batch": "8E001H25",
+          "jumlah": 50,
+          "subtotal": 45156
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 10
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 04:36:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "NPS-2602-628176",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-09 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-09 00:00:00",
+      "total": 874315.85,
+      "diskon": 0,
+      "bayar": 979233.85,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "ALLETROL COMP EYE DROP NORETUR ;FL/5ML",
+          "harga_beli": 17760,
+          "harga_jual": 0,
+          "expired_date": "2027-10-31",
+          "batch": "D2060036",
+          "jumlah": 6,
+          "subtotal": 101232
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "ROHTO COOL TETES MATA NORETUR ;BTL,7ML",
+          "harga_beli": 16733.25,
+          "harga_jual": 0,
+          "expired_date": "2028-09-30",
+          "batch": "PIRF075",
+          "jumlah": 6,
+          "subtotal": 93372
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "ENTROSTOP (ANAK) SACH 10ML NR ;BX/6SACHET",
+          "harga_beli": 15140.40,
+          "harga_jual": 0,
+          "expired_date": "2027-04-30",
+          "batch": "MD117",
+          "jumlah": 18,
+          "subtotal": 45421
+        },
+        {
+          "no": 4,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "PROMAG GAZERO HERBAL @15ML/NR ;BX/6SACHET",
+          "harga_beli": 14985,
+          "harga_jual": 0,
+          "expired_date": "2027-10-31",
+          "batch": "MK459",
+          "jumlah": 36,
+          "subtotal": 89910
+        },
+        {
+          "no": 5,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "MYK KAPAK 28ML NORETUR ;FL/28ML",
+          "harga_beli": 37749.99,
+          "harga_jual": 0,
+          "expired_date": "2030-08-31",
+          "batch": "11500845-2",
+          "jumlah": 3,
+          "subtotal": 109852
+        },
+        {
+          "no": 6,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "WOODS' LOZ.ORIGINAL NORET ;BX/15SCH",
+          "harga_beli": 94461,
+          "harga_jual": 0,
+          "expired_date": "2029-07-31",
+          "batch": "726434",
+          "jumlah": 12,
+          "subtotal": 94461
+        },
+        {
+          "no": 7,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "HANSAPLAST 4,5M X 1,25M NORET ;BOX,10ROL",
+          "harga_beli": 117693.30,
+          "harga_jual": 0,
+          "expired_date": "2028-09-30",
+          "batch": "54356714",
+          "jumlah": 10,
+          "subtotal": 111808
+        },
+        {
+          "no": 10,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "GABAPENTIN 300MG DEXA NORETUR ;BOX/30",
+          "harga_beli": 166500,
+          "harga_jual": 0,
+          "expired_date": "2027-06-30",
+          "batch": "56H0790",
+          "jumlah": 200,
+          "subtotal": 99900
+        },
+        {
+          "no": 11,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "GENTAMICIN SK KF NORETUR ;8X/10TB*5G",
+          "harga_beli": 29637,
+          "harga_jual": 0,
+          "expired_date": "2027-05-31",
+          "batch": "E50872M",
+          "jumlah": 80,
+          "subtotal": 26673
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 11
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 12:48:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "NPS-2602-628177",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-09 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-09 00:00:00",
+      "total": 217111.25,
+      "diskon": 0,
+      "bayar": 243164.25,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "GLIBENCLAMIDE 5MG (INDO) NORET ;BX/100",
+          "harga_beli": 29970,
+          "harga_jual": 0,
+          "expired_date": "2027-11-30",
+          "batch": "25G11440",
+          "jumlah": 300,
+          "subtotal": 89910
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "BETAMETASON 0,1% CR (K-F) NR ;TUBE 5GR",
+          "harga_beli": 2460.87,
+          "harga_jual": 0,
+          "expired_date": "2027-10-31",
+          "batch": "J52090M",
+          "jumlah": 25,
+          "subtotal": 56908
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "METHYLPREDNISOLONE 8MG DEXA(NR ;BX/100TAB",
+          "harga_beli": 59032.02,
+          "harga_jual": 0,
+          "expired_date": "2029-06-30",
+          "batch": "56C4082",
+          "jumlah": 200,
+          "subtotal": 86187
+        },
+        {
+          "no": 4,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "MKP GAJAR 30ML PLST NORETUR ;FL/30ML",
+          "harga_beli": 9965.58,
+          "harga_jual": 0,
+          "expired_date": "2029-10-31",
+          "batch": "5390055T",
+          "jumlah": 3,
+          "subtotal": 29897
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 12
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 12:51:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "01549/SJA/02/26",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-09 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-09 00:00:00",
+      "total": 567756,
+      "diskon": 0,
+      "bayar": 630209,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "ANTASIDA DOEN BOX IFI 100'S",
+          "harga_beli": 8742,
+          "harga_jual": 0,
+          "expired_date": "2028-10-31",
+          "batch": "26944510",
+          "jumlah": 600,
+          "subtotal": 52452
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "CAVIPLEX BOX 100'S",
+          "harga_beli": 60638,
+          "harga_jual": 0,
+          "expired_date": "2027-11-30",
+          "batch": "F1460273",
+          "jumlah": 200,
+          "subtotal": 121276
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "DEXAHARSEN 0,5 MG BOX 200'S",
+          "harga_beli": 36133,
+          "harga_jual": 0,
+          "expired_date": "2031-01-31",
+          "batch": "6083001",
+          "jumlah": 400,
+          "subtotal": 72266
+        },
+        {
+          "no": 4,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "DEXAHARSEN 0,75 MG BOX 200'S",
+          "harga_beli": 39847,
+          "harga_jual": 0,
+          "expired_date": "2030-11-30",
+          "batch": "5085093",
+          "jumlah": 400,
+          "subtotal": 79694
+        },
+        {
+          "no": 5,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "INAMID BOX 100'S",
+          "harga_beli": 18801,
+          "harga_jual": 0,
+          "expired_date": "2028-09-30",
+          "batch": "5040023-1",
+          "jumlah": 200,
+          "subtotal": 37602
+        },
+        {
+          "no": 6,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "ISOSORBIDE DINITRATE (ISDN) BOX 100'S",
+          "harga_beli": 23853,
+          "harga_jual": 0,
+          "expired_date": "2027-11-30",
+          "batch": "A02343KC",
+          "jumlah": 100,
+          "subtotal": 23853
+        },
+        {
+          "no": 7,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "LOPAMID BOX 100'S",
+          "harga_beli": 22027,
+          "harga_jual": 0,
+          "expired_date": "2027-09-30",
+          "batch": "5145006",
+          "jumlah": 200,
+          "subtotal": 44054
+        },
+        {
+          "no": 8,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "MOLACORT 0,75 MG BOX 200'S",
+          "harga_beli": 27536,
+          "harga_jual": 0,
+          "expired_date": "2030-11-30",
+          "batch": "M05HN183",
+          "jumlah": 400,
+          "subtotal": 55072
+        },
+        {
+          "no": 9,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "SOLDEXTAM KAPLET - (SL) 200'S",
+          "harga_beli": 27873,
+          "harga_jual": 0,
+          "expired_date": "2030-07-31",
+          "batch": "TSDXG5074",
+          "jumlah": 200,
+          "subtotal": 27873
+        },
+        {
+          "no": 10,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "WINATIN BOX 100'S",
+          "harga_beli": 26807,
+          "harga_jual": 0,
+          "expired_date": "2027-11-30",
+          "batch": "HN00T",
+          "jumlah": 200,
+          "subtotal": 53614
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 13
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 12:54:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "01552/SJA/02/26",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-09 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-09 00:00:00",
+      "total": 119788,
+      "diskon": 0,
+      "bayar": 132965,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "AMLODIPIN 10 MG SAMCO 100'S",
+          "harga_beli": 9489,
+          "harga_jual": 0,
+          "expired_date": "2028-12-31",
+          "batch": "5202EN",
+          "jumlah": 300,
+          "subtotal": 47445
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "NOVAXICAM KAP BOX 100'S",
+          "harga_beli": 21010,
+          "harga_jual": 0,
+          "expired_date": "2027-11-30",
+          "batch": "25110347",
+          "jumlah": 500,
+          "subtotal": 21010
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "SAMCOFENAC 50 MG BOX 100'S",
+          "harga_beli": 17111,
+          "harga_jual": 0,
+          "expired_date": "2028-08-31",
+          "batch": "11757EH",
+          "jumlah": 100,
+          "subtotal": 51333
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 14
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 12:56:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "01553/SJA/02/26",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-09 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-09 00:00:00",
+      "total": 254124,
+      "diskon": 0,
+      "bayar": 282078,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "ALPARA KAPLET 150'S",
+          "harga_beli": 86657,
+          "harga_jual": 0,
+          "expired_date": "2028-11-30",
+          "batch": "A06HN287",
+          "jumlah": 300,
+          "subtotal": 173314
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "TERA-F BOX 100'S",
+          "harga_beli": 40405,
+          "harga_jual": 0,
+          "expired_date": "2028-12-31",
+          "batch": "T 12033 BE",
+          "jumlah": 200,
+          "subtotal": 80810
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 15
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 12:59:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "01547/SJA/02/26",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-09 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-09 00:00:00",
+      "total": 444000,
+      "diskon": 0,
+      "bayar": 492840,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "ANASTAN FORTE BOX 100'S",
+          "harga_beli": 31690,
+          "harga_jual": 0,
+          "expired_date": "2028-11-30",
+          "batch": "K002045",
+          "jumlah": 200,
+          "subtotal": 63380
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "CARBIDU 0,5 MG BOX 200'S",
+          "harga_beli": 25617,
+          "harga_jual": 0,
+          "expired_date": "2028-11-30",
+          "batch": "DK0681",
+          "jumlah": 200,
+          "subtotal": 25617
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "DICLOFENAC SODIUM SAMCO 50 MG 100'S",
+          "harga_beli": 12965,
+          "harga_jual": 0,
+          "expired_date": "2028-08-31",
+          "batch": "11811EH",
+          "jumlah": 300,
+          "subtotal": 38895
+        },
+        {
+          "no": 4,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "ERLADERM-N CREAM",
+          "harga_beli": 4365,
+          "harga_jual": 0,
+          "expired_date": "2027-09-30",
+          "batch": "01960028",
+          "jumlah": 12,
+          "subtotal": 52380
+        },
+        {
+          "no": 5,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "ETAMOX BOX 100'S",
+          "harga_beli": 47250,
+          "harga_jual": 0,
+          "expired_date": "2027-11-30",
+          "batch": "KQ4028",
+          "jumlah": 100,
+          "subtotal": 47250
+        },
+        {
+          "no": 6,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "FARSIFEN SYR",
+          "harga_beli": 5321,
+          "harga_jual": 0,
+          "expired_date": "2028-12-31",
+          "batch": "SV03N",
+          "jumlah": 6,
+          "subtotal": 31926
+        },
+        {
+          "no": 7,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "HUFAMAG PLUS BOX 100'S",
+          "harga_beli": 29786,
+          "harga_jual": 0,
+          "expired_date": "2027-11-30",
+          "batch": "L502645",
+          "jumlah": 200,
+          "subtotal": 59572
+        },
+        {
+          "no": 8,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "LANSOPRAZOLE 30 MG NUFARINDO 20'S",
+          "harga_beli": 9901,
+          "harga_jual": 0,
+          "expired_date": "2028-04-30",
+          "batch": "5178028",
+          "jumlah": 120,
+          "subtotal": 59406
+        },
+        {
+          "no": 9,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "LICOKALK BOX 100'S",
+          "harga_beli": 20878,
+          "harga_jual": 0,
+          "expired_date": "2030-09-30",
+          "batch": "IRC026085",
+          "jumlah": 200,
+          "subtotal": 41756
+        },
+        {
+          "no": 10,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "PARAFEN KAPLET 100'S",
+          "harga_beli": 23818,
+          "harga_jual": 0,
+          "expired_date": "2027-12-31",
+          "batch": "251203325",
+          "jumlah": 100,
+          "subtotal": 23818
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 16
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 13:00:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "AJA-2602-004949",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-09 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-09 00:00:00",
+      "total": 1148962,
+      "diskon": 0,
+      "bayar": 1275348,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "PARACETAMOL 500MG 100'S/NOVA",
+          "harga_beli": 16300,
+          "harga_jual": 0,
+          "expired_date": "2027-12-31",
+          "batch": "2208117",
+          "jumlah": 1000,
+          "subtotal": 146700
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "OMEPRAZOLE 20MG 100'S/NOVA",
+          "harga_beli": 28000,
+          "harga_jual": 0,
+          "expired_date": "2027-06-30",
+          "batch": "2506-10280",
+          "jumlah": 300,
+          "subtotal": 67200
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "MELOXICAM 15MG 100'S/NOVA (NON RETUR)",
+          "harga_beli": 22200,
+          "harga_jual": 0,
+          "expired_date": "2027-11-30",
+          "batch": "251104175",
+          "jumlah": 300,
+          "subtotal": 59940
+        },
+        {
+          "no": 4,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "LODIA TAB 2MG 100'S",
+          "harga_beli": 125000,
+          "harga_jual": 0,
+          "expired_date": "2027-11-30",
+          "batch": "FL8090A",
+          "jumlah": 100,
+          "subtotal": 120000
+        },
+        {
+          "no": 5,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "ALLOPURINOL 100MG 100'S/NOVA (NO RET)",
+          "harga_beli": 17850,
+          "harga_jual": 0,
+          "expired_date": "2027-12-31",
+          "batch": "251204106",
+          "jumlah": 1000,
+          "subtotal": 160650
+        },
+        {
+          "no": 6,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "MEFENAMIC ACID 500MG 100/NOVA(NO RET)",
+          "harga_beli": 21000,
+          "harga_jual": 0,
+          "expired_date": "2027-12-31",
+          "batch": "251203170",
+          "jumlah": 1000,
+          "subtotal": 189000
+        },
+        {
+          "no": 7,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "X-FLAM 50MG 30'S",
+          "harga_beli": 62000,
+          "harga_jual": 0,
+          "expired_date": "2030-11-30",
+          "batch": "SML067",
+          "jumlah": 30,
+          "subtotal": 105400
+        },
+        {
+          "no": 8,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "AMOXICILLIN 500MG 100'S/NOVA(NO RETU)",
+          "harga_beli": 47000,
+          "harga_jual": 0,
+          "expired_date": "2029-12-31",
+          "batch": "251235115",
+          "jumlah": 200,
+          "subtotal": 77550
+        },
+        {
+          "no": 9,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "COPAL CHEST RUB 25GR",
+          "harga_beli": 14000,
+          "harga_jual": 0,
+          "expired_date": "2027-10-31",
+          "batch": "2510005",
+          "jumlah": 6,
+          "subtotal": 73500
+        },
+        {
+          "no": 10,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "HOTIN CR STRONG TUBE 60GR",
+          "harga_beli": 18000,
+          "harga_jual": 0,
+          "expired_date": "2028-11-30",
+          "batch": "25H08617",
+          "jumlah": 6,
+          "subtotal": 91800
+        },
+        {
+          "no": 11,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "FRESH CARE CITRUS 10ML(HIJAU)",
+          "harga_beli": 11560,
+          "harga_jual": 0,
+          "expired_date": "2028-08-31",
+          "batch": "25H05482",
+          "jumlah": 6,
+          "subtotal": 57222
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 17
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 13:02:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "AJA-2602-004950",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-09 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-09 00:00:00",
+      "total": 432402,
+      "diskon": 0,
+      "bayar": 479966,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "HOTIN CR STRONG TUBE 120GR",
+          "harga_beli": 30000,
+          "harga_jual": 0,
+          "expired_date": "2028-11-30",
+          "batch": "25H08613",
+          "jumlah": 3,
+          "subtotal": 76500
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "BENOSON N CR 5GR(KUNING)",
+          "harga_beli": 17000,
+          "harga_jual": 0,
+          "expired_date": "2030-10-31",
+          "batch": "LCL01054",
+          "jumlah": 3,
+          "subtotal": 49470
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "SANMOL DROPS*15ML",
+          "harga_beli": 18800,
+          "harga_jual": 0,
+          "expired_date": "2027-12-31",
+          "batch": "FW1554",
+          "jumlah": 6,
+          "subtotal": 108288
+        },
+        {
+          "no": 4,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "SANMOL SYR*60ML",
+          "harga_beli": 17200,
+          "harga_jual": 0,
+          "expired_date": "2027-09-30",
+          "batch": "FJ9823",
+          "jumlah": 12,
+          "subtotal": 198144
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 18
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 13:05:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "02128/SJA/03/26",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-03-11 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-03-11 00:00:00",
+      "total": 458490,
+      "diskon": 0,
+      "bayar": 508924,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "COD LIVER OIL 50'S BOTOL",
+          "harga_beli": 9375,
+          "harga_jual": 0,
+          "expired_date": "2028-07-31",
+          "batch": "4903EA",
+          "jumlah": 8,
+          "subtotal": 56250
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "GRATHEOS 10 X 10 BOX",
+          "harga_beli": 21284,
+          "harga_jual": 0,
+          "expired_date": "102029",
+          "batch": "B5J324",
+          "jumlah": 200,
+          "subtotal": 42568
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "KAOTIN SYR",
+          "harga_beli": 7539,
+          "harga_jual": 0,
+          "expired_date": "2027-11-30",
+          "batch": "S1160291",
+          "jumlah": 6,
+          "subtotal": 45234
+        },
+        {
+          "no": 4,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "LOKEV 100'S",
+          "harga_beli": 38475,
+          "harga_jual": 0,
+          "expired_date": "2029-12-31",
+          "batch": "JMOOX",
+          "jumlah": 200,
+          "subtotal": 76950
+        },
+        {
+          "no": 5,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "MOLACORT 0,75 MG BOX 200'S",
+          "harga_beli": 27536,
+          "harga_jual": 0,
+          "expired_date": "2030-12-31",
+          "batch": "M05HD196",
+          "jumlah": 400,
+          "subtotal": 55072
+        },
+        {
+          "no": 6,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "NOVASTAN SIRUP",
+          "harga_beli": 5947,
+          "harga_jual": 0,
+          "expired_date": "2027-12-31",
+          "batch": "251201180",
+          "jumlah": 6,
+          "subtotal": 35682
+        },
+        {
+          "no": 7,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "NUFADOL KAP BOX 100'S",
+          "harga_beli": 31827,
+          "harga_jual": 0,
+          "expired_date": "2027-12-31",
+          "batch": "5016038",
+          "jumlah": 100,
+          "subtotal": 31827
+        },
+        {
+          "no": 8,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "OBH SURYA 100ML",
+          "harga_beli": 5194,
+          "harga_jual": 0,
+          "expired_date": "2030-02-28",
+          "batch": "B02124",
+          "jumlah": 10,
+          "subtotal": 51940
+        },
+        {
+          "no": 9,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "SAMCOFENAC 50 MG BOX 100'S",
+          "harga_beli": 17111,
+          "harga_jual": 0,
+          "expired_date": "2028-10-31",
+          "batch": "11708EL",
+          "jumlah": 300,
+          "subtotal": 51333
+        },
+        {
+          "no": 10,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "VITAMIN B COMPLEX 180 MG 100'S PIM",
+          "harga_beli": 5817,
+          "harga_jual": 0,
+          "expired_date": "2027-12-31",
+          "batch": "24512201",
+          "jumlah": 200,
+          "subtotal": 11634
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 19
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 13:10:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "02127/SJA/03/26",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-03-11 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-03-11 00:00:00",
+      "total": 662582,
+      "diskon": 0,
+      "bayar": 735466,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "ANASTAN FORTE BOX 100'S",
+          "harga_beli": 31690,
+          "harga_jual": 0,
+          "expired_date": "2028-11-30",
+          "batch": "K002045",
+          "jumlah": 200,
+          "subtotal": 63380
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "ANTASIDA DOEN BOX IFI 100'S",
+          "harga_beli": 8242,
+          "harga_jual": 0,
+          "expired_date": "2028-10-31",
+          "batch": "26944510",
+          "jumlah": 600,
+          "subtotal": 49452
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "BINTAMOX 500MG BOX 100'S",
+          "harga_beli": 48142,
+          "harga_jual": 0,
+          "expired_date": "2027-07-31",
+          "batch": "CBTXA54134",
+          "jumlah": 100,
+          "subtotal": 48142
+        },
+        {
+          "no": 4,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "ERLADERM-N CREAM",
+          "harga_beli": 4365,
+          "harga_jual": 0,
+          "expired_date": "2027-11-30",
+          "batch": "01960034",
+          "jumlah": 10,
+          "subtotal": 43650
+        },
+        {
+          "no": 5,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "INFALGIN KAPLET 100'S",
+          "harga_beli": 30405,
+          "harga_jual": 0,
+          "expired_date": "2030-11-30",
+          "batch": "B5K063",
+          "jumlah": 100,
+          "subtotal": 30405
+        },
+        {
+          "no": 6,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "LERZIN BOX 100'S",
+          "harga_beli": 34875,
+          "harga_jual": 0,
+          "expired_date": "2028-01-31",
+          "batch": "JK059",
+          "jumlah": 200,
+          "subtotal": 69750
+        },
+        {
+          "no": 7,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "LICOKALK BOX 100'S",
+          "harga_beli": 20878,
+          "harga_jual": 0,
+          "expired_date": "2030-11-30",
+          "batch": "KRC026105",
+          "jumlah": 200,
+          "subtotal": 41756
+        },
+        {
+          "no": 8,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "PIROXICAM 20 MG CAPS IFI 120'S",
+          "harga_beli": 17851,
+          "harga_jual": 0,
+          "expired_date": "2028-12-31",
+          "batch": "24814512",
+          "jumlah": 1000,
+          "subtotal": 178510
+        },
+        {
+          "no": 9,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "SCOPMA PLUS BOX",
+          "harga_beli": 96791,
+          "harga_jual": 0,
+          "expired_date": "2029-12-31",
+          "batch": "GL05C",
+          "jumlah": 100,
+          "subtotal": 96791
+        },
+        {
+          "no": 10,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "SOLINFEC CREAM",
+          "harga_beli": 6791,
+          "harga_jual": 0,
+          "expired_date": "2029-10-31",
+          "batch": "QF01J",
+          "jumlah": 6,
+          "subtotal": 40746
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 20
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 13:14:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "02129/SJA/03/26",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-03-11 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-03-11 00:00:00",
+      "total": 192997,
+      "diskon": 0,
+      "bayar": 214227,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "CALCIFAR PLUS KAPLET 100'S",
+          "harga_beli": 17483,
+          "harga_jual": 0,
+          "expired_date": "2027-12-31",
+          "batch": "AX06R",
+          "jumlah": 100,
+          "subtotal": 17483
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "ETABION BOX 100'S",
+          "harga_beli": 21874,
+          "harga_jual": 0,
+          "expired_date": "2028-10-31",
+          "batch": "JR1047",
+          "jumlah": 100,
+          "subtotal": 21874
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "INFUS SODIUM CHLORIDE 0.9% 500 ML (NS)",
+          "harga_beli": 7682,
+          "harga_jual": 0,
+          "expired_date": "2028-01-31",
+          "batch": "2A1A6A031",
+          "jumlah": 20,
+          "subtotal": 153640
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 21
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 13:15:40",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "02130/SJA/03/26",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-03-11 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-03-11 00:00:00",
+      "total": 217934,
+      "diskon": 0,
+      "bayar": 241907,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "COPARCETIN KAPLET 100'S",
+          "harga_beli": 46512,
+          "harga_jual": 0,
+          "expired_date": "2028-01-31",
+          "batch": "EA1861",
+          "jumlah": 200,
+          "subtotal": 93024
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "HUFAGRIPP FORTE BOX 100'S",
+          "harga_beli": 39651,
+          "harga_jual": 0,
+          "expired_date": "2027-12-31",
+          "batch": "L101555",
+          "jumlah": 200,
+          "subtotal": 79302
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "NEO PROTIFED TABLET",
+          "harga_beli": 45608,
+          "harga_jual": 0,
+          "expired_date": "2027-04-30",
+          "batch": "TD268G",
+          "jumlah": 100,
+          "subtotal": 45608
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 22
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 13:19:30",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "02131/SJA/03/26",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-03-11 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-03-11 00:00:00",
+      "total": 40991,
+      "diskon": 0,
+      "bayar": 45500,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "LODECON FORTE KAPLET 100'S",
+          "harga_beli": 40991,
+          "harga_jual": 0,
+          "expired_date": "2027-09-30",
+          "batch": "TLDFI5178",
+          "jumlah": 100,
+          "subtotal": 40991
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 23
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 13:20:50",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "JMR-2603-00451",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-03-12 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-03-12 00:00:00",
+      "total": 308729,
+      "diskon": 0,
+      "bayar": 342689,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "OBH COM ANAK BTUK FLU 60ML STRW",
+          "harga_beli": 14836,
+          "harga_jual": 0,
+          "expired_date": "2027-10-31",
+          "batch": "5NK003",
+          "jumlah": 6,
+          "subtotal": 89016
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "HUFAGRIP FLU SYR 60ML",
+          "harga_beli": 20591,
+          "harga_jual": 0,
+          "expired_date": "2028-12-31",
+          "batch": "A902555",
+          "jumlah": 12,
+          "subtotal": 247092
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 24
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 13:23:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "JMR-2603-00452",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-03-12 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-03-12 00:00:00",
+      "total": 186322,
+      "diskon": 0,
+      "bayar": 206817,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "HUFAGRIP BP SYR 60ML",
+          "harga_beli": 17252,
+          "harga_jual": 0,
+          "expired_date": "2029-12-31",
+          "batch": "1045",
+          "jumlah": 12,
+          "subtotal": 207024
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 25
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 13:27:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "JM1-2603-01208",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-03-12 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-03-12 00:00:00",
+      "total": 510499,
+      "diskon": 0,
+      "bayar": 566654,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "INSTO COOL 7.5 ML",
+          "harga_beli": 13883,
+          "harga_jual": 0,
+          "expired_date": "2027-09-30",
+          "batch": "6-09.27",
+          "jumlah": 6,
+          "subtotal": 83298
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "POLYSILANE SYR 100ML",
+          "harga_beli": 21218,
+          "harga_jual": 0,
+          "expired_date": "2028-11-30",
+          "batch": "3M-11.28",
+          "jumlah": 3,
+          "subtotal": 63654
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "POLYSILANE TAB 5X8'S",
+          "harga_beli": 38000,
+          "harga_jual": 0,
+          "expired_date": "2028-09-30",
+          "batch": "1M-09.28",
+          "jumlah": 40,
+          "subtotal": 38000
+        },
+        {
+          "no": 4,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "FATIGON KAP 60'S",
+          "harga_beli": 67568,
+          "harga_jual": 0,
+          "expired_date": "2027-07-31",
+          "batch": "07.27",
+          "jumlah": 60,
+          "subtotal": 67568
+        },
+        {
+          "no": 5,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "DEXTEEM PLUS TAB 100'S E10223",
+          "harga_beli": 36800,
+          "harga_jual": 0,
+          "expired_date": "2029-11-30",
+          "batch": "91-11.29",
+          "jumlah": 300,
+          "subtotal": 110400
+        },
+        {
+          "no": 6,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "CANDESARTAN 16MG(DX) TAB 30'S",
+          "harga_beli": 27526,
+          "harga_jual": 0,
+          "expired_date": "2027-06-30",
+          "batch": "91-06.27",
+          "jumlah": 60,
+          "subtotal": 55052
+        },
+        {
+          "no": 7,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "DEXTAMIN TAB 100'S",
+          "harga_beli": 181500,
+          "harga_jual": 0,
+          "expired_date": "2028-07-31",
+          "batch": "020-07.28",
+          "jumlah": 100,
+          "subtotal": 181500
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 26
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 13:30:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "JM1-2603-01207",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-03-12 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-03-12 00:00:00",
+      "total": 1387119,
+      "diskon": 0,
+      "bayar": 1539702,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "FLAGYSTATIN SUPPO",
+          "harga_beli": 213652,
+          "harga_jual": 0,
+          "expired_date": "2028-07-31",
+          "batch": "N247A",
+          "jumlah": 10,
+          "subtotal": 213652
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "NEURALGIN RX 100'S",
+          "harga_beli": 112000,
+          "harga_jual": 0,
+          "expired_date": "2027-11-30",
+          "batch": "056197",
+          "jumlah": 200,
+          "subtotal": 224000
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "VICKS VAPORUB 10 GR",
+          "harga_beli": 7632,
+          "harga_jual": 0,
+          "expired_date": "2027-11-30",
+          "batch": "26298X1",
+          "jumlah": 12,
+          "subtotal": 91584
+        },
+        {
+          "no": 4,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "NATUR E WHITE SC 16'S",
+          "harga_beli": 43497,
+          "harga_jual": 0,
+          "expired_date": "2027-09-30",
+          "batch": "SEI1921",
+          "jumlah": 48,
+          "subtotal": 130491
+        },
+        {
+          "no": 5,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "DEXAHARSEN 0.75MG TAB 200'S",
+          "harga_beli": 44275,
+          "harga_jual": 0,
+          "expired_date": "2030-11-30",
+          "batch": "5085087",
+          "jumlah": 600,
+          "subtotal": 132825
+        },
+        {
+          "no": 6,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "COUNTERPAIN CR 5GR",
+          "harga_beli": 7700,
+          "harga_jual": 0,
+          "expired_date": "2028-09-30",
+          "batch": "5J6072",
+          "jumlah": 6,
+          "subtotal": 46200
+        },
+        {
+          "no": 7,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "DAKTARIN CREAM 5 GR",
+          "harga_beli": 25670,
+          "harga_jual": 0,
+          "expired_date": "2028-01-31",
+          "batch": "5J5401",
+          "jumlah": 3,
+          "subtotal": 77010
+        },
+        {
+          "no": 8,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "INSTO EYE DROPS 7.5 ML",
+          "harga_beli": 12280,
+          "harga_jual": 0,
+          "expired_date": "2029-10-31",
+          "batch": "2549051",
+          "jumlah": 10,
+          "subtotal": 122800
+        },
+        {
+          "no": 9,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "SCABIMITE CR 10GR",
+          "harga_beli": 48360,
+          "harga_jual": 0,
+          "expired_date": "2028-11-30",
+          "batch": "K25007",
+          "jumlah": 3,
+          "subtotal": 145080
+        },
+        {
+          "no": 10,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "SCABIMITE CR 30GR",
+          "harga_beli": 80600,
+          "harga_jual": 0,
+          "expired_date": "2028-11-30",
+          "batch": "K25003",
+          "jumlah": 2,
+          "subtotal": 161200
+        },
+        {
+          "no": 11,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "WOODS EXP 60ML",
+          "harga_beli": 19909,
+          "harga_jual": 0,
+          "expired_date": "2027-11-30",
+          "batch": "56559",
+          "jumlah": 3,
+          "subtotal": 59727
+        },
+        {
+          "no": 12,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "GLUCOSAMIN 500MG TAB 100'S",
+          "harga_beli": 178000,
+          "harga_jual": 0,
+          "expired_date": "2030-09-30",
+          "batch": "51398",
+          "jumlah": 100,
+          "subtotal": 178000
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 27
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 13:35:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "NPS-2603-634442",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-03-12 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-03-12 00:00:00",
+      "total": 431149.61,
+      "diskon": 0,
+      "bayar": 482883,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "ANAKONIDIN OBH SYR 30ML NORET ;FL/30ML",
+          "harga_beli": 8991,
+          "harga_jual": 0,
+          "expired_date": "2028-01-31",
+          "batch": "A26A03",
+          "jumlah": 6,
+          "subtotal": 52328
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "ANAKONIDIN OBH SYR 60ML NORET ;FL/60ML",
+          "harga_beli": 14652,
+          "harga_jual": 0,
+          "expired_date": "2027-12-31",
+          "batch": "L25A02/A26A10",
+          "jumlah": 6,
+          "subtotal": 85274
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "ANAKONIDIN SYR 30ML NORETUR ;FL/30ML",
+          "harga_beli": 8214,
+          "harga_jual": 0,
+          "expired_date": "2028-12-31",
+          "batch": "L25A02",
+          "jumlah": 3,
+          "subtotal": 23903
+        },
+        {
+          "no": 4,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "ANAKONIDIN SYR 60ML NORETUR ;FL/60ML",
+          "harga_beli": 13431,
+          "harga_jual": 0,
+          "expired_date": "2028-12-31",
+          "batch": "L25A11",
+          "jumlah": 3,
+          "subtotal": 39084
+        },
+        {
+          "no": 5,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "TERMOREX PLUS SYR 30ML NORETUR ;FL/30ML",
+          "harga_beli": 9990,
+          "harga_jual": 0,
+          "expired_date": "2027-12-31",
+          "batch": "L25A01",
+          "jumlah": 3,
+          "subtotal": 29071
+        },
+        {
+          "no": 6,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "TERMOREX PLUS SYR 60ML NORETUR ;FL/60ML",
+          "harga_beli": 16095,
+          "harga_jual": 0,
+          "expired_date": "2027-12-31",
+          "batch": "K25A15",
+          "jumlah": 3,
+          "subtotal": 46836
+        },
+        {
+          "no": 7,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "DEMACOLIN TAB NORETUR ;BOX/100",
+          "harga_beli": 47175,
+          "harga_jual": 0,
+          "expired_date": "2029-11-30",
+          "batch": "25LA012",
+          "jumlah": 300,
+          "subtotal": 141525
+        },
+        {
+          "no": 8,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "DEXTRAL CAP ;BOX150'S",
+          "harga_beli": 138750,
+          "harga_jual": 0,
+          "expired_date": "2027-12-31",
+          "batch": "D03HD114",
+          "jumlah": 250,
+          "subtotal": 104062
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 28
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 13:38:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "NPS-2603-634440",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-03-12 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-03-12 00:00:00",
+      "total": 637544.97,
+      "diskon": 0,
+      "bayar": 714049.97,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "COD LIVER OIL \"BTL 100'S NORET ;BTL/100CAP",
+          "harga_beli": 22200,
+          "harga_jual": 0,
+          "expired_date": "2029-02-28",
+          "batch": "4905EF",
+          "jumlah": 3,
+          "subtotal": 59940
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "DENOMIX KRIM 10GR NORETUR ;TUBE,10GR",
+          "harga_beli": 13858.35,
+          "harga_jual": 0,
+          "expired_date": "2027-10-31",
+          "batch": "5NK144",
+          "jumlah": 3,
+          "subtotal": 33260
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "DUMIN (KCL) TAB 500MG 100S NR ;BOX,100'S",
+          "harga_beli": 74461.02,
+          "harga_jual": 0,
+          "expired_date": "2028-06-30",
+          "batch": "E23341002",
+          "jumlah": 100,
+          "subtotal": 69249
+        },
+        {
+          "no": 4,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "FUNCIDERM KRIM 5 GR (KECIL) NR ;TUBE/5GR",
+          "harga_beli": 12953.70,
+          "harga_jual": 0,
+          "expired_date": "2030-08-31",
+          "batch": "M25A07",
+          "jumlah": 3,
+          "subtotal": 36918
+        },
+        {
+          "no": 5,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "ISOSORBIDE DINITRATE 5MG 'INDO' ;BOX/100",
+          "harga_beli": 22200,
+          "harga_jual": 0,
+          "expired_date": "2027-08-31",
+          "batch": "25ID1001",
+          "jumlah": 100,
+          "subtotal": 19980
+        },
+        {
+          "no": 6,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "KETOCONAZOLE CR DEXA(NORET)MT ;TUBE10GR",
+          "harga_beli": 7064.04,
+          "harga_jual": 0,
+          "expired_date": "2028-02-29",
+          "batch": "4951991",
+          "jumlah": 12,
+          "subtotal": 66119
+        },
+        {
+          "no": 7,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "MADU TJ (SACHET) ALL VARIAN NR ;BOX,12SACH",
+          "harga_beli": 9879,
+          "harga_jual": 0,
+          "expired_date": "2028-12-31",
+          "batch": "25H/25M/25N",
+          "jumlah": 144,
+          "subtotal": 94839
+        },
+        {
+          "no": 8,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "MADURASA \"JERUK\" MK ;BX/12SACH",
+          "harga_beli": 9353.97,
+          "harga_jual": 0,
+          "expired_date": "2028-09-30",
+          "batch": "BPMJ35I",
+          "jumlah": 72,
+          "subtotal": 55002
+        },
+        {
+          "no": 9,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "MYK KAPAK 56ML NORETUR ;FL/56ML",
+          "harga_beli": 68999.82,
+          "harga_jual": 0,
+          "expired_date": "2030-09-30",
+          "batch": "1150950-2",
+          "jumlah": 3,
+          "subtotal": 200789
+        },
+        {
+          "no": 10,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "OB HERBAL JUNIOR SYR 60ML N-RT ;BTL/60ML",
+          "harga_beli": 14815.17,
+          "harga_jual": 0,
+          "expired_date": "2027-10-31",
+          "batch": "AE003J25",
+          "jumlah": 3,
+          "subtotal": 42224
+        },
+        {
+          "no": 11,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "PI KANG SHUANG KRIM 5 GR* NR ;TUBE/5GR",
+          "harga_beli": 12765,
+          "harga_jual": 0,
+          "expired_date": "2028-10-31",
+          "batch": "0351007",
+          "jumlah": 6,
+          "subtotal": 67016
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 29
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 13:41:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "NPS-2603-634438",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-03-12 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-03-12 00:00:00",
+      "total": 94416.67,
+      "diskon": 0,
+      "bayar": 105746.67,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "SAMCODIN TABLET NORETUR ;BOX,100TAB",
+          "harga_beli": 57165,
+          "harga_jual": 0,
+          "expired_date": "2028-11-30",
+          "batch": "10411EM",
+          "jumlah": 200,
+          "subtotal": 114330
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 30
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 13:45:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "NPS-2603-634441",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-03-12 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-03-12 00:00:00",
+      "total": 367268.70,
+      "diskon": 0,
+      "bayar": 411340.70,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "PLOSSA (BIRU) BLUE MOUNTAIN NR ;FLS,8ML",
+          "harga_beli": 10342.98,
+          "harga_jual": 0,
+          "expired_date": "2028-02-29",
+          "batch": "00386",
+          "jumlah": 6,
+          "subtotal": 54611
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "MADU TJ JOYBEE \"JRK\" 100ML NR ;BTL,100ML",
+          "harga_beli": 15429,
+          "harga_jual": 0,
+          "expired_date": "2028-05-31",
+          "batch": "25E03513",
+          "jumlah": 3,
+          "subtotal": 38187
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "SULFADIAZIN TAB IFAR NORET ;BX/100",
+          "harga_beli": 89600.31,
+          "harga_jual": 0,
+          "expired_date": "2028-11-30",
+          "batch": "CWOOC",
+          "jumlah": 400,
+          "subtotal": 67200
+        },
+        {
+          "no": 4,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "TISSUE MAGIC POWER HITAM NORET ;PAK/6SACH",
+          "harga_beli": 11916.96,
+          "harga_jual": 0,
+          "expired_date": "2031-01-31",
+          "batch": "MC01012026",
+          "jumlah": 60,
+          "subtotal": 95336
+        },
+        {
+          "no": 5,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "SILADEX M * EXP 60ML HIJAU NR ;FL/60ML",
+          "harga_beli": 13542,
+          "harga_jual": 0,
+          "expired_date": "2027-12-31",
+          "batch": "L25A10",
+          "jumlah": 6,
+          "subtotal": 78814
+        },
+        {
+          "no": 6,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "CHRYSANTHEMUM / CHI HWA CING ;BOX,10SACH",
+          "harga_beli": 31943.58,
+          "harga_jual": 0,
+          "expired_date": "2029-10-31",
+          "batch": "FA102504",
+          "jumlah": 3,
+          "subtotal": 54304
+        },
+        {
+          "no": 7,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "HEROCYN BEDAK 50GR**/NORETUR ;BTL,50GR",
+          "harga_beli": 7437,
+          "harga_jual": 0,
+          "expired_date": "2029-08-31",
+          "batch": "25H0170",
+          "jumlah": 2,
+          "subtotal": 22311
+        },
+        {
+          "no": 8,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "HEROCYN BEDAK 85GR NORETUR ;KLC,85GR",
+          "harga_beli": 11322,
+          "harga_jual": 0,
+          "expired_date": "2029-10-31",
+          "batch": "25K0058",
+          "jumlah": 3,
+          "subtotal": 33966
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 31
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 13:48:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "NPS-2603-634439",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-03-12 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-03-12 00:00:00",
+      "total": 646066.67,
+      "diskon": 0,
+      "bayar": 723594.67,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "PINTRAKOL KIDS SYR NORETUR ;BTL/60ML",
+          "harga_beli": 16269.27,
+          "harga_jual": 0,
+          "expired_date": "2028-04-30",
+          "batch": "83510007",
+          "jumlah": 3,
+          "subtotal": 39046
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "SALEP KULIT 88 NORETUR ;BX/12POT",
+          "harga_beli": 174825.00,
+          "harga_jual": 0,
+          "expired_date": "2028-07-31",
+          "batch": "2507114",
+          "jumlah": 12,
+          "subtotal": 152972
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "LASERIN SYR 60ML NORETUR ;FL/60ML",
+          "harga_beli": 14652.00,
+          "harga_jual": 0,
+          "expired_date": "2029-12-31",
+          "batch": "2512A801",
+          "jumlah": 6,
+          "subtotal": 80879
+        },
+        {
+          "no": 4,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "C T M PIM BOX 24X12'S NORETUR ;BX/24X12",
+          "harga_beli": 27999.75,
+          "harga_jual": 0,
+          "expired_date": "2030-07-31",
+          "batch": "09507109",
+          "jumlah": 288,
+          "subtotal": 18900
+        },
+        {
+          "no": 5,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "MYK TELON + MY BABY 60ML NORET ;BTL,60ML",
+          "harga_beli": 15288.03,
+          "harga_jual": 0,
+          "expired_date": "2027-11-30",
+          "batch": "1154725",
+          "jumlah": 1,
+          "subtotal": 14524
+        },
+        {
+          "no": 6,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "MKP GAJAR 60ML PLST NORETUR ;FL/60ML",
+          "harga_beli": 18921.06,
+          "harga_jual": 0,
+          "expired_date": "2029-12-31",
+          "batch": "5400104T",
+          "jumlah": 3,
+          "subtotal": 56763
+        },
+        {
+          "no": 7,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "ESEMAG SIDOMUNCUL NORETUR ;BOX/15SACH",
+          "harga_beli": 8103.00,
+          "harga_jual": 0,
+          "expired_date": "2027-10-31",
+          "batch": "EL00043",
+          "jumlah": 15,
+          "subtotal": 23823
+        },
+        {
+          "no": 8,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "ASAM MEFENAMAT 500MG(HEX) NR ;BOX,100KPL",
+          "harga_beli": 22200.00,
+          "harga_jual": 0,
+          "expired_date": "2027-09-30",
+          "batch": "TMEC850856",
+          "jumlah": 300,
+          "subtotal": 63270
+        },
+        {
+          "no": 9,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "ROHTO EYE DROP ;FLS,11ML",
+          "harga_beli": 11436.33,
+          "harga_jual": 0,
+          "expired_date": "2027-10-31",
+          "batch": "PTI 03",
+          "jumlah": 6,
+          "subtotal": 61756
+        },
+        {
+          "no": 10,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "AKURAT UJI KEHAMILAN NORETUR ;STRIP",
+          "harga_beli": 10545.00,
+          "harga_jual": 0,
+          "expired_date": "2028-06-30",
+          "batch": "BQ202506",
+          "jumlah": 6,
+          "subtotal": 53779
+        },
+        {
+          "no": 11,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "BALSEM GELIGA 20GR SEDANG NR ;POT,20GR",
+          "harga_beli": 8350.53,
+          "harga_jual": 0,
+          "expired_date": "2030-10-31",
+          "batch": "P101151",
+          "jumlah": 6,
+          "subtotal": 48099
+        },
+        {
+          "no": 12,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "SALICYL TALK MENT GJH KNNC NR ;BTL 100GR",
+          "harga_beli": 7250.52,
+          "harga_jual": 0,
+          "expired_date": "2029-12-31",
+          "batch": "50668302X",
+          "jumlah": 6,
+          "subtotal": 43503
+        },
+        {
+          "no": 13,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "BUFACOMB IN ORA BASE NORETUR ;TUBE,5GR",
+          "harga_beli": 33300.00,
+          "harga_jual": 0,
+          "expired_date": "2029-10-31",
+          "batch": "H0210501",
+          "jumlah": 3,
+          "subtotal": 79920
+        },
+        {
+          "no": 14,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "CETIRIZINE 10MG NOVA TAB NORET ;BOX,100TAB",
+          "harga_beli": 9018.75,
+          "harga_jual": 0,
+          "expired_date": "2028-01-31",
+          "batch": "260101332",
+          "jumlah": 500,
+          "subtotal": 45094
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 32
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 13:51:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "JM1-2602-01176A",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-12 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-12 00:00:00",
+      "total": 973537,
+      "diskon": 0,
+      "bayar": 1080626,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "PRORIS SYR 60ML",
+          "harga_beli": 23000,
+          "harga_jual": 0,
+          "expired_date": "2027-12-31",
+          "batch": "D5M043A",
+          "jumlah": 6,
+          "subtotal": 138000
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "COMBANTRIN SYR ORANGE 25MG/ML",
+          "harga_beli": 17440,
+          "harga_jual": 0,
+          "expired_date": "2028-09-30",
+          "batch": "NC2016",
+          "jumlah": 3,
+          "subtotal": 52320
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "YUSIMOX DS 60ML",
+          "harga_beli": 15318,
+          "harga_jual": 0,
+          "expired_date": "2028-10-31",
+          "batch": "UY0D3",
+          "jumlah": 60,
+          "subtotal": 919080
+        },
+        {
+          "no": 4,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "KOOLFEVER ADULT/LBR",
+          "harga_beli": 6352,
+          "harga_jual": 0,
+          "expired_date": "2028-01-31",
+          "batch": "01.28",
+          "jumlah": 12,
+          "subtotal": 76224
+        },
+        {
+          "no": 5,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "NATUR E SC 16'S SMALL",
+          "harga_beli": 16686,
+          "harga_jual": 0,
+          "expired_date": "2028-04-30",
+          "batch": "5ED0878",
+          "jumlah": 48,
+          "subtotal": 50058
+        },
+        {
+          "no": 6,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "DULCOLAX 5MG 10'S",
+          "harga_beli": 16642,
+          "harga_jual": 0,
+          "expired_date": "2027-04-30",
+          "batch": "4050225",
+          "jumlah": 30,
+          "subtotal": 49926
+        },
+        {
+          "no": 7,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "GLIMEPIRID 2MG TAB 100'S",
+          "harga_beli": 130299,
+          "harga_jual": 0,
+          "expired_date": "2027-08-31",
+          "batch": "56I4096",
+          "jumlah": 300,
+          "subtotal": 390897
+        },
+        {
+          "no": 8,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "BETADINE FEM HYGIENE 60ML",
+          "harga_beli": 31615,
+          "harga_jual": 0,
+          "expired_date": "2027-08-31",
+          "batch": "IB25070",
+          "jumlah": 2,
+          "subtotal": 63230
+        },
+        {
+          "no": 9,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "GENALTEN CR 5GR",
+          "harga_beli": 10878,
+          "harga_jual": 0,
+          "expired_date": "2028-10-31",
+          "batch": "PR029",
+          "jumlah": 10,
+          "subtotal": 108780
+        },
+        {
+          "no": 10,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "MYCORAL 200MG 50'S",
+          "harga_beli": 225000,
+          "harga_jual": 0,
+          "expired_date": "2027-06-30",
+          "batch": "CJ53321",
+          "jumlah": 50,
+          "subtotal": 225000
+        },
+        {
+          "no": 11,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "CAPTOPRIL 25MG 100'S",
+          "harga_beli": 12523,
+          "harga_jual": 0,
+          "expired_date": "2029-08-31",
+          "batch": "HR1064",
+          "jumlah": 300,
+          "subtotal": 37569
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 33
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 13:52:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "JM1-2602-01180",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-12 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-12 00:00:00",
+      "total": 221625,
+      "diskon": 0,
+      "bayar": 246004,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "ANTANGIN JRG 12'S",
+          "harga_beli": 33514,
+          "harga_jual": 0,
+          "expired_date": "2027-09-30",
+          "batch": "A91I25",
+          "jumlah": 36,
+          "subtotal": 100542
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "TOLAKANGIN CAIR 12'S",
+          "harga_beli": 40541,
+          "harga_jual": 0,
+          "expired_date": "2027-08-31",
+          "batch": "TACD12",
+          "jumlah": 36,
+          "subtotal": 121623
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 34
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 13:54:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "JM1-2602-01178",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-12 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-12 00:00:00",
+      "total": 40542,
+      "diskon": 0,
+      "bayar": 45002,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "BRONCHITIN EXP SYR 60ML E3584",
+          "harga_beli": 10341,
+          "harga_jual": 0,
+          "expired_date": "2028-10-31",
+          "batch": "054048",
+          "jumlah": 6,
+          "subtotal": 62046
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 35
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 13:56:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "JMR-2602-00451",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-12 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-12 00:00:00",
+      "total": 188393,
+      "diskon": 0,
+      "bayar": 209116,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "OBH COM BTUK FLU MENTHOL 100ML",
+          "harga_beli": 18670,
+          "harga_jual": 0,
+          "expired_date": "2027-09-30",
+          "batch": "5NJ115",
+          "jumlah": 6,
+          "subtotal": 112020
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "OBH COM BTUK FLU MENTHOL 60ML",
+          "harga_beli": 13700,
+          "harga_jual": 0,
+          "expired_date": "2027-10-31",
+          "batch": "5NK045",
+          "jumlah": 6,
+          "subtotal": 82200
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 36
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 13:58:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "JM1-2602-01177",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-12 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-12 00:00:00",
+      "total": 1119342,
+      "diskon": 0,
+      "bayar": 1242470,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "GLIBENCLAMIDE 5 MG 100' E13808",
+          "harga_beli": 32727,
+          "harga_jual": 0,
+          "expired_date": "2028-01-31",
+          "batch": "004964",
+          "jumlah": 300,
+          "subtotal": 98181
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "LACTACYD ALL DAY CARE 60ML",
+          "harga_beli": 25973,
+          "harga_jual": 0,
+          "expired_date": "2028-10-31",
+          "batch": "FVH2497",
+          "jumlah": 3,
+          "subtotal": 77919
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "VENTOLIN INH 100MCG",
+          "harga_beli": 146074,
+          "harga_jual": 0,
+          "expired_date": "2027-03-31",
+          "batch": "LX2U",
+          "jumlah": 1,
+          "subtotal": 146074
+        },
+        {
+          "no": 4,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "MICROGYNON LIBI 28'S",
+          "harga_beli": 19723,
+          "harga_jual": 0,
+          "expired_date": "2028-01-31",
+          "batch": "WE15HE",
+          "jumlah": 12,
+          "subtotal": 236676
+        },
+        {
+          "no": 5,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "CATAFLAM 50MG 50'S",
+          "harga_beli": 313220,
+          "harga_jual": 0,
+          "expired_date": "2028-06-30",
+          "batch": "ID6710",
+          "jumlah": 50,
+          "subtotal": 313220
+        },
+        {
+          "no": 6,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "BIOPLACENTON JELLY 15GR",
+          "harga_beli": 28000,
+          "harga_jual": 0,
+          "expired_date": "2027-05-31",
+          "batch": "CA53143",
+          "jumlah": 6,
+          "subtotal": 168000
+        },
+        {
+          "no": 7,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "BETASON N CR 5GR",
+          "harga_beli": 16500,
+          "harga_jual": 0,
+          "expired_date": "2027-09-30",
+          "batch": "151691W",
+          "jumlah": 6,
+          "subtotal": 99000
+        },
+        {
+          "no": 8,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "ACYCLOVIR KRIM 5GR(FM) E5532",
+          "harga_beli": 8910,
+          "harga_jual": 0,
+          "expired_date": "2028-11-30",
+          "batch": "7658",
+          "jumlah": 10,
+          "subtotal": 89100
+        },
+        {
+          "no": 9,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "TRANSPULMIN KIDS BALS 10GR",
+          "harga_beli": 43300,
+          "harga_jual": 0,
+          "expired_date": "2028-11-30",
+          "batch": "PL1201",
+          "jumlah": 2,
+          "subtotal": 86600
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 37
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-mnj",
+  "generated_at": "2026-03-19 14:02:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "T56C3351.20260213001",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-13 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-13 00:00:00",
+      "total": 87000,
+      "diskon": 0,
+      "bayar": 95604,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "SILADEX ANTITUSIVE 60 ML",
+          "harga_beli": 12200,
+          "harga_jual": 0,
+          "expired_date": "2027-12-31",
+          "batch": "L25A22",
+          "jumlah": 3,
+          "subtotal": 40220
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "SILADEX ANTITUSIVE 100 ML",
+          "harga_beli": 16800,
+          "harga_jual": 0,
+          "expired_date": "2028-01-31",
+          "batch": "A26A09",
+          "jumlah": 3,
+          "subtotal": 55384
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 38
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-mnj",
+  "generated_at": "2026-03-19 14:06:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "T56C3351.20260213002",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-13 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-13 00:00:00",
+      "total": 146800,
+      "diskon": 0,
+      "bayar": 161318,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "PARAMEX",
+          "harga_beli": 2060,
+          "harga_jual": 0,
+          "expired_date": "2027-12-31",
+          "batch": "K25A34",
+          "jumlah": 200,
+          "subtotal": 113186
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "SILADEX MUCOLYTIC & EXPECTORANT 30 ML",
+          "harga_beli": 7300,
+          "harga_jual": 0,
+          "expired_date": "2028-01-31",
+          "batch": "A26A04",
+          "jumlah": 6,
+          "subtotal": 48132
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 39
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-mnj",
+  "generated_at": "2026-03-19 14:12:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "T56C3351.20260212004",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-12 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-12 00:00:00",
+      "total": 192000,
+      "diskon": 0,
+      "bayar": 210402,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "OBAT BATUK IBU ANAK 75 ML",
+          "harga_beli": 27200,
+          "harga_jual": 0,
+          "expired_date": "2028-04-30",
+          "batch": "E2505030ID",
+          "jumlah": 3,
+          "subtotal": 87858
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "LPC BADAK 200 ML",
+          "harga_beli": 3000,
+          "harga_jual": 0,
+          "expired_date": "2030-10-31",
+          "batch": "5105047",
+          "jumlah": 12,
+          "subtotal": 39960
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "LPC BADAK 500 ML",
+          "harga_beli": 6200,
+          "harga_jual": 0,
+          "expired_date": "2030-12-31",
+          "batch": "5129049",
+          "jumlah": 12,
+          "subtotal": 82584
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 40
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 14:13:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "JM1-2602-01468",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-14 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-14 00:00:00",
+      "total": 1187030,
+      "diskon": 0,
+      "bayar": 1317603,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "TEOSAL TAB 100'S",
+          "harga_beli": 20000,
+          "harga_jual": 0,
+          "expired_date": "2028-01-31",
+          "batch": "56B4135",
+          "jumlah": 400,
+          "subtotal": 80000
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "SUPER TETRA 20X6'S",
+          "harga_beli": 150000,
+          "harga_jual": 0,
+          "expired_date": "2028-04-30",
+          "batch": "5ED0783",
+          "jumlah": 120,
+          "subtotal": 150000
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "DEXTEEM PLUS TAB 100'S E10223",
+          "harga_beli": 36800,
+          "harga_jual": 0,
+          "expired_date": "2029-11-30",
+          "batch": "6250488",
+          "jumlah": 300,
+          "subtotal": 110400
+        },
+        {
+          "no": 4,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "KAPSIDA/DZ",
+          "harga_beli": 168649,
+          "harga_jual": 0,
+          "expired_date": "2030-07-31",
+          "batch": "3050723",
+          "jumlah": 12,
+          "subtotal": 168649
+        },
+        {
+          "no": 5,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "OBH COM BTUK BDHAK MTHOL 100ML",
+          "harga_beli": 14200,
+          "harga_jual": 0,
+          "expired_date": "2027-10-31",
+          "batch": "5NK021",
+          "jumlah": 6,
+          "subtotal": 85200
+        },
+        {
+          "no": 6,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "DIAPET KAP 12X10'S",
+          "harga_beli": 60200,
+          "harga_jual": 0,
+          "expired_date": "2028-09-30",
+          "batch": "25H0199",
+          "jumlah": 120,
+          "subtotal": 60200
+        },
+        {
+          "no": 7,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "NEUROBION FORTE 50'S",
+          "harga_beli": 206605,
+          "harga_jual": 0,
+          "expired_date": "2028-04-30",
+          "batch": "1021826",
+          "jumlah": 50,
+          "subtotal": 206605
+        },
+        {
+          "no": 8,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "ANDALAN PIL KB 15X2(28)'S",
+          "harga_beli": 201100,
+          "harga_jual": 0,
+          "expired_date": "2030-09-30",
+          "batch": "5193199",
+          "jumlah": 30,
+          "subtotal": 201100
+        },
+        {
+          "no": 9,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "BYEBYE FEVER ANAK 10'S",
+          "harga_beli": 86748,
+          "harga_jual": 0,
+          "expired_date": "2028-09-30",
+          "batch": "5A01",
+          "jumlah": 10,
+          "subtotal": 86748
+        },
+        {
+          "no": 10,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "EMTURNAS KAP 100'S E47747",
+          "harga_beli": 64865,
+          "harga_jual": 0,
+          "expired_date": "2029-12-31",
+          "batch": "112354",
+          "jumlah": 200,
+          "subtotal": 129730
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 41
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 14:15:20",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "JM1-2602-01469",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-14 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-14 00:00:00",
+      "total": 457608,
+      "diskon": 0,
+      "bayar": 507945,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "ALLOPURINOL 300MG TAB 1 E24955",
+          "harga_beli": 70000,
+          "harga_jual": 0,
+          "expired_date": "2029-08-31",
+          "batch": "020953",
+          "jumlah": 200,
+          "subtotal": 140000
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "INSTO COOL 7.5 ML",
+          "harga_beli": 13883,
+          "harga_jual": 0,
+          "expired_date": "2027-07-31",
+          "batch": "2561034",
+          "jumlah": 3,
+          "subtotal": 41649
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "DENOMIX CR 10GR",
+          "harga_beli": 12485,
+          "harga_jual": 0,
+          "expired_date": "2027-09-30",
+          "batch": "5NJ084",
+          "jumlah": 3,
+          "subtotal": 37455
+        },
+        {
+          "no": 4,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "DARYANT TULLE STERIL 10'S",
+          "harga_beli": 234400,
+          "harga_jual": 0,
+          "expired_date": "2027-02-28",
+          "batch": "5EB0250",
+          "jumlah": 10,
+          "subtotal": 234400
+        },
+        {
+          "no": 5,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "NEURODEX TAB 200'S E42630",
+          "harga_beli": 112000,
+          "harga_jual": 0,
+          "expired_date": "2027-07-31",
+          "batch": "56H4435",
+          "jumlah": 200,
+          "subtotal": 112000
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 42
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 14:17:45",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "JMR-2602-00563",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-14 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-14 00:00:00",
+      "total": 617095,
+      "diskon": 0,
+      "bayar": 684975,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "OBH COM ANAK BTUK FLU 60ML STRW",
+          "harga_beli": 14836,
+          "harga_jual": 0,
+          "expired_date": "2027-10-31",
+          "batch": "5NK003",
+          "jumlah": 6,
+          "subtotal": 89016
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "HUFAGRIP BP SYR 60ML",
+          "harga_beli": 17252,
+          "harga_jual": 0,
+          "expired_date": "2029-10-31",
+          "batch": "A800875",
+          "jumlah": 10,
+          "subtotal": 172520
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "HUFAGRIP FLU SYR 60ML",
+          "harga_beli": 20591,
+          "harga_jual": 0,
+          "expired_date": "2028-12-31",
+          "batch": "A902625",
+          "jumlah": 6,
+          "subtotal": 123546
+        },
+        {
+          "no": 4,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "PARATUSIN TAB 200'S",
+          "harga_beli": 278200,
+          "harga_jual": 0,
+          "expired_date": "2027-08-31",
+          "batch": "GX5A099",
+          "jumlah": 200,
+          "subtotal": 278200
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 43
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 14:21:40",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "TMP-INV-2026/02/18/2444044",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-18 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-18 00:00:00",
+      "total": 749905.07,
+      "diskon": 0,
+      "bayar": 832394,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "ID105671-3",
+          "nama_produk": "ENERVON C Medifarma TABLET",
+          "harga_beli": 31201.01,
+          "harga_jual": 0,
+          "expired_date": "2027-09-30",
+          "batch": "202709-25156003",
+          "jumlah": 90,
+          "subtotal": 93135
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "ID125545-1",
+          "nama_produk": "MYWELL VITAMIN D3 1000 IU Ultrasakti TABLET",
+          "harga_beli": 15000,
+          "harga_jual": 0,
+          "expired_date": "2027-11-30",
+          "batch": "202711-25N08218",
+          "jumlah": 60,
+          "subtotal": 39825
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "ID105533-1",
+          "nama_produk": "ELKANA Sanbe SUSPENSI",
+          "harga_beli": 26150,
+          "harga_jual": 0,
+          "expired_date": "2027-03-31",
+          "batch": "202703-FL9787",
+          "jumlah": 2,
+          "subtotal": 52300
+        },
+        {
+          "no": 4,
+          "id_produk": null,
+          "kode_produk": "ID121835-1",
+          "nama_produk": "VEGETA HERBAL RASA ANGGUR Sari Enensis",
+          "harga_beli": 15016,
+          "harga_jual": 0,
+          "expired_date": "2027-05-31",
+          "batch": "202705-007K5",
+          "jumlah": 30,
+          "subtotal": 72452.2
+        },
+        {
+          "no": 5,
+          "id_produk": null,
+          "kode_produk": "ID123863-1",
+          "nama_produk": "LACTO-B Novell SERBUK",
+          "harga_beli": 307500,
+          "harga_jual": 0,
+          "expired_date": "2027-08-31",
+          "batch": "202708-IN01Z08",
+          "jumlah": 40,
+          "subtotal": 302887.5
+        },
+        {
+          "no": 6,
+          "id_produk": null,
+          "kode_produk": "ID101954-1",
+          "nama_produk": "BENZOLAC 2.5 Surya Dermato GEL 2.5 %",
+          "harga_beli": 15400,
+          "harga_jual": 0,
+          "expired_date": "2027-10-31",
+          "batch": "202710-IOS01B1",
+          "jumlah": 3,
+          "subtotal": 46200
+        },
+        {
+          "no": 7,
+          "id_produk": null,
+          "kode_produk": "ID109287-2",
+          "nama_produk": "INCIDAL-OD Bayer KAPSUL",
+          "harga_beli": 121909,
+          "harga_jual": 0,
+          "expired_date": "2028-03-31",
+          "batch": "202803-E25132006",
+          "jumlah": 50,
+          "subtotal": 113375.37
+        },
+        {
+          "no": 8,
+          "id_produk": null,
+          "kode_produk": "ID122165-2",
+          "nama_produk": "VITAMIN B COMPLEX IPI Supra Ferbindo TABLET",
+          "harga_beli": 4955,
+          "harga_jual": 0,
+          "expired_date": "2027-12-31",
+          "batch": "202712-120575",
+          "jumlah": 6,
+          "subtotal": 29730
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 44
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-final-correction",
+  "generated_at": "2026-03-19 14:40:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "NPS-2602-629901",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-18 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-18 00:00:00",
+      "total": 737929.06,
+      "diskon": 0,
+      "bayar": 893565,
+      "detail": [
+        {
+          "no": 1,
+          "nama_produk": "COLDREXIN SYRUP NORETUR ;BTL,60ML",
+          "harga_beli": 9255.18,
+          "expired_date": "2027-04-30",
+          "batch": "01604508",
+          "jumlah": 3,
+          "subtotal": 23046
+        },
+        {
+          "no": 2,
+          "nama_produk": "LISTERINE COOLMINT 100ML NORET ;FLS/100ML",
+          "harga_beli": 8380.50,
+          "expired_date": "2028-09-30",
+          "batch": "8245E023",
+          "jumlah": 3,
+          "subtotal": 23885
+        },
+        {
+          "no": 3,
+          "nama_produk": "MADU TJ * 150GR NORETUR ;BTL,150GR",
+          "harga_beli": 22422.00,
+          "expired_date": "2029-12-31",
+          "batch": "25P09462",
+          "jumlah": 6,
+          "subtotal": 114352
+        },
+        {
+          "no": 4,
+          "nama_produk": "METHYLPREDNISOLONE 4MG DEXA(NR ;80X100'S",
+          "harga_beli": 44455.50,
+          "expired_date": "2027-05-31",
+          "batch": "56F4147",
+          "jumlah": 200,
+          "subtotal": 40010
+        },
+        {
+          "no": 5,
+          "nama_produk": "METHYLPREDNISOLONE 16MGDEXA(NR ;80X100'S",
+          "harga_beli": 104441.01,
+          "expired_date": "2029-08-31",
+          "batch": "56G0751",
+          "jumlah": 100,
+          "subtotal": 76242
+        },
+        {
+          "no": 6,
+          "nama_produk": "DESOXIMETASONE CR DEXA NORET ;TUBE/15GR",
+          "harga_beli": 14774.10,
+          "expired_date": "2027-08-31",
+          "batch": "4951934",
+          "jumlah": 2,
+          "subtotal": 26593
+        },
+        {
+          "no": 7,
+          "nama_produk": "MYK OTOT CELICA 30 ML NORETUR ;BTL,30ML",
+          "harga_beli": 14499.93,
+          "expired_date": "2030-11-30",
+          "batch": "PN00406",
+          "jumlah": 3,
+          "subtotal": 41760
+        },
+        {
+          "no": 8,
+          "nama_produk": "ROHTO COOL TETES MATA NORETUR ;BTL,7ML",
+          "harga_beli": 16733.25,
+          "expired_date": "2028-09-30",
+          "batch": "PIRF075",
+          "jumlah": 3,
+          "subtotal": 46686
+        },
+        {
+          "no": 9,
+          "nama_produk": "SALEP KULIT 88 NORETUR ;BX/12POT",
+          "harga_beli": 174825.00,
+          "expired_date": "2028-07-31",
+          "batch": "2507114",
+          "jumlah": 12,
+          "subtotal": 152972
+        },
+        {
+          "no": 10,
+          "nama_produk": "STREPSILS REC 2X6'S MERAH NR ;PAK/2X6'S",
+          "harga_beli": 21152.16,
+          "expired_date": "2028-06-30",
+          "batch": "A8C6228",
+          "jumlah": 36,
+          "subtotal": 55524
+        },
+        {
+          "no": 11,
+          "nama_produk": "CESSA BABY 'HAPPY NOSE' NORET ;BTL/8 ML",
+          "harga_beli": 28100.76,
+          "expired_date": "2028-10-31",
+          "batch": "T201KJY",
+          "jumlah": 3,
+          "subtotal": 80087
+        },
+        {
+          "no": 12,
+          "nama_produk": "HEMAVITON ACTION KAPSUL NORET ;BX/50KAPS",
+          "harga_beli": 67599.00,
+          "expired_date": "2028-10-31",
+          "batch": "110605",
+          "jumlah": 50,
+          "subtotal": 67599
+        },
+        {
+          "no": 13,
+          "nama_produk": "BALSEM HIJAU LANG 20GR BSR NR ;TUBE20GR",
+          "harga_beli": 8299.47,
+          "expired_date": "2030-09-30",
+          "batch": "PD00753",
+          "jumlah": 6,
+          "subtotal": 47307
+        },
+        {
+          "no": 14,
+          "nama_produk": "TISSUE MAGIC POWER HITAM NORET ;PAK/6SACH",
+          "harga_beli": 12187.80,
+          "expired_date": "2030-04-30",
+          "batch": "MC02042025",
+          "jumlah": 60,
+          "subtotal": 97502
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 45
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 14:31:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "NPS-2602-629903",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-18 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-18 00:00:00",
+      "total": 590137.63,
+      "diskon": 0,
+      "bayar": 714604,
+      "detail": [
+        {
+          "no": 1,
+          "nama_produk": "SAFE CARE ROLL \"MIND&SPIRIT\" NR ;BTL/10ML",
+          "harga_beli": 15150.39,
+          "expired_date": "2029-01-31",
+          "batch": "10250705",
+          "jumlah": 3,
+          "subtotal": 42269
+        },
+        {
+          "no": 2,
+          "nama_produk": "BODREX TAB NORETUR ;BX/20TAB",
+          "harga_beli": 8299.47,
+          "expired_date": "2030-11-30",
+          "batch": "120675",
+          "jumlah": 960,
+          "subtotal": 99594
+        },
+        {
+          "no": 3,
+          "nama_produk": "SUPERHOID SUPP NORETUR ;BX/6",
+          "harga_beli": 37267.14,
+          "expired_date": "2028-08-31",
+          "batch": "K25086",
+          "jumlah": 24,
+          "subtotal": 70807
+        },
+        {
+          "no": 4,
+          "nama_produk": "CAVIPLEX SYRUP NORETUR ;BTL,60ML",
+          "harga_beli": 10897.98,
+          "expired_date": "2027-10-31",
+          "batch": "S.3760032",
+          "jumlah": 3,
+          "subtotal": 31059
+        },
+        {
+          "no": 5,
+          "nama_produk": "SALICY SPIRITUS GAJAH 50ML NR ;BTL/50ML",
+          "harga_beli": 6416.91,
+          "expired_date": "2029-01-31",
+          "batch": "6690047T",
+          "jumlah": 6,
+          "subtotal": 38501
+        },
+        {
+          "no": 6,
+          "nama_produk": "CETIRIZINE HCL TAB./NOVA MORET ;BOX,100TAB",
+          "harga_beli": 9018.75,
+          "expired_date": "2028-01-31",
+          "batch": "260101332",
+          "jumlah": 400,
+          "subtotal": 36075
+        },
+        {
+          "no": 7,
+          "nama_produk": "BEVALEX CR 5G NORETUR ;TUBE/5G",
+          "harga_beli": 18870.00,
+          "expired_date": "2027-09-30",
+          "batch": "801MS061",
+          "jumlah": 3,
+          "subtotal": 36796
+        },
+        {
+          "no": 8,
+          "nama_produk": "CAZETIN DROPS NORETUR ;BTL15ML",
+          "harga_beli": 24996.09,
+          "expired_date": "2027-11-30",
+          "batch": "SE01C",
+          "jumlah": 3,
+          "subtotal": 58116
+        },
+        {
+          "no": 9,
+          "nama_produk": "FARSIFEN PLUS TAB NORETUR ;80X100",
+          "harga_beli": 48182.88,
+          "expired_date": "2028-01-31",
+          "batch": "CM08A",
+          "jumlah": 200,
+          "subtotal": 72274
+        },
+        {
+          "no": 10,
+          "nama_produk": "GEMFIBROZIL KAP 300MG\"PHP\" NR ;BX/100KAP",
+          "harga_beli": 83250.00,
+          "expired_date": "2027-10-31",
+          "batch": "86441013",
+          "jumlah": 100,
+          "subtotal": 83250
+        },
+        {
+          "no": 11,
+          "nama_produk": "GUAIFENESIN TAB / GG TRIMAN NR ;80X100",
+          "harga_beli": 11652.78,
+          "expired_date": "2028-09-30",
+          "batch": "P25027",
+          "jumlah": 100,
+          "subtotal": 17479
+        },
+        {
+          "no": 12,
+          "nama_produk": "OBH ITRASAL 100ML NORETUR ;FL/100ML",
+          "harga_beli": 7592.40,
+          "expired_date": "2029-12-31",
+          "batch": "512052",
+          "jumlah": 6,
+          "subtotal": 35304
+        },
+        {
+          "no": 13,
+          "nama_produk": "KETOCONAZOLE CR DEXA(NORET)MT ;TUBE10GR",
+          "harga_beli": 7064.04,
+          "expired_date": "2028-02-29",
+          "batch": "4951991",
+          "jumlah": 12,
+          "subtotal": 66119
+        },
+        {
+          "no": 14,
+          "nama_produk": "LASERIN SYR 30ML NORETUR ;FL/30ML",
+          "harga_beli": 7326.00,
+          "expired_date": "2029-11-30",
+          "batch": "2511A003",
+          "jumlah": 3,
+          "subtotal": 26960
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 46
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 14:33:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "NPS-2602-629900",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-18 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-18 00:00:00",
+      "total": 286923.28,
+      "diskon": 0,
+      "bayar": 313007.21,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "OBH TROP + ANAK STRAW NORETUR ;BTL/60ML",
+          "harga_beli": 20979,
+          "harga_jual": 0,
+          "expired_date": "2027-09-30",
+          "batch": "CI0201",
+          "jumlah": 3,
+          "subtotal": 61049
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "OBH TROP * EXTRA ANAK JERUK NR ;BTL,60ML",
+          "harga_beli": 19647,
+          "harga_jual": 0,
+          "expired_date": "2027-09-30",
+          "batch": "CI0411",
+          "jumlah": 3,
+          "subtotal": 57173
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "OBH COMBI ANAK ORANGE B+F NR ;BTL,60ML",
+          "harga_beli": 16467.96,
+          "harga_jual": 0,
+          "expired_date": "2027-11-30",
+          "batch": "5ML070",
+          "jumlah": 6,
+          "subtotal": 95844
+        },
+        {
+          "no": 4,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "OBH COMBI ANAK MADU BTK+FLU NR ;BTL60ML",
+          "harga_beli": 16467.96,
+          "harga_jual": 0,
+          "expired_date": "2027-10-31",
+          "batch": "SNK044",
+          "jumlah": 3,
+          "subtotal": 47922
+        },
+        {
+          "no": 5,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "PINTRACOL PLUS LEMON 60ML NRT ;FL/60ML",
+          "harga_beli": 17802.18,
+          "harga_jual": 0,
+          "expired_date": "2027-09-30",
+          "batch": "81509014",
+          "jumlah": 6,
+          "subtotal": 85450
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 47
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 14:45:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "NPS-2602-629930",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-18 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-18 00:00:00",
+      "total": 95590.16,
+      "diskon": 0,
+      "bayar": 115751,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "GRANTUSIF CAPL NORETUR ;BOX100'S",
+          "harga_beli": 58460.37,
+          "harga_jual": 0,
+          "expired_date": "2029-08-31",
+          "batch": "8SH045",
+          "jumlah": 300,
+          "subtotal": 115751
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 48
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 14:48:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "NPS-2602-629905",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-18 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-18 00:00:00",
+      "total": 21683.70,
+      "diskon": 0,
+      "bayar": 26257,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "LISTERINE GREEN TEA 100 ML ;BTL/100ML",
+          "harga_beli": 9213,
+          "harga_jual": 0,
+          "expired_date": "2028-08-31",
+          "batch": "B285E011V",
+          "jumlah": 3,
+          "subtotal": 26257
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 49
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 14:40:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "JMR-2602-00760",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-19 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-19 00:00:00",
+      "total": 193838,
+      "diskon": 0,
+      "bayar": 215160,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "VICKS F 44 DEWASA 54ML",
+          "harga_beli": 18188,
+          "harga_jual": 0,
+          "expired_date": "2027-08-31",
+          "batch": "56298C1",
+          "jumlah": 6,
+          "subtotal": 109128
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "VICKS F 44 DEWASA 100ML",
+          "harga_beli": 30235,
+          "harga_jual": 0,
+          "expired_date": "2027-07-31",
+          "batch": "06298B1",
+          "jumlah": 3,
+          "subtotal": 90705
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 50
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 14:43:11",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "JMR-2602-00761",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-19 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-19 00:00:00",
+      "total": 79734,
+      "diskon": 0,
+      "bayar": 88505,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "OBH COM BTUK FLU MENTHOL 60ML",
+          "harga_beli": 13700,
+          "harga_jual": 0,
+          "expired_date": "2027-10-31",
+          "batch": "5NK045",
+          "jumlah": 6,
+          "subtotal": 82200
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 51
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 14:44:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "JM1-2602-01894",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-19 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-19 00:00:00",
+      "total": 440438,
+      "diskon": 0,
+      "bayar": 488886,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "RENABETIC TAB 100'S E16828",
+          "harga_beli": 38000,
+          "harga_jual": 0,
+          "expired_date": "2028-10-31",
+          "batch": "1EJ183",
+          "jumlah": 200,
+          "subtotal": 76000
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "RENADINAC 50MG TAB 100' E52072",
+          "harga_beli": 80000,
+          "harga_jual": 0,
+          "expired_date": "2027-10-31",
+          "batch": "1EJ199",
+          "jumlah": 200,
+          "subtotal": 160000
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "VICKS VAPORUB 25 GR",
+          "harga_beli": 18072,
+          "harga_jual": 0,
+          "expired_date": "2027-09-30",
+          "batch": "06298Y1",
+          "jumlah": 3,
+          "subtotal": 54216
+        },
+        {
+          "no": 4,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "GLUCOSAMIN 500MG TAB 100'S",
+          "harga_beli": 178000,
+          "harga_jual": 0,
+          "expired_date": "2030-09-30",
+          "batch": "51396",
+          "jumlah": 100,
+          "subtotal": 178000
+        },
+        {
+          "no": 5,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "COUNTERPAIN CR 30GR",
+          "harga_beli": 37300,
+          "harga_jual": 0,
+          "expired_date": "2028-09-30",
+          "batch": "5J5481",
+          "jumlah": 3,
+          "subtotal": 111900
+        },
+        {
+          "no": 6,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "SANGOBION KAP 40'S",
+          "harga_beli": 75450,
+          "harga_jual": 0,
+          "expired_date": "2027-08-31",
+          "batch": "0777176",
+          "jumlah": 40,
+          "subtotal": 75450
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 52
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 14:46:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "JM1-2602-01893",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-19 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-19 00:00:00",
+      "total": 258912,
+      "diskon": 0,
+      "bayar": 287392,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "GENOINT TM 5ML.",
+          "harga_beli": 12200,
+          "harga_jual": 0,
+          "expired_date": "2027-10-31",
+          "batch": "0860020",
+          "jumlah": 6,
+          "subtotal": 73200
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "INSTO EYE DROPS 7.5 ML",
+          "harga_beli": 12280,
+          "harga_jual": 0,
+          "expired_date": "2029-09-30",
+          "batch": "2549044",
+          "jumlah": 6,
+          "subtotal": 73680
+        },
+        {
+          "no": 3,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "YUSIMOX DS 60ML",
+          "harga_beli": 15318,
+          "harga_jual": 0,
+          "expired_date": "2028-10-31",
+          "batch": "UY0D2",
+          "jumlah": 10,
+          "subtotal": 153180
+        },
+        {
+          "no": 4,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "INSTO COOL 7.5 ML",
+          "harga_beli": 13883,
+          "harga_jual": 0,
+          "expired_date": "2027-07-31",
+          "batch": "2561034",
+          "jumlah": 6,
+          "subtotal": 83298
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 53
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 14:50:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "JM1-2602-01892",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-19 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-19 00:00:00",
+      "total": 1338965,
+      "diskon": 0,
+      "bayar": 1486253,
+      "detail": [
+        {
+          "no": 1,
+          "nama_produk": "NEURALGIN RX 100'S",
+          "harga_beli": 112000,
+          "expired_date": "2027-08-31",
+          "batch": "GD54169",
+          "jumlah": 300,
+          "subtotal": 336000
+        },
+        {
+          "no": 2,
+          "nama_produk": "FG TROCHES 120 TAB",
+          "harga_beli": 176703,
+          "expired_date": "2028-07-31",
+          "batch": "25850",
+          "jumlah": 120,
+          "subtotal": 176703
+        },
+        {
+          "no": 3,
+          "nama_produk": "POSTINOR 2 TAB",
+          "harga_beli": 30000,
+          "expired_date": "2028-10-31",
+          "batch": "T4A457P",
+          "jumlah": 3,
+          "subtotal": 90000
+        },
+        {
+          "no": 4,
+          "nama_produk": "KADITIC 50MG TAB 100'S E51419",
+          "harga_beli": 75924,
+          "expired_date": "2027-10-31",
+          "batch": "EA0A3",
+          "jumlah": 300,
+          "subtotal": 227772
+        },
+        {
+          "no": 5,
+          "nama_produk": "LACTACYD LIQ BABY 60ML(BIRU)",
+          "harga_beli": 26653,
+          "expired_date": "2028-03-31",
+          "batch": "FVHOQ41",
+          "jumlah": 3,
+          "subtotal": 79959
+        },
+        {
+          "no": 6,
+          "nama_produk": "WOODS EXP 60ML",
+          "harga_beli": 19909,
+          "expired_date": "2027-11-30",
+          "batch": "56559",
+          "jumlah": 3,
+          "subtotal": 59727
+        },
+        {
+          "no": 7,
+          "nama_produk": "IMBOOST TAB 50'S",
+          "harga_beli": 159700,
+          "expired_date": "2028-11-30",
+          "batch": "25L0007",
+          "jumlah": 50,
+          "subtotal": 159700
+        },
+        {
+          "no": 8,
+          "nama_produk": "GASELA TAB 100'S",
+          "harga_beli": 29200,
+          "expired_date": "2027-10-31",
+          "batch": "0460238",
+          "jumlah": 200,
+          "subtotal": 58400
+        },
+        {
+          "no": 9,
+          "nama_produk": "ANTANGIN JUNIOR 5'S",
+          "harga_beli": 9640,
+          "expired_date": "2027-09-30",
+          "batch": "C003J25",
+          "jumlah": 20,
+          "subtotal": 38560
+        },
+        {
+          "no": 10,
+          "nama_produk": "ANTANGIN JRG 12'S",
+          "harga_beli": 35860,
+          "expired_date": "2027-10-31",
+          "batch": "A034J25",
+          "jumlah": 72,
+          "subtotal": 215160
+        },
+        {
+          "no": 11,
+          "nama_produk": "MYLANTA 100 TABLET",
+          "harga_beli": 78200,
+          "expired_date": "2027-09-30",
+          "batch": "12P0981",
+          "jumlah": 100,
+          "subtotal": 78200
+        },
+        {
+          "no": 12,
+          "nama_produk": "CALLUSOL 10ML",
+          "harga_beli": 28000,
+          "expired_date": "2027-11-30",
+          "batch": "1EK068",
+          "jumlah": 3,
+          "subtotal": 84000
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 54-55
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-gehael",
+  "generated_at": "2026-03-19 15:05:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "POSPST260202706",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-20 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-20 00:00:00",
+      "total": 1069804.97,
+      "diskon": 0,
+      "bayar": 1187483.52,
+      "detail": [
+        {
+          "no": 1,
+          "nama_produk": "NATUR E 100 IU 16'S 16",
+          "harga_beli": 18521.46,
+          "expired_date": "2028-06-30",
+          "batch": "5EF1288",
+          "jumlah": 48,
+          "subtotal": 53897.46
+        },
+        {
+          "no": 2,
+          "nama_produk": "L-BIO SACHET 30 12000",
+          "harga_beli": 329670,
+          "expired_date": "2027-11-30",
+          "batch": "0OB15",
+          "jumlah": 30,
+          "subtotal": 313186.50
+        },
+        {
+          "no": 3,
+          "nama_produk": "ANTACIDA DOEN SIRUP FM 60ML",
+          "harga_beli": 4500,
+          "expired_date": "2027-12-31",
+          "batch": "007952",
+          "jumlah": 10,
+          "subtotal": 45000
+        },
+        {
+          "no": 4,
+          "nama_produk": "AMOXICILLIN 500 MG TAB HJ 200",
+          "harga_beli": 83500,
+          "expired_date": "2027-11-30",
+          "batch": "55772",
+          "jumlah": 400,
+          "subtotal": 167000
+        },
+        {
+          "no": 5,
+          "nama_produk": "BODREXIN F&B SYR PE 60ML",
+          "harga_beli": 12500,
+          "expired_date": "2027-12-31",
+          "batch": "121555",
+          "jumlah": 3,
+          "subtotal": 37500
+        },
+        {
+          "no": 6,
+          "nama_produk": "BODREX FLU & BATUK PE TIDAK BERD...",
+          "harga_beli": 51250,
+          "expired_date": "2028-07-31",
+          "batch": "080275",
+          "jumlah": 100,
+          "subtotal": 51250
+        },
+        {
+          "no": 7,
+          "nama_produk": "IPI MINERAL ZINC PLUS 45'S (12) 12",
+          "harga_beli": 114000,
+          "expired_date": "2027-08-31",
+          "batch": "080545",
+          "jumlah": 10,
+          "subtotal": 114000
+        },
+        {
+          "no": 8,
+          "nama_produk": "HEMAVITON STAMINA PLUS 50",
+          "harga_beli": 65550,
+          "expired_date": "2028-11-30",
+          "batch": "120425",
+          "jumlah": 50,
+          "subtotal": 65550
+        },
+        {
+          "no": 9,
+          "nama_produk": "SILADEX ME 60 ML HIJAU 60ML",
+          "harga_beli": 13542,
+          "expired_date": "2027-12-31",
+          "batch": "L25A10",
+          "jumlah": 6,
+          "subtotal": 79626.96
+        },
+        {
+          "no": 10,
+          "nama_produk": "TROPICANA DIABTX 25 25",
+          "harga_beli": 25530,
+          "expired_date": "2028-07-31",
+          "batch": "NPH28AB",
+          "jumlah": 75,
+          "subtotal": 75058.20
+        },
+        {
+          "no": 11,
+          "nama_produk": "KASA STERIL ONEMED 16 X 16 CM (KE...",
+          "harga_beli": 5772,
+          "expired_date": "2030-12-31",
+          "batch": "02012688",
+          "jumlah": 96,
+          "subtotal": 32900.40
+        },
+        {
+          "no": 12,
+          "nama_produk": "MASKER BEDAH HIJAB HIJAU 50",
+          "harga_beli": 18648,
+          "expired_date": "2030-11-30",
+          "batch": "01122588",
+          "jumlah": 150,
+          "subtotal": 55944
+        },
+        {
+          "no": 13,
+          "nama_produk": "KASA HEXA 16 X 16 12",
+          "harga_beli": 3219,
+          "expired_date": "2030-01-31",
+          "batch": "0130",
+          "jumlah": 30,
+          "subtotal": 96570
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 56
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 15:10:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "JM1-2602-02416",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-24 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-24 00:00:00",
+      "total": 1141956,
+      "diskon": 0,
+      "bayar": 1267571,
+      "detail": [
+        {
+          "no": 1,
+          "nama_produk": "CEFIXIME 200MG(DX) 100'S",
+          "harga_beli": 366700,
+          "expired_date": "2027-06-30",
+          "batch": "56G1004",
+          "jumlah": 100,
+          "subtotal": 366700
+        },
+        {
+          "no": 2,
+          "nama_produk": "VITAQUIN CR 15GR",
+          "harga_beli": 68300,
+          "expired_date": "2028-08-31",
+          "batch": "00S0381",
+          "jumlah": 2,
+          "subtotal": 136600
+        },
+        {
+          "no": 3,
+          "nama_produk": "M.KAYU PUTIH 60ML(NO.2)",
+          "harga_beli": 17838,
+          "expired_date": "2030-10-31",
+          "batch": "PI00809",
+          "jumlah": 6,
+          "subtotal": 107028
+        },
+        {
+          "no": 4,
+          "nama_produk": "VICKS VAPORUP 10 GR",
+          "harga_beli": 7632,
+          "expired_date": "2027-11-30",
+          "batch": "86298X1",
+          "jumlah": 12,
+          "subtotal": 91584
+        },
+        {
+          "no": 5,
+          "nama_produk": "BIOPLACENTON JELLY 15GR",
+          "harga_beli": 28000,
+          "expired_date": "2027-05-31",
+          "batch": "CA53143",
+          "jumlah": 6,
+          "subtotal": 168000
+        },
+        {
+          "no": 6,
+          "nama_produk": "VICKS BABYBALM 8GR",
+          "harga_beli": 8620,
+          "expired_date": "2027-06-30",
+          "batch": "5C56705",
+          "jumlah": 6,
+          "subtotal": 51720
+        },
+        {
+          "no": 7,
+          "nama_produk": "NEUROBION FORTE 50'S",
+          "harga_beli": 206605,
+          "expired_date": "2028-04-30",
+          "batch": "1021826",
+          "jumlah": 50,
+          "subtotal": 206605
+        },
+        {
+          "no": 8,
+          "nama_produk": "THROMBO GEL 10GR",
+          "harga_beli": 40000,
+          "expired_date": "2029-05-31",
+          "batch": "02E251A",
+          "jumlah": 3,
+          "subtotal": 120000
+        },
+        {
+          "no": 9,
+          "nama_produk": "INTERHISTIN TAB 100'S",
+          "harga_beli": 102000,
+          "expired_date": "2029-08-31",
+          "batch": "412N013",
+          "jumlah": 100,
+          "subtotal": 102000
+        },
+        {
+          "no": 10,
+          "nama_produk": "KOMIX OBH 30X7ML",
+          "harga_beli": 39937,
+          "expired_date": "2027-11-30",
+          "batch": "HL678",
+          "jumlah": 30,
+          "subtotal": 39937
+        },
+        {
+          "no": 11,
+          "nama_produk": "CEFIXIME 100MG(DX) 100'S",
+          "harga_beli": 217690,
+          "expired_date": "2027-05-31",
+          "batch": "56F0601",
+          "jumlah": 100,
+          "subtotal": 217690
+        },
+        {
+          "no": 12,
+          "nama_produk": "VOLTADEX 50MG TAB 100'S E24578",
+          "harga_beli": 45750,
+          "expired_date": "2027-06-30",
+          "batch": "56G7018",
+          "jumlah": 300,
+          "subtotal": 137250
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 57
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 15:03:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "JM1-2602-02417",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-24 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-24 00:00:00",
+      "total": 676399,
+      "diskon": 0,
+      "bayar": 750803,
+      "detail": [
+        {
+          "no": 1,
+          "nama_produk": "ERPHAFLAM 50MG TAB 50'S E3936",
+          "harga_beli": 17900,
+          "expired_date": "2028-09-30",
+          "batch": "5250601",
+          "jumlah": 200,
+          "subtotal": 71600
+        },
+        {
+          "no": 2,
+          "nama_produk": "IMBOOST KID SYR 60ML",
+          "harga_beli": 33500,
+          "expired_date": "2027-09-30",
+          "batch": "25K0186",
+          "jumlah": 2,
+          "subtotal": 67000
+        },
+        {
+          "no": 3,
+          "nama_produk": "HUFAGRIP DEMAM SYR 60ML",
+          "harga_beli": 14139,
+          "expired_date": "2027-11-30",
+          "batch": "E400205",
+          "jumlah": 3,
+          "subtotal": 42417
+        },
+        {
+          "no": 4,
+          "nama_produk": "POLIDENT CR 20GR",
+          "harga_beli": 30600,
+          "expired_date": "2028-05-31",
+          "batch": "8K6U",
+          "jumlah": 3,
+          "subtotal": 91800
+        },
+        {
+          "no": 5,
+          "nama_produk": "MICROGYNON LIBI 28'S",
+          "harga_beli": 19723,
+          "expired_date": "2028-01-31",
+          "batch": "WE15HE",
+          "jumlah": 6,
+          "subtotal": 118338
+        },
+        {
+          "no": 6,
+          "nama_produk": "DEXTEEM PLUS TAB 100'S E10223",
+          "harga_beli": 36800,
+          "expired_date": "2029-07-31",
+          "batch": "6250259",
+          "jumlah": 300,
+          "subtotal": 110400
+        },
+        {
+          "no": 7,
+          "nama_produk": "CATARLENT 15ML",
+          "harga_beli": 30625,
+          "expired_date": "2028-03-31",
+          "batch": "5CN0904",
+          "jumlah": 3,
+          "subtotal": 91875
+        },
+        {
+          "no": 8,
+          "nama_produk": "LYTEERS 15 ML",
+          "harga_beli": 22500,
+          "expired_date": "2028-10-31",
+          "batch": "5LI0291",
+          "jumlah": 3,
+          "subtotal": 67500
+        },
+        {
+          "no": 9,
+          "nama_produk": "TRINORDIOL-28 TAB 2X28'S",
+          "harga_beli": 22880,
+          "expired_date": "2026-09-30",
+          "batch": "L016T01",
+          "jumlah": 5,
+          "subtotal": 114400
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 58
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 15:06:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "JMR-2602-00977",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-24 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-24 00:00:00",
+      "total": 107256,
+      "diskon": 0,
+      "bayar": 119054,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "HUFAGRIP BPDAHAK SYR 60ML",
+          "harga_beli": 16430,
+          "harga_jual": 0,
+          "expired_date": "2027-11-30",
+          "batch": "E100265",
+          "jumlah": 3,
+          "subtotal": 49290
+        },
+        {
+          "no": 2,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "PARATUSIN SYR 60ML",
+          "harga_beli": 34400,
+          "harga_jual": 0,
+          "expired_date": "2027-05-31",
+          "batch": "5EE0936",
+          "jumlah": 2,
+          "subtotal": 68800
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 59
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 15:10:28",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "JMR-2602-00978",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-24 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-24 00:00:00",
+      "total": 57129,
+      "diskon": 0,
+      "bayar": 63413,
+      "detail": [
+        {
+          "no": 1,
+          "id_produk": null,
+          "kode_produk": "",
+          "nama_produk": "VICKS F 44 DEWASA 27ML",
+          "harga_beli": 9816,
+          "harga_jual": 0,
+          "expired_date": "2027-08-31",
+          "batch": "56298B1",
+          "jumlah": 6,
+          "subtotal": 58896
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 60
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 15:13:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "AJA-2602-006835/24-02-2026/LF",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-24 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-24 00:00:00",
+      "total": 1169974,
+      "diskon": 0,
+      "bayar": 1298671,
+      "detail": [
+        {
+          "no": 1,
+          "nama_produk": "FRESH CARE STRONG 10ML",
+          "harga_beli": 11560,
+          "expired_date": "2028-10-31",
+          "batch": "25N07449",
+          "jumlah": 12,
+          "subtotal": 114444
+        },
+        {
+          "no": 2,
+          "nama_produk": "HOTIN CR TUBE 60GR",
+          "harga_beli": 18000,
+          "expired_date": "2028-11-30",
+          "batch": "25N09403",
+          "jumlah": 6,
+          "subtotal": 91800
+        },
+        {
+          "no": 3,
+          "nama_produk": "HOTIN DCL CREAM 120GR",
+          "harga_beli": 28560,
+          "expired_date": "2027-11-30",
+          "batch": "25N08301",
+          "jumlah": 6,
+          "subtotal": 168790
+        },
+        {
+          "no": 4,
+          "nama_produk": "FRESH CARE SMASH 8ML",
+          "harga_beli": 11560,
+          "expired_date": "2028-09-30",
+          "batch": "25E07034",
+          "jumlah": 6,
+          "subtotal": 57222
+        },
+        {
+          "no": 5,
+          "nama_produk": "LOMATUELL-H 10X10 CM",
+          "harga_beli": 165550,
+          "expired_date": "2029-08-31",
+          "batch": "2440112217",
+          "jumlah": 10,
+          "subtotal": 140717
+        },
+        {
+          "no": 6,
+          "nama_produk": "AMBROXOL 30MG 100'S/NOVA (NO RETUR)",
+          "harga_beli": 11300,
+          "expired_date": "2028-12-31",
+          "batch": "251202146",
+          "jumlah": 300,
+          "subtotal": 28815
+        },
+        {
+          "no": 7,
+          "nama_produk": "KOYO CABE ISI 20 SACHET",
+          "harga_beli": 194500,
+          "expired_date": "2029-12-31",
+          "batch": "15212225",
+          "jumlah": 20,
+          "subtotal": 188665
+        },
+        {
+          "no": 8,
+          "nama_produk": "PONSTAN FCT 500MG 100'S",
+          "harga_beli": 276949,
+          "expired_date": "2027-06-30",
+          "batch": "NRQ819",
+          "jumlah": 100,
+          "subtotal": 243715
+        },
+        {
+          "no": 9,
+          "nama_produk": "FRESH CARE LAVENDER 10ML",
+          "harga_beli": 11560,
+          "expired_date": "2028-09-30",
+          "batch": "25K07130",
+          "jumlah": 6,
+          "subtotal": 57222
+        },
+        {
+          "no": 10,
+          "nama_produk": "FUNGIDERM KRIM 5GR",
+          "harga_beli": 11670,
+          "expired_date": "2030-11-30",
+          "batch": "K25A03",
+          "jumlah": 3,
+          "subtotal": 32384
+        },
+        {
+          "no": 11,
+          "nama_produk": "DOMPERIDONE 10MG 100'S/HEXP",
+          "harga_beli": 33000,
+          "expired_date": "2027-08-31",
+          "batch": "DB54215",
+          "jumlah": 200,
+          "subtotal": 46200
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 61
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 15:24:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "AJA-2602-006836/24-02-2026/LF",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-24 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-24 00:00:00",
+      "total": 787592,
+      "diskon": 0,
+      "bayar": 874227,
+      "detail": [
+        {
+          "no": 1,
+          "nama_produk": "SCABIMITE CREAM 30GR NON RETUR",
+          "harga_beli": 80600,
+          "expired_date": "2028-11-30",
+          "batch": "K25003",
+          "jumlah": 1,
+          "subtotal": 68510
+        },
+        {
+          "no": 2,
+          "nama_produk": "SCABIMITE CREAM 10GR NON RETUR",
+          "harga_beli": 48360,
+          "expired_date": "2028-12-31",
+          "batch": "L25001",
+          "jumlah": 2,
+          "subtotal": 82212
+        },
+        {
+          "no": 3,
+          "nama_produk": "LANSOPRAZOLE 30MG/NOVA",
+          "harga_beli": 67000,
+          "expired_date": "2027-07-31",
+          "batch": "250703273",
+          "jumlah": 40,
+          "subtotal": 97150
+        },
+        {
+          "no": 4,
+          "nama_produk": "MEFINAL 500MG 100'S",
+          "harga_beli": 160000,
+          "expired_date": "2027-11-30",
+          "batch": "FL8098B",
+          "jumlah": 200,
+          "subtotal": 307200
+        },
+        {
+          "no": 5,
+          "nama_produk": "SIMVASTATIN 20MG 100'S/NOVA (NON RET)",
+          "harga_beli": 20700,
+          "expired_date": "2027-12-31",
+          "batch": "251212335",
+          "jumlah": 300,
+          "subtotal": 49680
+        },
+        {
+          "no": 6,
+          "nama_produk": "INERSON SALEP 15GR(NON RETUR)",
+          "harga_beli": 101500,
+          "expired_date": "2030-01-31",
+          "batch": "C404004",
+          "jumlah": 2,
+          "subtotal": 142100
+        },
+        {
+          "no": 7,
+          "nama_produk": "BENOSON CREAM 5GR(HJU)",
+          "harga_beli": 14000,
+          "expired_date": "2030-01-31",
+          "batch": "LCB10454",
+          "jumlah": 3,
+          "subtotal": 40740
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 62
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 15:28:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "JM1-2602-02924",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-28 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-28 00:00:00",
+      "total": 1373092,
+      "diskon": 0,
+      "bayar": 1524132,
+      "detail": [
+        {
+          "no": 1,
+          "nama_produk": "POSTINOR 2 TAB",
+          "harga_beli": 30000,
+          "expired_date": "2028-10-31",
+          "batch": "T4A457P",
+          "jumlah": 6,
+          "subtotal": 180000
+        },
+        {
+          "no": 2,
+          "nama_produk": "MYCORAL CREAM 5 GR",
+          "harga_beli": 18000,
+          "expired_date": "2027-08-31",
+          "batch": "CD54490",
+          "jumlah": 3,
+          "subtotal": 54000
+        },
+        {
+          "no": 3,
+          "nama_produk": "ANTIMO STRIP",
+          "harga_beli": 4300,
+          "expired_date": "2030-07-31",
+          "batch": "6002243",
+          "jumlah": 720,
+          "subtotal": 309600
+        },
+        {
+          "no": 4,
+          "nama_produk": "SUCRALFATE SYR 100ML",
+          "harga_beli": 16500,
+          "expired_date": "2027-08-31",
+          "batch": "5NH102",
+          "jumlah": 3,
+          "subtotal": 49500
+        },
+        {
+          "no": 5,
+          "nama_produk": "DEXANTA TAB 100'S",
+          "harga_beli": 25000,
+          "expired_date": "2029-08-31",
+          "batch": "5614012",
+          "jumlah": 200,
+          "subtotal": 50000
+        },
+        {
+          "no": 6,
+          "nama_produk": "M.TAWON CC/DZ",
+          "harga_beli": 250000,
+          "expired_date": "2030-01-31",
+          "batch": "01.30",
+          "jumlah": 12,
+          "subtotal": 250000
+        },
+        {
+          "no": 7,
+          "nama_produk": "TEMPRA SYR 30ML",
+          "harga_beli": 20200,
+          "expired_date": "2027-10-31",
+          "batch": "5K6342",
+          "jumlah": 3,
+          "subtotal": 60600
+        },
+        {
+          "no": 8,
+          "nama_produk": "KOOLFEVER ADULT/LBR",
+          "harga_beli": 6352,
+          "expired_date": "2028-01-31",
+          "batch": "01.28",
+          "jumlah": 12,
+          "subtotal": 76224
+        },
+        {
+          "no": 9,
+          "nama_produk": "VOLTAREN EC 50MG 50'S",
+          "harga_beli": 344636,
+          "expired_date": "2028-05-31",
+          "batch": "ID6682",
+          "jumlah": 50,
+          "subtotal": 344636
+        },
+        {
+          "no": 10,
+          "nama_produk": "DULCOLAX 5MG 10'S",
+          "harga_beli": 16642,
+          "expired_date": "2027-04-30",
+          "batch": "4050225",
+          "jumlah": 30,
+          "subtotal": 49926
+        },
+        {
+          "no": 11,
+          "nama_produk": "GASTRUCID SYR 60ML",
+          "harga_beli": 10544,
+          "expired_date": "2027-11-30",
+          "batch": "5068067",
+          "jumlah": 6,
+          "subtotal": 63264
+        },
+        {
+          "no": 12,
+          "nama_produk": "DECADRYL EXP SYR 60ML",
+          "harga_beli": 15500,
+          "expired_date": "2028-07-31",
+          "batch": "5041038",
+          "jumlah": 3,
+          "subtotal": 46500
+        }
+      ]
+    }
+  ]
+}
+```
+
+## HALAMAN 63
+
+```json
+{
+  "schema_version": "2.0",
+  "source": "ocr-extraction-apotekbisma-corrected",
+  "generated_at": "2026-03-19 15:30:00",
+  "ppn_persen": 11,
+  "purchases": [
+    {
+      "nomor_faktur": "JM1-2602-02925",
+      "id_supplier": 1,
+      "tanggal_waktu_faktur": "2026-02-28 00:00:00",
+      "tanggal_waktu_obat_datang": "2026-02-28 00:00:00",
+      "total": 268164,
+      "diskon": 0,
+      "bayar": 297662,
+      "detail": [
+        {
+          "no": 1,
+          "nama_produk": "MYLANTA LIQUID 50ML",
+          "harga_beli": 14380,
+          "expired_date": "2028-01-31",
+          "batch": "14P0491",
+          "jumlah": 6,
+          "subtotal": 86280
+        },
+        {
+          "no": 2,
+          "nama_produk": "M.KAYU PUTIH 30ML(NO.3)",
+          "harga_beli": 9460,
+          "expired_date": "2030-12-31",
+          "batch": "PG01217",
+          "jumlah": 12,
+          "subtotal": 113520
+        },
+        {
+          "no": 3,
+          "nama_produk": "VICKS INH 0.5ML KC",
+          "harga_beli": 16858,
+          "expired_date": "2027-02-28",
+          "batch": "16298V1",
+          "jumlah": 3,
+          "subtotal": 50574
+        },
+        {
+          "no": 4,
+          "nama_produk": "FIMESTAN 500MG KAPLET",
+          "harga_beli": 45455,
+          "expired_date": "2029-09-30",
+          "batch": "087254",
+          "jumlah": 100,
+          "subtotal": 45455
+        }
+      ]
+    }
+  ]
+}
+```
