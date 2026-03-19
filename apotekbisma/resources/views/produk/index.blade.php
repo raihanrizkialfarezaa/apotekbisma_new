@@ -20,11 +20,16 @@
         font-weight: bold;
     }
     
-    #filter_stok {
+    #filter_stok,
+    #search_mode {
         height: 34px;
         font-size: 13px;
         border-radius: 4px;
         padding: 5px 10px;
+    }
+    #search_produk {
+        height: 34px;
+        font-size: 13px;
     }
     .box-header .form-control {
         margin-top: -2px;
@@ -69,6 +74,119 @@
         padding: 6px 12px;
         margin-right: 5px;
     }
+
+    .mobile-filter-section .filter-toolbar {
+        background: linear-gradient(135deg, #f8fbff 0%, #eef4ff 100%);
+        border: 1px solid #d8e6ff;
+        border-radius: 10px;
+        padding: 10px 12px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: flex-end;
+    }
+
+    .mobile-filter-section .toolbar-field {
+        min-width: 140px;
+        flex: 0 0 auto;
+    }
+
+    .mobile-filter-section .toolbar-field-search {
+        min-width: 260px;
+        flex: 1 1 300px;
+    }
+
+    .mobile-filter-section .toolbar-field label {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+        color: #4a5f87;
+        text-transform: uppercase;
+    }
+
+    .mobile-filter-section .toolbar-field select,
+    .mobile-filter-section .toolbar-field input {
+        width: 100%;
+        border: 1px solid #c9d8f3;
+        border-radius: 8px;
+        box-shadow: none;
+    }
+
+    .mobile-filter-section .toolbar-field select:focus,
+    .mobile-filter-section .toolbar-field input:focus {
+        border-color: #7aa7f8;
+        box-shadow: 0 0 0 2px rgba(58, 123, 213, 0.12);
+    }
+
+    .search-input-wrap {
+        position: relative;
+    }
+
+    .search-input-wrap i {
+        position: absolute;
+        top: 50%;
+        left: 10px;
+        transform: translateY(-50%);
+        color: #7a8cae;
+        pointer-events: none;
+    }
+
+    .search-input-wrap input {
+        padding-left: 30px;
+    }
+
+    .dataTables_wrapper .dataTables_length {
+        display: none;
+    }
+
+    .dataTables_wrapper .dataTables_info {
+        display: inline-block;
+        margin-top: 12px;
+        padding: 7px 11px;
+        border-radius: 8px;
+        border: 1px solid #d7e4fb;
+        background: #f5f9ff;
+        color: #4f6388;
+        font-weight: 600;
+        font-size: 12px;
+    }
+
+    .dataTables_wrapper .dataTables_paginate {
+        margin-top: 10px;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        border: 1px solid #d2e0fb !important;
+        border-radius: 8px !important;
+        background: #ffffff !important;
+        color: #496298 !important;
+        margin-left: 4px !important;
+        padding: 4px 10px !important;
+        transition: all 0.15s ease;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+        border-color: #8cb0f5 !important;
+        background: #edf4ff !important;
+        color: #2f5faf !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+        border-color: #2f76d8 !important;
+        background: #2f76d8 !important;
+        color: #ffffff !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
+    .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover {
+        opacity: 0.5;
+        cursor: not-allowed;
+        background: #f8fbff !important;
+        color: #7f92b7 !important;
+    }
     
     /* Mobile responsive fixes */
     .table-responsive-mobile {
@@ -97,7 +215,10 @@
         background: none;
         padding: 0;
         border: none;
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
         margin-left: 15px;
     }
     
@@ -112,6 +233,20 @@
         display: inline-block;
         width: 180px !important;
         height: 30px;
+    }
+
+    .search-mode-group {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .search-mode-group #search_produk {
+        width: 250px;
+    }
+
+    .search-mode-group #search_mode {
+        width: 150px;
     }
     
     .mobile-summary-section .stock-alerts {
@@ -190,7 +325,7 @@
         /* Specific column styling */
         .table th:nth-child(1), .table td:nth-child(1) { width: 30px; } /* Checkbox */
         .table th:nth-child(2), .table td:nth-child(2) { width: 30px; } /* No */
-        .table th:nth-child(3), .table td:nth-child(3) { width: 60px; } /* Kode */
+        .table th:nth-child(3), .table td:nth-child(3) { width: 60px; } /* ID Produk */
         .table th:nth-child(4), .table td:nth-child(4) { width: 120px; } /* Nama */
         .table th:nth-child(5), .table td:nth-child(5) { width: 70px; } /* Kategori */
         .table th:nth-child(6), .table td:nth-child(6) { width: 60px; } /* Merk */
@@ -240,6 +375,8 @@
             padding: 12px;
             border-radius: 6px;
             border: 1px solid #dee2e6;
+            margin-left: 0;
+            display: block;
         }
         
         .mobile-filter-section .control-label {
@@ -257,6 +394,17 @@
             padding: 8px 12px;
             border-radius: 4px;
             border: 1px solid #ced4da;
+        }
+
+        .mobile-filter-section .search-mode-group {
+            display: block;
+            margin-top: 10px;
+        }
+
+        .mobile-filter-section .search-mode-group #search_produk,
+        .mobile-filter-section .search-mode-group #search_mode {
+            width: 100% !important;
+            margin-bottom: 8px;
         }
         
         /* Stock summary section */
@@ -363,7 +511,11 @@
             padding: 8px 12px;
         }
         
-        .mobile-filter-section #filter_stok {
+        .mobile-filter-section #filter_stok,
+        .mobile-filter-section #search_produk,
+        .mobile-filter-section #search_mode,
+        .mobile-filter-section #sort_mode,
+        .mobile-filter-section #page_size {
             height: 38px;
             font-size: 13px;
         }
@@ -394,7 +546,11 @@
             padding: 12px 16px;
         }
         
-        .mobile-filter-section #filter_stok {
+        .mobile-filter-section #filter_stok,
+        .mobile-filter-section #search_produk,
+        .mobile-filter-section #search_mode,
+        .mobile-filter-section #sort_mode,
+        .mobile-filter-section #page_size {
             min-height: 48px;
             padding: 12px;
         }
@@ -471,17 +627,54 @@
                 
                 <!-- Filter section -->
                 <div class="mobile-filter-section">
-                    <div class="filter-container">
-                        <label for="filter_stok" class="control-label">
-                            <i class="fa fa-filter"></i> Filter Stok:
-                        </label>
-                        <select id="filter_stok" class="form-control input-sm">
-                            <option value="">Semua Produk</option>
-                            <option value="habis">Stok Habis (≤0)</option>
-                            <option value="menipis">Stok Menipis (=1)</option>
-                            <option value="kritis">Stok Kritis (≤1)</option>
-                            <option value="normal">Stok Normal (>1)</option>
-                        </select>
+                    <div class="filter-container filter-toolbar">
+                        <div class="toolbar-field">
+                            <label for="filter_stok"><i class="fa fa-filter"></i> Filter Stok</label>
+                            <select id="filter_stok" class="form-control input-sm">
+                                <option value="">Semua Produk</option>
+                                <option value="habis">Stok Habis (≤0)</option>
+                                <option value="menipis">Stok Menipis (=1)</option>
+                                <option value="kritis">Stok Kritis (≤1)</option>
+                                <option value="normal">Stok Normal (>1)</option>
+                            </select>
+                        </div>
+
+                        <div class="toolbar-field">
+                            <label for="search_mode"><i class="fa fa-crosshairs"></i> Search By</label>
+                            <select id="search_mode" class="form-control input-sm">
+                                <option value="all">Semua Kolom</option>
+                                <option value="id">ID Produk</option>
+                                <option value="nama">Nama Produk</option>
+                            </select>
+                        </div>
+
+                        <div class="toolbar-field">
+                            <label for="sort_mode"><i class="fa fa-sort"></i> Urutkan</label>
+                            <select id="sort_mode" class="form-control input-sm">
+                                <option value="id_asc">ID Produk (Terkecil)</option>
+                                <option value="id_desc">ID Produk (Terbesar)</option>
+                                <option value="nama_asc">Nama (A-Z)</option>
+                                <option value="nama_desc">Nama (Z-A)</option>
+                            </select>
+                        </div>
+
+                        <div class="toolbar-field">
+                            <label for="page_size"><i class="fa fa-list-ol"></i> Per Halaman</label>
+                            <select id="page_size" class="form-control input-sm">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                        </div>
+
+                        <div class="toolbar-field toolbar-field-search">
+                            <label for="search_produk"><i class="fa fa-search"></i> Cari Realtime</label>
+                            <div class="search-input-wrap">
+                                <i class="fa fa-search"></i>
+                                <input type="text" id="search_produk" class="form-control input-sm" placeholder="Ketik ID produk atau nama produk...">
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
@@ -523,7 +716,7 @@
                                     <input type="checkbox" name="select_all" id="select_all">
                                 </th>
                                 <th width="5%">No</th>
-                                <th>Kode</th>
+                                <th>ID Produk</th>
                                 <th>Nama</th>
                                 <th>Kategori</th>
                                 <th>Merk</th>
@@ -636,6 +829,10 @@
         });
         
         table = $('.table').DataTable({
+            dom: 'lrtip',
+            order: [[2, 'asc']],
+            pageLength: 10,
+            lengthMenu: [10, 25, 50, 100],
             responsive: {
                 details: {
                     type: 'column',
@@ -653,10 +850,28 @@
                     d.filter_stok = $('#filter_stok').val();
                 }
             },
+            language: {
+                info: 'Menampilkan _START_ sampai _END_ dari _TOTAL_ produk',
+                infoEmpty: 'Belum ada produk untuk ditampilkan',
+                zeroRecords: 'Produk tidak ditemukan',
+                paginate: {
+                    previous: 'Prev',
+                    next: 'Next'
+                }
+            },
             columns: [
                 {data: 'select_all', searchable: false, sortable: false},
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
-                {data: 'kode_produk'},
+                {
+                    data: 'id_produk',
+                    render: function (data, type) {
+                        if (type === 'display') {
+                            return '<span class="label label-primary">' + data + '</span>';
+                        }
+
+                        return data;
+                    }
+                },
                 {data: 'nama_produk'},
                 {data: 'nama_kategori'},
                 {data: 'merk'},
@@ -669,9 +884,77 @@
             ]
         });
 
+        $('#page_size').val(String(table.page.len()));
+
         // Filter event handler
         $('#filter_stok').on('change', function() {
             table.ajax.reload();
+        });
+
+        $('#page_size').on('change', function() {
+            const pageSize = parseInt($(this).val() || '10', 10);
+            table.page.len(pageSize).draw();
+        });
+
+        function applySortMode() {
+            const sortMode = $('#sort_mode').val();
+
+            switch (sortMode) {
+                case 'id_desc':
+                    table.order([2, 'desc']).draw();
+                    break;
+                case 'nama_asc':
+                    table.order([3, 'asc']).draw();
+                    break;
+                case 'nama_desc':
+                    table.order([3, 'desc']).draw();
+                    break;
+                case 'id_asc':
+                default:
+                    table.order([2, 'asc']).draw();
+                    break;
+            }
+        }
+
+        $('#sort_mode').on('change', function() {
+            applySortMode();
+        });
+
+        function applyProdukSearch() {
+            const keyword = $('#search_produk').val() || '';
+            const mode = $('#search_mode').val();
+
+            table.search('');
+            table.column(2).search('');
+            table.column(3).search('');
+
+            if (mode === 'id') {
+                table.column(2).search(keyword).draw();
+                return;
+            }
+
+            if (mode === 'nama') {
+                table.column(3).search(keyword).draw();
+                return;
+            }
+
+            table.search(keyword).draw();
+        }
+
+        let produkSearchTimer = null;
+
+        $('#search_produk').on('input', function() {
+            if (produkSearchTimer) {
+                clearTimeout(produkSearchTimer);
+            }
+
+            produkSearchTimer = setTimeout(function () {
+                applyProdukSearch();
+            }, 220);
+        });
+
+        $('#search_mode').on('change', function() {
+            applyProdukSearch();
         });
 
         $('#modal-form').validator().on('submit', function (e) {
