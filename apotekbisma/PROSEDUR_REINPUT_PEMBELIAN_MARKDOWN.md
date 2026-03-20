@@ -5,6 +5,7 @@
 - Jangan reset database.
 - Jangan migrate:fresh.
 - Selalu mulai dari dry-run.
+- Untuk import darurat jan-feb via JSON executable, gunakan --preserve-subtotal agar subtotal sumber tetap dipakai apa adanya.
 
 ## Command
 
@@ -32,6 +33,7 @@ Default discovery:
 - --file: file markdown manual (bisa banyak)
 - --file-dir: folder sumber markdown
 - --file-glob: pattern file markdown (bisa koma)
+- --preserve-subtotal: gunakan subtotal dari input apa adanya (tanpa dipaksa harga_beli x jumlah)
 - --alias: file alias aktif
 - --alias-template: generate template alias unresolved
 - --alias-suggestions: generate kandidat mapping
@@ -77,6 +79,22 @@ php artisan stock:import-post-cutoff-purchases --from="2026-01-01 00:00:00" --un
 Apply:
 
 php artisan stock:import-post-cutoff-purchases --apply --from="2026-01-01 00:00:00" --until="2026-02-28 23:59:59" --alias="storage/app/product_alias_auto_deadline.json"
+
+## Alur Darurat JSON Executable (Jan-Feb)
+
+Gunakan file final executable agar tidak tergantung parser tabel markdown:
+
+1. Dry-run:
+
+php artisan stock:import-post-cutoff-purchases --from="2026-01-01 00:00:00" --until="2026-02-28 23:59:59" --file="DATA_INPUT_JANUARI_EXECUTABLE.json" --file="DATA_INPUT_FEBRUARI_EXECUTABLE.json" --preserve-subtotal --report="post_cutoff_purchase_reinput_report_janfeb_json_dryrun.json"
+
+2. Apply:
+
+php artisan stock:import-post-cutoff-purchases --apply --from="2026-01-01 00:00:00" --until="2026-02-28 23:59:59" --file="DATA_INPUT_JANUARI_EXECUTABLE.json" --file="DATA_INPUT_FEBRUARI_EXECUTABLE.json" --preserve-subtotal --report="post_cutoff_purchase_reinput_report_janfeb_json_apply.json"
+
+3. Post-check idempotent:
+
+php artisan stock:import-post-cutoff-purchases --from="2026-01-01 00:00:00" --until="2026-02-28 23:59:59" --file="DATA_INPUT_JANUARI_EXECUTABLE.json" --file="DATA_INPUT_FEBRUARI_EXECUTABLE.json" --preserve-subtotal --report="post_cutoff_purchase_reinput_report_janfeb_json_postcheck.json"
 
 ## Format Alias JSON
 

@@ -11,15 +11,16 @@ use Illuminate\Support\Facades\Schema;
 class ImportPostCutoffPurchasesFromMarkdown extends Command
 {
     protected $signature = 'stock:import-post-cutoff-purchases
-                            {--file=* : Path file markdown faktur (bisa lebih dari satu)}
-                            {--file-dir= : Direktori pencarian file markdown saat --file tidak diisi (default: root project)}
-                            {--file-glob=INPUT_FAKTUR_PEMBELIAN*.md : Pattern glob file markdown saat --file tidak diisi (pisahkan dengan koma jika lebih dari satu)}
+                            {--file=* : Path file input faktur (markdown/json, bisa lebih dari satu)}
+                            {--file-dir= : Direktori pencarian file input saat --file tidak diisi (default: root project)}
+                            {--file-glob=INPUT_FAKTUR_PEMBELIAN*.md : Pattern glob file input saat --file tidak diisi (pisahkan dengan koma jika lebih dari satu)}
                             {--alias= : Path JSON alias nama produk markdown ke id_produk atau nama produk DB}
                             {--alias-template= : Path output template JSON untuk alias produk unresolved}
                             {--alias-suggestions= : Path output JSON kandidat alias produk unresolved}
                             {--alias-autofill : Isi alias-template dengan kandidat ber-confidence tinggi}
                             {--force-map-all-products : Paksa mapping semua produk unresolved ke kandidat terbaik database (agresif)}
                             {--force-map-min-score=50 : Skor minimum mode force-map-all-products}
+                            {--preserve-subtotal : Simpan subtotal sumber apa adanya (tanpa dipaksa harga_beli x jumlah)}
                             {--apply : Terapkan insert ke database}
                             {--allow-partial : Tetap apply walau ada baris gagal mapping}
                             {--cutoff= : Cutoff baseline datetime}
@@ -28,10 +29,11 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
                             {--report= : Path report JSON output}
                             {--source=markdown-reinput-admin : Label sumber import untuk audit}';
 
-    protected $description = 'Import ulang pembelian pasca-cutoff dari file markdown tervalidasi admin, lalu reflow stok produk terdampak';
+    protected $description = 'Import ulang pembelian pasca-cutoff dari file markdown/json tervalidasi admin, lalu reflow stok produk terdampak';
 
     private array $supplierIndex = [];
     private array $supplierRows = [];
+    private array $supplierById = [];
     private array $productIndex = [];
     private array $productTokenIndex = [];
     private array $productById = [];
@@ -51,7 +53,7 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
 
         $filePaths = $this->resolveMarkdownPaths();
         if (empty($filePaths)) {
-            $this->error('Tidak ada file markdown yang valid.');
+            $this->error('Tidak ada file input yang valid.');
             return 1;
         }
 
@@ -63,13 +65,15 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
         $allowPartial = (bool) $this->option('allow-partial');
         $forceMapAllProducts = (bool) $this->option('force-map-all-products');
         $forceMapMinScore = (float) $this->option('force-map-min-score');
+        $preserveSubtotal = (bool) $this->option('preserve-subtotal');
         $sourceLabel = trim((string) $this->option('source')) !== ''
             ? trim((string) $this->option('source'))
             : 'markdown-reinput-admin';
 
-        $this->line('=== IMPORT PEMBELIAN PASCA-CUTOFF (MARKDOWN) ===');
+        $this->line('=== IMPORT PEMBELIAN PASCA-CUTOFF (MARKDOWN/JSON) ===');
         $this->line('Mode          : ' . ($apply ? 'APPLY' : 'DRY-RUN'));
         $this->line('Allow partial : ' . ($allowPartial ? 'YES' : 'NO'));
+        $this->line('Preserve subtotal: ' . ($preserveSubtotal ? 'YES' : 'NO'));
         $this->line('Cutoff        : ' . $cutoff);
         $this->line('From          : ' . $from);
         $this->line('Until         : ' . $until);
@@ -86,7 +90,7 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
             return 1;
         }
 
-        $parsed = $this->parseMarkdownFiles($filePaths);
+        $parsed = $this->parseInputFiles($filePaths);
 
         $aggregation = $this->aggregateInvoices($parsed['sections']);
         $invoiceRows = $aggregation['invoices'];
@@ -96,7 +100,7 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
         $invoiceRows = $dateFiltered['rows'];
         $dateIssues = $dateFiltered['issues'];
 
-        $mapping = $this->mapSuppliersAndProducts($invoiceRows);
+        $mapping = $this->mapSuppliersAndProducts($invoiceRows, $preserveSubtotal);
         $preparedInvoices = $mapping['invoices'];
         $mappingIssues = $mapping['issues'];
 
@@ -130,6 +134,7 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
             'generated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'mode' => $apply ? 'APPLY' : 'DRY_RUN',
             'allow_partial' => $allowPartial,
+            'preserve_subtotal' => $preserveSubtotal,
             'cutoff' => $cutoff,
             'from' => $from,
             'until' => $until,
@@ -146,6 +151,7 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
                 'forced_product_mappings_total' => count($this->forcedProductMappings),
                 'force_map_enabled' => $forceMapAllProducts,
                 'force_map_min_score' => $forceMapMinScore,
+                'preserve_subtotal' => $preserveSubtotal,
             ],
             'issues' => $issues,
             'unresolved_product_names' => $unresolvedProductNames,
@@ -380,53 +386,240 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
         return null;
     }
 
-    private function parseMarkdownFiles(array $filePaths): array
+    private function parseInputFiles(array $filePaths): array
     {
         $sections = [];
         $issues = [];
 
         foreach ($filePaths as $filePath) {
-            $content = @file_get_contents($filePath);
-            if ($content === false) {
-                $issues[] = [
+            $extension = strtolower((string) pathinfo($filePath, PATHINFO_EXTENSION));
+
+            if ($extension === 'json') {
+                $parsed = $this->parseJsonFile($filePath);
+            } else {
+                $parsed = $this->parseMarkdownFile($filePath);
+            }
+
+            if (!empty($parsed['sections'])) {
+                $sections = array_merge($sections, $parsed['sections']);
+            }
+
+            if (!empty($parsed['issues'])) {
+                $issues = array_merge($issues, $parsed['issues']);
+            }
+        }
+
+        return [
+            'sections' => $sections,
+            'issues' => $issues,
+        ];
+    }
+
+    private function parseMarkdownFile(string $filePath): array
+    {
+        $sections = [];
+        $issues = [];
+
+        $content = @file_get_contents($filePath);
+        if ($content === false) {
+            return [
+                'sections' => [],
+                'issues' => [[
                     'type' => 'file_read_error',
                     'file' => $filePath,
                     'message' => 'Gagal membaca file markdown.',
-                ];
+                ]],
+            ];
+        }
+
+        $lines = preg_split('/\r\n|\r|\n/', $content) ?: [];
+        $currentHeader = null;
+        $currentStart = 1;
+        $currentLines = [];
+
+        foreach ($lines as $index => $line) {
+            $lineNo = $index + 1;
+            if (strpos((string) $line, '### HALAMAN') === 0) {
+                if ($currentHeader !== null) {
+                    $section = $this->buildSection($filePath, $currentHeader, $currentLines, $currentStart);
+                    if ($section !== null) {
+                        $sections[] = $section;
+                    }
+                }
+
+                $currentHeader = (string) $line;
+                $currentStart = $lineNo;
+                $currentLines = [];
                 continue;
             }
 
-            $lines = preg_split('/\r\n|\r|\n/', $content) ?: [];
-            $currentHeader = null;
-            $currentStart = 1;
-            $currentLines = [];
+            if ($currentHeader !== null) {
+                $currentLines[] = (string) $line;
+            }
+        }
 
-            foreach ($lines as $index => $line) {
-                $lineNo = $index + 1;
-                if (strpos((string) $line, '### HALAMAN') === 0) {
-                    if ($currentHeader !== null) {
-                        $section = $this->buildSection($filePath, $currentHeader, $currentLines, $currentStart);
-                        if ($section !== null) {
-                            $sections[] = $section;
-                        }
-                    }
+        if ($currentHeader !== null) {
+            $section = $this->buildSection($filePath, $currentHeader, $currentLines, $currentStart);
+            if ($section !== null) {
+                $sections[] = $section;
+            }
+        }
 
-                    $currentHeader = (string) $line;
-                    $currentStart = $lineNo;
-                    $currentLines = [];
+        return [
+            'sections' => $sections,
+            'issues' => $issues,
+        ];
+    }
+
+    private function parseJsonFile(string $filePath): array
+    {
+        $content = @file_get_contents($filePath);
+        if ($content === false) {
+            return [
+                'sections' => [],
+                'issues' => [[
+                    'type' => 'file_read_error',
+                    'file' => $filePath,
+                    'message' => 'Gagal membaca file json.',
+                ]],
+            ];
+        }
+
+        $decoded = json_decode($content, true);
+        if (!is_array($decoded)) {
+            return [
+                'sections' => [],
+                'issues' => [[
+                    'type' => 'json_decode_error',
+                    'file' => $filePath,
+                    'message' => 'Format JSON tidak valid.',
+                ]],
+            ];
+        }
+
+        $documents = [];
+        if (isset($decoded['purchases']) && is_array($decoded['purchases'])) {
+            $documents[] = $decoded;
+        } elseif ($this->isListArray($decoded)) {
+            foreach ($decoded as $item) {
+                if (is_array($item) && isset($item['purchases']) && is_array($item['purchases'])) {
+                    $documents[] = $item;
+                }
+            }
+        }
+
+        if (empty($documents)) {
+            return [
+                'sections' => [],
+                'issues' => [[
+                    'type' => 'json_structure_error',
+                    'file' => $filePath,
+                    'message' => 'JSON tidak memiliki key purchases yang valid.',
+                ]],
+            ];
+        }
+
+        $sections = [];
+        $issues = [];
+
+        foreach ($documents as $doc) {
+            $purchases = $doc['purchases'] ?? [];
+            if (!is_array($purchases)) {
+                continue;
+            }
+
+            foreach ($purchases as $purchaseIndex => $purchase) {
+                if (!is_array($purchase)) {
                     continue;
                 }
 
-                if ($currentHeader !== null) {
-                    $currentLines[] = (string) $line;
+                $invoiceNo = mb_strtoupper(trim((string) ($purchase['nomor_faktur'] ?? '')));
+                if ($invoiceNo === '') {
+                    $issues[] = [
+                        'type' => 'missing_invoice_number',
+                        'file' => $filePath,
+                        'purchase_index' => $purchaseIndex,
+                        'message' => 'Nomor faktur tidak ditemukan pada JSON purchase.',
+                    ];
+                    continue;
                 }
-            }
 
-            if ($currentHeader !== null) {
-                $section = $this->buildSection($filePath, $currentHeader, $currentLines, $currentStart);
-                if ($section !== null) {
-                    $sections[] = $section;
+                $invoiceDate = trim((string) ($purchase['tanggal_waktu_faktur'] ?? ''));
+                if ($invoiceDate === '') {
+                    $invoiceDate = trim((string) ($purchase['tanggal_waktu_obat_datang'] ?? ''));
                 }
+                if ($invoiceDate === '') {
+                    $invoiceDate = null;
+                }
+
+                $supplierIdInput = (int) ($purchase['id_supplier'] ?? 0);
+                $supplierName = $supplierIdInput > 0
+                    ? $this->resolveSupplierNameById($supplierIdInput)
+                    : null;
+
+                $detailRows = $purchase['detail'] ?? [];
+                if (!is_array($detailRows)) {
+                    $detailRows = [];
+                }
+
+                $rows = [];
+                foreach ($detailRows as $detailIndex => $detailRow) {
+                    if (!is_array($detailRow)) {
+                        continue;
+                    }
+
+                    $jumlah = $this->parseQuantity((string) ($detailRow['jumlah'] ?? '0'));
+                    if ($jumlah <= 0) {
+                        continue;
+                    }
+
+                    $hargaBeli = $this->parseNumericToInt($detailRow['harga_beli'] ?? 0);
+                    $subtotal = $this->parseNumericToInt($detailRow['subtotal'] ?? 0);
+
+                    if ($subtotal <= 0 && $hargaBeli > 0) {
+                        $subtotal = $hargaBeli * $jumlah;
+                    }
+
+                    if ($hargaBeli <= 0 && $subtotal > 0) {
+                        $hargaBeli = (int) max(1, round($subtotal / max($jumlah, 1)));
+                    }
+
+                    if ($subtotal <= 0) {
+                        $issues[] = [
+                            'type' => 'invalid_detail_subtotal',
+                            'file' => $filePath,
+                            'no_faktur' => $invoiceNo,
+                            'detail_index' => $detailIndex,
+                            'message' => 'Detail memiliki subtotal <= 0 setelah normalisasi.',
+                        ];
+                        continue;
+                    }
+
+                    $rows[] = [
+                        'line' => $detailIndex + 1,
+                        'nama_produk_raw' => trim((string) ($detailRow['nama_produk'] ?? '')),
+                        'jumlah' => $jumlah,
+                        'harga_beli' => max(1, $hargaBeli),
+                        'subtotal' => $subtotal,
+                        'batch' => trim((string) ($detailRow['batch'] ?? '')),
+                        'id_produk_input' => (int) ($detailRow['id_produk'] ?? 0),
+                    ];
+                }
+
+                if (empty($rows)) {
+                    continue;
+                }
+
+                $sections[] = [
+                    'file' => $filePath,
+                    'header' => 'JSON PURCHASE: ' . $invoiceNo,
+                    'start_line' => $purchaseIndex + 1,
+                    'supplier_name' => $supplierName,
+                    'id_supplier_input' => $supplierIdInput,
+                    'no_faktur' => $invoiceNo,
+                    'invoice_date' => $invoiceDate,
+                    'rows' => $rows,
+                ];
             }
         }
 
@@ -463,6 +656,7 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
             'header' => $header,
             'start_line' => $startLine,
             'supplier_name' => $supplierName,
+            'id_supplier_input' => null,
             'no_faktur' => $invoiceNo,
             'invoice_date' => $invoiceDate,
             'rows' => $rows,
@@ -838,6 +1032,55 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
         return (int) max(0, round((float) $clean));
     }
 
+    private function parseNumericToInt($value): int
+    {
+        if (is_int($value)) {
+            return max(0, $value);
+        }
+
+        if (is_float($value)) {
+            return (int) max(0, round($value));
+        }
+
+        if (is_numeric($value)) {
+            return (int) max(0, round((float) $value));
+        }
+
+        $stringValue = trim((string) $value);
+        if ($stringValue === '') {
+            return 0;
+        }
+
+        $normalized = str_replace(['rp', 'idr', ' '], '', strtolower($stringValue));
+        if ($normalized === '' || $normalized === '-') {
+            return 0;
+        }
+
+        if (preg_match('/^-?[0-9]+(?:\.[0-9]+)?$/', $normalized)) {
+            return (int) max(0, round((float) $normalized));
+        }
+
+        if (preg_match('/^-?[0-9]+(?:,[0-9]+)?$/', $normalized)) {
+            $normalized = str_replace(',', '.', $normalized);
+            return (int) max(0, round((float) $normalized));
+        }
+
+        return $this->parseCurrencyToInt($stringValue);
+    }
+
+    private function isListArray(array $value): bool
+    {
+        $expectedIndex = 0;
+        foreach (array_keys($value) as $key) {
+            if ($key !== $expectedIndex) {
+                return false;
+            }
+            $expectedIndex++;
+        }
+
+        return true;
+    }
+
     private function aggregateInvoices(array $sections): array
     {
         $issues = [];
@@ -860,6 +1103,7 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
                 $grouped[$invoiceNo] = [
                     'no_faktur' => $invoiceNo,
                     'supplier_name' => $section['supplier_name'],
+                    'id_supplier_input' => (int) ($section['id_supplier_input'] ?? 0),
                     'invoice_date' => $section['invoice_date'],
                     'source_sections' => [],
                     'rows' => [],
@@ -873,6 +1117,10 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
 
             if ($grouped[$invoiceNo]['invoice_date'] === null && $section['invoice_date'] !== null) {
                 $grouped[$invoiceNo]['invoice_date'] = $section['invoice_date'];
+            }
+
+            if ((int) $grouped[$invoiceNo]['id_supplier_input'] <= 0 && (int) ($section['id_supplier_input'] ?? 0) > 0) {
+                $grouped[$invoiceNo]['id_supplier_input'] = (int) $section['id_supplier_input'];
             }
 
             $grouped[$invoiceNo]['source_sections'][] = [
@@ -908,6 +1156,7 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
             $invoices[] = [
                 'no_faktur' => $invoiceNo,
                 'supplier_name' => $payload['supplier_name'],
+                'id_supplier_input' => (int) ($payload['id_supplier_input'] ?? 0),
                 'invoice_date' => $payload['invoice_date'],
                 'source_sections' => $payload['source_sections'],
                 'rows' => $payload['rows'],
@@ -970,14 +1219,23 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
         ];
     }
 
-    private function mapSuppliersAndProducts(array $invoiceRows): array
+    private function mapSuppliersAndProducts(array $invoiceRows, bool $preserveSubtotal = false): array
     {
         $issues = [];
         $mappedInvoices = [];
 
         foreach ($invoiceRows as $invoice) {
             $supplierName = trim((string) ($invoice['supplier_name'] ?? ''));
-            $supplierMapping = $this->resolveSupplier($supplierName);
+            $supplierInputId = (int) ($invoice['id_supplier_input'] ?? 0);
+            if ($supplierInputId > 0 && isset($this->supplierById[$supplierInputId])) {
+                $supplierMapping = [
+                    'ok' => true,
+                    'id_supplier' => $supplierInputId,
+                    'nama' => (string) $this->supplierById[$supplierInputId]['nama'],
+                ];
+            } else {
+                $supplierMapping = $this->resolveSupplier($supplierName);
+            }
 
             if (!$supplierMapping['ok']) {
                 $issues[] = [
@@ -993,8 +1251,18 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
             $rowIssues = [];
 
             foreach ($invoice['rows'] as $row) {
-                $productName = $row['nama_produk_raw'];
-                $productMapping = $this->resolveProduct($productName);
+                $productName = trim((string) ($row['nama_produk_raw'] ?? ''));
+                $productInputId = (int) ($row['id_produk_input'] ?? 0);
+
+                if ($productInputId > 0 && isset($this->productById[$productInputId])) {
+                    $productMapping = [
+                        'ok' => true,
+                        'id_produk' => $productInputId,
+                        'nama_produk' => (string) $this->productById[$productInputId]['nama_produk'],
+                    ];
+                } else {
+                    $productMapping = $this->resolveProduct($productName);
+                }
 
                 if (!$productMapping['ok']) {
                     $rowIssues[] = [
@@ -1014,11 +1282,36 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
                         'nama_produk_db' => $productMapping['nama_produk'],
                         'jumlah' => 0,
                         'subtotal' => 0,
+                        'harga_beli_weighted_total' => 0,
+                        'harga_beli_weighted_qty' => 0,
                     ];
                 }
 
-                $detailByProduct[$productId]['jumlah'] += (int) $row['jumlah'];
-                $detailByProduct[$productId]['subtotal'] += (int) $row['subtotal'];
+                $jumlah = max(1, (int) ($row['jumlah'] ?? 0));
+                $subtotal = max(0, (int) ($row['subtotal'] ?? 0));
+                $hargaBeli = max(0, (int) ($row['harga_beli'] ?? 0));
+
+                if ($subtotal <= 0 && $hargaBeli > 0) {
+                    $subtotal = $hargaBeli * $jumlah;
+                }
+
+                if ($subtotal <= 0) {
+                    $rowIssues[] = [
+                        'type' => 'invalid_detail_subtotal',
+                        'no_faktur' => $invoice['no_faktur'],
+                        'line' => $row['line'] ?? null,
+                        'nama_produk_raw' => $productName,
+                        'message' => 'Subtotal detail tidak valid (<= 0).',
+                    ];
+                    continue;
+                }
+
+                $detailByProduct[$productId]['jumlah'] += $jumlah;
+                $detailByProduct[$productId]['subtotal'] += $subtotal;
+                if ($hargaBeli > 0) {
+                    $detailByProduct[$productId]['harga_beli_weighted_total'] += ($hargaBeli * $jumlah);
+                    $detailByProduct[$productId]['harga_beli_weighted_qty'] += $jumlah;
+                }
             }
 
             if (!empty($rowIssues)) {
@@ -1026,17 +1319,29 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
                 continue;
             }
 
-            $details = array_values(array_map(function (array $detail): array {
+            $details = array_values(array_map(function (array $detail) use ($preserveSubtotal): array {
                 $jumlah = max(1, (int) $detail['jumlah']);
                 $subtotal = max(1, (int) $detail['subtotal']);
-                $hargaBeli = (int) max(1, round($subtotal / $jumlah));
+
+                $hargaBeli = 0;
+                if ((int) ($detail['harga_beli_weighted_qty'] ?? 0) > 0) {
+                    $hargaBeli = (int) max(1, round(
+                        ((int) $detail['harga_beli_weighted_total']) / ((int) $detail['harga_beli_weighted_qty'])
+                    ));
+                } else {
+                    $hargaBeli = (int) max(1, round($subtotal / $jumlah));
+                }
+
+                $finalSubtotal = $preserveSubtotal
+                    ? $subtotal
+                    : ($hargaBeli * $jumlah);
 
                 return [
                     'id_produk' => (int) $detail['id_produk'],
                     'nama_produk' => $detail['nama_produk_db'],
                     'jumlah' => $jumlah,
                     'harga_beli' => $hargaBeli,
-                    'subtotal' => $hargaBeli * $jumlah,
+                    'subtotal' => (int) max(1, $finalSubtotal),
                 ];
             }, $detailByProduct));
 
@@ -1105,7 +1410,7 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
         $existingDetailRows = DB::table('pembelian_detail as pd')
             ->join('pembelian as p', 'p.id_pembelian', '=', 'pd.id_pembelian')
             ->whereIn('p.no_faktur', $invoiceNumbers)
-            ->select('p.no_faktur', 'p.id_supplier', 'pd.id_produk', 'pd.jumlah')
+            ->select('p.no_faktur', 'p.id_supplier', 'pd.id_produk', 'pd.jumlah', 'pd.subtotal')
             ->get();
 
         $existingSignatures = [];
@@ -1117,10 +1422,14 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
 
             $productId = (int) $detail->id_produk;
             if (!isset($existingSignatures[$invoiceNo][$productId])) {
-                $existingSignatures[$invoiceNo][$productId] = 0;
+                $existingSignatures[$invoiceNo][$productId] = [
+                    'jumlah' => 0,
+                    'subtotal' => 0,
+                ];
             }
 
-            $existingSignatures[$invoiceNo][$productId] += (int) $detail->jumlah;
+            $existingSignatures[$invoiceNo][$productId]['jumlah'] += (int) $detail->jumlah;
+            $existingSignatures[$invoiceNo][$productId]['subtotal'] += (int) $detail->subtotal;
         }
 
         $insertable = [];
@@ -1169,9 +1478,14 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
         foreach ($details as $detail) {
             $productId = (int) $detail['id_produk'];
             if (!isset($signature[$productId])) {
-                $signature[$productId] = 0;
+                $signature[$productId] = [
+                    'jumlah' => 0,
+                    'subtotal' => 0,
+                ];
             }
-            $signature[$productId] += (int) $detail['jumlah'];
+
+            $signature[$productId]['jumlah'] += (int) $detail['jumlah'];
+            $signature[$productId]['subtotal'] += (int) $detail['subtotal'];
         }
 
         ksort($signature);
@@ -1216,6 +1530,26 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
         }
 
         $this->supplierIndex = $index;
+
+        $supplierById = [];
+        foreach ($this->supplierRows as $row) {
+            $supplierById[(int) $row['id_supplier']] = $row;
+        }
+
+        $this->supplierById = $supplierById;
+    }
+
+    private function resolveSupplierNameById(int $idSupplier): ?string
+    {
+        if ($idSupplier <= 0) {
+            return null;
+        }
+
+        if (!isset($this->supplierById[$idSupplier])) {
+            return null;
+        }
+
+        return (string) ($this->supplierById[$idSupplier]['nama'] ?? null);
     }
 
     private function buildProductIndex(): void
