@@ -1,12 +1,7 @@
-# INPUT DATA FEBRUARI JSON FIXED YAALLAH
-
-## HALAMAN 1
-
-```json
 {
     "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-gehael-merged",
-    "generated_at": "2026-03-19 21:43:00",
+    "source": "markdown-json-converted:DATA_INPUT_FEBRUARI.md",
+    "generated_at": "2026-03-19 23:48:34",
     "ppn_persen": 11,
     "purchases": [
         {
@@ -259,26 +254,13 @@
                     "subtotal": 72709.26
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 2
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 04:24:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "POSPSE260200549",
             "id_supplier": 1,
             "tanggal_waktu_faktur": "2026-02-04 14:05:28",
             "tanggal_waktu_obat_datang": "2026-02-04 14:05:28",
-            "total": 243920.0,
+            "total": 243920,
             "diskon": 0,
             "bayar": 270751.2,
             "detail": [
@@ -307,20 +289,7 @@
                     "subtotal": 48951
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 3
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 04:26:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "POSPST260200550",
             "id_supplier": 1,
@@ -367,20 +336,7 @@
                     "subtotal": 90159.75
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 4
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 04:27:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "TMP-INV-2026/02/04/2396190",
             "id_supplier": 1,
@@ -463,20 +419,7 @@
                     "subtotal": 81755
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 5
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 04:30:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "T5603351.20260205003",
             "id_supplier": 1,
@@ -499,20 +442,7 @@
                     "subtotal": 78600
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 6
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 04:30:30",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "JM1-2602-00415",
             "id_supplier": 1,
@@ -655,20 +585,7 @@
                     "subtotal": 329048
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 7
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 04:31:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "JMR-2602-00156",
             "id_supplier": 1,
@@ -691,20 +608,7 @@
                     "subtotal": 39937
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 8
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 04:32:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "NPS-2602-628174",
             "id_supplier": 1,
@@ -775,20 +679,7 @@
                     "subtotal": 57173
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 9
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 04:35:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "NPS-2602-628175",
             "id_supplier": 1,
@@ -931,20 +822,7 @@
                     "subtotal": 45156
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 10
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 04:36:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "NPS-2602-628176",
             "id_supplier": 1,
@@ -1063,20 +941,7 @@
                     "subtotal": 26673
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 11
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 12:48:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "NPS-2602-628177",
             "id_supplier": 1,
@@ -1135,20 +1000,7 @@
                     "subtotal": 29897
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 12
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 12:51:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "01549/SJA/02/26",
             "id_supplier": 1,
@@ -1279,20 +1131,7 @@
                     "subtotal": 53614
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 13
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 12:54:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "01552/SJA/02/26",
             "id_supplier": 1,
@@ -1339,20 +1178,7 @@
                     "subtotal": 51333
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 14
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 12:56:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "01553/SJA/02/26",
             "id_supplier": 1,
@@ -1387,20 +1213,7 @@
                     "subtotal": 80810
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 15
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 12:59:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "01547/SJA/02/26",
             "id_supplier": 1,
@@ -1531,20 +1344,7 @@
                     "subtotal": 23818
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 16
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 13:00:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "AJA-2602-004949",
             "id_supplier": 1,
@@ -1687,20 +1487,7 @@
                     "subtotal": 57222
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 17
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 13:02:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "AJA-2602-004950",
             "id_supplier": 1,
@@ -1759,20 +1546,7 @@
                     "subtotal": 198144
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 18
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 13:05:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "02128/SJA/03/26",
             "id_supplier": 1,
@@ -1903,20 +1677,7 @@
                     "subtotal": 11634
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 19
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 13:10:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "02127/SJA/03/26",
             "id_supplier": 1,
@@ -2047,20 +1808,7 @@
                     "subtotal": 40746
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 20
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 13:14:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "02129/SJA/03/26",
             "id_supplier": 1,
@@ -2107,20 +1855,7 @@
                     "subtotal": 153640
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 21
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 13:15:40",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "02130/SJA/03/26",
             "id_supplier": 1,
@@ -2167,20 +1902,7 @@
                     "subtotal": 45608
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 22
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 13:19:30",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "02131/SJA/03/26",
             "id_supplier": 1,
@@ -2203,20 +1925,7 @@
                     "subtotal": 40991
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 23
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 13:20:50",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "JMR-2603-00451",
             "id_supplier": 1,
@@ -2251,20 +1960,7 @@
                     "subtotal": 247092
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 24
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 13:23:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "JMR-2603-00452",
             "id_supplier": 1,
@@ -2287,20 +1983,7 @@
                     "subtotal": 207024
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 25
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 13:27:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "JM1-2603-01208",
             "id_supplier": 1,
@@ -2395,20 +2078,7 @@
                     "subtotal": 181500
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 26
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 13:30:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "JM1-2603-01207",
             "id_supplier": 1,
@@ -2563,20 +2233,7 @@
                     "subtotal": 178000
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 27
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 13:35:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "NPS-2603-634442",
             "id_supplier": 1,
@@ -2683,20 +2340,7 @@
                     "subtotal": 104062
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 28
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 13:38:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "NPS-2603-634440",
             "id_supplier": 1,
@@ -2839,20 +2483,7 @@
                     "subtotal": 67016
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 29
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 13:41:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "NPS-2603-634438",
             "id_supplier": 1,
@@ -2875,20 +2506,7 @@
                     "subtotal": 114330
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 30
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 13:45:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "NPS-2603-634441",
             "id_supplier": 1,
@@ -2995,20 +2613,7 @@
                     "subtotal": 33966
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 31
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 13:48:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "NPS-2603-634439",
             "id_supplier": 1,
@@ -3035,7 +2640,7 @@
                     "id_produk": 708,
                     "kode_produk": "",
                     "nama_produk": "SALEP KULIT 88 NORETUR ;BX/12POT",
-                    "harga_beli": 174825.0,
+                    "harga_beli": 174825,
                     "harga_jual": 0,
                     "expired_date": "2028-07-31",
                     "batch": "2507114",
@@ -3047,7 +2652,7 @@
                     "id_produk": 435,
                     "kode_produk": "",
                     "nama_produk": "LASERIN SYR 60ML NORETUR ;FL/60ML",
-                    "harga_beli": 14652.0,
+                    "harga_beli": 14652,
                     "harga_jual": 0,
                     "expired_date": "2029-12-31",
                     "batch": "2512A801",
@@ -3095,7 +2700,7 @@
                     "id_produk": 256,
                     "kode_produk": "",
                     "nama_produk": "ESEMAG SIDOMUNCUL NORETUR ;BOX/15SACH",
-                    "harga_beli": 8103.0,
+                    "harga_beli": 8103,
                     "harga_jual": 0,
                     "expired_date": "2027-10-31",
                     "batch": "EL00043",
@@ -3107,7 +2712,7 @@
                     "id_produk": 63,
                     "kode_produk": "",
                     "nama_produk": "ASAM MEFENAMAT 500MG(HEX) NR ;BOX,100KPL",
-                    "harga_beli": 22200.0,
+                    "harga_beli": 22200,
                     "harga_jual": 0,
                     "expired_date": "2027-09-30",
                     "batch": "TMEC850856",
@@ -3131,7 +2736,7 @@
                     "id_produk": 13,
                     "kode_produk": "",
                     "nama_produk": "AKURAT UJI KEHAMILAN NORETUR ;STRIP",
-                    "harga_beli": 10545.0,
+                    "harga_beli": 10545,
                     "harga_jual": 0,
                     "expired_date": "2028-06-30",
                     "batch": "BQ202506",
@@ -3167,7 +2772,7 @@
                     "id_produk": 122,
                     "kode_produk": "",
                     "nama_produk": "BUFACOMB IN ORA BASE NORETUR ;TUBE,5GR",
-                    "harga_beli": 33300.0,
+                    "harga_beli": 33300,
                     "harga_jual": 0,
                     "expired_date": "2029-10-31",
                     "batch": "H0210501",
@@ -3187,20 +2792,7 @@
                     "subtotal": 45094
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 32
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 13:51:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "JM1-2602-01176A",
             "id_supplier": 1,
@@ -3343,20 +2935,7 @@
                     "subtotal": 37569
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 33
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 13:52:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "JM1-2602-01180",
             "id_supplier": 1,
@@ -3391,20 +2970,7 @@
                     "subtotal": 121623
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 34
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 13:54:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "JM1-2602-01178",
             "id_supplier": 1,
@@ -3427,20 +2993,7 @@
                     "subtotal": 62046
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 35
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 13:56:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "JMR-2602-00451",
             "id_supplier": 1,
@@ -3475,20 +3028,7 @@
                     "subtotal": 82200
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 36
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 13:58:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "JM1-2602-01177",
             "id_supplier": 1,
@@ -3607,20 +3147,7 @@
                     "subtotal": 86600
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 37
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-mnj",
-    "generated_at": "2026-03-19 14:02:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "T56C3351.20260213001",
             "id_supplier": 1,
@@ -3655,20 +3182,7 @@
                     "subtotal": 55384
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 38
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-mnj",
-    "generated_at": "2026-03-19 14:06:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "T56C3351.20260213002",
             "id_supplier": 1,
@@ -3703,20 +3217,7 @@
                     "subtotal": 48132
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 39
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-mnj",
-    "generated_at": "2026-03-19 14:12:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "T56C3351.20260212004",
             "id_supplier": 1,
@@ -3732,7 +3233,7 @@
                     "kode_produk": "",
                     "nama_produk": "OBAT BATUK IBU ANAK 75 ML",
                     "harga_beli": 27200,
-                    "harga_jual": 30000,
+                    "harga_jual": 0,
                     "expired_date": "2028-04-30",
                     "batch": "E2505030ID",
                     "jumlah": 3,
@@ -3763,20 +3264,7 @@
                     "subtotal": 82584
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 40
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 14:13:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "JM1-2602-01468",
             "id_supplier": 1,
@@ -3907,20 +3395,7 @@
                     "subtotal": 129730
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 41
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 14:15:20",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "JM1-2602-01469",
             "id_supplier": 1,
@@ -3991,20 +3466,7 @@
                     "subtotal": 112000
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 42
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 14:17:45",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "JMR-2602-00563",
             "id_supplier": 1,
@@ -4063,20 +3525,7 @@
                     "subtotal": 278200
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 43
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 14:21:40",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "TMP-INV-2026/02/18/2444044",
             "id_supplier": 1,
@@ -4183,20 +3632,7 @@
                     "subtotal": 29730
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 44
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-final-correction",
-    "generated_at": "2026-03-20 00:36:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "NPS-2602-629901",
             "id_supplier": 1,
@@ -4235,7 +3671,7 @@
                     "id_produk": 496,
                     "kode_produk": "",
                     "nama_produk": "MADU TJ * 150GR NORETUR ;BTL,150GR",
-                    "harga_beli": 22422.0,
+                    "harga_beli": 22422,
                     "harga_jual": 0,
                     "expired_date": "2029-12-31",
                     "batch": "25P09462",
@@ -4307,7 +3743,7 @@
                     "id_produk": 708,
                     "kode_produk": "",
                     "nama_produk": "SALEP KULIT 88 NORETUR ;BX/12POT",
-                    "harga_beli": 174825.0,
+                    "harga_beli": 174825,
                     "harga_jual": 0,
                     "expired_date": "2028-07-31",
                     "batch": "2507114",
@@ -4343,7 +3779,7 @@
                     "id_produk": 344,
                     "kode_produk": "",
                     "nama_produk": "HEMAVITON ACTION KAPSUL NORET ;BX/50KAPS",
-                    "harga_beli": 67599.0,
+                    "harga_beli": 67599,
                     "harga_jual": 0,
                     "expired_date": "2028-10-31",
                     "batch": "110605",
@@ -4375,20 +3811,7 @@
                     "subtotal": 97502
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 45
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-20 03:50:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "NPS-2602-629903",
             "id_supplier": 1,
@@ -4475,7 +3898,7 @@
                     "id_produk": 98,
                     "kode_produk": "",
                     "nama_produk": "BEVALEX CR 5G NORETUR ;TUBE/5G",
-                    "harga_beli": 18870.0,
+                    "harga_beli": 18870,
                     "harga_jual": 0,
                     "expired_date": "2027-09-30",
                     "batch": "801MS061",
@@ -4511,7 +3934,7 @@
                     "id_produk": 309,
                     "kode_produk": "",
                     "nama_produk": "GEMFIBROZIL KAP 300MG\"PHP\" NR ;BX/100KAP",
-                    "harga_beli": 83250.0,
+                    "harga_beli": 83250,
                     "harga_jual": 0,
                     "expired_date": "2027-10-31",
                     "batch": "86441013",
@@ -4559,7 +3982,7 @@
                     "id_produk": 434,
                     "kode_produk": "",
                     "nama_produk": "LASERIN SYR 30ML NORETUR ;FL/30ML",
-                    "harga_beli": 7326.0,
+                    "harga_beli": 7326,
                     "harga_jual": 0,
                     "expired_date": "2029-11-30",
                     "batch": "2511A003",
@@ -4567,20 +3990,7 @@
                     "subtotal": 26960
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 46
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 14:33:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "NPS-2602-629900",
             "id_supplier": 1,
@@ -4651,20 +4061,7 @@
                     "subtotal": 85450
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 47
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 14:45:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "NPS-2602-629930",
             "id_supplier": 1,
@@ -4687,20 +4084,7 @@
                     "subtotal": 115751
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 48
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 14:48:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "NPS-2602-629905",
             "id_supplier": 1,
@@ -4723,20 +4107,7 @@
                     "subtotal": 26257
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 49
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 14:40:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "JMR-2602-00760",
             "id_supplier": 1,
@@ -4771,20 +4142,7 @@
                     "subtotal": 90705
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 50
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 14:43:11",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "JMR-2602-00761",
             "id_supplier": 1,
@@ -4807,20 +4165,7 @@
                     "subtotal": 82200
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 51
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 14:44:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "JM1-2602-01894",
             "id_supplier": 1,
@@ -4903,20 +4248,7 @@
                     "subtotal": 75450
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 52
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 14:46:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "JM1-2602-01893",
             "id_supplier": 1,
@@ -4975,20 +4307,7 @@
                     "subtotal": 83298
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 53
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-20 04:06:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "JM1-2602-01892",
             "id_supplier": 1,
@@ -5143,20 +4462,7 @@
                     "subtotal": 84000
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 54-55
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-gehael",
-    "generated_at": "2026-03-20 04:15:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "POSPST260202706",
             "id_supplier": 1,
@@ -5323,20 +4629,7 @@
                     "subtotal": 96570
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 56
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-20 04:20:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "JM1-2602-02416",
             "id_supplier": 1,
@@ -5491,20 +4784,7 @@
                     "subtotal": 137250
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 57
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-20 04:31:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "JM1-2602-02417",
             "id_supplier": 1,
@@ -5623,20 +4903,7 @@
                     "subtotal": 114400
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 58
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 15:06:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "JMR-2602-00977",
             "id_supplier": 1,
@@ -5671,20 +4938,7 @@
                     "subtotal": 68800
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 59
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-19 15:10:28",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "JMR-2602-00978",
             "id_supplier": 1,
@@ -5707,20 +4961,7 @@
                     "subtotal": 58896
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 60
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-20 04:35:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "AJA-2602-006835/24-02-2026/LF",
             "id_supplier": 1,
@@ -5863,20 +5104,7 @@
                     "subtotal": 46200
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 61
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-20 04:40:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "AJA-2602-006836/24-02-2026/LF",
             "id_supplier": 1,
@@ -5971,20 +5199,7 @@
                     "subtotal": 40740
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 62
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-20 04:42:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "JM1-2602-02924",
             "id_supplier": 1,
@@ -6139,20 +5354,7 @@
                     "subtotal": 46500
                 }
             ]
-        }
-    ]
-}
-```
-
-## HALAMAN 63
-
-```json
-{
-    "schema_version": "2.0",
-    "source": "ocr-extraction-apotekbisma-corrected",
-    "generated_at": "2026-03-20 04:45:00",
-    "ppn_persen": 11,
-    "purchases": [
+        },
         {
             "nomor_faktur": "JM1-2602-02925",
             "id_supplier": 1,
@@ -6214,4 +5416,3 @@
         }
     ]
 }
-```

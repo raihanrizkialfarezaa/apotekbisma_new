@@ -210,7 +210,8 @@ class ProdukController extends Controller
         $request['kode_produk'] = 'P'. tambah_nol_didepan((int)$produk->id_produk +1, 6);
         // dd($request->all());
 
-        $produk = Produk::create($request->all());
+        $data = $request->except('keterangan_stok');
+        $produk = Produk::create($data);
 
         return response()->json('Data berhasil disimpan', 200);
     }
