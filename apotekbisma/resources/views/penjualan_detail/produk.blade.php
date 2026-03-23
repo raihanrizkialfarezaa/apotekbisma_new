@@ -84,12 +84,12 @@
                                             <span class="label label-warning">Stok Menipis</span>
                                         @endif
                                     </td>
-                                    <td>{{ number_format($item->harga_jual) }}</td>
                                     <td>
                                         <span class="{{ $item->stok <= 0 ? 'text-danger' : ($item->stok == 1 ? 'text-warning' : 'text-success') }}">
                                             {{ $item->stok }}
                                         </span>
                                     </td>
+                                    <td>{{ number_format($item->harga_jual) }}</td>
                                     <td>
                                         @if($item->stok > 0)
                                             <a href="#" class="btn btn-primary btn-xs btn-flat"

@@ -1192,6 +1192,9 @@
 
     function cancelPenjualanTransaksi() {
         let idPenjualan = $('input[name="id_penjualan"]').first().val();
+        const isTransaksiBaruPage = window.location.pathname.indexOf('/transaksi/baru') !== -1;
+        const isEditTransaction = @json($isEditTransaction ?? false);
+        const cancelMode = isTransaksiBaruPage ? 'draft' : (isEditTransaction ? 'edit' : 'general');
 
         if (!confirm('Batalkan form penjualan ini? Draft transaksi akan ditutup.')) {
             return;
@@ -1203,10 +1206,19 @@
         }
 
         $.post('{{ route("transaksi.cancel", ":id") }}'.replace(':id', idPenjualan), {
-                '_token': $('[name=csrf-token]').attr('content')
+                '_token': $('[name=csrf-token]').attr('content'),
+                'mode': cancelMode
             })
-            .done(() => {
-                window.location.href = '{{ route("penjualan.index") }}';
+            .done((response) => {
+                if (response && (response.deleted === true || response.restored === true)) {
+                    window.location.href = '{{ route("penjualan.index") }}';
+                    return;
+                }
+
+                const message = (response && response.message)
+                    ? response.message
+                    : 'Transaksi tidak dibatalkan karena bukan draft.';
+                alert(message);
             })
             .fail((xhr) => {
                 let errorMessage = 'Tidak dapat membatalkan transaksi';

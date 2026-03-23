@@ -34,6 +34,17 @@ class PembelianStockSyncService
 
         $forceReflow = (bool) ($options['force_reflow'] ?? false);
         $useReflow = $forceReflow || $this->shouldUsePostCutoffReflow($idPembelian, $snapshot);
+        $hasContext = $idPembelian && $idPembelian > 0;
+
+        if ($hasContext && !$useReflow && !$forceReflow) {
+            // Draft pembelian sudah mengubah produk.stok secara atomic di level transaksi.
+            // Hindari fallback recalculate global agar histori lama yang korup tidak menimpa stok draft.
+            return [
+                'strategy' => 'skip_draft_sync',
+                'products_synced' => count($normalizedIds),
+                'product_ids' => $normalizedIds,
+            ];
+        }
 
         if ($useReflow && $this->canExecuteReflow()) {
             try {

@@ -209,6 +209,9 @@ class PembelianController extends Controller
 
     public function create($id = null)
     {
+        session()->forget('pembelian_edit_mode');
+        session()->forget('pembelian_edit_snapshot');
+
         // Jika ada ID, berarti ini untuk lanjutkan/edit transaksi
         if ($id && request('continue') === 'true') {
             $pembelian = Pembelian::find($id);
@@ -259,6 +262,8 @@ class PembelianController extends Controller
         if ($pembelian) {
             session(['id_pembelian' => $pembelian->id_pembelian]);
             session(['id_supplier' => $pembelian->id_supplier]);
+            session()->forget('pembelian_edit_mode');
+            session()->forget('pembelian_edit_snapshot');
             return redirect()->route('pembelian_detail.index');
         }
         
@@ -378,6 +383,8 @@ class PembelianController extends Controller
         // Hapus session setelah transaksi selesai
         session()->forget('id_pembelian');
         session()->forget('id_supplier');
+        session()->forget('pembelian_edit_mode');
+        session()->forget('pembelian_edit_snapshot');
         
         return redirect()->route('pembelian.index')->with('success', 'Transaksi pembelian berhasil disimpan');
     }
@@ -456,6 +463,8 @@ class PembelianController extends Controller
             
             session()->forget('id_pembelian');
             session()->forget('id_supplier');
+            session()->forget('pembelian_edit_mode');
+            session()->forget('pembelian_edit_snapshot');
             
             return redirect()->route('pembelian.index')->with('success', 'Transaksi pembelian berhasil diperbarui');
             
@@ -557,6 +566,8 @@ class PembelianController extends Controller
 
     public function cancelTransaction($id)
     {
+        $cancelMode = request()->input('mode');
+
         DB::beginTransaction();
         $affectedProductIds = [];
         $pembelianSnapshot = null;
@@ -568,6 +579,38 @@ class PembelianController extends Controller
                 ->first();
 
             $deleted = false;
+
+            if ($pembelian && $cancelMode === 'edit') {
+                $snapshot = $this->getPembelianEditSnapshotFor($id);
+
+                if (!$snapshot) {
+                    DB::rollBack();
+
+                    return response()->json([
+                        'success' => false,
+                        'deleted' => false,
+                        'restored' => false,
+                        'message' => 'Snapshot edit pembelian tidak ditemukan. Tidak dapat mengembalikan transaksi ke kondisi awal.',
+                    ], 409);
+                }
+
+                $this->restorePembelianFromSnapshot($id, $snapshot);
+
+                DB::commit();
+
+                if (intval(session('id_pembelian')) === intval($id)) {
+                    session()->forget(['id_pembelian', 'id_supplier']);
+                }
+                session()->forget('pembelian_edit_mode');
+                session()->forget('pembelian_edit_snapshot');
+
+                return response()->json([
+                    'success' => true,
+                    'deleted' => false,
+                    'restored' => true,
+                    'message' => 'Perubahan edit pembelian dibatalkan. Data transaksi dikembalikan seperti semula.',
+                ], 200);
+            }
 
             if ($pembelian && $this->isPembelianIncomplete($pembelian)) {
                 $pembelianSnapshot = $this->buildPembelianSnapshot($pembelian);
@@ -593,6 +636,15 @@ class PembelianController extends Controller
                 $deleted = true;
 
                 $forceReflow = $this->isPostCutoffWaktu($pembelianSnapshot['waktu_datang'] ?? $pembelianSnapshot['waktu'] ?? null);
+            } elseif ($pembelian && $cancelMode === 'draft') {
+                DB::rollBack();
+
+                return response()->json([
+                    'success' => false,
+                    'deleted' => false,
+                    'restored' => false,
+                    'message' => 'Transaksi ini tidak dikenali sebagai draft pembelian yang dapat dibatalkan otomatis.',
+                ], 409);
             }
 
             DB::commit();
@@ -607,10 +659,13 @@ class PembelianController extends Controller
             if (intval(session('id_pembelian')) === intval($id)) {
                 session()->forget(['id_pembelian', 'id_supplier']);
             }
+            session()->forget('pembelian_edit_mode');
+            session()->forget('pembelian_edit_snapshot');
 
             return response()->json([
                 'success' => true,
                 'deleted' => $deleted,
+                'restored' => false,
                 'message' => $deleted
                     ? 'Draft pembelian dibatalkan, dihapus, dan stok disinkronkan.'
                     : 'Edit pembelian dibatalkan. Tidak ada draft baru yang dihapus.',
@@ -781,6 +836,96 @@ class PembelianController extends Controller
             'waktu_datang' => $pembelian->waktu_datang,
             'created_at' => $pembelian->created_at,
         ];
+    }
+
+    private function getPembelianEditSnapshotFor(int $idPembelian): ?array
+    {
+        $snapshot = session('pembelian_edit_snapshot');
+        if (!is_array($snapshot)) {
+            return null;
+        }
+
+        if (intval($snapshot['id_pembelian'] ?? 0) !== $idPembelian) {
+            return null;
+        }
+
+        if (!is_array($snapshot['header'] ?? null) || !is_array($snapshot['details'] ?? null) || !is_array($snapshot['rekamans'] ?? null)) {
+            return null;
+        }
+
+        return $snapshot;
+    }
+
+    private function restorePembelianFromSnapshot(int $idPembelian, array $snapshot): void
+    {
+        $currentDetails = DB::table('pembelian_detail')
+            ->where('id_pembelian', $idPembelian)
+            ->lockForUpdate()
+            ->get(['id_produk', 'jumlah']);
+
+        $currentGrouped = [];
+        foreach ($currentDetails as $detail) {
+            $productId = intval($detail->id_produk ?? 0);
+            if ($productId <= 0) {
+                continue;
+            }
+
+            $currentGrouped[$productId] = ($currentGrouped[$productId] ?? 0) + max(0, intval($detail->jumlah ?? 0));
+        }
+
+        $originalGrouped = [];
+        foreach (($snapshot['details'] ?? []) as $detail) {
+            $productId = intval($detail['id_produk'] ?? 0);
+            if ($productId <= 0) {
+                continue;
+            }
+
+            $originalGrouped[$productId] = ($originalGrouped[$productId] ?? 0) + max(0, intval($detail['jumlah'] ?? 0));
+        }
+
+        $affectedProductIds = array_values(array_unique(array_merge(array_keys($currentGrouped), array_keys($originalGrouped))));
+        foreach ($affectedProductIds as $productId) {
+            $produk = DB::table('produk')
+                ->where('id_produk', $productId)
+                ->lockForUpdate()
+                ->first(['id_produk', 'stok']);
+
+            if (!$produk) {
+                continue;
+            }
+
+            $currentQty = intval($currentGrouped[$productId] ?? 0);
+            $originalQty = intval($originalGrouped[$productId] ?? 0);
+            $adjustment = $currentQty - $originalQty;
+
+            if ($adjustment !== 0) {
+                DB::table('produk')
+                    ->where('id_produk', $productId)
+                    ->update([
+                        'stok' => intval($produk->stok) - $adjustment,
+                        'updated_at' => now(),
+                    ]);
+            }
+        }
+
+        DB::table('pembelian_detail')->where('id_pembelian', $idPembelian)->delete();
+        if (!empty($snapshot['details'])) {
+            DB::table('pembelian_detail')->insert($snapshot['details']);
+        }
+
+        DB::table('rekaman_stoks')->where('id_pembelian', $idPembelian)->delete();
+        if (!empty($snapshot['rekamans'])) {
+            DB::table('rekaman_stoks')->insert($snapshot['rekamans']);
+        }
+
+        $header = $snapshot['header'] ?? [];
+        unset($header['id_pembelian']);
+
+        if (!empty($header)) {
+            DB::table('pembelian')
+                ->where('id_pembelian', $idPembelian)
+                ->update($header);
+        }
     }
 
     private function isPostCutoffWaktu($waktu): bool

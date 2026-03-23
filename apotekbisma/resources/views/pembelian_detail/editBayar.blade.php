@@ -670,10 +670,19 @@
         }
 
         $.post('{{ route("pembelian.cancel", ":id") }}'.replace(':id', idPembelian), {
-                '_token': $('[name=csrf-token]').attr('content')
+                '_token': $('[name=csrf-token]').attr('content'),
+                'mode': 'edit'
             })
-            .done(() => {
-                window.location.href = '{{ route("pembelian.index") }}';
+            .done((response) => {
+                if (response && (response.restored === true || response.deleted === true)) {
+                    window.location.href = '{{ route("pembelian.index") }}';
+                    return;
+                }
+
+                const message = (response && response.message)
+                    ? response.message
+                    : 'Transaksi tidak dapat dikembalikan ke kondisi awal.';
+                alert(message);
             })
             .fail((xhr) => {
                 let errorMessage = 'Tidak dapat membatalkan transaksi';

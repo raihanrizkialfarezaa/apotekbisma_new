@@ -266,7 +266,72 @@
             computeTotalsInDetail();
             loadForm($('#diskon').val(), parseFloat($('#total').val()) || 0, parseFloat($('#diterima').val()) || 0);
         });
-        table2 = $('.table-produk').DataTable();
+        table2 = $('.table-produk').DataTable({
+            processing: true,
+            serverSide: false,
+            autoWidth: false,
+            scrollX: true,
+            scrollCollapse: true,
+            ajax: {
+                url: '{{ route('transaksi.produk_data') }}',
+                dataSrc: ''
+            },
+            columns: [
+                {data: 'no', searchable: false, sortable: false},
+                {
+                    data: 'kode_produk',
+                    render: function(data) {
+                        return '<span class="label label-success">' + data + '</span>';
+                    }
+                },
+                {data: 'nama_produk'},
+                {
+                    data: null,
+                    render: function(data) {
+                        const stok = parseInt(data.stok, 10) || 0;
+                        let badgeHtml = '<span class="badge ' + data.stok_badge_class + '">' +
+                                        formatUang(stok) + ' unit</span>';
+
+                        if (data.stok_text) {
+                            badgeHtml += '<small class="' + data.stok_text_class + '"><br><i class="fa ' +
+                                        data.stok_icon + '"></i> ' + data.stok_text + '</small>';
+                        }
+
+                        return badgeHtml;
+                    }
+                },
+                {
+                    data: 'harga_jual',
+                    render: function(data) {
+                        return 'Rp. ' + formatUang(data);
+                    }
+                },
+                {
+                    data: null,
+                    render: function(data) {
+                        const stok = parseInt(data.stok, 10) || 0;
+                        return '<a href="#" class="btn btn-primary btn-xs btn-flat" ' +
+                               'onclick="pilihProduk(\'' + data.id + '\', \'' + data.kode_produk + '\', ' + stok + ')">' +
+                               '<i class="fa fa-check-circle"></i> Pilih</a>';
+                    },
+                    searchable: false,
+                    sortable: false
+                }
+            ],
+            order: [[2, 'asc']],
+            language: {
+                processing: "Memuat data produk...",
+                search: "Cari produk:",
+                lengthMenu: "Tampilkan _MENU_ produk",
+                info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ produk",
+                paginate: {
+                    first: "Pertama",
+                    last: "Terakhir",
+                    next: "Selanjutnya",
+                    previous: "Sebelumnya"
+                }
+            }
+        });
 
         $(document).on('input', '.quantity', function () {
             let id = $(this).data('id');
@@ -292,6 +357,9 @@
                     // After successful server update, update totals client-side and refresh row data
                     userEditedDiterima = false;
                     table.ajax.reload(null, false);
+                    if (table2) {
+                        table2.ajax.reload(null, false);
+                    }
                     computeTotalsInDetail();
                     loadForm($('#diskon').val(), parseFloat($('#diterima').val()) || 0);
                 })
@@ -356,6 +424,9 @@
     });
 
     function tampilProduk() {
+        if (table2) {
+            table2.ajax.reload(null, false);
+        }
         $('#modal-produk').modal('show');
     }
 
@@ -363,7 +434,12 @@
         $('#modal-produk').modal('hide');
     }
 
-    function pilihProduk(id, kode) {
+    function pilihProduk(id, kode, stok = null) {
+        if (stok !== null && parseInt(stok, 10) <= 0) {
+            alert('❌ STOK HABIS!\n\nProduk tidak dapat dijual karena stok sudah habis (0).\nSilakan lakukan pembelian terlebih dahulu.');
+            return;
+        }
+
         $('#id_produk').val(id);
         $('#kode_produk').val(kode);
         hideProduk();
@@ -397,6 +473,9 @@
                 $('#kode_produk').focus();
                 userEditedDiterima = false;
                 table.ajax.reload(null, false);
+                if (table2) {
+                    table2.ajax.reload(null, false);
+                }
                 computeTotalsInDetail();
                 loadForm($('#diskon').val(), parseFloat($('#total').val()) || 0, parseFloat($('#diterima').val()) || 0);
             })
@@ -451,6 +530,9 @@
                         computeTotalsInDetail();
                         loadForm($('#diskon').val(), parseFloat($('#total').val()) || 0, parseFloat($('#diterima').val()) || 0);
                     });
+                    if (table2) {
+                        table2.ajax.reload(null, false);
+                    }
                 })
                 .fail((errors) => {
                     alert('Tidak dapat menghapus data');

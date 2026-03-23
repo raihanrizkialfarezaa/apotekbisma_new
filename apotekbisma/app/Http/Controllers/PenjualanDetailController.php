@@ -557,16 +557,17 @@ class PenjualanDetailController extends Controller
             return $id > 0;
         })));
 
-        foreach ($normalizedIds as $produkId) {
-            try {
-                RekamanStok::recalculateStock($produkId);
-            } catch (\Throwable $e) {
-                Log::warning('Recalculate stok gagal setelah mutasi detail penjualan', [
-                    'id_produk' => $produkId,
-                    'message' => $e->getMessage(),
-                ]);
-            }
+        if (empty($normalizedIds)) {
+            return;
         }
+
+        // IMPORTANT: Do not run global stock-history recalculation for draft cart mutations.
+        // Draft flows already adjust produk.stok atomically. Recalculation across full history
+        // can overwrite correct draft stock with corrupted legacy chain results.
+        // Finalized transaction synchronization remains handled in PenjualanController::store().
+        Log::debug('Skip global stock sync on draft penjualan mutation', [
+            'id_produk' => $normalizedIds,
+        ]);
     }
     
     private function atomicRecalculateAndSync($produkId)

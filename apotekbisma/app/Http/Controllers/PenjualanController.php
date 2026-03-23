@@ -15,6 +15,7 @@ use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
 use App\Services\StockDraftCleanupService;
 use App\Services\TransactionDateMutationService;
+use App\Services\BaselineStockReflowService;
 
 class PenjualanController extends Controller
 {
@@ -244,6 +245,9 @@ class PenjualanController extends Controller
         $currentDraftId = session('id_penjualan');
         app(StockDraftCleanupService::class)->cleanupStalePenjualanDrafts($currentDraftId ? intval($currentDraftId) : null);
 
+        session()->forget('penjualan_edit_mode');
+        session()->forget('penjualan_edit_snapshot');
+
         // Pastikan saat membuka halaman 'Transaksi Baru' kita mulai dengan transaksi baru
         // sehingga tidak otomatis diarahkan ke transaksi aktif yang tersimpan di session.
         if (session('id_penjualan')) {
@@ -257,8 +261,9 @@ class PenjualanController extends Controller
         $id_penjualan = null;
         $penjualan = new Penjualan();
         $memberSelected = new Member();
+        $isEditTransaction = false;
 
-        return view('penjualan_detail.index', compact('produk', 'member', 'diskon', 'id_penjualan', 'penjualan', 'memberSelected'));
+        return view('penjualan_detail.index', compact('produk', 'member', 'diskon', 'id_penjualan', 'penjualan', 'memberSelected', 'isEditTransaction'));
     }
 
     public function createOrContinue()
@@ -270,11 +275,14 @@ class PenjualanController extends Controller
                 $member = Member::orderBy('nama')->get();
                 $diskon = Setting::first()->diskon ?? 0;
                 $memberSelected = $penjualan->member ?? new Member();
+                $isEditTransaction = (bool) session('penjualan_edit_mode', false);
 
-                return view('penjualan_detail.index', compact('produk', 'member', 'diskon', 'id_penjualan', 'penjualan', 'memberSelected'));
+                return view('penjualan_detail.index', compact('produk', 'member', 'diskon', 'id_penjualan', 'penjualan', 'memberSelected', 'isEditTransaction'));
             } else {
                 // ID penjualan di session tidak valid, bersihkan session
                 session()->forget('id_penjualan');
+                session()->forget('penjualan_edit_mode');
+                session()->forget('penjualan_edit_snapshot');
             }
         }
 
@@ -315,6 +323,9 @@ class PenjualanController extends Controller
             );
 
             DB::commit();
+
+            session()->forget('penjualan_edit_mode');
+            session()->forget('penjualan_edit_snapshot');
             
             return redirect()->route('transaksi.selesai');
             
@@ -426,6 +437,8 @@ class PenjualanController extends Controller
 
         // Hapus session setelah transaksi selesai
         session()->forget('id_penjualan');
+        session()->forget('penjualan_edit_mode');
+        session()->forget('penjualan_edit_snapshot');
 
         return redirect()->route('penjualan.index')->with('success', 'Transaksi berhasil disimpan!');
     }
@@ -502,12 +515,35 @@ class PenjualanController extends Controller
             $penjualan->delete();
 
             DB::commit();
-            
-            foreach (array_unique($affectedProductIds) as $produkId) {
+
+            $normalizedProductIds = array_values(array_unique(array_filter(array_map('intval', $affectedProductIds), function ($id) {
+                return $id > 0;
+            })));
+
+            if (!empty($normalizedProductIds)) {
                 try {
-                    RekamanStok::recalculateStock($produkId);
-                } catch (\Exception $e) {
-                    Log::warning('Recalculate stock after delete warning: ' . $e->getMessage());
+                    app(BaselineStockReflowService::class)->rebuildProducts(
+                        $normalizedProductIds,
+                        Carbon::now()->format('Y-m-d H:i:s')
+                    );
+                } catch (\Throwable $reflowException) {
+                    Log::warning('Reflow stok setelah hapus transaksi gagal, fallback recalculate lama', [
+                        'id_penjualan' => $id,
+                        'product_ids' => $normalizedProductIds,
+                        'message' => $reflowException->getMessage(),
+                    ]);
+
+                    foreach ($normalizedProductIds as $produkId) {
+                        try {
+                            RekamanStok::recalculateStock($produkId);
+                        } catch (\Throwable $recalcException) {
+                            Log::warning('Fallback recalculate stock after delete warning', [
+                                'id_penjualan' => $id,
+                                'id_produk' => $produkId,
+                                'message' => $recalcException->getMessage(),
+                            ]);
+                        }
+                    }
                 }
             }
             
@@ -528,6 +564,8 @@ class PenjualanController extends Controller
         }
 
         session(['id_penjualan' => $penjualan->id_penjualan]);
+        session()->forget('penjualan_edit_mode');
+        session()->forget('penjualan_edit_snapshot');
         
         return redirect()->route('transaksi.aktif')->with('success', 'Melanjutkan transaksi #' . $penjualan->id_penjualan);
     }
@@ -540,7 +578,13 @@ class PenjualanController extends Controller
             return redirect()->back()->with('error', 'Transaksi tidak ditemukan');
         }
 
-        session(['id_penjualan' => $penjualan->id_penjualan]);
+        $snapshot = $this->buildPenjualanEditSnapshot($penjualan->id_penjualan);
+
+        session([
+            'id_penjualan' => $penjualan->id_penjualan,
+            'penjualan_edit_mode' => true,
+            'penjualan_edit_snapshot' => $snapshot,
+        ]);
         
         return redirect()->route('transaksi.aktif')->with('success', 'Mengedit transaksi #' . $penjualan->id_penjualan);
     }
@@ -565,6 +609,8 @@ class PenjualanController extends Controller
 
     public function cancelTransaction($id)
     {
+        $cancelMode = request()->input('mode');
+
         DB::beginTransaction();
 
         try {
@@ -573,6 +619,37 @@ class PenjualanController extends Controller
                 ->first();
 
             $deleted = false;
+
+            if ($penjualan && $cancelMode === 'edit') {
+                $snapshot = $this->getEditSnapshotFor($id);
+
+                if (!$snapshot) {
+                    DB::rollBack();
+
+                    return response()->json([
+                        'success' => false,
+                        'deleted' => false,
+                        'restored' => false,
+                        'message' => 'Snapshot edit tidak ditemukan. Tidak dapat mengembalikan transaksi ke kondisi awal.',
+                    ], 409);
+                }
+
+                $this->restorePenjualanFromSnapshot($id, $snapshot);
+                DB::commit();
+
+                if (intval(session('id_penjualan')) === intval($id)) {
+                    session()->forget('id_penjualan');
+                }
+                session()->forget('penjualan_edit_mode');
+                session()->forget('penjualan_edit_snapshot');
+
+                return response()->json([
+                    'success' => true,
+                    'deleted' => false,
+                    'restored' => true,
+                    'message' => 'Perubahan edit dibatalkan. Data transaksi dikembalikan seperti semula.',
+                ], 200);
+            }
 
             if ($penjualan && $this->isPenjualanIncomplete($penjualan)) {
                 $details = PenjualanDetail::where('id_penjualan', $id)
@@ -611,6 +688,15 @@ class PenjualanController extends Controller
                 PenjualanDetail::where('id_penjualan', $id)->delete();
                 Penjualan::where('id_penjualan', $id)->delete();
                 $deleted = true;
+            } elseif ($penjualan && $cancelMode === 'draft') {
+                // Untuk flow transaksi baru, tombol Batal harus benar-benar membatalkan draft.
+                DB::rollBack();
+
+                return response()->json([
+                    'success' => false,
+                    'deleted' => false,
+                    'message' => 'Transaksi ini tidak dikenali sebagai draft yang dapat dibatalkan otomatis.',
+                ], 409);
             }
 
             DB::commit();
@@ -618,6 +704,8 @@ class PenjualanController extends Controller
             if (intval(session('id_penjualan')) === intval($id)) {
                 session()->forget('id_penjualan');
             }
+            session()->forget('penjualan_edit_mode');
+            session()->forget('penjualan_edit_snapshot');
 
             return response()->json([
                 'success' => true,
@@ -721,6 +809,125 @@ class PenjualanController extends Controller
             || intval($penjualan->total_harga ?? 0) <= 0
             || intval($penjualan->bayar ?? 0) <= 0
             || intval($penjualan->diterima ?? 0) <= 0;
+    }
+
+    private function buildPenjualanEditSnapshot(int $idPenjualan): array
+    {
+        $header = DB::table('penjualan')
+            ->where('id_penjualan', $idPenjualan)
+            ->first();
+
+        $details = DB::table('penjualan_detail')
+            ->where('id_penjualan', $idPenjualan)
+            ->orderBy('id_penjualan_detail', 'asc')
+            ->get();
+
+        $rekamans = DB::table('rekaman_stoks')
+            ->where('id_penjualan', $idPenjualan)
+            ->orderBy('id_rekaman_stok', 'asc')
+            ->get();
+
+        return [
+            'id_penjualan' => $idPenjualan,
+            'captured_at' => now()->format('Y-m-d H:i:s'),
+            'header' => $header ? (array) $header : null,
+            'details' => $details->map(function ($row) {
+                return (array) $row;
+            })->values()->all(),
+            'rekamans' => $rekamans->map(function ($row) {
+                return (array) $row;
+            })->values()->all(),
+        ];
+    }
+
+    private function getEditSnapshotFor(int $idPenjualan): ?array
+    {
+        $snapshot = session('penjualan_edit_snapshot');
+        if (!is_array($snapshot)) {
+            return null;
+        }
+
+        if (intval($snapshot['id_penjualan'] ?? 0) !== $idPenjualan) {
+            return null;
+        }
+
+        if (!is_array($snapshot['header'] ?? null) || !is_array($snapshot['details'] ?? null) || !is_array($snapshot['rekamans'] ?? null)) {
+            return null;
+        }
+
+        return $snapshot;
+    }
+
+    private function restorePenjualanFromSnapshot(int $idPenjualan, array $snapshot): void
+    {
+        $currentDetails = DB::table('penjualan_detail')
+            ->where('id_penjualan', $idPenjualan)
+            ->lockForUpdate()
+            ->get(['id_produk', 'jumlah']);
+
+        $currentGrouped = [];
+        foreach ($currentDetails as $detail) {
+            $productId = intval($detail->id_produk ?? 0);
+            if ($productId <= 0) {
+                continue;
+            }
+
+            $currentGrouped[$productId] = ($currentGrouped[$productId] ?? 0) + max(0, intval($detail->jumlah ?? 0));
+        }
+
+        $originalGrouped = [];
+        foreach (($snapshot['details'] ?? []) as $detail) {
+            $productId = intval($detail['id_produk'] ?? 0);
+            if ($productId <= 0) {
+                continue;
+            }
+
+            $originalGrouped[$productId] = ($originalGrouped[$productId] ?? 0) + max(0, intval($detail['jumlah'] ?? 0));
+        }
+
+        $affectedProductIds = array_values(array_unique(array_merge(array_keys($currentGrouped), array_keys($originalGrouped))));
+        foreach ($affectedProductIds as $productId) {
+            $produk = DB::table('produk')
+                ->where('id_produk', $productId)
+                ->lockForUpdate()
+                ->first(['id_produk', 'stok']);
+
+            if (!$produk) {
+                continue;
+            }
+
+            $currentQty = intval($currentGrouped[$productId] ?? 0);
+            $originalQty = intval($originalGrouped[$productId] ?? 0);
+            $adjustment = $currentQty - $originalQty;
+
+            if ($adjustment !== 0) {
+                DB::table('produk')
+                    ->where('id_produk', $productId)
+                    ->update([
+                        'stok' => intval($produk->stok) + $adjustment,
+                        'updated_at' => now(),
+                    ]);
+            }
+        }
+
+        DB::table('penjualan_detail')->where('id_penjualan', $idPenjualan)->delete();
+        if (!empty($snapshot['details'])) {
+            DB::table('penjualan_detail')->insert($snapshot['details']);
+        }
+
+        DB::table('rekaman_stoks')->where('id_penjualan', $idPenjualan)->delete();
+        if (!empty($snapshot['rekamans'])) {
+            DB::table('rekaman_stoks')->insert($snapshot['rekamans']);
+        }
+
+        $header = $snapshot['header'] ?? [];
+        unset($header['id_penjualan']);
+
+        if (!empty($header)) {
+            DB::table('penjualan')
+                ->where('id_penjualan', $idPenjualan)
+                ->update($header);
+        }
     }
 
     private function resolveTransactionWaktu($value, $fallback = null): string

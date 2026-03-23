@@ -21,6 +21,9 @@ class PembelianDetailController extends Controller
     
     public function index()
     {
+        session()->forget('pembelian_edit_mode');
+        session()->forget('pembelian_edit_snapshot');
+
         $id_pembelian = session('id_pembelian');
         
         if (!$id_pembelian) {
@@ -63,6 +66,8 @@ class PembelianDetailController extends Controller
         
         session(['id_pembelian' => $pembelian->id_pembelian]);
         session(['id_supplier' => $pembelian->id_supplier]);
+        session(['pembelian_edit_mode' => true]);
+        session(['pembelian_edit_snapshot' => $this->buildPembelianEditSnapshot($pembelian->id_pembelian)]);
         
         $produk = Produk::orderBy('nama_produk')->get();
         $detail_pembelian = PembelianDetail::where('id_pembelian', $id)->get();
@@ -75,6 +80,35 @@ class PembelianDetailController extends Controller
         }
 
         return view('pembelian_detail.editBayar', compact('id_pembelian', 'pembelian', 'tanggal', 'detail_pembelian', 'produk', 'supplier', 'diskon'));
+    }
+
+    private function buildPembelianEditSnapshot(int $idPembelian): array
+    {
+        $header = DB::table('pembelian')
+            ->where('id_pembelian', $idPembelian)
+            ->first();
+
+        $details = DB::table('pembelian_detail')
+            ->where('id_pembelian', $idPembelian)
+            ->orderBy('id_pembelian_detail', 'asc')
+            ->get();
+
+        $rekamans = DB::table('rekaman_stoks')
+            ->where('id_pembelian', $idPembelian)
+            ->orderBy('id_rekaman_stok', 'asc')
+            ->get();
+
+        return [
+            'id_pembelian' => $idPembelian,
+            'captured_at' => now()->format('Y-m-d H:i:s'),
+            'header' => $header ? (array) $header : null,
+            'details' => $details->map(function ($row) {
+                return (array) $row;
+            })->values()->all(),
+            'rekamans' => $rekamans->map(function ($row) {
+                return (array) $row;
+            })->values()->all(),
+        ];
     }
 
     public function data($id)

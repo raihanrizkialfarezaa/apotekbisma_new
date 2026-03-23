@@ -1331,10 +1331,20 @@
         }
 
         $.post('{{ route("pembelian.cancel", ":id") }}'.replace(':id', idPembelian), {
-                '_token': $('[name=csrf-token]').attr('content')
+                '_token': $('[name=csrf-token]').attr('content'),
+                'mode': 'draft'
             })
-            .done(() => {
-                window.location.href = '{{ route("pembelian.index") }}';
+            .done((response) => {
+                if (response && response.deleted === true) {
+                    window.location.href = '{{ route("pembelian.index") }}';
+                    return;
+                }
+
+                const message = (response && response.message)
+                    ? response.message
+                    : 'Transaksi tidak dibatalkan karena bukan draft.';
+                alert(message);
+                window.isFormSubmitted = false;
             })
             .fail((xhr) => {
                 let errorMessage = 'Tidak dapat membatalkan transaksi';
