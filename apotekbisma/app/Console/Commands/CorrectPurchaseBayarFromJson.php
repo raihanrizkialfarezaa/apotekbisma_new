@@ -399,6 +399,7 @@ class CorrectPurchaseBayarFromJson extends Command
             : base_path('purchase_bayar_correction_report_' . Carbon::now()->format('Ymd_His') . '.json');
 
         $outputPath = $this->resolveOutputPath($reportPath);
+        $this->ensureOutputDirectoryExists($outputPath);
         file_put_contents(
             $outputPath,
             json_encode($report, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
@@ -414,10 +415,25 @@ class CorrectPurchaseBayarFromJson extends Command
             return base_path('purchase_bayar_correction_report_' . Carbon::now()->format('Ymd_His') . '.json');
         }
 
-        if (preg_match('/^[A-Za-z]:\\\\|^\\\\\\\\/', $value) === 1) {
+        if (
+            preg_match('/^[A-Za-z]:\\\\|^\\\\\\\\/', $value) === 1
+            || strpos($value, '/') === 0
+        ) {
             return $value;
         }
 
         return base_path($value);
+    }
+
+    private function ensureOutputDirectoryExists(string $outputPath): void
+    {
+        $directory = dirname($outputPath);
+        if ($directory === '' || $directory === '.') {
+            return;
+        }
+
+        if (!is_dir($directory)) {
+            mkdir($directory, 0775, true);
+        }
     }
 }
