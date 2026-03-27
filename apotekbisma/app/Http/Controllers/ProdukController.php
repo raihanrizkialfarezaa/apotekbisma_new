@@ -273,9 +273,10 @@ class ProdukController extends Controller
             }
 
             $stok_lama = intval($produk->stok);
+            $stok_lama_otoritatif = $this->resolveAuthoritativeOldStock($produk->id_produk, $stok_lama);
             $stok_baru = intval($validated['stok']);
 
-            if ($stok_baru !== $stok_lama && empty(trim((string) ($validated['keterangan_stok'] ?? '')))) {
+            if ($stok_baru !== $stok_lama_otoritatif && empty(trim((string) ($validated['keterangan_stok'] ?? '')))) {
                 DB::rollBack();
                 return response()->json([
                     'message' => 'Keterangan perubahan stok wajib diisi jika stok diubah melalui Edit Produk.'
@@ -296,10 +297,10 @@ class ProdukController extends Controller
             $produk->save();
 
             // Jika ada perubahan stok, buat Stock Opname record
-            if ($stok_baru !== $stok_lama) {
+            if ($stok_baru !== $stok_lama_otoritatif) {
                 $this->createStockOpnameRecord(
                     $produk->id_produk, 
-                    $stok_lama, 
+                    $stok_lama_otoritatif, 
                     $stok_baru, 
                     'Stock Opname via Edit Produk: ' . trim((string) $validated['keterangan_stok'])
                 );
@@ -349,8 +350,9 @@ class ProdukController extends Controller
             }
 
             $stok_lama = intval($produk->stok);
+            $stok_lama_otoritatif = $this->resolveAuthoritativeOldStock($produk->id_produk, $stok_lama);
             $stok_baru = intval($request->stok);
-            $selisih_stok = $stok_baru - $stok_lama;
+            $selisih_stok = $stok_baru - $stok_lama_otoritatif;
 
             if ($selisih_stok == 0) {
                 DB::commit();
@@ -359,7 +361,7 @@ class ProdukController extends Controller
                     'success' => true,
                     'message' => 'Stok tidak berubah',
                     'data' => [
-                        'stok_lama' => $stok_lama,
+                        'stok_lama' => $stok_lama_otoritatif,
                         'stok_baru' => $stok_baru,
                         'selisih' => 0
                     ]
@@ -374,7 +376,7 @@ class ProdukController extends Controller
                 $keteranganFinal = 'Stock Opname: ' . $request->keterangan;
             }
 
-            $this->createStockOpnameRecord($produk->id_produk, $stok_lama, $stok_baru, $keteranganFinal);
+            $this->createStockOpnameRecord($produk->id_produk, $stok_lama_otoritatif, $stok_baru, $keteranganFinal);
             
             DB::commit();
             
@@ -388,7 +390,7 @@ class ProdukController extends Controller
                 'success' => true,
                 'message' => 'Stok berhasil diperbarui dan disinkronkan',
                 'data' => [
-                    'stok_lama' => $stok_lama,
+                    'stok_lama' => $stok_lama_otoritatif,
                     'stok_baru' => $stok_baru,
                     'selisih' => $selisih_stok
                 ]
@@ -419,6 +421,22 @@ class ProdukController extends Controller
             'created_at' => $currentTime,
             'updated_at' => $currentTime
         ]);
+    }
+
+    private function resolveAuthoritativeOldStock(int $idProduk, int $fallbackStock): int
+    {
+        $latestRekaman = DB::table('rekaman_stoks')
+            ->where('id_produk', $idProduk)
+            ->orderBy('waktu', 'desc')
+            ->orderBy('id_rekaman_stok', 'desc')
+            ->lockForUpdate()
+            ->first();
+
+        if (!$latestRekaman) {
+            return $fallbackStock;
+        }
+
+        return intval($latestRekaman->stok_sisa);
     }
 
     private function sinkronisasiStokProduk($produk, $keterangan = 'Update stok manual')

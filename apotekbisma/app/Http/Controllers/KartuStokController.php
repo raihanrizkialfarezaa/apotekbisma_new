@@ -188,6 +188,14 @@ class KartuStokController extends Controller
         $stok = RekamanStok::with(['produk', 'pembelian.supplier', 'penjualan'])
             ->where('id_produk', $id)
             ->orderBy('rekaman_stoks.waktu', 'asc')
+            ->orderByRaw("CASE
+                WHEN rekaman_stoks.id_pembelian IS NOT NULL THEN 0
+                WHEN rekaman_stoks.id_penjualan IS NOT NULL THEN 1
+                WHEN LOWER(COALESCE(rekaman_stoks.keterangan, '')) LIKE '%stock opname%' THEN 2
+                WHEN LOWER(COALESCE(rekaman_stoks.keterangan, '')) LIKE '%perubahan stok manual%' THEN 2
+                WHEN LOWER(COALESCE(rekaman_stoks.keterangan, '')) LIKE '%penyesuaian stok%' THEN 2
+                ELSE 3
+            END ASC")
             ->orderBy('id_rekaman_stok', 'asc')
             ->get()
             ->filter(function ($item) use ($request) {

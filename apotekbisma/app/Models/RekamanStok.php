@@ -120,12 +120,9 @@ class RekamanStok extends Model
         try {
             static::$preventRecalculation = true;
             
-            $stokRecords = DB::table('rekaman_stoks')
-                ->where('id_produk', $productId)
-                ->orderBy('waktu', 'asc')
-                ->orderBy('created_at', 'asc')
-                ->orderBy('id_rekaman_stok', 'asc')
-                ->get();
+            $stokRecords = static::applyStockOrder(
+                DB::table('rekaman_stoks')->where('id_produk', $productId)
+            )->get();
 
             if ($stokRecords->isEmpty()) {
                 static::$preventRecalculation = false;
@@ -149,6 +146,18 @@ class RekamanStok extends Model
                         $updateData['stok_awal'] = $runningStock;
                         $needsUpdate = true;
                     }
+                }
+
+                if (static::isStockOpnameRecord($record)) {
+                    // Stock opname manual diperlakukan sebagai anchor absolut.
+                    // Kita pertahankan stok_sisa yang diinput admin sebagai source of truth.
+                    $runningStock = intval($record->stok_sisa);
+
+                    if ($needsUpdate) {
+                        $updates[$record->id_rekaman_stok] = $updateData;
+                    }
+
+                    continue;
                 }
 
                 $calculatedSisa = $runningStock + intval($record->stok_masuk) - intval($record->stok_keluar);
@@ -206,12 +215,9 @@ class RekamanStok extends Model
     
     public static function getCalculatedStock($productId)
     {
-        $stokRecords = DB::table('rekaman_stoks')
-            ->where('id_produk', $productId)
-            ->orderBy('waktu', 'asc')
-            ->orderBy('created_at', 'asc')
-            ->orderBy('id_rekaman_stok', 'asc')
-            ->get();
+        $stokRecords = static::applyStockOrder(
+            DB::table('rekaman_stoks')->where('id_produk', $productId)
+        )->get();
 
         if ($stokRecords->isEmpty()) {
             return 0;
@@ -220,6 +226,11 @@ class RekamanStok extends Model
         $runningStock = intval($stokRecords->first()->stok_awal);
 
         foreach ($stokRecords as $record) {
+            if (static::isStockOpnameRecord($record)) {
+                $runningStock = intval($record->stok_sisa);
+                continue;
+            }
+
             $runningStock = $runningStock + intval($record->stok_masuk) - intval($record->stok_keluar);
         }
 
@@ -237,12 +248,9 @@ class RekamanStok extends Model
         $productStock = intval($produk->stok);
         
         $chainErrors = 0;
-        $stokRecords = DB::table('rekaman_stoks')
-            ->where('id_produk', $productId)
-            ->orderBy('waktu', 'asc')
-            ->orderBy('created_at', 'asc')
-            ->orderBy('id_rekaman_stok', 'asc')
-            ->get();
+        $stokRecords = static::applyStockOrder(
+            DB::table('rekaman_stoks')->where('id_produk', $productId)
+        )->get();
             
         if ($stokRecords->isNotEmpty()) {
             $runningStock = intval($stokRecords->first()->stok_awal);
@@ -253,11 +261,17 @@ class RekamanStok extends Model
                     $chainErrors++;
                 }
                 
+                if (static::isStockOpnameRecord($record)) {
+                    $runningStock = intval($record->stok_sisa);
+                    $isFirst = false;
+                    continue;
+                }
+
                 $calculatedSisa = $runningStock + intval($record->stok_masuk) - intval($record->stok_keluar);
                 if (intval($record->stok_sisa) != $calculatedSisa) {
                     $chainErrors++;
                 }
-                
+
                 $runningStock = $calculatedSisa;
                 $isFirst = false;
             }
@@ -331,5 +345,33 @@ class RekamanStok extends Model
             'duplicates_removed' => $duplicatesRemoved,
             'integrity' => $integrity
         ];
+    }
+
+    private static function applyStockOrder($query)
+    {
+        return $query
+            ->orderBy('waktu', 'asc')
+            ->orderByRaw("CASE
+                WHEN id_pembelian IS NOT NULL THEN 0
+                WHEN id_penjualan IS NOT NULL THEN 1
+                WHEN LOWER(COALESCE(keterangan, '')) LIKE '%stock opname%' THEN 2
+                WHEN LOWER(COALESCE(keterangan, '')) LIKE '%perubahan stok manual%' THEN 2
+                WHEN LOWER(COALESCE(keterangan, '')) LIKE '%penyesuaian stok%' THEN 2
+                ELSE 3
+            END ASC")
+            ->orderBy('created_at', 'asc')
+            ->orderBy('id_rekaman_stok', 'asc');
+    }
+
+    private static function isStockOpnameRecord($record): bool
+    {
+        $keterangan = strtolower(trim((string) ($record->keterangan ?? '')));
+        if ($keterangan === '') {
+            return false;
+        }
+
+        return strpos($keterangan, 'stock opname') !== false
+            || strpos($keterangan, 'perubahan stok manual') !== false
+            || strpos($keterangan, 'penyesuaian stok') !== false;
     }
 }
