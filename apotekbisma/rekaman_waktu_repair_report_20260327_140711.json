@@ -1,0 +1,2714 @@
+{
+    "generated_at": "2026-03-27 14:07:11",
+    "mode": "APPLY",
+    "filter": {
+        "only_date": "2026-03-27"
+    },
+    "summary": {
+        "candidates": 21596,
+        "to_fix": 21596,
+        "affected_products": 368
+    },
+    "updates_preview": [
+        {
+            "id_rekaman_stok": 144706,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 76,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2024-12-24 00:00:00",
+            "keterangan": "Penjualan - ID: 76"
+        },
+        {
+            "id_rekaman_stok": 144707,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 79,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2024-12-25 00:00:00",
+            "keterangan": "Penjualan - ID: 79"
+        },
+        {
+            "id_rekaman_stok": 144708,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 83,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2024-12-25 00:00:00",
+            "keterangan": "Penjualan - ID: 83"
+        },
+        {
+            "id_rekaman_stok": 144709,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 87,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2024-12-26 00:00:00",
+            "keterangan": "Penjualan - ID: 87"
+        },
+        {
+            "id_rekaman_stok": 144710,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 108,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-01-15 00:00:00",
+            "keterangan": "Penjualan - ID: 108"
+        },
+        {
+            "id_rekaman_stok": 144711,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 112,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-01-17 00:00:00",
+            "keterangan": "Penjualan - ID: 112"
+        },
+        {
+            "id_rekaman_stok": 144712,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 118,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-01-20 00:00:00",
+            "keterangan": "Penjualan - ID: 118"
+        },
+        {
+            "id_rekaman_stok": 144714,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 119,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-01-20 00:00:00",
+            "keterangan": "Penjualan - ID: 119"
+        },
+        {
+            "id_rekaman_stok": 144716,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 120,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-01-20 00:00:00",
+            "keterangan": "Penjualan - ID: 120"
+        },
+        {
+            "id_rekaman_stok": 144718,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 125,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-01-23 00:00:00",
+            "keterangan": "Penjualan - ID: 125"
+        },
+        {
+            "id_rekaman_stok": 144719,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 129,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-01-24 00:00:00",
+            "keterangan": "Penjualan - ID: 129"
+        },
+        {
+            "id_rekaman_stok": 144720,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 131,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-01-28 00:00:00",
+            "keterangan": "Penjualan - ID: 131"
+        },
+        {
+            "id_rekaman_stok": 144721,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 133,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-01-30 00:00:00",
+            "keterangan": "Penjualan - ID: 133"
+        },
+        {
+            "id_rekaman_stok": 144723,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 134,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-01-31 00:00:00",
+            "keterangan": "Penjualan - ID: 134"
+        },
+        {
+            "id_rekaman_stok": 144725,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 137,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-04-15 11:15:49",
+            "keterangan": "Penjualan - ID: 137"
+        },
+        {
+            "id_rekaman_stok": 144726,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 229,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-07-05 00:00:00",
+            "keterangan": "Penjualan - ID: 229"
+        },
+        {
+            "id_rekaman_stok": 144727,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 232,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-07-05 00:00:00",
+            "keterangan": "Penjualan - ID: 232"
+        },
+        {
+            "id_rekaman_stok": 144728,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 245,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-07-08 00:00:00",
+            "keterangan": "Penjualan - ID: 245"
+        },
+        {
+            "id_rekaman_stok": 144729,
+            "id_produk": 598,
+            "id_pembelian": 65,
+            "id_penjualan": null,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-07-17 00:00:00",
+            "keterangan": "Pembelian - Faktur: 0586"
+        },
+        {
+            "id_rekaman_stok": 144730,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 307,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-07-19 00:00:00",
+            "keterangan": "Penjualan - ID: 307"
+        },
+        {
+            "id_rekaman_stok": 144731,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 316,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-07-22 00:00:00",
+            "keterangan": "Penjualan - ID: 316"
+        },
+        {
+            "id_rekaman_stok": 144732,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 320,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-07-23 00:00:00",
+            "keterangan": "Penjualan - ID: 320"
+        },
+        {
+            "id_rekaman_stok": 144733,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 324,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-07-23 00:00:00",
+            "keterangan": "Penjualan - ID: 324"
+        },
+        {
+            "id_rekaman_stok": 144734,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 336,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-07-26 00:00:00",
+            "keterangan": "Penjualan - ID: 336"
+        },
+        {
+            "id_rekaman_stok": 144735,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 337,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-07-26 00:00:00",
+            "keterangan": "Penjualan - ID: 337"
+        },
+        {
+            "id_rekaman_stok": 144736,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 338,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-07-26 00:00:00",
+            "keterangan": "Penjualan - ID: 338"
+        },
+        {
+            "id_rekaman_stok": 144737,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 377,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-08-04 00:00:00",
+            "keterangan": "Penjualan - ID: 377"
+        },
+        {
+            "id_rekaman_stok": 144738,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 381,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-08-04 00:00:00",
+            "keterangan": "Penjualan - ID: 381"
+        },
+        {
+            "id_rekaman_stok": 144739,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 375,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-08-04 00:00:00",
+            "keterangan": "Penjualan - ID: 375"
+        },
+        {
+            "id_rekaman_stok": 144740,
+            "id_produk": 598,
+            "id_pembelian": 118,
+            "id_penjualan": null,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-08-06 00:00:00",
+            "keterangan": "Pembelian - Faktur: 380613"
+        },
+        {
+            "id_rekaman_stok": 144741,
+            "id_produk": 598,
+            "id_pembelian": 126,
+            "id_penjualan": null,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-08-08 00:00:00",
+            "keterangan": "Pembelian - Faktur: 250801068"
+        },
+        {
+            "id_rekaman_stok": 144742,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 400,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-08-08 00:00:00",
+            "keterangan": "Penjualan - ID: 400"
+        },
+        {
+            "id_rekaman_stok": 144743,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 408,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-08-11 00:00:00",
+            "keterangan": "Penjualan - ID: 408"
+        },
+        {
+            "id_rekaman_stok": 144744,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 420,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-08-13 00:00:00",
+            "keterangan": "Penjualan - ID: 420"
+        },
+        {
+            "id_rekaman_stok": 144745,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 425,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-08-14 00:00:00",
+            "keterangan": "Penjualan - ID: 425"
+        },
+        {
+            "id_rekaman_stok": 144746,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 427,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-08-15 00:00:00",
+            "keterangan": "Penjualan - ID: 427"
+        },
+        {
+            "id_rekaman_stok": 144747,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 430,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-08-15 00:00:00",
+            "keterangan": "Penjualan - ID: 430"
+        },
+        {
+            "id_rekaman_stok": 144748,
+            "id_produk": 598,
+            "id_pembelian": 148,
+            "id_penjualan": null,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-08-16 00:00:00",
+            "keterangan": "Pembelian - Faktur: 00605"
+        },
+        {
+            "id_rekaman_stok": 144749,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 434,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-08-16 00:00:00",
+            "keterangan": "Penjualan - ID: 434"
+        },
+        {
+            "id_rekaman_stok": 144750,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 531,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-08-25 00:00:00",
+            "keterangan": "Penjualan - ID: 531"
+        },
+        {
+            "id_rekaman_stok": 144751,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 597,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-09-01 07:00:00",
+            "keterangan": "Penjualan - ID: 597"
+        },
+        {
+            "id_rekaman_stok": 144752,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 599,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-09-01 07:00:00",
+            "keterangan": "Penjualan - ID: 599"
+        },
+        {
+            "id_rekaman_stok": 144753,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 600,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-09-01 07:00:00",
+            "keterangan": "Penjualan - ID: 600"
+        },
+        {
+            "id_rekaman_stok": 144754,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 617,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-09-02 07:00:00",
+            "keterangan": "Penjualan - ID: 617"
+        },
+        {
+            "id_rekaman_stok": 144755,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 620,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-09-03 07:00:00",
+            "keterangan": "Penjualan - ID: 620"
+        },
+        {
+            "id_rekaman_stok": 144756,
+            "id_produk": 598,
+            "id_pembelian": 188,
+            "id_penjualan": null,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-09-06 07:00:00",
+            "keterangan": "Pembelian - Faktur: 00252"
+        },
+        {
+            "id_rekaman_stok": 144757,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 642,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-09-06 07:00:00",
+            "keterangan": "Penjualan - ID: 642"
+        },
+        {
+            "id_rekaman_stok": 144758,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 644,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-09-06 07:00:00",
+            "keterangan": "Penjualan - ID: 644"
+        },
+        {
+            "id_rekaman_stok": 144759,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 658,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-09-08 07:00:00",
+            "keterangan": "Penjualan - ID: 658"
+        },
+        {
+            "id_rekaman_stok": 144760,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 666,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-09-09 07:00:00",
+            "keterangan": "Penjualan - ID: 666"
+        },
+        {
+            "id_rekaman_stok": 144761,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 713,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-09-24 07:00:00",
+            "keterangan": "Penjualan - ID: 713"
+        },
+        {
+            "id_rekaman_stok": 144762,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 715,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-09-24 07:00:00",
+            "keterangan": "Penjualan - ID: 715"
+        },
+        {
+            "id_rekaman_stok": 144763,
+            "id_produk": 598,
+            "id_pembelian": 232,
+            "id_penjualan": null,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-09-25 07:00:00",
+            "keterangan": "Pembelian - Faktur: 03515"
+        },
+        {
+            "id_rekaman_stok": 144764,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 719,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-09-26 07:00:00",
+            "keterangan": "Penjualan - ID: 719"
+        },
+        {
+            "id_rekaman_stok": 144765,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 737,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-10-04 07:00:00",
+            "keterangan": "Penjualan - ID: 737"
+        },
+        {
+            "id_rekaman_stok": 144766,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 751,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-10-08 07:00:00",
+            "keterangan": "Penjualan - ID: 751"
+        },
+        {
+            "id_rekaman_stok": 144768,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 756,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-10-10 07:00:00",
+            "keterangan": "Penjualan - ID: 756"
+        },
+        {
+            "id_rekaman_stok": 144769,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 767,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-10-13 07:00:00",
+            "keterangan": "Penjualan - ID: 767"
+        },
+        {
+            "id_rekaman_stok": 144771,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 782,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-10-17 07:00:00",
+            "keterangan": "Penjualan - ID: 782"
+        },
+        {
+            "id_rekaman_stok": 144772,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 783,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-10-18 07:00:00",
+            "keterangan": "Penjualan - ID: 783"
+        },
+        {
+            "id_rekaman_stok": 144773,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 793,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-10-21 07:00:00",
+            "keterangan": "Penjualan - ID: 793"
+        },
+        {
+            "id_rekaman_stok": 144774,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 808,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-10-25 07:00:00",
+            "keterangan": "Penjualan - ID: 808"
+        },
+        {
+            "id_rekaman_stok": 144775,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 825,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-10-31 07:00:00",
+            "keterangan": "Penjualan - ID: 825"
+        },
+        {
+            "id_rekaman_stok": 144776,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 845,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-11-06 07:00:00",
+            "keterangan": "Penjualan - ID: 845"
+        },
+        {
+            "id_rekaman_stok": 144777,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 876,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-11-15 07:00:00",
+            "keterangan": "Penjualan - ID: 876"
+        },
+        {
+            "id_rekaman_stok": 144778,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 882,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-11-17 07:00:00",
+            "keterangan": "Penjualan - ID: 882"
+        },
+        {
+            "id_rekaman_stok": 144779,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 897,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-11-21 07:00:00",
+            "keterangan": "Penjualan - ID: 897"
+        },
+        {
+            "id_rekaman_stok": 144780,
+            "id_produk": 598,
+            "id_pembelian": 344,
+            "id_penjualan": null,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-11-26 07:00:00",
+            "keterangan": "Pembelian - Faktur: 03456"
+        },
+        {
+            "id_rekaman_stok": 144781,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 930,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-12-02 07:00:00",
+            "keterangan": "Penjualan - ID: 930"
+        },
+        {
+            "id_rekaman_stok": 144782,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 934,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-12-03 07:00:00",
+            "keterangan": "Penjualan - ID: 934"
+        },
+        {
+            "id_rekaman_stok": 144783,
+            "id_produk": 598,
+            "id_pembelian": 371,
+            "id_penjualan": null,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-12-04 07:00:00",
+            "keterangan": "Pembelian - Faktur: 00166"
+        },
+        {
+            "id_rekaman_stok": 144784,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 938,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-12-04 07:00:00",
+            "keterangan": "Penjualan - ID: 938"
+        },
+        {
+            "id_rekaman_stok": 144785,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 940,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-12-04 07:00:00",
+            "keterangan": "Penjualan - ID: 940"
+        },
+        {
+            "id_rekaman_stok": 144786,
+            "id_produk": 598,
+            "id_pembelian": null,
+            "id_penjualan": 977,
+            "waktu_lama": "2026-03-27 13:58:35",
+            "waktu_baru": "2025-12-15 07:00:00",
+            "keterangan": "Penjualan - ID: 977"
+        },
+        {
+            "id_rekaman_stok": 144826,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 43,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2024-05-08 00:00:00",
+            "keterangan": "Penjualan - ID: 43"
+        },
+        {
+            "id_rekaman_stok": 144827,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 150,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2024-08-21 00:00:00",
+            "keterangan": "Penjualan - ID: 150"
+        },
+        {
+            "id_rekaman_stok": 144828,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 169,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2024-08-26 00:00:00",
+            "keterangan": "Penjualan - ID: 169"
+        },
+        {
+            "id_rekaman_stok": 144829,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 170,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2024-08-26 00:00:00",
+            "keterangan": "Penjualan - ID: 170"
+        },
+        {
+            "id_rekaman_stok": 144830,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 175,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2024-08-27 00:00:00",
+            "keterangan": "Penjualan - ID: 175"
+        },
+        {
+            "id_rekaman_stok": 144831,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 182,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2024-08-30 00:00:00",
+            "keterangan": "Penjualan - ID: 182"
+        },
+        {
+            "id_rekaman_stok": 144832,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 183,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2024-08-30 00:00:00",
+            "keterangan": "Penjualan - ID: 183"
+        },
+        {
+            "id_rekaman_stok": 144833,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 190,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2024-09-02 00:00:00",
+            "keterangan": "Penjualan - ID: 190"
+        },
+        {
+            "id_rekaman_stok": 144834,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 192,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2024-09-03 00:00:00",
+            "keterangan": "Penjualan - ID: 192"
+        },
+        {
+            "id_rekaman_stok": 144835,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 202,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2024-09-07 00:00:00",
+            "keterangan": "Penjualan - ID: 202"
+        },
+        {
+            "id_rekaman_stok": 144836,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 203,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2024-09-09 00:00:00",
+            "keterangan": "Penjualan - ID: 203"
+        },
+        {
+            "id_rekaman_stok": 144837,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 208,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2024-09-11 00:00:00",
+            "keterangan": "Penjualan - ID: 208"
+        },
+        {
+            "id_rekaman_stok": 144838,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 70,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2024-12-20 00:00:00",
+            "keterangan": "Penjualan - ID: 70"
+        },
+        {
+            "id_rekaman_stok": 144839,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 94,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-01-08 00:00:00",
+            "keterangan": "Penjualan - ID: 94"
+        },
+        {
+            "id_rekaman_stok": 144840,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 97,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-01-13 00:00:00",
+            "keterangan": "Penjualan - ID: 97"
+        },
+        {
+            "id_rekaman_stok": 144841,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 99,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-01-13 00:00:00",
+            "keterangan": "Penjualan - ID: 99"
+        },
+        {
+            "id_rekaman_stok": 144842,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 104,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-01-14 00:00:00",
+            "keterangan": "Penjualan - ID: 104"
+        },
+        {
+            "id_rekaman_stok": 144843,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 121,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-01-21 00:00:00",
+            "keterangan": "Penjualan - ID: 121"
+        },
+        {
+            "id_rekaman_stok": 144844,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 123,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-01-22 00:00:00",
+            "keterangan": "Penjualan - ID: 123"
+        },
+        {
+            "id_rekaman_stok": 144845,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 127,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-01-23 00:00:00",
+            "keterangan": "Penjualan - ID: 127"
+        },
+        {
+            "id_rekaman_stok": 144846,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 134,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-01-31 00:00:00",
+            "keterangan": "Penjualan - ID: 134"
+        },
+        {
+            "id_rekaman_stok": 144847,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 227,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-07-04 00:00:00",
+            "keterangan": "Penjualan - ID: 227"
+        },
+        {
+            "id_rekaman_stok": 144848,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 231,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-07-05 00:00:00",
+            "keterangan": "Penjualan - ID: 231"
+        },
+        {
+            "id_rekaman_stok": 144849,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 233,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-07-07 00:00:00",
+            "keterangan": "Penjualan - ID: 233"
+        },
+        {
+            "id_rekaman_stok": 144850,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 244,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-07-08 00:00:00",
+            "keterangan": "Penjualan - ID: 244"
+        },
+        {
+            "id_rekaman_stok": 144851,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 248,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-07-09 00:00:00",
+            "keterangan": "Penjualan - ID: 248"
+        },
+        {
+            "id_rekaman_stok": 144852,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 250,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-07-09 00:00:00",
+            "keterangan": "Penjualan - ID: 250"
+        },
+        {
+            "id_rekaman_stok": 144853,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 262,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-07-11 00:00:00",
+            "keterangan": "Penjualan - ID: 262"
+        },
+        {
+            "id_rekaman_stok": 144854,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 269,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-07-14 00:00:00",
+            "keterangan": "Penjualan - ID: 269"
+        },
+        {
+            "id_rekaman_stok": 144855,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 290,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-07-15 00:00:00",
+            "keterangan": "Penjualan - ID: 290"
+        },
+        {
+            "id_rekaman_stok": 144856,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 285,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-07-16 00:00:00",
+            "keterangan": "Penjualan - ID: 285"
+        },
+        {
+            "id_rekaman_stok": 144857,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 297,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-07-17 00:00:00",
+            "keterangan": "Penjualan - ID: 297"
+        },
+        {
+            "id_rekaman_stok": 144858,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 275,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-07-18 00:00:00",
+            "keterangan": "Penjualan - ID: 275"
+        },
+        {
+            "id_rekaman_stok": 144859,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 304,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-07-19 00:00:00",
+            "keterangan": "Penjualan - ID: 304"
+        },
+        {
+            "id_rekaman_stok": 144860,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 367,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-08-01 00:00:00",
+            "keterangan": "Penjualan - ID: 367"
+        },
+        {
+            "id_rekaman_stok": 144861,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 398,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-08-08 00:00:00",
+            "keterangan": "Penjualan - ID: 398"
+        },
+        {
+            "id_rekaman_stok": 144862,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 399,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-08-08 00:00:00",
+            "keterangan": "Penjualan - ID: 399"
+        },
+        {
+            "id_rekaman_stok": 144863,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 409,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-08-11 00:00:00",
+            "keterangan": "Penjualan - ID: 409"
+        },
+        {
+            "id_rekaman_stok": 144864,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 472,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-08-21 00:00:00",
+            "keterangan": "Penjualan - ID: 472"
+        },
+        {
+            "id_rekaman_stok": 144865,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 523,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-08-25 00:00:00",
+            "keterangan": "Penjualan - ID: 523"
+        },
+        {
+            "id_rekaman_stok": 144866,
+            "id_produk": 24,
+            "id_pembelian": 172,
+            "id_penjualan": null,
+            "waktu_lama": "2026-03-27 13:57:35",
+            "waktu_baru": "2025-08-30 07:00:00",
+            "keterangan": "Pembelian - Faktur: 03006"
+        },
+        {
+            "id_rekaman_stok": 144867,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 654,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-09-08 07:00:00",
+            "keterangan": "Penjualan - ID: 654"
+        },
+        {
+            "id_rekaman_stok": 144868,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 661,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-09-08 07:00:00",
+            "keterangan": "Penjualan - ID: 661"
+        },
+        {
+            "id_rekaman_stok": 144869,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 686,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-09-16 07:00:00",
+            "keterangan": "Penjualan - ID: 686"
+        },
+        {
+            "id_rekaman_stok": 144870,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 716,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-09-25 07:00:00",
+            "keterangan": "Penjualan - ID: 716"
+        },
+        {
+            "id_rekaman_stok": 144871,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 717,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-09-25 07:00:00",
+            "keterangan": "Penjualan - ID: 717"
+        },
+        {
+            "id_rekaman_stok": 144873,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 718,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-09-25 07:00:00",
+            "keterangan": "Penjualan - ID: 718"
+        },
+        {
+            "id_rekaman_stok": 144874,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 719,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-09-26 07:00:00",
+            "keterangan": "Penjualan - ID: 719"
+        },
+        {
+            "id_rekaman_stok": 144875,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 738,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-10-04 07:00:00",
+            "keterangan": "Penjualan - ID: 738"
+        },
+        {
+            "id_rekaman_stok": 144876,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 739,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-10-06 07:00:00",
+            "keterangan": "Penjualan - ID: 739"
+        },
+        {
+            "id_rekaman_stok": 144877,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 743,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-10-07 07:00:00",
+            "keterangan": "Penjualan - ID: 743"
+        },
+        {
+            "id_rekaman_stok": 144878,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 746,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-10-07 07:00:00",
+            "keterangan": "Penjualan - ID: 746"
+        },
+        {
+            "id_rekaman_stok": 144879,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 760,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-10-11 07:00:00",
+            "keterangan": "Penjualan - ID: 760"
+        },
+        {
+            "id_rekaman_stok": 144880,
+            "id_produk": 24,
+            "id_pembelian": 283,
+            "id_penjualan": null,
+            "waktu_lama": "2026-03-27 13:57:35",
+            "waktu_baru": "2025-10-22 07:00:00",
+            "keterangan": "Pembelian - Faktur: 002156"
+        },
+        {
+            "id_rekaman_stok": 144881,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 812,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-10-27 07:00:00",
+            "keterangan": "Penjualan - ID: 812"
+        },
+        {
+            "id_rekaman_stok": 144882,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 823,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-10-30 07:00:00",
+            "keterangan": "Penjualan - ID: 823"
+        },
+        {
+            "id_rekaman_stok": 144883,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 828,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-10-31 07:00:00",
+            "keterangan": "Penjualan - ID: 828"
+        },
+        {
+            "id_rekaman_stok": 144884,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 830,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-11-01 07:00:00",
+            "keterangan": "Penjualan - ID: 830"
+        },
+        {
+            "id_rekaman_stok": 144885,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 838,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-11-04 07:00:00",
+            "keterangan": "Penjualan - ID: 838"
+        },
+        {
+            "id_rekaman_stok": 144886,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 843,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-11-05 07:00:00",
+            "keterangan": "Penjualan - ID: 843"
+        },
+        {
+            "id_rekaman_stok": 144887,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 844,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-11-06 07:00:00",
+            "keterangan": "Penjualan - ID: 844"
+        },
+        {
+            "id_rekaman_stok": 144888,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 851,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-11-07 07:00:00",
+            "keterangan": "Penjualan - ID: 851"
+        },
+        {
+            "id_rekaman_stok": 144889,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 875,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-11-14 07:00:00",
+            "keterangan": "Penjualan - ID: 875"
+        },
+        {
+            "id_rekaman_stok": 144890,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 877,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-11-15 07:00:00",
+            "keterangan": "Penjualan - ID: 877"
+        },
+        {
+            "id_rekaman_stok": 144891,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 881,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-11-17 07:00:00",
+            "keterangan": "Penjualan - ID: 881"
+        },
+        {
+            "id_rekaman_stok": 144892,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 885,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-11-18 07:00:00",
+            "keterangan": "Penjualan - ID: 885"
+        },
+        {
+            "id_rekaman_stok": 144894,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 900,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-11-22 07:00:00",
+            "keterangan": "Penjualan - ID: 900"
+        },
+        {
+            "id_rekaman_stok": 144895,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 914,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-11-27 07:00:00",
+            "keterangan": "Penjualan - ID: 914"
+        },
+        {
+            "id_rekaman_stok": 144896,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 919,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-11-28 07:00:00",
+            "keterangan": "Penjualan - ID: 919"
+        },
+        {
+            "id_rekaman_stok": 144897,
+            "id_produk": 24,
+            "id_pembelian": 356,
+            "id_penjualan": null,
+            "waktu_lama": "2026-03-27 13:57:35",
+            "waktu_baru": "2025-11-29 07:00:00",
+            "keterangan": "Pembelian - Faktur: 03108"
+        },
+        {
+            "id_rekaman_stok": 144898,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 942,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-12-05 07:00:00",
+            "keterangan": "Penjualan - ID: 942"
+        },
+        {
+            "id_rekaman_stok": 144899,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 956,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-12-09 07:00:00",
+            "keterangan": "Penjualan - ID: 956"
+        },
+        {
+            "id_rekaman_stok": 144901,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 960,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-12-10 07:00:00",
+            "keterangan": "Penjualan - ID: 960"
+        },
+        {
+            "id_rekaman_stok": 144902,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 977,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-12-15 07:00:00",
+            "keterangan": "Penjualan - ID: 977"
+        },
+        {
+            "id_rekaman_stok": 144903,
+            "id_produk": 24,
+            "id_pembelian": 397,
+            "id_penjualan": null,
+            "waktu_lama": "2026-03-27 13:57:35",
+            "waktu_baru": "2025-12-16 07:00:00",
+            "keterangan": "Pembelian - Faktur: 02359"
+        },
+        {
+            "id_rekaman_stok": 144904,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 980,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-12-16 07:00:00",
+            "keterangan": "Penjualan - ID: 980"
+        },
+        {
+            "id_rekaman_stok": 144905,
+            "id_produk": 24,
+            "id_pembelian": null,
+            "id_penjualan": 991,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-12-19 07:00:00",
+            "keterangan": "Penjualan - ID: 991"
+        },
+        {
+            "id_rekaman_stok": 144912,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 225,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-07-04 00:00:00",
+            "keterangan": "Penjualan - ID: 225"
+        },
+        {
+            "id_rekaman_stok": 144913,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 230,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-07-05 00:00:00",
+            "keterangan": "Penjualan - ID: 230"
+        },
+        {
+            "id_rekaman_stok": 144914,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 239,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-07-07 00:00:00",
+            "keterangan": "Penjualan - ID: 239"
+        },
+        {
+            "id_rekaman_stok": 144915,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 245,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-07-08 00:00:00",
+            "keterangan": "Penjualan - ID: 245"
+        },
+        {
+            "id_rekaman_stok": 144916,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 248,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-07-09 00:00:00",
+            "keterangan": "Penjualan - ID: 248"
+        },
+        {
+            "id_rekaman_stok": 144917,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 252,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-07-10 00:00:00",
+            "keterangan": "Penjualan - ID: 252"
+        },
+        {
+            "id_rekaman_stok": 144918,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 261,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-07-11 00:00:00",
+            "keterangan": "Penjualan - ID: 261"
+        },
+        {
+            "id_rekaman_stok": 144919,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 269,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-07-14 00:00:00",
+            "keterangan": "Penjualan - ID: 269"
+        },
+        {
+            "id_rekaman_stok": 144920,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 271,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-07-14 00:00:00",
+            "keterangan": "Penjualan - ID: 271"
+        },
+        {
+            "id_rekaman_stok": 144921,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 283,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-07-16 00:00:00",
+            "keterangan": "Penjualan - ID: 283"
+        },
+        {
+            "id_rekaman_stok": 144922,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 278,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-07-18 00:00:00",
+            "keterangan": "Penjualan - ID: 278"
+        },
+        {
+            "id_rekaman_stok": 144923,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 310,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-07-21 00:00:00",
+            "keterangan": "Penjualan - ID: 310"
+        },
+        {
+            "id_rekaman_stok": 144924,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 320,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-07-23 00:00:00",
+            "keterangan": "Penjualan - ID: 320"
+        },
+        {
+            "id_rekaman_stok": 144925,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 322,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-07-23 00:00:00",
+            "keterangan": "Penjualan - ID: 322"
+        },
+        {
+            "id_rekaman_stok": 144926,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 323,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-07-23 00:00:00",
+            "keterangan": "Penjualan - ID: 323"
+        },
+        {
+            "id_rekaman_stok": 144927,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 325,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-07-24 00:00:00",
+            "keterangan": "Penjualan - ID: 325"
+        },
+        {
+            "id_rekaman_stok": 144928,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 330,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-07-25 00:00:00",
+            "keterangan": "Penjualan - ID: 330"
+        },
+        {
+            "id_rekaman_stok": 144929,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 331,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-07-25 00:00:00",
+            "keterangan": "Penjualan - ID: 331"
+        },
+        {
+            "id_rekaman_stok": 144930,
+            "id_produk": 108,
+            "id_pembelian": 85,
+            "id_penjualan": null,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-07-26 00:00:00",
+            "keterangan": "Pembelian - Faktur: 1773774"
+        },
+        {
+            "id_rekaman_stok": 144931,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 341,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-07-28 00:00:00",
+            "keterangan": "Penjualan - ID: 341"
+        },
+        {
+            "id_rekaman_stok": 144932,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 349,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-07-29 00:00:00",
+            "keterangan": "Penjualan - ID: 349"
+        },
+        {
+            "id_rekaman_stok": 144933,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 351,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-07-30 00:00:00",
+            "keterangan": "Penjualan - ID: 351"
+        },
+        {
+            "id_rekaman_stok": 144934,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 357,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-07-31 00:00:00",
+            "keterangan": "Penjualan - ID: 357"
+        },
+        {
+            "id_rekaman_stok": 144935,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 361,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-07-31 00:00:00",
+            "keterangan": "Penjualan - ID: 361"
+        },
+        {
+            "id_rekaman_stok": 144936,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 373,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-08-02 00:00:00",
+            "keterangan": "Penjualan - ID: 373"
+        },
+        {
+            "id_rekaman_stok": 144937,
+            "id_produk": 108,
+            "id_pembelian": 121,
+            "id_penjualan": null,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-08-08 00:00:00",
+            "keterangan": "Pembelian - Faktur: 1812385"
+        },
+        {
+            "id_rekaman_stok": 144938,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 399,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-08-08 00:00:00",
+            "keterangan": "Penjualan - ID: 399"
+        },
+        {
+            "id_rekaman_stok": 144939,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 403,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-08-09 00:00:00",
+            "keterangan": "Penjualan - ID: 403"
+        },
+        {
+            "id_rekaman_stok": 144940,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 404,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-08-09 00:00:00",
+            "keterangan": "Penjualan - ID: 404"
+        },
+        {
+            "id_rekaman_stok": 144941,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 409,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-08-11 00:00:00",
+            "keterangan": "Penjualan - ID: 409"
+        },
+        {
+            "id_rekaman_stok": 144942,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 439,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-08-18 00:00:00",
+            "keterangan": "Penjualan - ID: 439"
+        },
+        {
+            "id_rekaman_stok": 144943,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 441,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-08-18 00:00:00",
+            "keterangan": "Penjualan - ID: 441"
+        },
+        {
+            "id_rekaman_stok": 144944,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 445,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-08-19 00:00:00",
+            "keterangan": "Penjualan - ID: 445"
+        },
+        {
+            "id_rekaman_stok": 144945,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 449,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-08-19 00:00:00",
+            "keterangan": "Penjualan - ID: 449"
+        },
+        {
+            "id_rekaman_stok": 144946,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 457,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-08-20 00:00:00",
+            "keterangan": "Penjualan - ID: 457"
+        },
+        {
+            "id_rekaman_stok": 144947,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 503,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-08-23 00:00:00",
+            "keterangan": "Penjualan - ID: 503"
+        },
+        {
+            "id_rekaman_stok": 144948,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 519,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-08-25 00:00:00",
+            "keterangan": "Penjualan - ID: 519"
+        },
+        {
+            "id_rekaman_stok": 144949,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 554,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-08-27 00:00:00",
+            "keterangan": "Penjualan - ID: 554"
+        },
+        {
+            "id_rekaman_stok": 144950,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 556,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-08-27 00:00:00",
+            "keterangan": "Penjualan - ID: 556"
+        },
+        {
+            "id_rekaman_stok": 144951,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 574,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-08-29 00:00:00",
+            "keterangan": "Penjualan - ID: 574"
+        },
+        {
+            "id_rekaman_stok": 144952,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 577,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-08-29 00:00:00",
+            "keterangan": "Penjualan - ID: 577"
+        },
+        {
+            "id_rekaman_stok": 144953,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 598,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-09-01 07:00:00",
+            "keterangan": "Penjualan - ID: 598"
+        },
+        {
+            "id_rekaman_stok": 144954,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 599,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-09-01 07:00:00",
+            "keterangan": "Penjualan - ID: 599"
+        },
+        {
+            "id_rekaman_stok": 144955,
+            "id_produk": 108,
+            "id_pembelian": 181,
+            "id_penjualan": null,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-09-02 07:00:00",
+            "keterangan": "Pembelian - Faktur: 386094"
+        },
+        {
+            "id_rekaman_stok": 144956,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 654,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-09-08 07:00:00",
+            "keterangan": "Penjualan - ID: 654"
+        },
+        {
+            "id_rekaman_stok": 144957,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 666,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-09-09 07:00:00",
+            "keterangan": "Penjualan - ID: 666"
+        },
+        {
+            "id_rekaman_stok": 144958,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 680,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-09-16 07:00:00",
+            "keterangan": "Penjualan - ID: 680"
+        },
+        {
+            "id_rekaman_stok": 144959,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 690,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-09-17 07:00:00",
+            "keterangan": "Penjualan - ID: 690"
+        },
+        {
+            "id_rekaman_stok": 144960,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 703,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-09-22 07:00:00",
+            "keterangan": "Penjualan - ID: 703"
+        },
+        {
+            "id_rekaman_stok": 144961,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 717,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-09-25 07:00:00",
+            "keterangan": "Penjualan - ID: 717"
+        },
+        {
+            "id_rekaman_stok": 144962,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 719,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-09-26 07:00:00",
+            "keterangan": "Penjualan - ID: 719"
+        },
+        {
+            "id_rekaman_stok": 144963,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 720,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-09-26 07:00:00",
+            "keterangan": "Penjualan - ID: 720"
+        },
+        {
+            "id_rekaman_stok": 144964,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 723,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-10-01 07:00:00",
+            "keterangan": "Penjualan - ID: 723"
+        },
+        {
+            "id_rekaman_stok": 144966,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 724,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-10-01 07:00:00",
+            "keterangan": "Penjualan - ID: 724"
+        },
+        {
+            "id_rekaman_stok": 144968,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 725,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-10-01 07:00:00",
+            "keterangan": "Penjualan - ID: 725"
+        },
+        {
+            "id_rekaman_stok": 144969,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 736,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-10-04 07:00:00",
+            "keterangan": "Penjualan - ID: 736"
+        },
+        {
+            "id_rekaman_stok": 144970,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 746,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-10-07 07:00:00",
+            "keterangan": "Penjualan - ID: 746"
+        },
+        {
+            "id_rekaman_stok": 144971,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 752,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-10-09 07:00:00",
+            "keterangan": "Penjualan - ID: 752"
+        },
+        {
+            "id_rekaman_stok": 144972,
+            "id_produk": 108,
+            "id_pembelian": 270,
+            "id_penjualan": null,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-10-16 07:00:00",
+            "keterangan": "Pembelian - Faktur: 395207"
+        },
+        {
+            "id_rekaman_stok": 144973,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 789,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-10-20 07:00:00",
+            "keterangan": "Penjualan - ID: 789"
+        },
+        {
+            "id_rekaman_stok": 144974,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 796,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-10-22 07:00:00",
+            "keterangan": "Penjualan - ID: 796"
+        },
+        {
+            "id_rekaman_stok": 144975,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 798,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-10-23 07:00:00",
+            "keterangan": "Penjualan - ID: 798"
+        },
+        {
+            "id_rekaman_stok": 144976,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 807,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-10-25 07:00:00",
+            "keterangan": "Penjualan - ID: 807"
+        },
+        {
+            "id_rekaman_stok": 144977,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 833,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-11-03 07:00:00",
+            "keterangan": "Penjualan - ID: 833"
+        },
+        {
+            "id_rekaman_stok": 144978,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 841,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-11-04 07:00:00",
+            "keterangan": "Penjualan - ID: 841"
+        },
+        {
+            "id_rekaman_stok": 144979,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 842,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-11-05 07:00:00",
+            "keterangan": "Penjualan - ID: 842"
+        },
+        {
+            "id_rekaman_stok": 144980,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 856,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-11-08 07:00:00",
+            "keterangan": "Penjualan - ID: 856"
+        },
+        {
+            "id_rekaman_stok": 144981,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 866,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-11-12 07:00:00",
+            "keterangan": "Penjualan - ID: 866"
+        },
+        {
+            "id_rekaman_stok": 144982,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 867,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-11-13 07:00:00",
+            "keterangan": "Penjualan - ID: 867"
+        },
+        {
+            "id_rekaman_stok": 144983,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 869,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-11-13 07:00:00",
+            "keterangan": "Penjualan - ID: 869"
+        },
+        {
+            "id_rekaman_stok": 144984,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 870,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-11-13 07:00:00",
+            "keterangan": "Penjualan - ID: 870"
+        },
+        {
+            "id_rekaman_stok": 144985,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 879,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-11-15 07:00:00",
+            "keterangan": "Penjualan - ID: 879"
+        },
+        {
+            "id_rekaman_stok": 144986,
+            "id_produk": 108,
+            "id_pembelian": 336,
+            "id_penjualan": null,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-11-19 07:00:00",
+            "keterangan": "Pembelian - Faktur: 402204"
+        },
+        {
+            "id_rekaman_stok": 144987,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 890,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-11-19 07:00:00",
+            "keterangan": "Penjualan - ID: 890"
+        },
+        {
+            "id_rekaman_stok": 144988,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 894,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-11-20 07:00:00",
+            "keterangan": "Penjualan - ID: 894"
+        },
+        {
+            "id_rekaman_stok": 144989,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 898,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-11-22 07:00:00",
+            "keterangan": "Penjualan - ID: 898"
+        },
+        {
+            "id_rekaman_stok": 144990,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 899,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-11-22 07:00:00",
+            "keterangan": "Penjualan - ID: 899"
+        },
+        {
+            "id_rekaman_stok": 144991,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 904,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-11-24 07:00:00",
+            "keterangan": "Penjualan - ID: 904"
+        },
+        {
+            "id_rekaman_stok": 144992,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 905,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-11-24 07:00:00",
+            "keterangan": "Penjualan - ID: 905"
+        },
+        {
+            "id_rekaman_stok": 144994,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 906,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-11-24 07:00:00",
+            "keterangan": "Penjualan - ID: 906"
+        },
+        {
+            "id_rekaman_stok": 144995,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 910,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-11-26 07:00:00",
+            "keterangan": "Penjualan - ID: 910"
+        },
+        {
+            "id_rekaman_stok": 144996,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 919,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-11-28 07:00:00",
+            "keterangan": "Penjualan - ID: 919"
+        },
+        {
+            "id_rekaman_stok": 144997,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 921,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-11-28 07:00:00",
+            "keterangan": "Penjualan - ID: 921"
+        },
+        {
+            "id_rekaman_stok": 144998,
+            "id_produk": 108,
+            "id_pembelian": 353,
+            "id_penjualan": null,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-11-29 07:00:00",
+            "keterangan": "Pembelian - Faktur: 2174304"
+        },
+        {
+            "id_rekaman_stok": 144999,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 929,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-12-01 07:00:00",
+            "keterangan": "Penjualan - ID: 929"
+        },
+        {
+            "id_rekaman_stok": 145000,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 930,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-12-02 07:00:00",
+            "keterangan": "Penjualan - ID: 930"
+        },
+        {
+            "id_rekaman_stok": 145001,
+            "id_produk": 108,
+            "id_pembelian": 360,
+            "id_penjualan": null,
+            "waktu_lama": "2026-03-27 13:58:54",
+            "waktu_baru": "2025-12-03 07:00:00",
+            "keterangan": "Pembelian - Faktur: 571168"
+        },
+        {
+            "id_rekaman_stok": 145002,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 944,
+            "waktu_lama": "2026-03-27 13:58:55",
+            "waktu_baru": "2025-12-05 07:00:00",
+            "keterangan": "Penjualan - ID: 944"
+        },
+        {
+            "id_rekaman_stok": 145003,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 948,
+            "waktu_lama": "2026-03-27 13:58:55",
+            "waktu_baru": "2025-12-06 07:00:00",
+            "keterangan": "Penjualan - ID: 948"
+        },
+        {
+            "id_rekaman_stok": 145004,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 950,
+            "waktu_lama": "2026-03-27 13:58:55",
+            "waktu_baru": "2025-12-08 07:00:00",
+            "keterangan": "Penjualan - ID: 950"
+        },
+        {
+            "id_rekaman_stok": 145005,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 952,
+            "waktu_lama": "2026-03-27 13:58:55",
+            "waktu_baru": "2025-12-08 07:00:00",
+            "keterangan": "Penjualan - ID: 952"
+        },
+        {
+            "id_rekaman_stok": 145006,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 958,
+            "waktu_lama": "2026-03-27 13:58:55",
+            "waktu_baru": "2025-12-10 07:00:00",
+            "keterangan": "Penjualan - ID: 958"
+        },
+        {
+            "id_rekaman_stok": 145007,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 965,
+            "waktu_lama": "2026-03-27 13:58:55",
+            "waktu_baru": "2025-12-12 07:00:00",
+            "keterangan": "Penjualan - ID: 965"
+        },
+        {
+            "id_rekaman_stok": 145008,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 968,
+            "waktu_lama": "2026-03-27 13:58:55",
+            "waktu_baru": "2025-12-12 07:00:00",
+            "keterangan": "Penjualan - ID: 968"
+        },
+        {
+            "id_rekaman_stok": 145009,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 974,
+            "waktu_lama": "2026-03-27 13:58:55",
+            "waktu_baru": "2025-12-15 07:00:00",
+            "keterangan": "Penjualan - ID: 974"
+        },
+        {
+            "id_rekaman_stok": 145010,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 979,
+            "waktu_lama": "2026-03-27 13:58:55",
+            "waktu_baru": "2025-12-16 07:00:00",
+            "keterangan": "Penjualan - ID: 979"
+        },
+        {
+            "id_rekaman_stok": 145011,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 980,
+            "waktu_lama": "2026-03-27 13:58:55",
+            "waktu_baru": "2025-12-16 07:00:00",
+            "keterangan": "Penjualan - ID: 980"
+        },
+        {
+            "id_rekaman_stok": 145012,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 982,
+            "waktu_lama": "2026-03-27 13:58:55",
+            "waktu_baru": "2025-12-17 07:00:00",
+            "keterangan": "Penjualan - ID: 982"
+        },
+        {
+            "id_rekaman_stok": 145013,
+            "id_produk": 108,
+            "id_pembelian": null,
+            "id_penjualan": 986,
+            "waktu_lama": "2026-03-27 13:58:55",
+            "waktu_baru": "2025-12-18 07:00:00",
+            "keterangan": "Penjualan - ID: 986"
+        },
+        {
+            "id_rekaman_stok": 145016,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 24,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2024-05-07 00:00:00",
+            "keterangan": "Penjualan - ID: 24"
+        },
+        {
+            "id_rekaman_stok": 145017,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 45,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2024-05-08 00:00:00",
+            "keterangan": "Penjualan - ID: 45"
+        },
+        {
+            "id_rekaman_stok": 145018,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 13,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2024-05-29 12:19:28",
+            "keterangan": "Penjualan - ID: 13"
+        },
+        {
+            "id_rekaman_stok": 145019,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 140,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2024-08-20 00:00:00",
+            "keterangan": "Penjualan - ID: 140"
+        },
+        {
+            "id_rekaman_stok": 145020,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 155,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2024-08-22 00:00:00",
+            "keterangan": "Penjualan - ID: 155"
+        },
+        {
+            "id_rekaman_stok": 145021,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 157,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2024-08-23 00:00:00",
+            "keterangan": "Penjualan - ID: 157"
+        },
+        {
+            "id_rekaman_stok": 145023,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 158,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2024-08-23 00:00:00",
+            "keterangan": "Penjualan - ID: 158"
+        },
+        {
+            "id_rekaman_stok": 145025,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 159,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2024-08-23 00:00:00",
+            "keterangan": "Penjualan - ID: 159"
+        },
+        {
+            "id_rekaman_stok": 145026,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 167,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2024-08-24 00:00:00",
+            "keterangan": "Penjualan - ID: 167"
+        },
+        {
+            "id_rekaman_stok": 145027,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 185,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2024-08-30 00:00:00",
+            "keterangan": "Penjualan - ID: 185"
+        },
+        {
+            "id_rekaman_stok": 145028,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 186,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2024-08-31 00:00:00",
+            "keterangan": "Penjualan - ID: 186"
+        },
+        {
+            "id_rekaman_stok": 145029,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 187,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2024-08-31 00:00:00",
+            "keterangan": "Penjualan - ID: 187"
+        },
+        {
+            "id_rekaman_stok": 145030,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 194,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2024-09-03 00:00:00",
+            "keterangan": "Penjualan - ID: 194"
+        },
+        {
+            "id_rekaman_stok": 145031,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 196,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2024-09-04 00:00:00",
+            "keterangan": "Penjualan - ID: 196"
+        },
+        {
+            "id_rekaman_stok": 145032,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 200,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2024-09-06 00:00:00",
+            "keterangan": "Penjualan - ID: 200"
+        },
+        {
+            "id_rekaman_stok": 145033,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 204,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2024-09-09 00:00:00",
+            "keterangan": "Penjualan - ID: 204"
+        },
+        {
+            "id_rekaman_stok": 145034,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 206,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2024-09-10 00:00:00",
+            "keterangan": "Penjualan - ID: 206"
+        },
+        {
+            "id_rekaman_stok": 145035,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 208,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2024-09-11 00:00:00",
+            "keterangan": "Penjualan - ID: 208"
+        },
+        {
+            "id_rekaman_stok": 145036,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 217,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2024-09-13 00:00:00",
+            "keterangan": "Penjualan - ID: 217"
+        },
+        {
+            "id_rekaman_stok": 145037,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 218,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2024-09-13 00:00:00",
+            "keterangan": "Penjualan - ID: 218"
+        },
+        {
+            "id_rekaman_stok": 145039,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 220,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2024-09-14 00:00:00",
+            "keterangan": "Penjualan - ID: 220"
+        },
+        {
+            "id_rekaman_stok": 145040,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 67,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2024-12-13 00:00:00",
+            "keterangan": "Penjualan - ID: 67"
+        },
+        {
+            "id_rekaman_stok": 145041,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 72,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2024-12-20 00:00:00",
+            "keterangan": "Penjualan - ID: 72"
+        },
+        {
+            "id_rekaman_stok": 145043,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 78,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2024-12-25 00:00:00",
+            "keterangan": "Penjualan - ID: 78"
+        },
+        {
+            "id_rekaman_stok": 145044,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 88,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2024-12-26 00:00:00",
+            "keterangan": "Penjualan - ID: 88"
+        },
+        {
+            "id_rekaman_stok": 145045,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 89,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2024-12-26 00:00:00",
+            "keterangan": "Penjualan - ID: 89"
+        },
+        {
+            "id_rekaman_stok": 145046,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 97,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2025-01-13 00:00:00",
+            "keterangan": "Penjualan - ID: 97"
+        },
+        {
+            "id_rekaman_stok": 145047,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 98,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2025-01-13 00:00:00",
+            "keterangan": "Penjualan - ID: 98"
+        },
+        {
+            "id_rekaman_stok": 145048,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 106,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2025-01-14 00:00:00",
+            "keterangan": "Penjualan - ID: 106"
+        },
+        {
+            "id_rekaman_stok": 145049,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 115,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2025-01-20 00:00:00",
+            "keterangan": "Penjualan - ID: 115"
+        },
+        {
+            "id_rekaman_stok": 145050,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 117,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2025-01-20 00:00:00",
+            "keterangan": "Penjualan - ID: 117"
+        },
+        {
+            "id_rekaman_stok": 145051,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 118,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2025-01-20 00:00:00",
+            "keterangan": "Penjualan - ID: 118"
+        },
+        {
+            "id_rekaman_stok": 145052,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 119,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2025-01-20 00:00:00",
+            "keterangan": "Penjualan - ID: 119"
+        },
+        {
+            "id_rekaman_stok": 145053,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 126,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2025-01-23 00:00:00",
+            "keterangan": "Penjualan - ID: 126"
+        },
+        {
+            "id_rekaman_stok": 145054,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 128,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2025-01-24 00:00:00",
+            "keterangan": "Penjualan - ID: 128"
+        },
+        {
+            "id_rekaman_stok": 145055,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 129,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2025-01-24 00:00:00",
+            "keterangan": "Penjualan - ID: 129"
+        },
+        {
+            "id_rekaman_stok": 145057,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 130,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2025-01-25 00:00:00",
+            "keterangan": "Penjualan - ID: 130"
+        },
+        {
+            "id_rekaman_stok": 145058,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 131,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2025-01-28 00:00:00",
+            "keterangan": "Penjualan - ID: 131"
+        },
+        {
+            "id_rekaman_stok": 145061,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 132,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2025-01-29 00:00:00",
+            "keterangan": "Penjualan - ID: 132"
+        },
+        {
+            "id_rekaman_stok": 145062,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 188,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2025-05-14 10:48:46",
+            "keterangan": "Penjualan - ID: 188"
+        },
+        {
+            "id_rekaman_stok": 145063,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 232,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2025-07-05 00:00:00",
+            "keterangan": "Penjualan - ID: 232"
+        },
+        {
+            "id_rekaman_stok": 145065,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 245,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2025-07-08 00:00:00",
+            "keterangan": "Penjualan - ID: 245"
+        },
+        {
+            "id_rekaman_stok": 145066,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 248,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2025-07-09 00:00:00",
+            "keterangan": "Penjualan - ID: 248"
+        },
+        {
+            "id_rekaman_stok": 145067,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 252,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2025-07-10 00:00:00",
+            "keterangan": "Penjualan - ID: 252"
+        },
+        {
+            "id_rekaman_stok": 145068,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 269,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2025-07-14 00:00:00",
+            "keterangan": "Penjualan - ID: 269"
+        },
+        {
+            "id_rekaman_stok": 145069,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 272,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2025-07-14 00:00:00",
+            "keterangan": "Penjualan - ID: 272"
+        },
+        {
+            "id_rekaman_stok": 145070,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 291,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2025-07-15 00:00:00",
+            "keterangan": "Penjualan - ID: 291"
+        },
+        {
+            "id_rekaman_stok": 145071,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 276,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2025-07-18 00:00:00",
+            "keterangan": "Penjualan - ID: 276"
+        },
+        {
+            "id_rekaman_stok": 145072,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 305,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2025-07-19 00:00:00",
+            "keterangan": "Penjualan - ID: 305"
+        },
+        {
+            "id_rekaman_stok": 145073,
+            "id_produk": 59,
+            "id_pembelian": null,
+            "id_penjualan": 320,
+            "waktu_lama": "2026-03-27 14:01:52",
+            "waktu_baru": "2025-07-23 00:00:00",
+            "keterangan": "Penjualan - ID: 320"
+        }
+    ]
+}

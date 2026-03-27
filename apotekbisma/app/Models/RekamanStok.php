@@ -168,6 +168,9 @@ class RekamanStok extends Model
                 }
 
                 if ($needsUpdate) {
+                    // MySQL TIMESTAMP lama bisa auto-update ke NOW saat kolom lain diubah.
+                    // Pastikan waktu transaksi asli tetap dipertahankan.
+                    $updateData['waktu'] = $record->waktu;
                     $updates[$record->id_rekaman_stok] = $updateData;
                 }
 
