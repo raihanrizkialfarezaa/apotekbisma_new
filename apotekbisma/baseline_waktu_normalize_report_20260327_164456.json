@@ -1,0 +1,1812 @@
+{
+    "generated_at": "2026-03-27 16:44:56",
+    "mode": "DRY_RUN",
+    "cutoff": "2025-12-31 23:59:59",
+    "summary": {
+        "baseline_records_found": 347,
+        "to_update": 347,
+        "affected_products": 347
+    },
+    "updates_preview": [
+        {
+            "id_rekaman_stok": 224730,
+            "id_produk": 4,
+            "waktu_lama": "2026-03-27 14:07:39",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 2,
+            "stok_sisa": 2,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 224734,
+            "id_produk": 7,
+            "waktu_lama": "2026-03-27 14:00:30",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 5,
+            "stok_sisa": 5,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 224739,
+            "id_produk": 9,
+            "waktu_lama": "2026-03-27 14:07:30",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 21,
+            "stok_sisa": 21,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 224765,
+            "id_produk": 13,
+            "waktu_lama": "2026-03-27 14:01:16",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 8,
+            "stok_sisa": 8,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 224807,
+            "id_produk": 19,
+            "waktu_lama": "2026-03-27 14:07:39",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 23,
+            "stok_sisa": 23,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 224814,
+            "id_produk": 20,
+            "waktu_lama": "2026-03-27 14:07:39",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 5,
+            "stok_sisa": 5,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 224823,
+            "id_produk": 21,
+            "waktu_lama": "2026-03-27 14:07:39",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 131,
+            "stok_sisa": 131,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 224837,
+            "id_produk": 23,
+            "waktu_lama": "2026-03-27 14:00:16",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 1150,
+            "stok_sisa": 1150,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 224948,
+            "id_produk": 24,
+            "waktu_lama": "2026-03-27 13:57:36",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 320,
+            "stok_sisa": 320,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 224986,
+            "id_produk": 25,
+            "waktu_lama": "2026-03-27 14:07:38",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 160,
+            "stok_sisa": 160,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225035,
+            "id_produk": 27,
+            "waktu_lama": "2026-03-27 14:07:29",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 180,
+            "stok_sisa": 180,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225044,
+            "id_produk": 29,
+            "waktu_lama": "2026-03-27 14:07:32",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 100,
+            "stok_sisa": 100,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225063,
+            "id_produk": 30,
+            "waktu_lama": "2026-03-27 14:07:28",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 580,
+            "stok_sisa": 580,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225104,
+            "id_produk": 33,
+            "waktu_lama": "2026-03-27 13:57:51",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 420,
+            "stok_sisa": 420,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225171,
+            "id_produk": 34,
+            "waktu_lama": "2026-03-27 14:07:25",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 480,
+            "stok_sisa": 480,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225247,
+            "id_produk": 35,
+            "waktu_lama": "2026-03-27 14:01:31",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 11,
+            "stok_sisa": 11,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225252,
+            "id_produk": 41,
+            "waktu_lama": "2026-03-27 14:07:39",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 1,
+            "stok_sisa": 1,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225261,
+            "id_produk": 42,
+            "waktu_lama": "2026-03-27 14:07:40",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": -1,
+            "stok_sisa": -1,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225269,
+            "id_produk": 43,
+            "waktu_lama": "2026-03-27 14:07:40",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 8,
+            "stok_sisa": 8,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225277,
+            "id_produk": 44,
+            "waktu_lama": "2026-03-27 14:07:34",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 10,
+            "stok_sisa": 10,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225284,
+            "id_produk": 45,
+            "waktu_lama": "2026-03-27 14:07:35",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 420,
+            "stok_sisa": 420,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225319,
+            "id_produk": 48,
+            "waktu_lama": "2026-03-27 14:10:27",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 2331,
+            "stok_sisa": 2331,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225401,
+            "id_produk": 51,
+            "waktu_lama": "2026-03-27 14:07:27",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 23,
+            "stok_sisa": 23,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225477,
+            "id_produk": 52,
+            "waktu_lama": "2026-03-27 14:07:40",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 36,
+            "stok_sisa": 36,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225494,
+            "id_produk": 55,
+            "waktu_lama": "2026-03-27 14:07:32",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 710,
+            "stok_sisa": 710,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225561,
+            "id_produk": 57,
+            "waktu_lama": "2026-03-27 14:07:40",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": -2,
+            "stok_sisa": -2,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225578,
+            "id_produk": 59,
+            "waktu_lama": "2026-03-27 14:10:25",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 729,
+            "stok_sisa": 729,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225619,
+            "id_produk": 61,
+            "waktu_lama": "2026-03-27 14:00:17",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 1,
+            "stok_sisa": 1,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225736,
+            "id_produk": 64,
+            "waktu_lama": "2026-03-27 14:07:40",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": -1,
+            "stok_sisa": -1,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225762,
+            "id_produk": 74,
+            "waktu_lama": "2026-03-27 14:07:40",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 12,
+            "stok_sisa": 12,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225765,
+            "id_produk": 75,
+            "waktu_lama": "2026-03-27 13:59:27",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 2,
+            "stok_sisa": 2,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225777,
+            "id_produk": 85,
+            "waktu_lama": "2026-03-27 13:58:16",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 4,
+            "stok_sisa": 4,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225786,
+            "id_produk": 90,
+            "waktu_lama": "2026-03-27 14:07:40",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 1,
+            "stok_sisa": 1,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225793,
+            "id_produk": 94,
+            "waktu_lama": "2026-03-27 14:07:34",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 2,
+            "stok_sisa": 2,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225821,
+            "id_produk": 95,
+            "waktu_lama": "2026-03-27 14:07:40",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 1,
+            "stok_sisa": 1,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225824,
+            "id_produk": 96,
+            "waktu_lama": "2026-03-27 14:07:40",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 24,
+            "stok_sisa": 24,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225834,
+            "id_produk": 97,
+            "waktu_lama": "2026-03-27 14:07:39",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 5,
+            "stok_sisa": 5,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225850,
+            "id_produk": 98,
+            "waktu_lama": "2026-03-27 14:07:40",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 5,
+            "stok_sisa": 5,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225857,
+            "id_produk": 99,
+            "waktu_lama": "2026-03-27 14:07:40",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": -20,
+            "stok_sisa": -20,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225874,
+            "id_produk": 102,
+            "waktu_lama": "2026-03-27 13:58:44",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 5,
+            "stok_sisa": 5,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225879,
+            "id_produk": 103,
+            "waktu_lama": "2026-03-27 13:57:41",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 8,
+            "stok_sisa": 8,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225902,
+            "id_produk": 104,
+            "waktu_lama": "2026-03-27 14:07:39",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 14,
+            "stok_sisa": 14,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225913,
+            "id_produk": 108,
+            "waktu_lama": "2026-03-27 14:07:23",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 1215,
+            "stok_sisa": 1215,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225958,
+            "id_produk": 110,
+            "waktu_lama": "2026-03-27 14:07:30",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 102,
+            "stok_sisa": 102,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225977,
+            "id_produk": 111,
+            "waktu_lama": "2026-03-27 13:57:46",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 88,
+            "stok_sisa": 88,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 225991,
+            "id_produk": 112,
+            "waktu_lama": "2026-03-27 14:07:40",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 100,
+            "stok_sisa": 100,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226024,
+            "id_produk": 118,
+            "waktu_lama": "2026-03-27 14:07:40",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 120,
+            "stok_sisa": 120,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226042,
+            "id_produk": 119,
+            "waktu_lama": "2026-03-27 14:07:34",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 15,
+            "stok_sisa": 15,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226048,
+            "id_produk": 121,
+            "waktu_lama": "2026-03-27 14:07:30",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 310,
+            "stok_sisa": 310,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226068,
+            "id_produk": 122,
+            "waktu_lama": "2026-03-27 14:01:16",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 7,
+            "stok_sisa": 7,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226078,
+            "id_produk": 125,
+            "waktu_lama": "2026-03-27 14:07:25",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": -1,
+            "stok_sisa": -1,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226105,
+            "id_produk": 126,
+            "waktu_lama": "2026-03-27 14:07:25",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 3,
+            "stok_sisa": 3,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226120,
+            "id_produk": 130,
+            "waktu_lama": "2026-03-27 13:52:35",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 7,
+            "stok_sisa": 7,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226128,
+            "id_produk": 133,
+            "waktu_lama": "2026-03-27 13:59:57",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 2,
+            "stok_sisa": 2,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226146,
+            "id_produk": 135,
+            "waktu_lama": "2026-03-27 14:07:41",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 0,
+            "stok_sisa": 0,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226153,
+            "id_produk": 140,
+            "waktu_lama": "2026-03-27 14:07:41",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 190,
+            "stok_sisa": 190,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226163,
+            "id_produk": 142,
+            "waktu_lama": "2026-03-27 14:07:31",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 100,
+            "stok_sisa": 100,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226190,
+            "id_produk": 145,
+            "waktu_lama": "2026-03-27 14:07:30",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 43,
+            "stok_sisa": 43,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226239,
+            "id_produk": 146,
+            "waktu_lama": "2026-03-27 14:07:41",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 3,
+            "stok_sisa": 3,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226243,
+            "id_produk": 147,
+            "waktu_lama": "2026-03-27 14:07:29",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 250,
+            "stok_sisa": 250,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226260,
+            "id_produk": 148,
+            "waktu_lama": "2026-03-27 14:07:41",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 6,
+            "stok_sisa": 6,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226267,
+            "id_produk": 152,
+            "waktu_lama": "2026-03-27 13:57:46",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 290,
+            "stok_sisa": 290,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226302,
+            "id_produk": 155,
+            "waktu_lama": "2026-03-27 14:00:10",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 4,
+            "stok_sisa": 4,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226311,
+            "id_produk": 157,
+            "waktu_lama": "2026-03-27 14:07:29",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 1,
+            "stok_sisa": 1,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226322,
+            "id_produk": 159,
+            "waktu_lama": "2026-03-27 14:07:41",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 6,
+            "stok_sisa": 6,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226330,
+            "id_produk": 161,
+            "waktu_lama": "2026-03-27 14:07:24",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 1121,
+            "stok_sisa": 1121,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226431,
+            "id_produk": 165,
+            "waktu_lama": "2026-03-27 14:07:41",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 10,
+            "stok_sisa": 10,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226458,
+            "id_produk": 170,
+            "waktu_lama": "2026-03-27 14:07:41",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 2,
+            "stok_sisa": 2,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226462,
+            "id_produk": 172,
+            "waktu_lama": "2026-03-27 14:07:35",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 3,
+            "stok_sisa": 3,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226479,
+            "id_produk": 173,
+            "waktu_lama": "2026-03-27 14:07:41",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 51,
+            "stok_sisa": 51,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226488,
+            "id_produk": 175,
+            "waktu_lama": "2026-03-27 13:57:42",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 14,
+            "stok_sisa": 14,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226532,
+            "id_produk": 181,
+            "waktu_lama": "2026-03-27 14:07:41",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 130,
+            "stok_sisa": 130,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226545,
+            "id_produk": 184,
+            "waktu_lama": "2026-03-27 14:07:41",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 0,
+            "stok_sisa": 0,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226554,
+            "id_produk": 185,
+            "waktu_lama": "2026-03-27 14:07:41",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 11,
+            "stok_sisa": 11,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226565,
+            "id_produk": 186,
+            "waktu_lama": "2026-03-27 13:58:02",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 2,
+            "stok_sisa": 2,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226585,
+            "id_produk": 193,
+            "waktu_lama": "2026-03-27 14:07:41",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 0,
+            "stok_sisa": 0,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226589,
+            "id_produk": 195,
+            "waktu_lama": "2026-03-27 14:07:31",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 7,
+            "stok_sisa": 7,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226595,
+            "id_produk": 196,
+            "waktu_lama": "2026-03-27 14:07:34",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 20,
+            "stok_sisa": 20,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226635,
+            "id_produk": 199,
+            "waktu_lama": "2026-03-27 14:07:39",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 6,
+            "stok_sisa": 6,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226638,
+            "id_produk": 202,
+            "waktu_lama": "2026-03-27 14:07:32",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 678,
+            "stok_sisa": 678,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226655,
+            "id_produk": 204,
+            "waktu_lama": "2026-03-27 14:10:30",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 1310,
+            "stok_sisa": 1310,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226775,
+            "id_produk": 205,
+            "waktu_lama": "2026-03-27 14:07:41",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 7,
+            "stok_sisa": 7,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226786,
+            "id_produk": 207,
+            "waktu_lama": "2026-03-27 14:07:41",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 2,
+            "stok_sisa": 2,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226790,
+            "id_produk": 208,
+            "waktu_lama": "2026-03-27 14:07:42",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 1,
+            "stok_sisa": 1,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226794,
+            "id_produk": 209,
+            "waktu_lama": "2026-03-27 14:07:29",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 320,
+            "stok_sisa": 320,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226879,
+            "id_produk": 210,
+            "waktu_lama": "2026-03-27 14:07:32",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 859,
+            "stok_sisa": 859,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226943,
+            "id_produk": 211,
+            "waktu_lama": "2026-03-27 14:07:42",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 340,
+            "stok_sisa": 340,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226946,
+            "id_produk": 213,
+            "waktu_lama": "2026-03-27 14:07:42",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 145,
+            "stok_sisa": 145,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 226956,
+            "id_produk": 214,
+            "waktu_lama": "2026-03-27 13:57:37",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 1210,
+            "stok_sisa": 1210,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227066,
+            "id_produk": 215,
+            "waktu_lama": "2026-03-27 14:07:35",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 390,
+            "stok_sisa": 390,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227089,
+            "id_produk": 220,
+            "waktu_lama": "2026-03-27 13:57:47",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 139,
+            "stok_sisa": 139,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227148,
+            "id_produk": 223,
+            "waktu_lama": "2026-03-27 14:07:42",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 130,
+            "stok_sisa": 130,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227161,
+            "id_produk": 225,
+            "waktu_lama": "2026-03-27 14:07:25",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 160,
+            "stok_sisa": 160,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227171,
+            "id_produk": 227,
+            "waktu_lama": "2026-03-27 14:07:31",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 142,
+            "stok_sisa": 142,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227186,
+            "id_produk": 228,
+            "waktu_lama": "2026-03-27 14:07:42",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 87,
+            "stok_sisa": 87,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227199,
+            "id_produk": 231,
+            "waktu_lama": "2026-03-27 14:07:30",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 104,
+            "stok_sisa": 104,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227228,
+            "id_produk": 239,
+            "waktu_lama": "2026-03-27 14:07:36",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 250,
+            "stok_sisa": 250,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227246,
+            "id_produk": 244,
+            "waktu_lama": "2026-03-27 14:07:42",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 4,
+            "stok_sisa": 4,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227259,
+            "id_produk": 245,
+            "waktu_lama": "2026-03-27 14:07:42",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 133,
+            "stok_sisa": 133,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227277,
+            "id_produk": 246,
+            "waktu_lama": "2026-03-27 14:07:38",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 17,
+            "stok_sisa": 17,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227283,
+            "id_produk": 248,
+            "waktu_lama": "2026-03-27 14:07:42",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 32,
+            "stok_sisa": 32,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227309,
+            "id_produk": 253,
+            "waktu_lama": "2026-03-27 14:07:35",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 530,
+            "stok_sisa": 530,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227353,
+            "id_produk": 256,
+            "waktu_lama": "2026-03-27 14:07:42",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 13,
+            "stok_sisa": 13,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227364,
+            "id_produk": 260,
+            "waktu_lama": "2026-03-27 14:07:36",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 170,
+            "stok_sisa": 170,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227383,
+            "id_produk": 264,
+            "waktu_lama": "2026-03-27 14:07:42",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 80,
+            "stok_sisa": 80,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227391,
+            "id_produk": 267,
+            "waktu_lama": "2026-03-27 14:07:42",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 29,
+            "stok_sisa": 29,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227404,
+            "id_produk": 272,
+            "waktu_lama": "2026-03-27 14:07:42",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 95,
+            "stok_sisa": 95,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227419,
+            "id_produk": 273,
+            "waktu_lama": "2026-03-27 14:07:36",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 62,
+            "stok_sisa": 62,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227426,
+            "id_produk": 278,
+            "waktu_lama": "2026-03-27 14:07:38",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 271,
+            "stok_sisa": 271,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227446,
+            "id_produk": 279,
+            "waktu_lama": "2026-03-27 14:07:42",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 8,
+            "stok_sisa": 8,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227451,
+            "id_produk": 280,
+            "waktu_lama": "2026-03-27 13:57:37",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 150,
+            "stok_sisa": 150,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227468,
+            "id_produk": 281,
+            "waktu_lama": "2026-03-27 14:07:42",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 2,
+            "stok_sisa": 2,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227474,
+            "id_produk": 282,
+            "waktu_lama": "2026-03-27 14:07:42",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 14,
+            "stok_sisa": 14,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227480,
+            "id_produk": 286,
+            "waktu_lama": "2026-03-27 14:07:39",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 330,
+            "stok_sisa": 330,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227496,
+            "id_produk": 290,
+            "waktu_lama": "2026-03-27 14:07:29",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 70,
+            "stok_sisa": 70,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227521,
+            "id_produk": 293,
+            "waktu_lama": "2026-03-27 14:07:35",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": -30,
+            "stok_sisa": -30,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227536,
+            "id_produk": 296,
+            "waktu_lama": "2026-03-27 14:07:34",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 55,
+            "stok_sisa": 55,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227611,
+            "id_produk": 299,
+            "waktu_lama": "2026-03-27 14:07:42",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 50,
+            "stok_sisa": 50,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227617,
+            "id_produk": 301,
+            "waktu_lama": "2026-03-27 14:00:27",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 3,
+            "stok_sisa": 3,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227624,
+            "id_produk": 302,
+            "waktu_lama": "2026-03-27 14:07:42",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 6,
+            "stok_sisa": 6,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227630,
+            "id_produk": 304,
+            "waktu_lama": "2026-03-27 14:07:43",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 95,
+            "stok_sisa": 95,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227643,
+            "id_produk": 306,
+            "waktu_lama": "2026-03-27 14:07:33",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 6,
+            "stok_sisa": 6,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227655,
+            "id_produk": 308,
+            "waktu_lama": "2026-03-27 14:01:32",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 3,
+            "stok_sisa": 3,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227689,
+            "id_produk": 311,
+            "waktu_lama": "2026-03-27 14:07:43",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 4,
+            "stok_sisa": 4,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227698,
+            "id_produk": 312,
+            "waktu_lama": "2026-03-27 13:57:42",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 7,
+            "stok_sisa": 7,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227703,
+            "id_produk": 313,
+            "waktu_lama": "2026-03-27 14:07:43",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 6,
+            "stok_sisa": 6,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227713,
+            "id_produk": 314,
+            "waktu_lama": "2026-03-27 14:07:35",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 80,
+            "stok_sisa": 80,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227727,
+            "id_produk": 315,
+            "waktu_lama": "2026-03-27 14:07:43",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 7,
+            "stok_sisa": 7,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227738,
+            "id_produk": 318,
+            "waktu_lama": "2026-03-27 14:07:33",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 270,
+            "stok_sisa": 270,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227756,
+            "id_produk": 319,
+            "waktu_lama": "2026-03-27 14:07:43",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 170,
+            "stok_sisa": 170,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227772,
+            "id_produk": 320,
+            "waktu_lama": "2026-03-27 13:57:38",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 320,
+            "stok_sisa": 320,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227805,
+            "id_produk": 323,
+            "waktu_lama": "2026-03-27 14:07:31",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 100,
+            "stok_sisa": 100,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227834,
+            "id_produk": 324,
+            "waktu_lama": "2026-03-27 13:57:38",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 150,
+            "stok_sisa": 150,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227849,
+            "id_produk": 325,
+            "waktu_lama": "2026-03-27 14:07:43",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 0,
+            "stok_sisa": 0,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227879,
+            "id_produk": 331,
+            "waktu_lama": "2026-03-27 13:58:47",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 60,
+            "stok_sisa": 60,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227889,
+            "id_produk": 332,
+            "waktu_lama": "2026-03-27 14:07:43",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 220,
+            "stok_sisa": 220,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227918,
+            "id_produk": 335,
+            "waktu_lama": "2026-03-27 14:07:30",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 160,
+            "stok_sisa": 160,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227937,
+            "id_produk": 336,
+            "waktu_lama": "2026-03-27 14:07:43",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 210,
+            "stok_sisa": 210,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227947,
+            "id_produk": 341,
+            "waktu_lama": "2026-03-27 14:07:30",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 2,
+            "stok_sisa": 2,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227970,
+            "id_produk": 343,
+            "waktu_lama": "2026-03-27 14:07:43",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 1,
+            "stok_sisa": 1,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227981,
+            "id_produk": 345,
+            "waktu_lama": "2026-03-27 14:07:39",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 60,
+            "stok_sisa": 60,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 227996,
+            "id_produk": 350,
+            "waktu_lama": "2026-03-27 14:07:28",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 12,
+            "stok_sisa": 12,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228017,
+            "id_produk": 355,
+            "waktu_lama": "2026-03-27 14:07:31",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 1,
+            "stok_sisa": 1,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228031,
+            "id_produk": 356,
+            "waktu_lama": "2026-03-27 14:07:25",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 4,
+            "stok_sisa": 4,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228058,
+            "id_produk": 357,
+            "waktu_lama": "2026-03-27 14:07:30",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 5,
+            "stok_sisa": 5,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228079,
+            "id_produk": 358,
+            "waktu_lama": "2026-03-27 14:07:30",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": -6,
+            "stok_sisa": -6,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228099,
+            "id_produk": 359,
+            "waktu_lama": "2026-03-27 14:07:43",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 350,
+            "stok_sisa": 350,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228123,
+            "id_produk": 362,
+            "waktu_lama": "2026-03-27 14:07:34",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 170,
+            "stok_sisa": 170,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228137,
+            "id_produk": 363,
+            "waktu_lama": "2026-03-27 14:07:24",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 40,
+            "stok_sisa": 40,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228158,
+            "id_produk": 365,
+            "waktu_lama": "2026-03-27 14:00:03",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 180,
+            "stok_sisa": 180,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228179,
+            "id_produk": 366,
+            "waktu_lama": "2026-03-27 14:07:27",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 250,
+            "stok_sisa": 250,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228217,
+            "id_produk": 369,
+            "waktu_lama": "2026-03-27 14:07:43",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 81,
+            "stok_sisa": 81,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228228,
+            "id_produk": 374,
+            "waktu_lama": "2026-03-27 14:07:43",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 290,
+            "stok_sisa": 290,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228236,
+            "id_produk": 375,
+            "waktu_lama": "2026-03-27 14:07:28",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 71,
+            "stok_sisa": 71,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228268,
+            "id_produk": 376,
+            "waktu_lama": "2026-03-27 14:07:43",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 100,
+            "stok_sisa": 100,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228275,
+            "id_produk": 377,
+            "waktu_lama": "2026-03-27 14:07:31",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 11,
+            "stok_sisa": 11,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228295,
+            "id_produk": 379,
+            "waktu_lama": "2026-03-27 14:07:37",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 250,
+            "stok_sisa": 250,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228324,
+            "id_produk": 381,
+            "waktu_lama": "2026-03-27 14:07:43",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": -70,
+            "stok_sisa": -70,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228336,
+            "id_produk": 383,
+            "waktu_lama": "2026-03-27 13:57:39",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 4,
+            "stok_sisa": 4,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228343,
+            "id_produk": 385,
+            "waktu_lama": "2026-03-27 14:07:25",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 370,
+            "stok_sisa": 370,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228395,
+            "id_produk": 386,
+            "waktu_lama": "2026-03-27 14:07:43",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": -3,
+            "stok_sisa": -3,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228403,
+            "id_produk": 388,
+            "waktu_lama": "2026-03-27 13:57:43",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 2400,
+            "stok_sisa": 2400,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228501,
+            "id_produk": 393,
+            "waktu_lama": "2026-03-27 14:07:44",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 6,
+            "stok_sisa": 6,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228518,
+            "id_produk": 396,
+            "waktu_lama": "2026-03-27 14:07:44",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 16,
+            "stok_sisa": 16,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228544,
+            "id_produk": 399,
+            "waktu_lama": "2026-03-27 14:07:30",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 194,
+            "stok_sisa": 194,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228558,
+            "id_produk": 400,
+            "waktu_lama": "2026-03-27 14:07:44",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 23,
+            "stok_sisa": 23,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228579,
+            "id_produk": 402,
+            "waktu_lama": "2026-03-27 14:07:44",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 430,
+            "stok_sisa": 430,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228620,
+            "id_produk": 406,
+            "waktu_lama": "2026-03-27 14:07:31",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 178,
+            "stok_sisa": 178,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228657,
+            "id_produk": 412,
+            "waktu_lama": "2026-03-27 14:07:37",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 48,
+            "stok_sisa": 48,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228673,
+            "id_produk": 415,
+            "waktu_lama": "2026-03-27 14:07:24",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 22,
+            "stok_sisa": 22,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228690,
+            "id_produk": 416,
+            "waktu_lama": "2026-03-27 13:57:48",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 36,
+            "stok_sisa": 36,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228709,
+            "id_produk": 419,
+            "waktu_lama": "2026-03-27 13:57:39",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 3,
+            "stok_sisa": 3,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228718,
+            "id_produk": 420,
+            "waktu_lama": "2026-03-27 14:07:44",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 1,
+            "stok_sisa": 1,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228721,
+            "id_produk": 421,
+            "waktu_lama": "2026-03-27 14:07:35",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 25,
+            "stok_sisa": 25,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228761,
+            "id_produk": 427,
+            "waktu_lama": "2026-03-27 14:07:44",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 27,
+            "stok_sisa": 27,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228766,
+            "id_produk": 428,
+            "waktu_lama": "2026-03-27 14:07:44",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": -140,
+            "stok_sisa": -140,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228805,
+            "id_produk": 429,
+            "waktu_lama": "2026-03-27 14:07:44",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 130,
+            "stok_sisa": 130,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228812,
+            "id_produk": 434,
+            "waktu_lama": "2026-03-27 14:07:44",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 9,
+            "stok_sisa": 9,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228829,
+            "id_produk": 439,
+            "waktu_lama": "2026-03-27 14:07:39",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 33,
+            "stok_sisa": 33,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228854,
+            "id_produk": 442,
+            "waktu_lama": "2026-03-27 14:07:39",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 290,
+            "stok_sisa": 290,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228872,
+            "id_produk": 444,
+            "waktu_lama": "2026-03-27 14:07:34",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 410,
+            "stok_sisa": 410,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228908,
+            "id_produk": 454,
+            "waktu_lama": "2026-03-27 14:07:39",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 220,
+            "stok_sisa": 220,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228924,
+            "id_produk": 455,
+            "waktu_lama": "2026-03-27 14:07:25",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 100,
+            "stok_sisa": 100,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228938,
+            "id_produk": 456,
+            "waktu_lama": "2026-03-27 14:07:44",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 12,
+            "stok_sisa": 12,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228946,
+            "id_produk": 457,
+            "waktu_lama": "2026-03-27 14:07:44",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 140,
+            "stok_sisa": 140,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228964,
+            "id_produk": 463,
+            "waktu_lama": "2026-03-27 14:00:34",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 2,
+            "stok_sisa": 2,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228969,
+            "id_produk": 465,
+            "waktu_lama": "2026-03-27 14:07:44",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 2,
+            "stok_sisa": 2,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 228975,
+            "id_produk": 473,
+            "waktu_lama": "2026-03-27 14:07:24",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 4,
+            "stok_sisa": 4,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 229004,
+            "id_produk": 474,
+            "waktu_lama": "2026-03-27 14:07:44",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 8,
+            "stok_sisa": 8,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 229020,
+            "id_produk": 475,
+            "waktu_lama": "2026-03-27 14:07:44",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 4,
+            "stok_sisa": 4,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 229040,
+            "id_produk": 494,
+            "waktu_lama": "2026-03-27 14:07:44",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 145,
+            "stok_sisa": 145,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 229048,
+            "id_produk": 496,
+            "waktu_lama": "2026-03-27 14:07:39",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 16,
+            "stok_sisa": 16,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 229055,
+            "id_produk": 498,
+            "waktu_lama": "2026-03-27 14:07:37",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 364,
+            "stok_sisa": 364,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 229078,
+            "id_produk": 502,
+            "waktu_lama": "2026-03-27 13:58:56",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 0,
+            "stok_sisa": 0,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 229084,
+            "id_produk": 504,
+            "waktu_lama": "2026-03-27 14:07:28",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 245,
+            "stok_sisa": 245,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 229128,
+            "id_produk": 506,
+            "waktu_lama": "2026-03-27 14:07:31",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 300,
+            "stok_sisa": 300,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 229171,
+            "id_produk": 509,
+            "waktu_lama": "2026-03-27 14:07:27",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 30,
+            "stok_sisa": 30,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 229204,
+            "id_produk": 510,
+            "waktu_lama": "2026-03-27 14:07:45",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 60,
+            "stok_sisa": 60,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 229213,
+            "id_produk": 511,
+            "waktu_lama": "2026-03-27 14:07:30",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 520,
+            "stok_sisa": 520,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        },
+        {
+            "id_rekaman_stok": 229268,
+            "id_produk": 512,
+            "waktu_lama": "2026-03-27 14:07:25",
+            "waktu_baru": "2025-12-31 23:59:59",
+            "stok_awal": 40,
+            "stok_sisa": 40,
+            "keterangan": "Saldo Awal Stok per 31-12-2025"
+        }
+    ]
+}
