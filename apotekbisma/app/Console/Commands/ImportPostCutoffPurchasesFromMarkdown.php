@@ -165,6 +165,7 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
                     'waktu' => $invoice['waktu'],
                     'total_item' => $invoice['total_item'],
                     'total_harga' => $invoice['total_harga'],
+                    'bayar' => $invoice['bayar'] ?? $invoice['total_harga'],
                     'detail_count' => count($invoice['details']),
                 ];
             }, array_slice($insertableInvoices, 0, 200)),
@@ -222,7 +223,7 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
                         'total_item' => $invoice['total_item'],
                         'total_harga' => $invoice['total_harga'],
                         'diskon' => 0,
-                        'bayar' => $invoice['total_harga'],
+                        'bayar' => $invoice['bayar'] ?? $invoice['total_harga'],
                         'no_faktur' => $invoice['no_faktur'],
                         'waktu' => $invoice['waktu'],
                         'waktu_datang' => $invoice['waktu'],
@@ -256,6 +257,7 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
                 $affectedProductIds = array_values(array_map('intval', array_keys($inserted['affected_product_ids'])));
 
                 if (!empty($affectedProductIds)) {
+                    $this->syncProdukHargaBeliDariPembelianTerakhir($affectedProductIds);
                     $reflowService->rebuildProducts($affectedProductIds, $until);
                 }
             }, 3);
@@ -618,6 +620,8 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
                     'id_supplier_input' => $supplierIdInput,
                     'no_faktur' => $invoiceNo,
                     'invoice_date' => $invoiceDate,
+                    'source_total_harga' => $this->parseNumericToInt($purchase['total'] ?? 0),
+                    'source_bayar' => $this->parseNumericToInt($purchase['bayar'] ?? 0),
                     'rows' => $rows,
                 ];
             }
@@ -659,6 +663,8 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
             'id_supplier_input' => null,
             'no_faktur' => $invoiceNo,
             'invoice_date' => $invoiceDate,
+            'source_total_harga' => 0,
+            'source_bayar' => 0,
             'rows' => $rows,
         ];
     }
@@ -1105,6 +1111,8 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
                     'supplier_name' => $section['supplier_name'],
                     'id_supplier_input' => (int) ($section['id_supplier_input'] ?? 0),
                     'invoice_date' => $section['invoice_date'],
+                    'source_total_harga' => (int) ($section['source_total_harga'] ?? 0),
+                    'source_bayar' => (int) ($section['source_bayar'] ?? 0),
                     'source_sections' => [],
                     'rows' => [],
                     'row_keys' => [],
@@ -1117,6 +1125,14 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
 
             if ($grouped[$invoiceNo]['invoice_date'] === null && $section['invoice_date'] !== null) {
                 $grouped[$invoiceNo]['invoice_date'] = $section['invoice_date'];
+            }
+
+            if ((int) $grouped[$invoiceNo]['source_total_harga'] <= 0 && (int) ($section['source_total_harga'] ?? 0) > 0) {
+                $grouped[$invoiceNo]['source_total_harga'] = (int) $section['source_total_harga'];
+            }
+
+            if ((int) $grouped[$invoiceNo]['source_bayar'] <= 0 && (int) ($section['source_bayar'] ?? 0) > 0) {
+                $grouped[$invoiceNo]['source_bayar'] = (int) $section['source_bayar'];
             }
 
             if ((int) $grouped[$invoiceNo]['id_supplier_input'] <= 0 && (int) ($section['id_supplier_input'] ?? 0) > 0) {
@@ -1158,6 +1174,8 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
                 'supplier_name' => $payload['supplier_name'],
                 'id_supplier_input' => (int) ($payload['id_supplier_input'] ?? 0),
                 'invoice_date' => $payload['invoice_date'],
+                'source_total_harga' => (int) ($payload['source_total_harga'] ?? 0),
+                'source_bayar' => (int) ($payload['source_bayar'] ?? 0),
                 'source_sections' => $payload['source_sections'],
                 'rows' => $payload['rows'],
             ];
@@ -1362,13 +1380,19 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
                 return $carry + (int) $item['subtotal'];
             }, 0);
 
+            $sourceTotalHarga = (int) ($invoice['source_total_harga'] ?? 0);
+            $sourceBayar = (int) ($invoice['source_bayar'] ?? 0);
+            $finalTotalHarga = $sourceTotalHarga > 0 ? $sourceTotalHarga : $totalHarga;
+            $finalBayar = $sourceBayar > 0 ? $sourceBayar : $finalTotalHarga;
+
             $mappedInvoices[] = [
                 'no_faktur' => $invoice['no_faktur'],
                 'supplier_name' => $supplierName,
                 'id_supplier' => (int) $supplierMapping['id_supplier'],
                 'waktu' => $invoice['invoice_date'],
                 'total_item' => (int) max(1, $totalItem),
-                'total_harga' => (int) max(1, $totalHarga),
+                'total_harga' => (int) max(1, $finalTotalHarga),
+                'bayar' => (int) max(1, $finalBayar),
                 'details' => $details,
                 'source_sections' => $invoice['source_sections'],
             ];
@@ -1378,6 +1402,50 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
             'invoices' => $mappedInvoices,
             'issues' => $issues,
         ];
+    }
+
+    private function syncProdukHargaBeliDariPembelianTerakhir(array $productIds): void
+    {
+        $ids = array_values(array_filter(array_map('intval', $productIds), function ($id) {
+            return $id > 0;
+        }));
+
+        if (empty($ids)) {
+            return;
+        }
+
+        $rows = DB::table('pembelian_detail as pd')
+            ->join('pembelian as p', 'p.id_pembelian', '=', 'pd.id_pembelian')
+            ->whereIn('pd.id_produk', $ids)
+            ->where('pd.harga_beli', '>', 0)
+            ->orderBy('pd.id_produk', 'asc')
+            ->orderBy('p.waktu', 'desc')
+            ->orderBy('pd.id_pembelian_detail', 'desc')
+            ->get(['pd.id_produk', 'pd.harga_beli']);
+
+        $latestByProduct = [];
+        foreach ($rows as $row) {
+            $productId = (int) ($row->id_produk ?? 0);
+            if ($productId <= 0 || isset($latestByProduct[$productId])) {
+                continue;
+            }
+
+            $latestByProduct[$productId] = (int) max(1, round((float) $row->harga_beli));
+        }
+
+        if (empty($latestByProduct)) {
+            return;
+        }
+
+        $now = Carbon::now();
+        foreach ($latestByProduct as $productId => $hargaBeli) {
+            DB::table('produk')
+                ->where('id_produk', $productId)
+                ->update([
+                    'harga_beli' => $hargaBeli,
+                    'updated_at' => $now,
+                ]);
+        }
     }
 
     private function resolveExistingInvoices(array $preparedInvoices): array

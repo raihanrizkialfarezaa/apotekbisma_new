@@ -1,0 +1,85 @@
+{
+    "generated_at": "2026-03-27 12:38:42",
+    "mode": "DRY_RUN",
+    "allow_partial": false,
+    "preserve_subtotal": false,
+    "cutoff": "2025-12-31 23:59:59",
+    "from": "2026-03-12 00:00:00",
+    "until": "2026-03-12 23:59:59",
+    "source_label": "markdown-reinput-admin",
+    "input_files": [
+        "DATA_INPUT_FEBRUARI_EXECUTABLE.json"
+    ],
+    "summary": {
+        "parsed_sections": 62,
+        "raw_invoice_groups": 62,
+        "invoices_in_range": 9,
+        "invoices_ready_for_mapping": 9,
+        "invoices_existing_same": 2,
+        "invoices_insertable": 0,
+        "issues_total": 7,
+        "forced_product_mappings_total": 0,
+        "force_map_enabled": false,
+        "force_map_min_score": 50,
+        "preserve_subtotal": false
+    },
+    "issues": [
+        {
+            "type": "existing_invoice_conflict",
+            "no_faktur": "JM1-2603-01208",
+            "id_pembelian": 645,
+            "message": "Nomor faktur sudah ada dengan detail/supplier berbeda. Dihentikan untuk cegah duplikasi salah."
+        },
+        {
+            "type": "existing_invoice_conflict",
+            "no_faktur": "JM1-2603-01207",
+            "id_pembelian": 646,
+            "message": "Nomor faktur sudah ada dengan detail/supplier berbeda. Dihentikan untuk cegah duplikasi salah."
+        },
+        {
+            "type": "existing_invoice_conflict",
+            "no_faktur": "NPS-2603-634442",
+            "id_pembelian": 647,
+            "message": "Nomor faktur sudah ada dengan detail/supplier berbeda. Dihentikan untuk cegah duplikasi salah."
+        },
+        {
+            "type": "existing_invoice_conflict",
+            "no_faktur": "NPS-2603-634440",
+            "id_pembelian": 648,
+            "message": "Nomor faktur sudah ada dengan detail/supplier berbeda. Dihentikan untuk cegah duplikasi salah."
+        },
+        {
+            "type": "existing_invoice_conflict",
+            "no_faktur": "NPS-2603-634438",
+            "id_pembelian": 649,
+            "message": "Nomor faktur sudah ada dengan detail/supplier berbeda. Dihentikan untuk cegah duplikasi salah."
+        },
+        {
+            "type": "existing_invoice_conflict",
+            "no_faktur": "NPS-2603-634441",
+            "id_pembelian": 650,
+            "message": "Nomor faktur sudah ada dengan detail/supplier berbeda. Dihentikan untuk cegah duplikasi salah."
+        },
+        {
+            "type": "existing_invoice_conflict",
+            "no_faktur": "NPS-2603-634439",
+            "id_pembelian": 651,
+            "message": "Nomor faktur sudah ada dengan detail/supplier berbeda. Dihentikan untuk cegah duplikasi salah."
+        }
+    ],
+    "unresolved_product_names": [],
+    "already_existing_same": [
+        {
+            "no_faktur": "JMR-2603-00451",
+            "id_pembelian": 643,
+            "status": "already_imported_same_signature"
+        },
+        {
+            "no_faktur": "JMR-2603-00452",
+            "id_pembelian": 644,
+            "status": "already_imported_same_signature"
+        }
+    ],
+    "forced_product_mappings": [],
+    "insertable_preview": []
+}

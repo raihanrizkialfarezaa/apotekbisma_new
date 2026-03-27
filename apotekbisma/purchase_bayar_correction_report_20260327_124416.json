@@ -1,0 +1,30 @@
+{
+    "generated_at": "2026-03-27 12:44:16",
+    "mode": "DRY_RUN",
+    "file": "DATA_INPUT_FEBRUARI_EXECUTABLE.json",
+    "filters": {
+        "from": null,
+        "until": null,
+        "invoice": [
+            "JM1-2603-01207"
+        ]
+    },
+    "summary": {
+        "source_invoices": 1,
+        "db_found": 1,
+        "to_update": 0,
+        "unchanged": 1,
+        "missing_in_db": 0
+    },
+    "updates": [],
+    "unchanged": [
+        {
+            "id_pembelian": 646,
+            "no_faktur": "JM1-2603-01207",
+            "bayar_db": 1539702,
+            "bayar_json": 1539702,
+            "status": "sama"
+        }
+    ],
+    "missing_in_db": []
+}

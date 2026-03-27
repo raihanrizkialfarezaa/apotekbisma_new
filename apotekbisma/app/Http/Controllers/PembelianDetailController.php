@@ -125,12 +125,12 @@ class PembelianDetailController extends Controller
         $total_item = 0;
 
         foreach ($detail as $item) {
-            $lineSubtotal = (int) (($item->harga_beli ?? 0) * ($item->jumlah ?? 0));
+            $lineSubtotal = (int) ($item->subtotal ?? 0);
             $row = array();
             $row['kode_produk'] = '<span class="label label-primary">ID: '. intval($item->produk['id_produk']) .'</span>';
             $row['nama_produk'] = $item->produk['nama_produk'];
             $row['harga_jual']  = '<input type="number" class="form-control input-sm harga_jual" data-id="'. $item->produk['id_produk'] .'" value="'. $item->produk['harga_jual'] .'">';
-            $row['harga_beli']  = '<input type="number" class="form-control input-sm harga_beli" data-id="'. $item->produk['id_produk'] .'" data-uid="'. $item->id_pembelian_detail .'" value="'. $item->produk['harga_beli'] .'">';
+            $row['harga_beli']  = '<input type="number" class="form-control input-sm harga_beli" data-id="'. $item->produk['id_produk'] .'" data-uid="'. $item->id_pembelian_detail .'" value="'. $item->harga_beli .'">';
             $row['jumlah']      = '<input type="number" class="form-control input-sm quantity" data-id="'. $item->id_pembelian_detail .'" value="'. $item->jumlah .'">';
             $row['expired_date']      = '<input type="date" class="form-control input-sm expired_date" data-id="'. $item->produk['id_produk'] .'" value="'. $item->produk['expired_date'] .'">';
             $row['batch']      = '<input type="text" class="form-control input-sm batch" data-id="'. $item->produk['id_produk'] .'" value="'. $item->produk['batch'] .'">';

@@ -1,0 +1,691 @@
+{
+    "generated_at": "2026-03-27 12:47:25",
+    "mode": "APPLY",
+    "files": [
+        "DATA_INPUT_JANUARI_EXECUTABLE.json",
+        "DATA_INPUT_FEBRUARI_EXECUTABLE.json"
+    ],
+    "filters": {
+        "from": "2026-01-01 00:00:00",
+        "until": "2026-02-28 23:59:59",
+        "invoice": []
+    },
+    "summary": {
+        "source_invoices": 95,
+        "db_found": 95,
+        "to_update": 0,
+        "unchanged": 95,
+        "missing_in_db": 0,
+        "source_conflicts": 0
+    },
+    "updates": [],
+    "unchanged": [
+        {
+            "id_pembelian": 574,
+            "no_faktur": "JM1-2601-00495",
+            "bayar_db": 1218639,
+            "bayar_json": 1218639,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 575,
+            "no_faktur": "JM1-2601-00496",
+            "bayar_db": 996554,
+            "bayar_json": 996554,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 576,
+            "no_faktur": "JMR-2601-00165",
+            "bayar_db": 190358,
+            "bayar_json": 190358,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 577,
+            "no_faktur": "POSPST260100684",
+            "bayar_db": 1074058,
+            "bayar_json": 1074058,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 578,
+            "no_faktur": "14-2601.0255",
+            "bayar_db": 590409,
+            "bayar_json": 590409,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 579,
+            "no_faktur": "TMP-INV-2026/01/07/2302665",
+            "bayar_db": 960905,
+            "bayar_json": 960905,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 580,
+            "no_faktur": "JM1-2601-00939",
+            "bayar_db": 1129572,
+            "bayar_json": 1129572,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 581,
+            "no_faktur": "JM1-2601-00940",
+            "bayar_db": 1029051,
+            "bayar_json": 1029051,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 582,
+            "no_faktur": "AJA-2601-001677",
+            "bayar_db": 1417988,
+            "bayar_json": 1417988,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 583,
+            "no_faktur": "JM1-2601-01590",
+            "bayar_db": 380850,
+            "bayar_json": 380850,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 584,
+            "no_faktur": "JM1-2601-01591",
+            "bayar_db": 1105084,
+            "bayar_json": 1105084,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 585,
+            "no_faktur": "JMR-2601-00507",
+            "bayar_db": 95844,
+            "bayar_json": 95844,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 586,
+            "no_faktur": "JMR-2601-00508",
+            "bayar_db": 117498,
+            "bayar_json": 117498,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 587,
+            "no_faktur": "2.701.311",
+            "bayar_db": 1275548,
+            "bayar_json": 1275548,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 588,
+            "no_faktur": "NPS-2601-624011",
+            "bayar_db": 689035,
+            "bayar_json": 689035,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 589,
+            "no_faktur": "NPS-2601-624013",
+            "bayar_db": 484282,
+            "bayar_json": 484282,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 590,
+            "no_faktur": "NPS-2601-624015",
+            "bayar_db": 252446,
+            "bayar_json": 252446,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 591,
+            "no_faktur": "TMP-INV-2026/01/24/2359834",
+            "bayar_db": 763551,
+            "bayar_json": 763551,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 592,
+            "no_faktur": "AJA-2601-003019",
+            "bayar_db": 1313506,
+            "bayar_json": 1313506,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 593,
+            "no_faktur": "AJA-2601-003020",
+            "bayar_db": 679443,
+            "bayar_json": 679443,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 594,
+            "no_faktur": "JM1-2601-02290",
+            "bayar_db": 1672656,
+            "bayar_json": 1672656,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 595,
+            "no_faktur": "JMR-2601-00746",
+            "bayar_db": 196875,
+            "bayar_json": 196875,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 596,
+            "no_faktur": "JMR-2601-00747",
+            "bayar_db": 277922,
+            "bayar_json": 277922,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 597,
+            "no_faktur": "JMR-2601-00806A",
+            "bayar_db": 68731,
+            "bayar_json": 68731,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 598,
+            "no_faktur": "JM1-2601-02586",
+            "bayar_db": 1854182,
+            "bayar_json": 1854182,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 599,
+            "no_faktur": "JM1-2601-02587",
+            "bayar_db": 691304,
+            "bayar_json": 691304,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 600,
+            "no_faktur": "04985/SJA/01/26",
+            "bayar_db": 408531,
+            "bayar_json": 408531,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 601,
+            "no_faktur": "04988/SJA/01/26",
+            "bayar_db": 187248,
+            "bayar_json": 187248,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 602,
+            "no_faktur": "T56C3351.20260129008",
+            "bayar_db": 71356,
+            "bayar_json": 71356,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 603,
+            "no_faktur": "TMP-INV-2026/01/30/2379654",
+            "bayar_db": 632362,
+            "bayar_json": 632362,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 604,
+            "no_faktur": "JM1-2601-02971B",
+            "bayar_db": 961630,
+            "bayar_json": 961630,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 605,
+            "no_faktur": "JM1-2601-02972A",
+            "bayar_db": 475169,
+            "bayar_json": 475169,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 606,
+            "no_faktur": "JMR-2601-00993A",
+            "bayar_db": 64602,
+            "bayar_json": 64602,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 607,
+            "no_faktur": "JMR-2601-00994A",
+            "bayar_db": 132594,
+            "bayar_json": 132594,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 608,
+            "no_faktur": "NPS-2601-623056",
+            "bayar_db": 318957,
+            "bayar_json": 318957,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 609,
+            "no_faktur": "NPS-2601-623058",
+            "bayar_db": 840771,
+            "bayar_json": 840771,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 610,
+            "no_faktur": "NPS-2601-623060",
+            "bayar_db": 125081,
+            "bayar_json": 125081,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 611,
+            "no_faktur": "02333/SJA/01/26",
+            "bayar_db": 576454,
+            "bayar_json": 576454,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 612,
+            "no_faktur": "02335/SJA/01/26",
+            "bayar_db": 494584,
+            "bayar_json": 494584,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 613,
+            "no_faktur": "02337/SJA/01/26",
+            "bayar_db": 233940,
+            "bayar_json": 233940,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 614,
+            "no_faktur": "JM1-2601-01589A",
+            "bayar_db": 1286371,
+            "bayar_json": 1286371,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 615,
+            "no_faktur": "JM1-2601-02291A",
+            "bayar_db": 1138365,
+            "bayar_json": 1138365,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 616,
+            "no_faktur": "04994/SJA/01/26",
+            "bayar_db": 489665,
+            "bayar_json": 489665,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 617,
+            "no_faktur": "04989/SJA/01/26",
+            "bayar_db": 45500,
+            "bayar_json": 45500,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 618,
+            "no_faktur": "00115-C3351",
+            "bayar_db": 71356,
+            "bayar_json": 71356,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 619,
+            "no_faktur": "00116-C3351",
+            "bayar_db": 109483,
+            "bayar_json": 109483,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 620,
+            "no_faktur": "JM1-2601-03003",
+            "bayar_db": 733164,
+            "bayar_json": 733164,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 621,
+            "no_faktur": "POSPST260200547",
+            "bayar_db": 2244836,
+            "bayar_json": 2244836,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 622,
+            "no_faktur": "POSPSE260200549",
+            "bayar_db": 270751,
+            "bayar_json": 270751,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 623,
+            "no_faktur": "POSPST260200550",
+            "bayar_db": 457797,
+            "bayar_json": 457797,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 624,
+            "no_faktur": "TMP-INV-2026/02/04/2396190",
+            "bayar_db": 418338,
+            "bayar_json": 418338,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 625,
+            "no_faktur": "T5603351.20260205003",
+            "bayar_db": 86329,
+            "bayar_json": 86329,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 626,
+            "no_faktur": "JM1-2602-00415",
+            "bayar_db": 1207520,
+            "bayar_json": 1207520,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 627,
+            "no_faktur": "JMR-2602-00156",
+            "bayar_db": 44330,
+            "bayar_json": 44330,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 628,
+            "no_faktur": "NPS-2602-628174",
+            "bayar_db": 462240,
+            "bayar_json": 462240,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 629,
+            "no_faktur": "NPS-2602-628175",
+            "bayar_db": 1255744,
+            "bayar_json": 1255744,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 630,
+            "no_faktur": "NPS-2602-628176",
+            "bayar_db": 979234,
+            "bayar_json": 979234,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 631,
+            "no_faktur": "NPS-2602-628177",
+            "bayar_db": 243164,
+            "bayar_json": 243164,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 632,
+            "no_faktur": "01549/SJA/02/26",
+            "bayar_db": 630209,
+            "bayar_json": 630209,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 633,
+            "no_faktur": "01552/SJA/02/26",
+            "bayar_db": 132965,
+            "bayar_json": 132965,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 634,
+            "no_faktur": "01553/SJA/02/26",
+            "bayar_db": 282078,
+            "bayar_json": 282078,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 635,
+            "no_faktur": "01547/SJA/02/26",
+            "bayar_db": 492840,
+            "bayar_json": 492840,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 636,
+            "no_faktur": "AJA-2602-004949",
+            "bayar_db": 1275348,
+            "bayar_json": 1275348,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 637,
+            "no_faktur": "AJA-2602-004950",
+            "bayar_db": 479966,
+            "bayar_json": 479966,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 652,
+            "no_faktur": "JM1-2602-01176A",
+            "bayar_db": 1080626,
+            "bayar_json": 1080626,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 653,
+            "no_faktur": "JM1-2602-01180",
+            "bayar_db": 246004,
+            "bayar_json": 246004,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 654,
+            "no_faktur": "JM1-2602-01178",
+            "bayar_db": 45002,
+            "bayar_json": 45002,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 655,
+            "no_faktur": "JMR-2602-00451",
+            "bayar_db": 209116,
+            "bayar_json": 209116,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 656,
+            "no_faktur": "JM1-2602-01177",
+            "bayar_db": 1242470,
+            "bayar_json": 1242470,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 657,
+            "no_faktur": "T56C3351.20260213001",
+            "bayar_db": 95604,
+            "bayar_json": 95604,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 658,
+            "no_faktur": "T56C3351.20260213002",
+            "bayar_db": 161318,
+            "bayar_json": 161318,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 659,
+            "no_faktur": "T56C3351.20260212004",
+            "bayar_db": 210402,
+            "bayar_json": 210402,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 660,
+            "no_faktur": "JM1-2602-01468",
+            "bayar_db": 1317603,
+            "bayar_json": 1317603,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 661,
+            "no_faktur": "JM1-2602-01469",
+            "bayar_db": 507945,
+            "bayar_json": 507945,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 662,
+            "no_faktur": "JMR-2602-00563",
+            "bayar_db": 684975,
+            "bayar_json": 684975,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 663,
+            "no_faktur": "TMP-INV-2026/02/18/2444044",
+            "bayar_db": 832394,
+            "bayar_json": 832394,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 664,
+            "no_faktur": "NPS-2602-629901",
+            "bayar_db": 893565,
+            "bayar_json": 893565,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 665,
+            "no_faktur": "NPS-2602-629903",
+            "bayar_db": 714604,
+            "bayar_json": 714604,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 666,
+            "no_faktur": "NPS-2602-629900",
+            "bayar_db": 313007,
+            "bayar_json": 313007,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 667,
+            "no_faktur": "NPS-2602-629930",
+            "bayar_db": 115751,
+            "bayar_json": 115751,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 668,
+            "no_faktur": "NPS-2602-629905",
+            "bayar_db": 26257,
+            "bayar_json": 26257,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 669,
+            "no_faktur": "JMR-2602-00760",
+            "bayar_db": 215160,
+            "bayar_json": 215160,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 670,
+            "no_faktur": "JMR-2602-00761",
+            "bayar_db": 88505,
+            "bayar_json": 88505,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 671,
+            "no_faktur": "JM1-2602-01894",
+            "bayar_db": 488886,
+            "bayar_json": 488886,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 672,
+            "no_faktur": "JM1-2602-01893",
+            "bayar_db": 287392,
+            "bayar_json": 287392,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 673,
+            "no_faktur": "JM1-2602-01892",
+            "bayar_db": 1486253,
+            "bayar_json": 1486253,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 674,
+            "no_faktur": "POSPST260202706",
+            "bayar_db": 1187484,
+            "bayar_json": 1187484,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 675,
+            "no_faktur": "JM1-2602-02416",
+            "bayar_db": 1267571,
+            "bayar_json": 1267571,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 676,
+            "no_faktur": "JM1-2602-02417",
+            "bayar_db": 750803,
+            "bayar_json": 750803,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 677,
+            "no_faktur": "JMR-2602-00977",
+            "bayar_db": 119054,
+            "bayar_json": 119054,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 678,
+            "no_faktur": "JMR-2602-00978",
+            "bayar_db": 63413,
+            "bayar_json": 63413,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 679,
+            "no_faktur": "AJA-2602-006835/24-02-2026/LF",
+            "bayar_db": 1298671,
+            "bayar_json": 1298671,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 680,
+            "no_faktur": "AJA-2602-006836/24-02-2026/LF",
+            "bayar_db": 874227,
+            "bayar_json": 874227,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 681,
+            "no_faktur": "JM1-2602-02924",
+            "bayar_db": 1524132,
+            "bayar_json": 1524132,
+            "status": "sama"
+        },
+        {
+            "id_pembelian": 682,
+            "no_faktur": "JM1-2602-02925",
+            "bayar_db": 297662,
+            "bayar_json": 297662,
+            "status": "sama"
+        }
+    ],
+    "missing_in_db": [],
+    "source_conflicts": []
+}
