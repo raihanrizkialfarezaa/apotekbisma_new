@@ -394,8 +394,13 @@ class PembelianDetailController extends Controller
                 }
                 
                 if ($stok_baru < 0) {
-                    throw new \Exception('Tidak dapat mengurangi jumlah! Stok akan menjadi minus. Stok saat ini: ' . $stok_sebelum . ', akan dikurangi: ' . abs($selisih) . '. Produk mungkin sudah terjual.');
+                    \Illuminate\Support\Facades\Log::warning("Stok hasil koreksi pembelian menjadi negatif ({$stok_baru}). Penyesuaian stok akan ditangani oleh auto-recalculate (stok akhir tidak boleh kurang dari 0).", [
+                        'id_produk' => $detail->id_produk,
+                        'id_pembelian' => $detail->id_pembelian,
+                        'new_jumlah' => $new_jumlah
+                    ]);
                 }
+
                 
                 DB::table('produk')->where('id_produk', $produk->id_produk)->update(['stok' => $stok_baru]);
                 
@@ -548,9 +553,11 @@ class PembelianDetailController extends Controller
             $new_stok = intval($produk->stok) + $selisih;
             
             if ($new_stok < 0) {
-                DB::rollBack();
-                Cache::forget($idempotencyKey);
-                return response()->json('Tidak dapat mengurangi jumlah! Stok akan menjadi minus. Stok saat ini: ' . intval($produk->stok) . ', akan dikurangi: ' . abs($selisih) . '. Produk mungkin sudah terjual.', 400);
+                \Illuminate\Support\Facades\Log::warning("Stok hasil koreksi pembelian (edit) menjadi negatif ({$new_stok}). Penyesuaian stok akan ditangani oleh auto-recalculate.", [
+                    'id_produk' => $detail->id_produk,
+                    'id_pembelian' => $detail->id_pembelian,
+                    'new_jumlah' => $new_jumlah
+                ]);
             }
             
             DB::table('produk')->where('id_produk', $produk->id_produk)->update(['stok' => $new_stok]);

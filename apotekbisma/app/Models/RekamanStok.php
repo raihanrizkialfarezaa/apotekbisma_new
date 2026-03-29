@@ -360,6 +360,7 @@ class RekamanStok extends Model
                 WHEN LOWER(COALESCE(keterangan, '')) LIKE '%stock opname%' THEN 2
                 WHEN LOWER(COALESCE(keterangan, '')) LIKE '%perubahan stok manual%' THEN 2
                 WHEN LOWER(COALESCE(keterangan, '')) LIKE '%penyesuaian stok%' THEN 2
+                WHEN LOWER(COALESCE(keterangan, '')) LIKE '%saldo awal stok%' THEN 2
                 ELSE 3
             END ASC")
             ->orderBy('created_at', 'asc')
@@ -375,6 +376,7 @@ class RekamanStok extends Model
 
         return strpos($keterangan, 'stock opname') !== false
             || strpos($keterangan, 'perubahan stok manual') !== false
-            || strpos($keterangan, 'penyesuaian stok') !== false;
+            || strpos($keterangan, 'penyesuaian stok') !== false
+            || strpos($keterangan, 'saldo awal stok') !== false;
     }
 }

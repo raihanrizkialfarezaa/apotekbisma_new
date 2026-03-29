@@ -50,6 +50,13 @@
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
+                    {{-- Warning harga --}}
+                    <div class="form-group row" id="harga-warning-container" style="display: none;">
+                        <div class="col-lg-6 col-lg-offset-3">
+                            <div id="harga-warning-box" style="padding: 8px 12px; border-radius: 4px; font-size: 13px;">
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <div class="col-lg-6">
                             <input type="hidden" name="diskon" id="diskon" class="form-control" value="0">
@@ -93,3 +100,40 @@
         </form>
     </div>
 </div>
+
+<script>
+$(function() {
+    // === Price Warning System ===
+    function checkHargaWarning() {
+        var hargaBeli = parseInt($('#harga_beli').val()) || 0;
+        var hargaJual = parseInt($('#harga_jual').val()) || 0;
+        var container = $('#harga-warning-container');
+        var box = $('#harga-warning-box');
+
+        if (hargaBeli <= 0 || hargaJual <= 0) {
+            container.hide();
+            return;
+        }
+
+        if (hargaJual < hargaBeli) {
+            var selisih = hargaBeli - hargaJual;
+            box.html('<i class="fa fa-exclamation-triangle"></i> <strong>Peringatan:</strong> Harga jual (Rp' + hargaJual.toLocaleString('id') + ') <strong>lebih rendah</strong> dari harga beli (Rp' + hargaBeli.toLocaleString('id') + '). Selisih rugi: <strong>Rp' + selisih.toLocaleString('id') + '</strong> per unit.')
+                .css({ 'background': '#f2dede', 'color': '#a94442', 'border': '1px solid #ebccd1' });
+            container.show();
+        } else if (hargaJual > hargaBeli * 10 && hargaBeli > 0) {
+            box.html('<i class="fa fa-info-circle"></i> <strong>Info:</strong> Harga jual (Rp' + hargaJual.toLocaleString('id') + ') sangat tinggi dibanding harga beli (Rp' + hargaBeli.toLocaleString('id') + '). Pastikan ini sudah benar.')
+                .css({ 'background': '#fcf8e3', 'color': '#8a6d3b', 'border': '1px solid #faebcc' });
+            container.show();
+        } else {
+            container.hide();
+        }
+    }
+
+    $('#harga_beli, #harga_jual').on('input change', checkHargaWarning);
+
+    // Initialize on modal show
+    $('#modal-form').on('shown.bs.modal', function() {
+        checkHargaWarning();
+    });
+});
+</script>
