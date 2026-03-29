@@ -48,6 +48,107 @@
             padding-top: 5px;
         }
     }
+
+    /* Processing overlay overrides - Only apply when explicitly saving */
+    body.is-saving div.dataTables_wrapper div.dataTables_processing {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        background: rgba(0, 0, 0, 0.7) !important;
+        z-index: 99999 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        color: white !important;
+        font-size: 26px !important;
+        font-weight: bold !important;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.8) !important;
+        backdrop-filter: blur(4px) !important;
+        transform: none !important;
+    }
+    
+    body.is-saving div.dataTables_wrapper div.dataTables_processing::before {
+        content: "\f110"; /* FontAwesome Spinner */
+        font-family: FontAwesome;
+        font-size: 3.5em;
+        margin-bottom: 25px;
+        animation: fa-spin 1.5s infinite linear;
+        color: #00c0ef;
+    }
+    
+    div.dataTables_wrapper div.dataTables_processing {
+        /* Default styling for initial load */
+        background: rgba(255,255,255,0.8) !important;
+        color: #333 !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        border-radius: 4px;
+        padding: 10px;
+    }
+    
+    /* Toast Notification Container */
+    #toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 999999;
+    }
+    
+    .custom-toast {
+        min-width: 300px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        font-size: 16px;
+        border-radius: 6px;
+        padding: 15px 20px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        animation: slideInRight 0.3s ease-out forwards;
+    }
+    
+    @keyframes slideInRight {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    
+    /* Highlight Animations */
+    .highlight-success {
+        animation: highlightAnim 3s ease-out !important;
+        border-color: #28a745 !important;
+        box-shadow: 0 0 10px rgba(40, 167, 69, 0.5) !important;
+        font-weight: bold;
+    }
+    .highlight-cell-success {
+        animation: highlightAnimCell 3s ease-out !important;
+        font-weight: bold;
+    }
+    @keyframes highlightAnim {
+        0% { background-color: #d4edda; color: #155724; }
+        100% { background-color: transparent; }
+    }
+    @keyframes highlightAnimCell {
+        0% { background-color: #d4edda !important; color: #155724 !important; }
+        100% { background-color: inherit; color: inherit; }
+    }
+    @keyframes fadeOutUp {
+        0% { opacity: 1; transform: translateY(0); }
+        80% { opacity: 1; transform: translateY(-15px); }
+        100% { opacity: 0; transform: translateY(-25px); }
+    }
+    .updated-label {
+        position: absolute;
+        top: -10px;
+        right: 0;
+        z-index: 10;
+        font-size: 11px;
+        animation: fadeOutUp 3s forwards;
+        pointer-events: none;
+    }
 </style>
 @endpush
 
@@ -57,6 +158,7 @@
 @endsection
 
 @section('content')
+<div id="toast-container"></div>
 @if(session('error'))
     <div class="alert alert-danger alert-dismissible">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -263,7 +365,10 @@
             ],
             dom: 'Brt',
             bSort: false,
-            paginate: false
+            paginate: false,
+            language: {
+                processing: "Memuat Data Produk..."
+            }
         })
         .on('draw.dt', function () {
             loadForm($('#diskon').val());
@@ -332,6 +437,49 @@
             }
         });
 
+        // Helper untuk Notifikasi Success
+        function showSuccessToast(message) {
+            const toast = $(`
+                <div class="alert alert-success custom-toast" style="display: none;">
+                    <i class="icon fa fa-check-circle" style="font-size: 24px;"></i> 
+                    <div>
+                        <strong style="display: block; font-size: 18px; margin-bottom: 2px;">Berhasil!</strong>
+                        ${message}
+                    </div>
+                </div>
+            `);
+            $('#toast-container').append(toast);
+            toast.fadeIn(300).delay(2500).fadeOut(400, function() {
+                $(this).remove();
+            });
+        }
+
+        // Helper untuk Highlight Baris yang Berubah
+        function highlightRowEdit(id, inputClass) {
+            let $input = $(`input.${inputClass}[data-id="${id}"]`);
+            if ($input.length > 0) {
+                let $row = $input.closest('tr');
+                let $subtotalCell = $row.find('td:eq(8)'); // Index 8 adalah Subtotal
+
+                // Tambahkan class animasi
+                $input.addClass('highlight-success');
+                $subtotalCell.addClass('highlight-cell-success');
+
+                // Tambahkan label "Updated!"
+                let labelHtml = '<span class="label label-success updated-label"><i class="fa fa-check"></i> Updated!</span>';
+                
+                // Supaya absolute positioning rapi, parent harus relative
+                $input.parent().css('position', 'relative').append(labelHtml);
+                $subtotalCell.css('position', 'relative').append(labelHtml);
+
+                // Bersihkan setelah animasi selesai
+                setTimeout(() => {
+                    $input.removeClass('highlight-success');
+                    $subtotalCell.removeClass('highlight-cell-success');
+                }, 3000);
+            }
+        }
+
         let quantityTimeout;
 
         $(document).on('focus', '.quantity', function () {
@@ -390,6 +538,7 @@
                 }
 
                 $input.data('updating', true).prop('disabled', true);
+                $('body').addClass('is-saving'); // ACTIVATE BLOCKER
 
                 $.post(`{{ url('/pembelian_detail/updateEdit') }}/${id}`, {
                         '_token': $('[name=csrf-token]').attr('content'),
@@ -398,9 +547,14 @@
                     })
                     .done(() => {
                         $input.data('original-value', jumlah);
-                        table.ajax.reload(() => loadForm($('#diskon').val()));
+                        table.ajax.reload(() => {
+                            loadForm($('#diskon').val());
+                            $('body').removeClass('is-saving'); // DEACTIVATE BLOCKER
+                            showSuccessToast('Kuantitas produk berhasil diperbarui.');
+                        }, false);
                     })
                     .fail((xhr) => {
+                        $('body').removeClass('is-saving'); // DEACTIVATE BLOCKER
                         $input.val(originalValue);
                         let errorMessage = 'Tidak dapat menyimpan data';
 
@@ -417,7 +571,7 @@
                     });
             }, 250);
         });
-        $(document).on('input', '.harga_jual', function () {
+        $(document).on('change', '.harga_jual', function () {
             let id = $(this).data('id');
             let harga_jual = parseInt($(this).val());
 
@@ -427,22 +581,27 @@
                 return;
             }
 
+            $('body').addClass('is-saving'); // ACTIVATE BLOCKER
+
             $.post(`{{ url('/updateHargaJual') }}/${id}`, {
                     '_token': $('[name=csrf-token]').attr('content'),
                     '_method': 'put',
                     'harga_jual': harga_jual
                 })
                 .done(response => {
-                    $(this).on('mouseout', function () {
-                        table.ajax.reload(() => loadForm($('#diskon').val()));
-                    });
+                    table.ajax.reload(() => {
+                        loadForm($('#diskon').val());
+                        $('body').removeClass('is-saving'); // DEACTIVATE BLOCKER
+                        showSuccessToast('Harga Jual berhasil diperbarui.');
+                    }, false);
                 })
                 .fail(errors => {
+                    $('body').removeClass('is-saving'); // DEACTIVATE BLOCKER
                     alert('Tidak dapat menyimpan data');
                     return;
                 });
         });
-        $(document).on('input', '.harga_beli', function () {
+        $(document).on('change', '.harga_beli', function () {
             let id = $(this).data('id');
 	    console.log($(this).data('id'));
 	    let id_pembelian_detail = $(this).data('uid');
@@ -464,16 +623,20 @@
                     'jumlah': jumlah
                 })
                 .done(response => {
-                    $(this).on('mouseout', function () {
-                        table.ajax.reload(() => loadForm($('#diskon').val()));
-                    });
+                    table.ajax.reload(() => {
+                        loadForm($('#diskon').val());
+                        $('body').removeClass('is-saving'); // DEACTIVATE BLOCKER
+                        showSuccessToast('Harga Beli berhasil diperbarui.');
+                        highlightRowEdit(id, 'harga_beli');
+                    }, false);
                 })
                 .fail(errors => {
+                    $('body').removeClass('is-saving'); // DEACTIVATE BLOCKER
                     alert('Tidak dapat menyimpan data');
                     return;
                 });
         });
-        $(document).on('input', '.expired_date', function () {
+        $(document).on('change', '.expired_date', function () {
             let id = $(this).data('id');
 	        console.log($(this).data('id'));
             let id_pembelian_detail = $(this).data('uid');
@@ -485,39 +648,50 @@
                 console.log("cant update");
                 return;
             }
+
+            $('body').addClass('is-saving'); // ACTIVATE BLOCKER
+
             $.post(`{{ url('/updateExpiredDate') }}/${id}`, {
                     '_token': $('[name=csrf-token]').attr('content'),
                     '_method': 'put',
                     'expired_date': expired_date,
                 })
                 .done(response => {
-                    $(this).on('mouseout', function () {
-                        table.ajax.reload(() => loadForm($('#diskon').val()));
-                    });
+                    table.ajax.reload(() => {
+                        loadForm($('#diskon').val());
+                        $('body').removeClass('is-saving'); // DEACTIVATE BLOCKER
+                        showSuccessToast('Expired Date berhasil diperbarui.');
+                    }, false);
                 })
                 .fail(errors => {
+                    $('body').removeClass('is-saving'); // DEACTIVATE BLOCKER
                     alert('Tidak dapat menyimpan data');
                     return;
                 });
         });
-        $(document).on('input', '.batch', function () {
+        $(document).on('change', '.batch', function () {
             let id = $(this).data('id');
 	        console.log($(this).data('id'));
             let id_pembelian_detail = $(this).data('uid');
             console.log(id_pembelian_detail);
             let batch = $(this).val();
             let jumlah = parseInt($('.quantity').val());
+            $('body').addClass('is-saving'); // ACTIVATE BLOCKER
+            
             $.post(`{{ url('/updateBatch') }}/${id}`, {
                     '_token': $('[name=csrf-token]').attr('content'),
                     '_method': 'put',
                     'batch': batch,
                 })
                 .done(response => {
-                    $(this).on('mouseout', function () {
-                        table.ajax.reload(() => loadForm($('#diskon').val()));
-                    });
+                    table.ajax.reload(() => {
+                        loadForm($('#diskon').val());
+                        $('body').removeClass('is-saving'); // DEACTIVATE BLOCKER
+                        showSuccessToast('Batch berhasil diperbarui.');
+                    }, false);
                 })
                 .fail(errors => {
+                    $('body').removeClass('is-saving'); // DEACTIVATE BLOCKER
                     alert('Tidak dapat menyimpan data');
                     return;
                 });
