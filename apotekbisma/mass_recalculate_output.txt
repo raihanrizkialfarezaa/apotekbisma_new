@@ -1,0 +1,16 @@
+﻿=========================================================
+ MASS RECALCULATE STOCK + CHRONOLOGICAL ANCHOR REPAIR 
+=========================================================
+
+[INFO] Memulai perbaikan kronologi Opname & Kalkulasi Ulang...
+
+=========================================================
+REKAPITULASI HASIL REPAIR
+=========================================================
+Total Terproses         : 960 / 960
+Selesai (MATCH)         : 863 Produk
+Kronologi Waktu Direset : 675 Produk (Anchor digeser ke 31-12-2025)
+Aman (DIABAIKAN)        : 97 Produk (Bukan Produk Opname)
+Gagal (ERROR)           : 0 Produk
+=========================================================
+Selesai! Silakan cek kembali kartu stok mulai Januari/Februari.
