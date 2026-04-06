@@ -542,11 +542,11 @@ class PembelianController extends Controller
             PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)->delete();
             $pembelian->delete();
 
-            DB::commit();
-
             $this->syncAffectedPembelianProducts($affectedProductIds, null, [
                 'pembelian_snapshot' => $pembelianSnapshot,
             ]);
+
+            DB::commit();
 
             return response()->json(['success' => true, 'message' => 'Pembelian berhasil dihapus dan stok disinkronkan'], 200);
             
@@ -596,7 +596,10 @@ class PembelianController extends Controller
                     ], 409);
                 }
 
-                $this->restorePembelianFromSnapshot($id, $snapshot);
+                $affectedProductIds = $this->restorePembelianFromSnapshot($id, $snapshot);
+                $this->syncAffectedPembelianProducts($affectedProductIds, $id, [
+                    'pembelian_snapshot' => is_array($snapshot['header'] ?? null) ? $snapshot['header'] : null,
+                ]);
 
                 DB::commit();
 
@@ -649,14 +652,14 @@ class PembelianController extends Controller
                 ], 409);
             }
 
-            DB::commit();
-
             if ($deleted) {
                 $this->syncAffectedPembelianProducts($affectedProductIds, null, [
                     'force_reflow' => $forceReflow,
                     'pembelian_snapshot' => $pembelianSnapshot,
                 ]);
             }
+
+            DB::commit();
 
             if (intval(session('id_pembelian')) === intval($id)) {
                 session()->forget(['id_pembelian', 'id_supplier']);
@@ -687,20 +690,30 @@ class PembelianController extends Controller
 
     public function destroyEmpty($id)
     {
-        $pembelian = Pembelian::where('id_pembelian', $id)->first();
-        
-        if (!$pembelian) {
-            return response()->json(['error' => 'Pembelian tidak ditemukan'], 404);
-        }
+        DB::beginTransaction();
 
-        // Hanya hapus jika transaksi benar-benar kosong atau belum selesai
-        $isEmpty = ($pembelian->no_faktur === 'o' || $pembelian->no_faktur === '' || $pembelian->no_faktur === null) &&
-                   $pembelian->total_harga == 0;
-        
-        if ($isEmpty) {
+        try {
+            $pembelian = Pembelian::where('id_pembelian', $id)
+                ->lockForUpdate()
+                ->first();
+
+            if (!$pembelian) {
+                DB::rollBack();
+                return response()->json(['error' => 'Pembelian tidak ditemukan'], 404);
+            }
+
+            $isEmpty = ($pembelian->no_faktur === 'o' || $pembelian->no_faktur === '' || $pembelian->no_faktur === null) &&
+                       $pembelian->total_harga == 0;
+
+            if (!$isEmpty) {
+                DB::commit();
+                return response()->json(['message' => 'Transaction not empty, not deleted']);
+            }
+
             $pembelianSnapshot = $this->buildPembelianSnapshot($pembelian);
 
             $affectedProductIds = PembelianDetail::where('id_pembelian', $id)
+                ->lockForUpdate()
                 ->pluck('id_produk')
                 ->map(function ($idProduk) {
                     return intval($idProduk);
@@ -720,15 +733,21 @@ class PembelianController extends Controller
                 'force_reflow' => $this->isPostCutoffWaktu($pembelianSnapshot['waktu_datang'] ?? $pembelianSnapshot['waktu'] ?? null),
                 'pembelian_snapshot' => $pembelianSnapshot,
             ]);
-            
-            // Hapus session terkait
+
+            DB::commit();
+
             session()->forget('id_pembelian');
             session()->forget('id_supplier');
-            
-            return response()->json(['message' => 'Empty transaction deleted and stock synchronized']);
-        }
 
-        return response()->json(['message' => 'Transaction not empty, not deleted']);
+            return response()->json(['message' => 'Empty transaction deleted and stock synchronized']);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('Destroy empty pembelian gagal: ' . $e->getMessage(), [
+                'id_pembelian' => $id,
+            ]);
+
+            return response()->json(['error' => 'Terjadi kesalahan saat menghapus transaksi kosong.'], 500);
+        }
     }
 
     public function notaKecil()
@@ -814,17 +833,9 @@ class PembelianController extends Controller
             || $pembelian->no_faktur === null;
     }
 
-    private function syncAffectedPembelianProducts(array $productIds, ?int $idPembelian = null, array $options = []): void
+    private function syncAffectedPembelianProducts(array $productIds, ?int $idPembelian = null, array $options = []): array
     {
-        try {
-            app(PembelianStockSyncService::class)->syncAffectedProducts($productIds, $idPembelian, $options);
-        } catch (\Throwable $e) {
-            Log::warning('Sinkronisasi stok pembelian gagal pada controller', [
-                'id_pembelian' => $idPembelian,
-                'product_ids' => array_values($productIds),
-                'message' => $e->getMessage(),
-            ]);
-        }
+        return app(PembelianStockSyncService::class)->syncAffectedProducts($productIds, $idPembelian, $options);
     }
 
     private function buildPembelianSnapshot(Pembelian $pembelian): array
@@ -858,7 +869,7 @@ class PembelianController extends Controller
         return $snapshot;
     }
 
-    private function restorePembelianFromSnapshot(int $idPembelian, array $snapshot): void
+    private function restorePembelianFromSnapshot(int $idPembelian, array $snapshot): array
     {
         $currentDetails = DB::table('pembelian_detail')
             ->where('id_pembelian', $idPembelian)
@@ -928,6 +939,8 @@ class PembelianController extends Controller
                 ->where('id_pembelian', $idPembelian)
                 ->update($header);
         }
+
+        return $affectedProductIds;
     }
 
     private function isPostCutoffWaktu($waktu): bool

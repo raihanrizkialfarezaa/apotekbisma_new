@@ -8,6 +8,7 @@ use App\Models\PenjualanDetail;
 use App\Models\Produk;
 use App\Models\RekamanStok;
 use App\Models\Setting;
+use App\Services\StockRuntimeIntegrityService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -565,6 +566,11 @@ class PenjualanDetailController extends Controller
         // Draft flows already adjust produk.stok atomically. Recalculation across full history
         // can overwrite correct draft stock with corrupted legacy chain results.
         // Finalized transaction synchronization remains handled in PenjualanController::store().
+        app(StockRuntimeIntegrityService::class)->assertLatestStockConsistency(
+            $normalizedIds,
+            'sinkronisasi draft penjualan'
+        );
+
         Log::debug('Skip global stock sync on draft penjualan mutation', [
             'id_produk' => $normalizedIds,
         ]);

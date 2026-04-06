@@ -38,6 +38,8 @@ class RekamanStok extends Model
                 ]);
                 $rekamanStok->stok_sisa = $calculatedSisa;
             }
+
+            static::assertManualAdjustmentNotNegative($rekamanStok);
         });
         
         static::updating(function ($rekamanStok) {
@@ -51,6 +53,8 @@ class RekamanStok extends Model
                 ]);
                 $rekamanStok->stok_sisa = $calculatedSisa;
             }
+
+            static::assertManualAdjustmentNotNegative($rekamanStok);
         });
     }
 
@@ -378,5 +382,31 @@ class RekamanStok extends Model
             || strpos($keterangan, 'perubahan stok manual') !== false
             || strpos($keterangan, 'penyesuaian stok') !== false
             || strpos($keterangan, 'saldo awal stok') !== false;
+    }
+
+    private static function isManualAdjustmentRecord($record): bool
+    {
+        $keterangan = strtolower(trim((string) ($record->keterangan ?? '')));
+        if ($keterangan === '') {
+            return false;
+        }
+
+        return (
+            strpos($keterangan, 'stock opname') !== false
+            || strpos($keterangan, 'perubahan stok manual') !== false
+            || strpos($keterangan, 'penyesuaian stok') !== false
+        ) && strpos($keterangan, 'saldo awal stok') === false;
+    }
+
+    private static function assertManualAdjustmentNotNegative($record): void
+    {
+        if (!static::isManualAdjustmentRecord($record)) {
+            return;
+        }
+
+        $stokSisa = intval($record->stok_sisa ?? 0);
+        if ($stokSisa < 0) {
+            throw new \InvalidArgumentException('Penyesuaian stok manual tidak boleh menghasilkan stok akhir negatif.');
+        }
     }
 }

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Pembelian;
 use App\Models\Penjualan;
 use App\Services\BaselineStockReflowService;
+use App\Services\StockRuntimeIntegrityService;
 use App\Exceptions\UnsafeStockMutationException;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -13,10 +14,15 @@ use Illuminate\Support\Facades\Log;
 class TransactionDateMutationService
 {
     private BaselineStockReflowService $baselineStockReflowService;
+    private StockRuntimeIntegrityService $stockRuntimeIntegrityService;
 
-    public function __construct(BaselineStockReflowService $baselineStockReflowService)
+    public function __construct(
+        BaselineStockReflowService $baselineStockReflowService,
+        StockRuntimeIntegrityService $stockRuntimeIntegrityService
+    )
     {
         $this->baselineStockReflowService = $baselineStockReflowService;
+        $this->stockRuntimeIntegrityService = $stockRuntimeIntegrityService;
     }
 
     public function handlePembelianFinalDateChange(Pembelian $pembelian, $oldWaktu, $newWaktu): array
@@ -51,8 +57,10 @@ class TransactionDateMutationService
     {
         $this->assertTransactionFinalWaktuAllowed($this->resolvePembelianStockWaktu($pembelian));
 
-        return $this->baselineStockReflowService->rebuildProducts(
+        return $this->stockRuntimeIntegrityService->rebuildAndValidate(
             $this->getPembelianProductIds($pembelian),
+            'sinkronisasi pembelian final ' . (string) ($pembelian->no_faktur ?? ('#' . $pembelian->id_pembelian)),
+            false,
             Carbon::now()->format('Y-m-d H:i:s')
         );
     }
@@ -61,8 +69,10 @@ class TransactionDateMutationService
     {
         $this->assertTransactionFinalWaktuAllowed($penjualan->waktu ?? $penjualan->created_at);
 
-        return $this->baselineStockReflowService->rebuildProducts(
+        return $this->stockRuntimeIntegrityService->rebuildAndValidate(
             $this->getPenjualanProductIds($penjualan),
+            'finalisasi penjualan #' . $penjualan->id_penjualan,
+            true,
             Carbon::now()->format('Y-m-d H:i:s')
         );
     }
@@ -87,7 +97,12 @@ class TransactionDateMutationService
             throw new \RuntimeException('Perubahan tanggal final diblokir karena transaksi menyentuh periode baseline yang dilindungi. Gunakan proses baseline rebuild terkontrol bila histori sebelum cutoff memang harus diubah.');
         }
 
-        $reflowSummary = $this->baselineStockReflowService->rebuildProducts($productIds, Carbon::now()->format('Y-m-d H:i:s'));
+        $reflowSummary = $this->stockRuntimeIntegrityService->rebuildAndValidate(
+            $productIds,
+            'perubahan waktu ' . $referenceLabel,
+            false,
+            Carbon::now()->format('Y-m-d H:i:s')
+        );
         $this->assertNoNegativeHistoricalStock(
             $transactionType,
             $transactionId,

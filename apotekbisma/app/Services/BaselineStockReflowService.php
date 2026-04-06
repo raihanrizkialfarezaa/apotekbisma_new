@@ -94,7 +94,16 @@ class BaselineStockReflowService
 
                 foreach ($events as $event) {
                     $stokAwal = $runningStock;
-                    $stokSisa = $stokAwal + intval($event['stok_masuk']) - intval($event['stok_keluar']);
+                    if (!empty($event['is_manual_adjustment'])) {
+                        $targetStock = intval($event['target_stock'] ?? $stokAwal);
+                        $stokMasuk = max(0, $targetStock - $stokAwal);
+                        $stokKeluar = max(0, $stokAwal - $targetStock);
+                        $stokSisa = $targetStock;
+                    } else {
+                        $stokMasuk = intval($event['stok_masuk']);
+                        $stokKeluar = intval($event['stok_keluar']);
+                        $stokSisa = $stokAwal + $stokMasuk - $stokKeluar;
+                    }
 
                     if ($stokSisa < 0) {
                         $negativeEventCount++;
@@ -106,8 +115,8 @@ class BaselineStockReflowService
                         'id_pembelian' => $event['id_pembelian'],
                         'waktu' => $event['waktu'],
                         'stok_awal' => $stokAwal,
-                        'stok_masuk' => intval($event['stok_masuk']),
-                        'stok_keluar' => intval($event['stok_keluar']),
+                        'stok_masuk' => $stokMasuk,
+                        'stok_keluar' => $stokKeluar,
                         'stok_sisa' => $stokSisa,
                         'keterangan' => $event['keterangan'],
                         'created_at' => $currentTime,
@@ -389,6 +398,8 @@ class BaselineStockReflowService
                 'waktu' => (string) $row->waktu_event,
                 'id_penjualan' => null,
                 'id_pembelian' => intval($row->ref_id),
+                'is_manual_adjustment' => false,
+                'target_stock' => null,
                 'stok_masuk' => intval($row->qty ?? 0),
                 'stok_keluar' => 0,
                 'keterangan' => 'Pembelian',
@@ -418,6 +429,8 @@ class BaselineStockReflowService
                 'waktu' => (string) $row->waktu_event,
                 'id_penjualan' => intval($row->ref_id),
                 'id_pembelian' => null,
+                'is_manual_adjustment' => false,
+                'target_stock' => null,
                 'stok_masuk' => 0,
                 'stok_keluar' => intval($row->qty ?? 0),
                 'keterangan' => 'Penjualan',
@@ -425,7 +438,7 @@ class BaselineStockReflowService
         }
 
         $manualRecords = DB::table('rekaman_stoks')
-            ->select('id_rekaman_stok', 'waktu', 'stok_masuk', 'stok_keluar', 'keterangan')
+            ->select('id_rekaman_stok', 'waktu', 'stok_masuk', 'stok_keluar', 'stok_sisa', 'keterangan')
             ->where('id_produk', $productId)
             ->whereNull('id_penjualan')
             ->whereNull('id_pembelian')
@@ -453,6 +466,8 @@ class BaselineStockReflowService
                 'waktu' => (string) $record->waktu,
                 'id_penjualan' => null,
                 'id_pembelian' => null,
+                'is_manual_adjustment' => true,
+                'target_stock' => intval($record->stok_sisa ?? 0),
                 'stok_masuk' => $stokMasuk,
                 'stok_keluar' => $stokKeluar,
                 'keterangan' => (string) ($record->keterangan ?: 'Penyesuaian stok manual'),

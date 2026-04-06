@@ -7,6 +7,7 @@ use App\Models\Kategori;
 use App\Models\PembelianDetail;
 use App\Models\RekamanStok;
 use App\Exceptions\UnsafeStockMutationException;
+use App\Services\StockRuntimeIntegrityService;
 use Illuminate\Http\Request;
 use App\Models\Produk;
 use Barryvdh\DomPDF\Facade as PDF;
@@ -310,7 +311,13 @@ class ProdukController extends Controller
                     $produk->id_produk, 
                     $stok_lama_otoritatif, 
                     $stok_baru, 
-                    'Stock Opname via Edit Produk: ' . trim((string) $validated['keterangan_stok'])
+                    'Penyesuaian Stok Manual via Edit Produk: ' . trim((string) $validated['keterangan_stok'])
+                );
+
+                app(StockRuntimeIntegrityService::class)->rebuildAndValidate(
+                    [$produk->id_produk],
+                    'edit stok produk manual',
+                    true
                 );
             }
 
@@ -394,20 +401,21 @@ class ProdukController extends Controller
 
             $produk->save();
 
-            $keteranganFinal = 'Stock Opname (Penyesuaian Stok Manual)';
+            $keteranganFinal = 'Penyesuaian Stok Manual';
             if ($keteranganRaw !== '') {
-                $keteranganFinal = 'Stock Opname: ' . $keteranganRaw;
+                $keteranganFinal = 'Penyesuaian Stok Manual: ' . $keteranganRaw;
             }
 
             $this->createStockOpnameRecord($produk->id_produk, $stok_lama_otoritatif, $stok_baru, $keteranganFinal);
+            app(StockRuntimeIntegrityService::class)->rebuildAndValidate(
+                [$produk->id_produk],
+                'stock opname manual',
+                true
+            );
             
             DB::commit();
             
             Cache::forget($idempotencyKey);
-
-            // PENTING: Jangan panggil recalculateStock() setelah Stock Opname!
-            // Stock Opname adalah "source of truth" yang mengoreksi stok ke nilai yang benar.
-            // Memanggil recalculateStock() akan menghitung ulang dari rekaman dan menimpa nilai opname.
 
             return response()->json([
                 'success' => true,
@@ -436,6 +444,10 @@ class ProdukController extends Controller
 
     private function createStockOpnameRecord($idProduk, $stokLama, $stokBaru, $keterangan)
     {
+        if (intval($stokBaru) < 0) {
+            throw new UnsafeStockMutationException('Penyesuaian stok manual tidak boleh menghasilkan stok negatif.');
+        }
+
         $currentTime = Carbon::now();
         $waktuWithMicro = $currentTime->format('Y-m-d H:i:s.u');
         $selisih = $stokBaru - $stokLama;

@@ -485,6 +485,22 @@ class KartuStokController extends Controller
             return 'Saldo Awal Stok';
         }
 
+        if (stripos($value, 'Stock Opname via Edit Produk:') === 0) {
+            return preg_replace('/^Stock Opname via Edit Produk:/i', 'Penyesuaian Stok Manual via Edit Produk:', $value) ?? $value;
+        }
+
+        if (stripos($value, 'Perubahan Stok Manual via Edit Produk') === 0) {
+            return preg_replace('/^Perubahan Stok Manual via Edit Produk/i', 'Penyesuaian Stok Manual via Edit Produk', $value) ?? $value;
+        }
+
+        if (preg_match('/^Stock Opname\s*\(Penyesuaian Stok Manual\)$/i', $value)) {
+            return 'Penyesuaian Stok Manual';
+        }
+
+        if (stripos($value, 'Stock Opname:') === 0) {
+            return preg_replace('/^Stock Opname:/i', 'Penyesuaian Stok Manual:', $value) ?? $value;
+        }
+
         return preg_replace('/\s+/', ' ', $value) ?? $value;
     }
 

@@ -10,10 +10,15 @@ use Illuminate\Support\Facades\Log;
 class PembelianStockSyncService
 {
     private BaselineStockReflowService $baselineStockReflowService;
+    private StockRuntimeIntegrityService $stockRuntimeIntegrityService;
 
-    public function __construct(BaselineStockReflowService $baselineStockReflowService)
+    public function __construct(
+        BaselineStockReflowService $baselineStockReflowService,
+        StockRuntimeIntegrityService $stockRuntimeIntegrityService
+    )
     {
         $this->baselineStockReflowService = $baselineStockReflowService;
+        $this->stockRuntimeIntegrityService = $stockRuntimeIntegrityService;
     }
 
     public function syncAffectedProducts(array $productIds, ?int $idPembelian = null, array $options = []): array
@@ -39,6 +44,11 @@ class PembelianStockSyncService
         if ($hasContext && !$useReflow && !$forceReflow) {
             // Draft pembelian sudah mengubah produk.stok secara atomic di level transaksi.
             // Hindari fallback recalculate global agar histori lama yang korup tidak menimpa stok draft.
+            $this->stockRuntimeIntegrityService->assertLatestStockConsistency(
+                $normalizedIds,
+                'sinkronisasi draft pembelian'
+            );
+
             return [
                 'strategy' => 'skip_draft_sync',
                 'products_synced' => count($normalizedIds),
@@ -51,6 +61,10 @@ class PembelianStockSyncService
                 $summary = $this->baselineStockReflowService->rebuildProducts(
                     $normalizedIds,
                     Carbon::now()->format('Y-m-d H:i:s')
+                );
+                $this->stockRuntimeIntegrityService->assertLatestStockConsistency(
+                    $normalizedIds,
+                    'sinkronisasi pembelian'
                 );
 
                 return [
@@ -86,6 +100,20 @@ class PembelianStockSyncService
                 ]);
             }
         }
+
+        if (!empty($errors)) {
+            throw new \RuntimeException(
+                'Fallback recalculate stok pembelian gagal pada produk: '
+                . implode(', ', array_map(function (array $error) {
+                    return '#' . intval($error['id_produk'] ?? 0);
+                }, $errors))
+            );
+        }
+
+        $this->stockRuntimeIntegrityService->assertLatestStockConsistency(
+            $normalizedIds,
+            'fallback recalculate pembelian'
+        );
 
         return [
             'strategy' => 'recalculate',

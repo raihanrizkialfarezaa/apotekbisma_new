@@ -8,14 +8,15 @@ use App\Models\PenjualanDetail;
 use App\Models\Produk;
 use App\Models\RekamanStok;
 use App\Models\Setting;
+use App\Exceptions\UnsafeStockMutationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
 use App\Services\StockDraftCleanupService;
+use App\Services\StockRuntimeIntegrityService;
 use App\Services\TransactionDateMutationService;
-use App\Services\BaselineStockReflowService;
 
 class PenjualanController extends Controller
 {
@@ -403,6 +404,8 @@ class PenjualanController extends Controller
 
             try {
                 app(TransactionDateMutationService::class)->synchronizeFinalizedPenjualan($penjualan);
+            } catch (UnsafeStockMutationException $syncException) {
+                throw $syncException;
             } catch (\Throwable $syncException) {
                 Log::warning('Sinkronisasi finalized penjualan gagal, fallback ke recalculate per produk', [
                     'id_penjualan' => $penjualan->id_penjualan,
@@ -487,13 +490,16 @@ class PenjualanController extends Controller
         DB::beginTransaction();
         
         try {
-            $penjualan = Penjualan::find($id);
+            $penjualan = Penjualan::where('id_penjualan', $id)
+                ->lockForUpdate()
+                ->first();
             
             if (!$penjualan) {
                 DB::rollBack();
                 return response()->json(['success' => false, 'message' => 'Transaksi tidak ditemukan'], 404);
             }
 
+            $penjualanSnapshot = $this->buildPenjualanHeaderSnapshot($penjualan);
             $detail = PenjualanDetail::where('id_penjualan', $penjualan->id_penjualan)->get();
             $affectedProductIds = [];
             
@@ -517,41 +523,24 @@ class PenjualanController extends Controller
 
             $penjualan->delete();
 
-            DB::commit();
-
             $normalizedProductIds = array_values(array_unique(array_filter(array_map('intval', $affectedProductIds), function ($id) {
                 return $id > 0;
             })));
 
             if (!empty($normalizedProductIds)) {
-                try {
-                    app(BaselineStockReflowService::class)->rebuildProducts(
-                        $normalizedProductIds,
-                        Carbon::now()->format('Y-m-d H:i:s')
-                    );
-                } catch (\Throwable $reflowException) {
-                    Log::warning('Reflow stok setelah hapus transaksi gagal, fallback recalculate lama', [
-                        'id_penjualan' => $id,
-                        'product_ids' => $normalizedProductIds,
-                        'message' => $reflowException->getMessage(),
-                    ]);
-
-                    foreach ($normalizedProductIds as $produkId) {
-                        try {
-                            RekamanStok::recalculateStock($produkId);
-                        } catch (\Throwable $recalcException) {
-                            Log::warning('Fallback recalculate stock after delete warning', [
-                                'id_penjualan' => $id,
-                                'id_produk' => $produkId,
-                                'message' => $recalcException->getMessage(),
-                            ]);
-                        }
-                    }
-                }
+                $this->syncAffectedPenjualanProducts(
+                    $normalizedProductIds,
+                    $penjualanSnapshot,
+                    'hapus penjualan #' . $id
+                );
             }
+
+            DB::commit();
             
             return response()->json(['success' => true, 'message' => 'Transaksi berhasil dihapus dan stok dikembalikan'], 200);
-            
+        } catch (UnsafeStockMutationException $e) {
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()], 500);
@@ -637,7 +626,12 @@ class PenjualanController extends Controller
                     ], 409);
                 }
 
-                $this->restorePenjualanFromSnapshot($id, $snapshot);
+                $affectedProductIds = $this->restorePenjualanFromSnapshot($id, $snapshot);
+                $this->syncAffectedPenjualanProducts(
+                    $affectedProductIds,
+                    is_array($snapshot['header'] ?? null) ? $snapshot['header'] : null,
+                    'batal edit penjualan #' . $id
+                );
                 DB::commit();
 
                 if (intval(session('id_penjualan')) === intval($id)) {
@@ -655,6 +649,7 @@ class PenjualanController extends Controller
             }
 
             if ($penjualan && $this->isPenjualanIncomplete($penjualan)) {
+                $penjualanSnapshot = $this->buildPenjualanHeaderSnapshot($penjualan);
                 $details = PenjualanDetail::where('id_penjualan', $id)
                     ->lockForUpdate()
                     ->get();
@@ -690,6 +685,13 @@ class PenjualanController extends Controller
                 DB::table('rekaman_stoks')->where('id_penjualan', $id)->delete();
                 PenjualanDetail::where('id_penjualan', $id)->delete();
                 Penjualan::where('id_penjualan', $id)->delete();
+
+                $this->syncAffectedPenjualanProducts(
+                    array_keys($groupedDetails),
+                    $penjualanSnapshot,
+                    'batal draft penjualan #' . $id
+                );
+
                 $deleted = true;
             } elseif ($penjualan && $cancelMode === 'draft') {
                 // Untuk flow transaksi baru, tombol Batal harus benar-benar membatalkan draft.
@@ -717,6 +719,13 @@ class PenjualanController extends Controller
                     ? 'Draft penjualan dibatalkan dan dihapus.'
                     : 'Edit penjualan dibatalkan. Tidak ada draft baru yang dihapus.',
             ], 200);
+        } catch (UnsafeStockMutationException $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 422);
         } catch (\Throwable $e) {
             DB::rollBack();
             Log::error('Cancel penjualan transaction gagal: ' . $e->getMessage(), [
@@ -861,7 +870,7 @@ class PenjualanController extends Controller
         return $snapshot;
     }
 
-    private function restorePenjualanFromSnapshot(int $idPenjualan, array $snapshot): void
+    private function restorePenjualanFromSnapshot(int $idPenjualan, array $snapshot): array
     {
         $currentDetails = DB::table('penjualan_detail')
             ->where('id_penjualan', $idPenjualan)
@@ -930,6 +939,88 @@ class PenjualanController extends Controller
             DB::table('penjualan')
                 ->where('id_penjualan', $idPenjualan)
                 ->update($header);
+        }
+
+        return $affectedProductIds;
+    }
+
+    private function buildPenjualanHeaderSnapshot(Penjualan $penjualan): array
+    {
+        return [
+            'id_penjualan' => intval($penjualan->id_penjualan),
+            'total_item' => $penjualan->total_item,
+            'total_harga' => $penjualan->total_harga,
+            'bayar' => $penjualan->bayar,
+            'diterima' => $penjualan->diterima,
+            'waktu' => $penjualan->waktu,
+            'created_at' => $penjualan->created_at,
+        ];
+    }
+
+    private function syncAffectedPenjualanProducts(array $productIds, ?array $snapshot = null, string $contextLabel = 'sinkronisasi penjualan'): void
+    {
+        $normalizedIds = array_values(array_unique(array_filter(array_map('intval', $productIds), function ($productId) {
+            return $productId > 0;
+        })));
+
+        if (empty($normalizedIds)) {
+            return;
+        }
+
+        $integrityService = app(StockRuntimeIntegrityService::class);
+
+        if ($this->shouldUsePenjualanPostCutoffRebuild($snapshot)) {
+            $integrityService->rebuildAndValidate($normalizedIds, $contextLabel, true);
+            return;
+        }
+
+        $integrityService->assertLatestStockConsistency($normalizedIds, $contextLabel);
+    }
+
+    private function shouldUsePenjualanPostCutoffRebuild(?array $snapshot): bool
+    {
+        if (!$snapshot) {
+            return false;
+        }
+
+        if (intval($snapshot['total_item'] ?? 0) <= 0) {
+            return false;
+        }
+
+        if (intval($snapshot['total_harga'] ?? 0) <= 0) {
+            return false;
+        }
+
+        if (intval($snapshot['bayar'] ?? 0) <= 0) {
+            return false;
+        }
+
+        if (intval($snapshot['diterima'] ?? 0) <= 0) {
+            return false;
+        }
+
+        $resolvedWaktu = $this->resolvePenjualanSnapshotWaktu($snapshot);
+        if (!$resolvedWaktu) {
+            return false;
+        }
+
+        return $resolvedWaktu > (string) config('stock.cutoff_datetime', '2025-12-31 23:59:59');
+    }
+
+    private function resolvePenjualanSnapshotWaktu(array $snapshot): ?string
+    {
+        $candidate = $snapshot['waktu']
+            ?? $snapshot['created_at']
+            ?? null;
+
+        if (!$candidate) {
+            return null;
+        }
+
+        try {
+            return Carbon::parse($candidate)->format('Y-m-d H:i:s');
+        } catch (\Throwable $e) {
+            return null;
         }
     }
 

@@ -4,15 +4,19 @@ namespace App\Services;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class StockDraftCleanupService
 {
     private PembelianStockSyncService $pembelianStockSyncService;
+    private StockRuntimeIntegrityService $stockRuntimeIntegrityService;
 
-    public function __construct(PembelianStockSyncService $pembelianStockSyncService)
+    public function __construct(
+        PembelianStockSyncService $pembelianStockSyncService,
+        StockRuntimeIntegrityService $stockRuntimeIntegrityService
+    )
     {
         $this->pembelianStockSyncService = $pembelianStockSyncService;
+        $this->stockRuntimeIntegrityService = $stockRuntimeIntegrityService;
     }
 
     public function cleanupStalePembelianDrafts(?int $excludeId = null): array
@@ -47,12 +51,7 @@ class StockDraftCleanupService
         foreach ($draftIds as $draftId) {
             $summary['checked']++;
 
-            $shouldSync = false;
-            $syncProductIds = [];
-            $syncForceReflow = false;
-            $syncSnapshot = null;
-
-            DB::transaction(function () use ($draftId, &$summary, &$shouldSync, &$syncProductIds, &$syncForceReflow, &$syncSnapshot) {
+            DB::transaction(function () use ($draftId, &$summary) {
                 $draft = DB::table('pembelian')
                     ->where('id_pembelian', $draftId)
                     ->lockForUpdate()
@@ -97,23 +96,14 @@ class StockDraftCleanupService
                 $summary['deleted_detail_rows'] += DB::table('pembelian_detail')->where('id_pembelian', $draftId)->delete();
                 DB::table('pembelian')->where('id_pembelian', $draftId)->delete();
                 $summary['deleted_headers']++;
-                $shouldSync = true;
-            }, 3);
 
-            if ($shouldSync && !empty($syncProductIds)) {
-                try {
+                if (!empty($syncProductIds)) {
                     $this->pembelianStockSyncService->syncAffectedProducts($syncProductIds, null, [
                         'force_reflow' => $syncForceReflow,
                         'pembelian_snapshot' => $syncSnapshot,
                     ]);
-                } catch (\Throwable $e) {
-                    Log::warning('Sinkronisasi stok setelah cleanup draft pembelian gagal', [
-                        'id_pembelian' => $draftId,
-                        'product_ids' => $syncProductIds,
-                        'message' => $e->getMessage(),
-                    ]);
                 }
-            }
+            }, 3);
         }
 
         return $summary;
@@ -199,6 +189,13 @@ class StockDraftCleanupService
                 $summary['deleted_detail_rows'] += DB::table('penjualan_detail')->where('id_penjualan', $draftId)->delete();
                 DB::table('penjualan')->where('id_penjualan', $draftId)->delete();
                 $summary['deleted_headers']++;
+
+                if (!empty($groupedDetails)) {
+                    $this->stockRuntimeIntegrityService->assertLatestStockConsistency(
+                        array_keys($groupedDetails),
+                        'cleanup draft penjualan #' . $draftId
+                    );
+                }
             }, 3);
         }
 
