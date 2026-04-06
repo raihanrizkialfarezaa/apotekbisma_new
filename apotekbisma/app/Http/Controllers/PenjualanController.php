@@ -307,6 +307,7 @@ class PenjualanController extends Controller
                 $request->waktu,
                 $penjualan->waktu ?? $penjualan->created_at ?? Carbon::now()
             );
+            $this->assertFinalPenjualanWaktuAllowed($waktu_baru);
             
             $penjualan->id_member = $request->id_member;
             $penjualan->total_item = $request->total_item;
@@ -369,10 +370,12 @@ class PenjualanController extends Controller
             $penjualan->diskon = $request->diskon;
             $penjualan->bayar = $request->bayar;
             $penjualan->diterima = $request->diterima;
-            $penjualan->waktu = $this->resolveTransactionWaktu(
+            $resolvedWaktu = $this->resolveTransactionWaktu(
                 $request->waktu,
                 $penjualan->waktu ?? $penjualan->created_at ?? Carbon::now()
             );
+            $this->assertFinalPenjualanWaktuAllowed($resolvedWaktu);
+            $penjualan->waktu = $resolvedWaktu;
             $penjualan->update();
 
             $id_penjualan = $penjualan->id_penjualan;
@@ -958,5 +961,20 @@ class PenjualanController extends Controller
         }
 
         return Carbon::parse($raw)->format('Y-m-d H:i:s');
+    }
+
+    private function assertFinalPenjualanWaktuAllowed(string $resolvedWaktu): void
+    {
+        $cutoff = (string) config('stock.cutoff_datetime', '2025-12-31 23:59:59');
+        if ($resolvedWaktu <= $cutoff) {
+            throw new \InvalidArgumentException('Tanggal transaksi penjualan tidak boleh pada atau sebelum cutoff baseline 31-12-2025 23:59:59.');
+        }
+
+        $maxFutureMinutes = max(0, (int) config('stock.max_future_transaction_minutes', 5));
+        $latestAllowed = Carbon::now()->addMinutes($maxFutureMinutes)->format('Y-m-d H:i:s');
+
+        if ($resolvedWaktu > $latestAllowed) {
+            throw new \InvalidArgumentException('Tanggal transaksi penjualan tidak boleh di masa depan. Periksa jam perangkat yang dipakai input.');
+        }
     }
 }

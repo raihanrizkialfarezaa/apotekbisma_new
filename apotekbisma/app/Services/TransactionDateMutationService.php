@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Pembelian;
 use App\Models\Penjualan;
 use App\Services\BaselineStockReflowService;
+use App\Exceptions\UnsafeStockMutationException;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -48,7 +49,7 @@ class TransactionDateMutationService
 
     public function synchronizeFinalizedPembelian(Pembelian $pembelian): array
     {
-        $this->assertTransactionIsPostCutoff($this->resolvePembelianStockWaktu($pembelian));
+        $this->assertTransactionFinalWaktuAllowed($this->resolvePembelianStockWaktu($pembelian));
 
         return $this->baselineStockReflowService->rebuildProducts(
             $this->getPembelianProductIds($pembelian),
@@ -58,7 +59,7 @@ class TransactionDateMutationService
 
     public function synchronizeFinalizedPenjualan(Penjualan $penjualan): array
     {
-        $this->assertTransactionIsPostCutoff($penjualan->waktu ?? $penjualan->created_at);
+        $this->assertTransactionFinalWaktuAllowed($penjualan->waktu ?? $penjualan->created_at);
 
         return $this->baselineStockReflowService->rebuildProducts(
             $this->getPenjualanProductIds($penjualan),
@@ -80,11 +81,23 @@ class TransactionDateMutationService
             ];
         }
 
+        $this->assertTransactionNotFuture($resolvedNewWaktu);
+
         if ($resolvedOldWaktu <= $cutoff || $resolvedNewWaktu <= $cutoff) {
             throw new \RuntimeException('Perubahan tanggal final diblokir karena transaksi menyentuh periode baseline yang dilindungi. Gunakan proses baseline rebuild terkontrol bila histori sebelum cutoff memang harus diubah.');
         }
 
         $reflowSummary = $this->baselineStockReflowService->rebuildProducts($productIds, Carbon::now()->format('Y-m-d H:i:s'));
+        $this->assertNoNegativeHistoricalStock(
+            $transactionType,
+            $transactionId,
+            $referenceLabel,
+            $productIds,
+            $resolvedOldWaktu,
+            $resolvedNewWaktu,
+            $reflowSummary
+        );
+
         $actor = auth()->user();
 
         $auditId = DB::table('transaction_date_change_audits')->insertGetId([
@@ -106,6 +119,7 @@ class TransactionDateMutationService
                 'until' => $reflowSummary['until'] ?? null,
                 'csv_delimiter' => $reflowSummary['csv_delimiter'] ?? null,
                 'products_rebuilt' => intval($reflowSummary['products_rebuilt'] ?? 0),
+                'negative_event_product_ids' => array_values(array_map('intval', $reflowSummary['negative_event_product_ids'] ?? [])),
             ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
@@ -121,6 +135,7 @@ class TransactionDateMutationService
             'affected_product_count' => count(array_unique(array_map('intval', $productIds))),
             'negative_event_products' => intval($reflowSummary['products_with_negative_event'] ?? 0),
             'negative_event_count' => intval($reflowSummary['negative_event_count'] ?? 0),
+            'negative_event_product_ids' => array_values(array_map('intval', $reflowSummary['negative_event_product_ids'] ?? [])),
         ]);
 
         return [
@@ -132,6 +147,69 @@ class TransactionDateMutationService
         ];
     }
 
+    private function assertNoNegativeHistoricalStock(
+        string $transactionType,
+        int $transactionId,
+        string $referenceLabel,
+        array $productIds,
+        string $oldWaktu,
+        string $newWaktu,
+        array $reflowSummary
+    ): void {
+        $negativeEventCount = intval($reflowSummary['negative_event_count'] ?? 0);
+        if ($negativeEventCount <= 0) {
+            return;
+        }
+
+        $negativeProductIds = array_values(array_unique(array_filter(array_map('intval', $reflowSummary['negative_event_product_ids'] ?? $productIds), function ($productId) {
+            return $productId > 0;
+        })));
+
+        $productSummary = $this->summarizeProductLabels($negativeProductIds);
+
+        Log::warning('Final transaction date change blocked because it introduces negative historical stock', [
+            'transaction_type' => $transactionType,
+            'transaction_id' => $transactionId,
+            'reference_label' => $referenceLabel,
+            'old_waktu' => $oldWaktu,
+            'new_waktu' => $newWaktu,
+            'negative_event_products' => intval($reflowSummary['products_with_negative_event'] ?? 0),
+            'negative_event_count' => $negativeEventCount,
+            'negative_event_product_ids' => $negativeProductIds,
+        ]);
+
+        throw new UnsafeStockMutationException(
+            'Perubahan waktu transaksi diblokir karena akan menimbulkan stok minus historis pada ' . $productSummary . '. Perbaiki urutan waktu transaksi atau lakukan penyesuaian stok yang terkontrol terlebih dahulu.'
+        );
+    }
+
+    private function summarizeProductLabels(array $productIds): string
+    {
+        if (empty($productIds)) {
+            return 'produk terkait';
+        }
+
+        $labelsById = DB::table('produk')
+            ->whereIn('id_produk', $productIds)
+            ->orderBy('nama_produk')
+            ->pluck('nama_produk', 'id_produk');
+
+        $labels = [];
+        foreach ($productIds as $productId) {
+            $name = trim((string) ($labelsById[$productId] ?? 'Produk'));
+            $labels[] = $name . ' (#' . $productId . ')';
+        }
+
+        $visibleLabels = array_slice($labels, 0, 5);
+        $remaining = count($labels) - count($visibleLabels);
+
+        if ($remaining > 0) {
+            $visibleLabels[] = 'dan ' . $remaining . ' produk lain';
+        }
+
+        return implode(', ', $visibleLabels);
+    }
+
     private function normalizeWaktu($value): string
     {
         if ($value instanceof Carbon) {
@@ -141,13 +219,26 @@ class TransactionDateMutationService
         return Carbon::parse($value)->format('Y-m-d H:i:s');
     }
 
-    private function assertTransactionIsPostCutoff($waktu): void
+    private function assertTransactionFinalWaktuAllowed($waktu): void
     {
         $resolvedWaktu = $this->normalizeWaktu($waktu);
         $cutoff = (string) config('stock.cutoff_datetime', '2025-12-31 23:59:59');
 
         if ($resolvedWaktu <= $cutoff) {
             throw new \RuntimeException('Transaksi final tidak boleh disimpan pada atau sebelum cutoff baseline. Gunakan proses forensik terkontrol jika histori sebelum cutoff memang harus diubah.');
+        }
+
+        $this->assertTransactionNotFuture($resolvedWaktu);
+    }
+
+    private function assertTransactionNotFuture($waktu): void
+    {
+        $resolvedWaktu = $this->normalizeWaktu($waktu);
+        $maxFutureMinutes = max(0, (int) config('stock.max_future_transaction_minutes', 5));
+        $latestAllowed = Carbon::now()->addMinutes($maxFutureMinutes)->format('Y-m-d H:i:s');
+
+        if ($resolvedWaktu > $latestAllowed) {
+            throw new \RuntimeException('Transaksi final tidak boleh bertanggal di masa depan. Periksa jam perangkat yang dipakai input.');
         }
     }
 

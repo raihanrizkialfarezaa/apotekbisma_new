@@ -6,6 +6,7 @@ use App\Imports\ObatImport;
 use App\Models\Kategori;
 use App\Models\PembelianDetail;
 use App\Models\RekamanStok;
+use App\Exceptions\UnsafeStockMutationException;
 use Illuminate\Http\Request;
 use App\Models\Produk;
 use Barryvdh\DomPDF\Facade as PDF;
@@ -283,6 +284,13 @@ class ProdukController extends Controller
                 ], 422);
             }
 
+            $this->assertManualStockMutationAllowed(
+                $produk->id_produk,
+                $stok_lama_otoritatif,
+                $stok_baru,
+                trim((string) ($validated['keterangan_stok'] ?? ''))
+            );
+
             $produk->fill([
                 'nama_produk' => $validated['nama_produk'],
                 'id_kategori' => $validated['id_kategori'],
@@ -308,6 +316,12 @@ class ProdukController extends Controller
 
             DB::commit();
             return response()->json('Data berhasil disimpan', 200);
+
+        } catch (UnsafeStockMutationException $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 422);
             
         } catch (\Exception $e) {
             DB::rollBack();
@@ -369,11 +383,20 @@ class ProdukController extends Controller
             }
 
             $produk->stok = $stok_baru;
+            $keteranganRaw = trim((string) $request->keterangan);
+
+            $this->assertManualStockMutationAllowed(
+                $produk->id_produk,
+                $stok_lama_otoritatif,
+                $stok_baru,
+                $keteranganRaw
+            );
+
             $produk->save();
 
             $keteranganFinal = 'Stock Opname (Penyesuaian Stok Manual)';
-            if (!empty($request->keterangan)) {
-                $keteranganFinal = 'Stock Opname: ' . $request->keterangan;
+            if ($keteranganRaw !== '') {
+                $keteranganFinal = 'Stock Opname: ' . $keteranganRaw;
             }
 
             $this->createStockOpnameRecord($produk->id_produk, $stok_lama_otoritatif, $stok_baru, $keteranganFinal);
@@ -395,6 +418,13 @@ class ProdukController extends Controller
                     'selisih' => $selisih_stok
                 ]
             ], 200);
+        } catch (UnsafeStockMutationException $e) {
+            DB::rollBack();
+            Cache::forget($idempotencyKey);
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage(),
+            ], 422);
             
         } catch (\Exception $e) {
             DB::rollBack();
@@ -437,6 +467,66 @@ class ProdukController extends Controller
         }
 
         return intval($latestRekaman->stok_sisa);
+    }
+
+    private function assertManualStockMutationAllowed(int $idProduk, int $stokLama, int $stokBaru, string $keterangan): void
+    {
+        if ($stokBaru === $stokLama) {
+            return;
+        }
+
+        if (mb_strlen($keterangan) < 10) {
+            throw new UnsafeStockMutationException('Keterangan stock opname minimal 10 karakter agar jejak audit jelas dan tidak ambigu.');
+        }
+
+        $blockingDrafts = $this->findBlockingDraftTransactionsForProduct($idProduk);
+        if (!empty($blockingDrafts)) {
+            throw new UnsafeStockMutationException('Stock opname manual diblokir karena produk ini masih terlibat pada draft transaksi: ' . implode(', ', $blockingDrafts) . '. Selesaikan atau hapus draft tersebut terlebih dahulu.');
+        }
+    }
+
+    private function findBlockingDraftTransactionsForProduct(int $idProduk): array
+    {
+        $pembelianDrafts = DB::table('pembelian_detail as pd')
+            ->join('pembelian as p', 'pd.id_pembelian', '=', 'p.id_pembelian')
+            ->where('pd.id_produk', $idProduk)
+            ->where('pd.jumlah', '>', 0)
+            ->where(function ($query) {
+                $query->where('p.no_faktur', 'o')
+                    ->orWhere('p.no_faktur', '')
+                    ->orWhereNull('p.no_faktur')
+                    ->orWhere('p.total_harga', '<=', 0)
+                    ->orWhere('p.bayar', '<=', 0);
+            })
+            ->orderBy('p.id_pembelian')
+            ->distinct()
+            ->limit(3)
+            ->pluck('p.id_pembelian')
+            ->map(function ($draftId) {
+                return 'pembelian#' . intval($draftId);
+            })
+            ->all();
+
+        $penjualanDrafts = DB::table('penjualan_detail as pd')
+            ->join('penjualan as p', 'pd.id_penjualan', '=', 'p.id_penjualan')
+            ->where('pd.id_produk', $idProduk)
+            ->where('pd.jumlah', '>', 0)
+            ->where(function ($query) {
+                $query->where('p.total_item', '<=', 0)
+                    ->orWhere('p.total_harga', '<=', 0)
+                    ->orWhere('p.bayar', '<=', 0)
+                    ->orWhere('p.diterima', '<=', 0);
+            })
+            ->orderBy('p.id_penjualan')
+            ->distinct()
+            ->limit(3)
+            ->pluck('p.id_penjualan')
+            ->map(function ($draftId) {
+                return 'penjualan#' . intval($draftId);
+            })
+            ->all();
+
+        return array_values(array_unique(array_merge($pembelianDrafts, $penjualanDrafts)));
     }
 
     private function sinkronisasiStokProduk($produk, $keterangan = 'Update stok manual')

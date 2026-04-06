@@ -301,13 +301,13 @@
                             <div class="form-group row">
                                 <label for="waktu_datang" class="col-lg-2 control-label">Tanggal & Waktu Obat Datang</label>
                                 <div class="col-lg-8">
-                                    <input type="datetime-local" name="waktu_datang" id="waktu_datang" class="form-control waktu-datang" step="1" readonly>
+                                    <input type="datetime-local" name="waktu_datang" id="waktu_datang" class="form-control waktu-datang" step="1" value="{{ optional($pembelian->waktu_datang ?? $pembelian->waktu ?? $pembelian->created_at)->format('Y-m-d\TH:i:s') }}" readonly>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="waktu_faktur" class="col-lg-2 control-label">Tanggal & Waktu Faktur</label>
                                 <div class="col-lg-8">
-                                    <input type="datetime-local" name="waktu" id="waktu_faktur" class="form-control waktu-faktur" step="1">
+                                    <input type="datetime-local" name="waktu" id="waktu_faktur" class="form-control waktu-faktur" step="1" value="{{ optional($pembelian->waktu ?? $pembelian->created_at)->format('Y-m-d\TH:i:s') }}">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -391,17 +391,6 @@
     document.addEventListener('DOMContentLoaded', checkMobileView);
     window.addEventListener('resize', checkMobileView);
     
-    function formatDateTimeLocal(date) {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        const hour = String(date.getHours()).padStart(2, '0');
-        const minute = String(date.getMinutes()).padStart(2, '0');
-        const second = String(date.getSeconds()).padStart(2, '0');
-
-        return `${year}-${month}-${day}T${hour}:${minute}:${second}`;
-    }
-
     function syncWaktuDatangWithFaktur() {
         if (!waktuDatangInput || !waktuFakturInput) {
             return;
@@ -419,9 +408,6 @@
 
     const waktuDatangInput = document.querySelector('.waktu-datang');
     const waktuFakturInput = document.querySelector('.waktu-faktur');
-    if (waktuFakturInput && !waktuFakturInput.value) {
-        waktuFakturInput.value = formatDateTimeLocal(new Date());
-    }
     syncWaktuDatangWithFaktur();
     if (waktuFakturInput) {
         waktuFakturInput.addEventListener('input', syncWaktuDatangWithFaktur);

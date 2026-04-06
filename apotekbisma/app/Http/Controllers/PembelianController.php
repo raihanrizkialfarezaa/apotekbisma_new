@@ -327,6 +327,7 @@ class PembelianController extends Controller
                 $request->waktu,
                 $pembelian->waktu ?? $pembelian->created_at ?? Carbon::now()
             );
+            $this->assertFinalPembelianWaktuAllowed($resolvedInvoiceWaktu);
             $pembelian->waktu = $resolvedInvoiceWaktu;
             $pembelian->waktu_datang = $resolvedInvoiceWaktu;
             $pembelian->no_faktur = $request->nomor_faktur;
@@ -447,6 +448,7 @@ class PembelianController extends Controller
                     $request->waktu,
                     $pembelian->waktu ?? $pembelian->created_at ?? Carbon::now()
                 );
+                $this->assertFinalPembelianWaktuAllowed($resolvedInvoiceWaktu);
                 $pembelian->waktu = $resolvedInvoiceWaktu;
                 $pembelian->waktu_datang = $resolvedInvoiceWaktu;
             }
@@ -1161,6 +1163,21 @@ class PembelianController extends Controller
         }
 
         return Carbon::parse($raw)->format('Y-m-d H:i:s');
+    }
+
+    private function assertFinalPembelianWaktuAllowed(string $resolvedWaktu): void
+    {
+        $cutoff = (string) config('stock.cutoff_datetime', '2025-12-31 23:59:59');
+        if ($resolvedWaktu <= $cutoff) {
+            throw new \InvalidArgumentException('Tanggal faktur pembelian tidak boleh pada atau sebelum cutoff baseline 31-12-2025 23:59:59.');
+        }
+
+        $maxFutureMinutes = max(0, (int) config('stock.max_future_transaction_minutes', 5));
+        $latestAllowed = Carbon::now()->addMinutes($maxFutureMinutes)->format('Y-m-d H:i:s');
+
+        if ($resolvedWaktu > $latestAllowed) {
+            throw new \InvalidArgumentException('Tanggal faktur pembelian tidak boleh di masa depan. Periksa jam perangkat yang dipakai input.');
+        }
     }
 }
 

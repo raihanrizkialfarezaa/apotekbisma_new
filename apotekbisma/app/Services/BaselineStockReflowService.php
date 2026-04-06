@@ -34,6 +34,7 @@ class BaselineStockReflowService
                 'products_rebuilt' => 0,
                 'products_with_negative_event' => 0,
                 'negative_event_count' => 0,
+                'negative_event_product_ids' => [],
                 'cutoff' => config('stock.cutoff_datetime', '2025-12-31 23:59:59'),
                 'until' => $until ? Carbon::parse($until)->format('Y-m-d H:i:s') : Carbon::now()->format('Y-m-d H:i:s'),
                 'csv_delimiter' => $this->csvDelimiter,
@@ -64,6 +65,7 @@ class BaselineStockReflowService
         $plans = [];
         $totalNegativeEventCount = 0;
         $productsWithNegativeEvent = 0;
+        $negativeEventProductIds = [];
         $locks = $this->acquireProductLocks($normalizedProductIds);
 
         try {
@@ -118,6 +120,7 @@ class BaselineStockReflowService
                 if ($negativeEventCount > 0) {
                     $productsWithNegativeEvent++;
                     $totalNegativeEventCount += $negativeEventCount;
+                    $negativeEventProductIds[] = $productId;
                 }
 
                 $plans[] = [
@@ -162,6 +165,7 @@ class BaselineStockReflowService
             'cutoff' => $cutoff,
             'until' => $resolvedUntil,
             'csv_delimiter' => $baselineData['delimiter'] ?? $this->csvDelimiter,
+            'negative_event_product_ids' => array_values(array_unique($negativeEventProductIds)),
         ];
     }
 
@@ -362,7 +366,7 @@ class BaselineStockReflowService
     {
         $events = [];
 
-        $pembelianEvents = DB::table('pembelian_detail as pd')
+        $pembelianEventsQuery = DB::table('pembelian_detail as pd')
             ->join('pembelian as p', 'pd.id_pembelian', '=', 'p.id_pembelian')
             ->where('pd.id_produk', $productId)
             ->where('pd.jumlah', '>', 0)
@@ -371,6 +375,11 @@ class BaselineStockReflowService
             ->whereRaw('COALESCE(p.waktu_datang, p.waktu, p.created_at) <= ?', [$until])
             ->groupBy('pd.id_pembelian', DB::raw('COALESCE(p.waktu_datang, p.waktu, p.created_at)'))
             ->selectRaw('pd.id_pembelian as ref_id, COALESCE(p.waktu_datang, p.waktu, p.created_at) as waktu_event, SUM(pd.jumlah) as qty, MAX(pd.id_pembelian_detail) as sort_key, MAX(p.no_faktur) as no_faktur')
+            ->selectRaw('MAX(p.total_harga) as total_harga, MAX(p.bayar) as bayar');
+
+        $this->applyFinalizedPembelianConstraints($pembelianEventsQuery, 'p');
+
+        $pembelianEvents = $pembelianEventsQuery
             ->get();
 
         foreach ($pembelianEvents as $row) {
@@ -386,7 +395,7 @@ class BaselineStockReflowService
             ];
         }
 
-        $penjualanEvents = DB::table('penjualan_detail as pd')
+        $penjualanEventsQuery = DB::table('penjualan_detail as pd')
             ->join('penjualan as p', 'pd.id_penjualan', '=', 'p.id_penjualan')
             ->where('pd.id_produk', $productId)
             ->where('pd.jumlah', '>', 0)
@@ -395,6 +404,11 @@ class BaselineStockReflowService
             ->whereRaw('COALESCE(p.waktu, p.created_at) <= ?', [$until])
             ->groupBy('pd.id_penjualan', DB::raw('COALESCE(p.waktu, p.created_at)'))
             ->selectRaw('pd.id_penjualan as ref_id, COALESCE(p.waktu, p.created_at) as waktu_event, SUM(pd.jumlah) as qty, MAX(pd.id_penjualan_detail) as sort_key')
+            ->selectRaw('MAX(p.total_item) as total_item, MAX(p.total_harga) as total_harga, MAX(p.bayar) as bayar, MAX(p.diterima) as diterima');
+
+        $this->applyFinalizedPenjualanConstraints($penjualanEventsQuery, 'p');
+
+        $penjualanEvents = $penjualanEventsQuery
             ->get();
 
         foreach ($penjualanEvents as $row) {
@@ -476,5 +490,24 @@ class BaselineStockReflowService
         }
 
         return false;
+    }
+
+    private function applyFinalizedPembelianConstraints($query, string $alias): void
+    {
+        $query
+            ->whereNotNull($alias . '.no_faktur')
+            ->whereRaw('TRIM(' . $alias . '.no_faktur) != ?', [''])
+            ->whereRaw('LOWER(TRIM(' . $alias . '.no_faktur)) != ?', ['o'])
+            ->where($alias . '.total_harga', '>', 0)
+            ->where($alias . '.bayar', '>', 0);
+    }
+
+    private function applyFinalizedPenjualanConstraints($query, string $alias): void
+    {
+        $query
+            ->where($alias . '.total_item', '>', 0)
+            ->where($alias . '.total_harga', '>', 0)
+            ->where($alias . '.bayar', '>', 0)
+            ->where($alias . '.diterima', '>', 0);
     }
 }

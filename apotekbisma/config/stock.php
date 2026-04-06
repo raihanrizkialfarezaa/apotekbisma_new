@@ -6,6 +6,7 @@ return [
     'enable_destructive_rebuild_tools' => (bool) env('ENABLE_DESTRUCTIVE_STOCK_TOOLS', false),
     'enable_legacy_sync_command' => (bool) env('ENABLE_LEGACY_STOCK_SYNC', false),
     'stale_draft_minutes' => (int) env('STOCK_STALE_DRAFT_MINUTES', 30),
+    'max_future_transaction_minutes' => (int) env('STOCK_MAX_FUTURE_TRANSACTION_MINUTES', 5),
     'excluded_manual_keterangan_patterns' => [
         'cutoff 31 desember 2025',
         'baseline_opname_31des2025',
