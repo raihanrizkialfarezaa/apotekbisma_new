@@ -1,0 +1,39 @@
+{
+    "generated_at": "2026-04-08 23:25:48",
+    "mode": "APPLY",
+    "threshold": "2026-04-08 23:30:48",
+    "summary": {
+        "future_transactions": 3,
+        "future_penjualan": 3,
+        "future_pembelian": 0,
+        "strategy": "after_latest_safe",
+        "target_start": "2026-04-08 20:26:18",
+        "target_end": "2026-04-08 20:26:20"
+    },
+    "preview": [
+        {
+            "type": "penjualan",
+            "id": 1455,
+            "reference": "penjualan#1455",
+            "old_waktu": "2026-04-09 01:14:29",
+            "minutes_ahead": 103,
+            "new_waktu": "2026-04-08 20:26:18"
+        },
+        {
+            "type": "penjualan",
+            "id": 1456,
+            "reference": "penjualan#1456",
+            "old_waktu": "2026-04-09 02:31:29",
+            "minutes_ahead": 180,
+            "new_waktu": "2026-04-08 20:26:19"
+        },
+        {
+            "type": "penjualan",
+            "id": 1457,
+            "reference": "penjualan#1457",
+            "old_waktu": "2026-04-09 03:10:35",
+            "minutes_ahead": 219,
+            "new_waktu": "2026-04-08 20:26:20"
+        }
+    ]
+}

@@ -191,7 +191,7 @@ class StockDraftCleanupService
                 $summary['deleted_headers']++;
 
                 if (!empty($groupedDetails)) {
-                    $this->stockRuntimeIntegrityService->assertLatestStockConsistency(
+                    $this->stockRuntimeIntegrityService->assertDraftStockConsistency(
                         array_keys($groupedDetails),
                         'cleanup draft penjualan #' . $draftId
                     );

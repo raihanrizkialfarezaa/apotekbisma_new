@@ -6,6 +6,7 @@ use App\Models\Pembelian;
 use App\Models\Penjualan;
 use App\Services\BaselineStockReflowService;
 use App\Services\StockRuntimeIntegrityService;
+use App\Services\TransactionLogicalClockService;
 use App\Exceptions\UnsafeStockMutationException;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -15,14 +16,17 @@ class TransactionDateMutationService
 {
     private BaselineStockReflowService $baselineStockReflowService;
     private StockRuntimeIntegrityService $stockRuntimeIntegrityService;
+    private TransactionLogicalClockService $transactionLogicalClockService;
 
     public function __construct(
         BaselineStockReflowService $baselineStockReflowService,
-        StockRuntimeIntegrityService $stockRuntimeIntegrityService
+        StockRuntimeIntegrityService $stockRuntimeIntegrityService,
+        TransactionLogicalClockService $transactionLogicalClockService
     )
     {
         $this->baselineStockReflowService = $baselineStockReflowService;
         $this->stockRuntimeIntegrityService = $stockRuntimeIntegrityService;
+        $this->transactionLogicalClockService = $transactionLogicalClockService;
     }
 
     public function handlePembelianFinalDateChange(Pembelian $pembelian, $oldWaktu, $newWaktu): array
@@ -61,7 +65,7 @@ class TransactionDateMutationService
             $this->getPembelianProductIds($pembelian),
             'sinkronisasi pembelian final ' . (string) ($pembelian->no_faktur ?? ('#' . $pembelian->id_pembelian)),
             false,
-            Carbon::now()->format('Y-m-d H:i:s')
+            $this->transactionLogicalClockService->now()->format('Y-m-d H:i:s')
         );
     }
 
@@ -73,7 +77,7 @@ class TransactionDateMutationService
             $this->getPenjualanProductIds($penjualan),
             'finalisasi penjualan #' . $penjualan->id_penjualan,
             true,
-            Carbon::now()->format('Y-m-d H:i:s')
+            $this->transactionLogicalClockService->now()->format('Y-m-d H:i:s')
         );
     }
 
@@ -101,7 +105,7 @@ class TransactionDateMutationService
             $productIds,
             'perubahan waktu ' . $referenceLabel,
             false,
-            Carbon::now()->format('Y-m-d H:i:s')
+            $this->transactionLogicalClockService->now()->format('Y-m-d H:i:s')
         );
         $this->assertNoNegativeHistoricalStock(
             $transactionType,
@@ -250,7 +254,10 @@ class TransactionDateMutationService
     {
         $resolvedWaktu = $this->normalizeWaktu($waktu);
         $maxFutureMinutes = max(0, (int) config('stock.max_future_transaction_minutes', 5));
-        $latestAllowed = Carbon::now()->addMinutes($maxFutureMinutes)->format('Y-m-d H:i:s');
+        $latestAllowed = $this->transactionLogicalClockService
+            ->now()
+            ->addMinutes($maxFutureMinutes)
+            ->format('Y-m-d H:i:s');
 
         if ($resolvedWaktu > $latestAllowed) {
             throw new \RuntimeException('Transaksi final tidak boleh bertanggal di masa depan. Periksa jam perangkat yang dipakai input.');

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use App\Services\PembelianBatchService;
 use App\Services\PembelianStockSyncService;
 use App\Services\StockDraftCleanupService;
+use App\Services\TransactionLogicalClockService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
@@ -761,12 +762,12 @@ class PembelianDetailController extends Controller
         $shouldSave = false;
 
         if (!$pembelian->waktu) {
-            $pembelian->waktu = $pembelian->created_at ?? Carbon::now();
+            $pembelian->waktu = $pembelian->created_at ?? app(TransactionLogicalClockService::class)->now();
             $shouldSave = true;
         }
 
         if (!$pembelian->waktu_datang) {
-            $pembelian->waktu_datang = $pembelian->created_at ?? $pembelian->waktu ?? Carbon::now();
+            $pembelian->waktu_datang = $pembelian->created_at ?? $pembelian->waktu ?? app(TransactionLogicalClockService::class)->now();
             $shouldSave = true;
         }
 
@@ -778,13 +779,13 @@ class PembelianDetailController extends Controller
     private function resolvePembelianStockWaktu($pembelian): string
     {
         if (!$pembelian) {
-            return Carbon::now()->format('Y-m-d H:i:s');
+            return app(TransactionLogicalClockService::class)->now()->format('Y-m-d H:i:s');
         }
 
         $candidate = $pembelian->waktu_datang
             ?? $pembelian->waktu
             ?? $pembelian->created_at
-            ?? Carbon::now();
+            ?? app(TransactionLogicalClockService::class)->now();
 
         return Carbon::parse($candidate)->format('Y-m-d H:i:s');
     }

@@ -1,0 +1,14 @@
+{
+    "generated_at": "2026-04-08 23:28:32",
+    "mode": "DRY_RUN",
+    "threshold": "2026-04-08 23:33:32",
+    "summary": {
+        "future_transactions": 0,
+        "future_penjualan": 0,
+        "future_pembelian": 0,
+        "strategy": "none",
+        "target_start": null,
+        "target_end": null
+    },
+    "preview": []
+}

@@ -17,6 +17,7 @@ use Carbon\Carbon;
 use App\Services\StockDraftCleanupService;
 use App\Services\StockRuntimeIntegrityService;
 use App\Services\TransactionDateMutationService;
+use App\Services\TransactionLogicalClockService;
 
 class PenjualanController extends Controller
 {
@@ -245,6 +246,7 @@ class PenjualanController extends Controller
     {
         $currentDraftId = session('id_penjualan');
         app(StockDraftCleanupService::class)->cleanupStalePenjualanDrafts($currentDraftId ? intval($currentDraftId) : null);
+        $defaultTransactionWaktu = app(TransactionLogicalClockService::class)->now();
 
         session()->forget('penjualan_edit_mode');
         session()->forget('penjualan_edit_snapshot');
@@ -264,7 +266,7 @@ class PenjualanController extends Controller
         $memberSelected = new Member();
         $isEditTransaction = false;
 
-        return view('penjualan_detail.index', compact('produk', 'member', 'diskon', 'id_penjualan', 'penjualan', 'memberSelected', 'isEditTransaction'));
+        return view('penjualan_detail.index', compact('produk', 'member', 'diskon', 'id_penjualan', 'penjualan', 'memberSelected', 'isEditTransaction', 'defaultTransactionWaktu'));
     }
 
     public function createOrContinue()
@@ -277,8 +279,9 @@ class PenjualanController extends Controller
                 $diskon = Setting::first()->diskon ?? 0;
                 $memberSelected = $penjualan->member ?? new Member();
                 $isEditTransaction = (bool) session('penjualan_edit_mode', false);
+                $defaultTransactionWaktu = app(TransactionLogicalClockService::class)->now();
 
-                return view('penjualan_detail.index', compact('produk', 'member', 'diskon', 'id_penjualan', 'penjualan', 'memberSelected', 'isEditTransaction'));
+                return view('penjualan_detail.index', compact('produk', 'member', 'diskon', 'id_penjualan', 'penjualan', 'memberSelected', 'isEditTransaction', 'defaultTransactionWaktu'));
             } else {
                 // ID penjualan di session tidak valid, bersihkan session
                 session()->forget('id_penjualan');
@@ -1031,7 +1034,9 @@ class PenjualanController extends Controller
             throw new \InvalidArgumentException('Tanggal transaksi harus diisi');
         }
 
-        $fallbackCarbon = $fallback ? Carbon::parse($fallback) : Carbon::now();
+        $fallbackCarbon = $fallback
+            ? Carbon::parse($fallback)
+            : app(TransactionLogicalClockService::class)->now();
 
         if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $raw)) {
             return Carbon::createFromFormat('Y-m-d', $raw)
@@ -1062,7 +1067,10 @@ class PenjualanController extends Controller
         }
 
         $maxFutureMinutes = max(0, (int) config('stock.max_future_transaction_minutes', 5));
-        $latestAllowed = Carbon::now()->addMinutes($maxFutureMinutes)->format('Y-m-d H:i:s');
+        $latestAllowed = app(TransactionLogicalClockService::class)
+            ->now()
+            ->addMinutes($maxFutureMinutes)
+            ->format('Y-m-d H:i:s');
 
         if ($resolvedWaktu > $latestAllowed) {
             throw new \InvalidArgumentException('Tanggal transaksi penjualan tidak boleh di masa depan. Periksa jam perangkat yang dipakai input.');

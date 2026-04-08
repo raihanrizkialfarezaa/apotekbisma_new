@@ -268,7 +268,7 @@
                             <div class="form-group row">
                                 <label for="waktu_transaksi" class="col-lg-2 control-label">Tanggal & Waktu Transaksi</label>
                                 <div class="col-lg-8">
-                                    <input type="datetime-local" id="waktu_transaksi" class="form-control waktu" name="waktu" step="1" value="{{ isset($penjualan->waktu) && $penjualan->waktu ? \Carbon\Carbon::parse($penjualan->waktu)->format('Y-m-d\TH:i:s') : now()->format('Y-m-d\TH:i:s') }}">
+                                    <input type="datetime-local" id="waktu_transaksi" class="form-control waktu" name="waktu" step="1" data-default-value="{{ isset($penjualan->waktu) && $penjualan->waktu ? \Carbon\Carbon::parse($penjualan->waktu)->format('Y-m-d\TH:i:s') : $defaultTransactionWaktu->format('Y-m-d\TH:i:s') }}" value="{{ isset($penjualan->waktu) && $penjualan->waktu ? \Carbon\Carbon::parse($penjualan->waktu)->format('Y-m-d\TH:i:s') : $defaultTransactionWaktu->format('Y-m-d\TH:i:s') }}">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -372,14 +372,7 @@
             const waktuInput = document.getElementById('waktu_transaksi');
             if (waktuInput) {
                 if (!waktuInput.value || waktuInput.value === '') {
-                    const now = new Date();
-                    const nowString = now.getFullYear() + '-' + 
-                        String(now.getMonth() + 1).padStart(2, '0') + '-' + 
-                        String(now.getDate()).padStart(2, '0') + 'T' +
-                        String(now.getHours()).padStart(2, '0') + ':' +
-                        String(now.getMinutes()).padStart(2, '0') + ':' +
-                        String(now.getSeconds()).padStart(2, '0');
-                    waktuInput.value = nowString;
+                    waktuInput.value = waktuInput.getAttribute('data-default-value') || waktuInput.defaultValue || '';
                 }
             }
         }
@@ -844,11 +837,7 @@
             // Pastikan tanggal terisi sebelum submit
             const waktuInput = document.getElementById('waktu_transaksi');
             if (waktuInput && (!waktuInput.value || waktuInput.value === '')) {
-                const today = new Date();
-                const todayString = today.getFullYear() + '-' + 
-                    String(today.getMonth() + 1).padStart(2, '0') + '-' + 
-                    String(today.getDate()).padStart(2, '0');
-                waktuInput.value = todayString;
+                waktuInput.value = waktuInput.getAttribute('data-default-value') || waktuInput.defaultValue || '';
             }
             
             // Validasi apakah ada item di transaksi
@@ -917,11 +906,7 @@
         // Pastikan tanggal terisi sebelum menambah produk
         const waktuInput = document.getElementById('waktu_transaksi');
         if (waktuInput && (!waktuInput.value || waktuInput.value === '')) {
-            const today = new Date();
-            const todayString = today.getFullYear() + '-' + 
-                String(today.getMonth() + 1).padStart(2, '0') + '-' + 
-                String(today.getDate()).padStart(2, '0');
-            waktuInput.value = todayString;
+            waktuInput.value = waktuInput.getAttribute('data-default-value') || waktuInput.defaultValue || '';
         }
         
         $.post('{{ route('transaksi.store') }}', $('.form-produk').serialize())

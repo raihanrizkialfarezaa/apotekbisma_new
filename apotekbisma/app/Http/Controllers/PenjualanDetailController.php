@@ -9,6 +9,7 @@ use App\Models\Produk;
 use App\Models\RekamanStok;
 use App\Models\Setting;
 use App\Services\StockRuntimeIntegrityService;
+use App\Services\TransactionLogicalClockService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -28,12 +29,13 @@ class PenjualanDetailController extends Controller
         $produk = Produk::orderBy('nama_produk')->get();
         $member = Member::orderBy('nama')->get();
         $diskon = Setting::first()->diskon ?? 0;
+        $defaultTransactionWaktu = app(TransactionLogicalClockService::class)->now();
 
         if ($id_penjualan = session('id_penjualan')) {
             $penjualan = Penjualan::find($id_penjualan);
             $memberSelected = $penjualan->member ?? new Member();
 
-            return view('penjualan_detail.detail', compact('produk', 'member', 'diskon', 'id_penjualan', 'penjualan', 'memberSelected'));
+            return view('penjualan_detail.detail', compact('produk', 'member', 'diskon', 'id_penjualan', 'penjualan', 'memberSelected', 'defaultTransactionWaktu'));
         } else {
             if (auth()->user()->level == 1) {
                 return redirect()->route('transaksi.baru');
@@ -148,7 +150,7 @@ class PenjualanDetailController extends Controller
                 $penjualan->diskon = 0;
                 $penjualan->bayar = 0;
                 $penjualan->diterima = 0;
-                $penjualan->waktu = Carbon::now();
+                $penjualan->waktu = app(TransactionLogicalClockService::class)->now();
                 $penjualan->id_user = auth()->id();
                 $penjualan->save();
 
@@ -198,7 +200,7 @@ class PenjualanDetailController extends Controller
                 $stok_baru = $stok_sebelum - $jumlah_tambahan;
                 $rekamanWaktu = $penjualan && $penjualan->waktu
                     ? Carbon::parse($penjualan->waktu)->format('Y-m-d H:i:s')
-                    : Carbon::now()->format('Y-m-d H:i:s');
+                    : app(TransactionLogicalClockService::class)->now()->format('Y-m-d H:i:s');
                 
                 DB::table('rekaman_stoks')->insert([
                     'id_produk' => $produk->id_produk,
@@ -221,12 +223,12 @@ class PenjualanDetailController extends Controller
             }
             
             DB::table('produk')->where('id_produk', $produk->id_produk)->update(['stok' => $stok_baru]);
+
+            $this->syncAffectedProdukHistory([$produk->id_produk ?? null]);
             
             DB::commit();
             
             Cache::forget($idempotencyKey);
-
-            $this->syncAffectedProdukHistory([$produk->id_produk ?? null]);
             
             return response()->json([
                 'success' => true,
@@ -322,7 +324,9 @@ class PenjualanDetailController extends Controller
                 ->sum('jumlah');
 
             $penjualan = Penjualan::find($detail->id_penjualan);
-            $waktu_transaksi = $penjualan && $penjualan->waktu ? $penjualan->waktu : Carbon::now();
+            $waktu_transaksi = $penjualan && $penjualan->waktu
+                ? $penjualan->waktu
+                : app(TransactionLogicalClockService::class)->now();
             
             $existingRekaman = DB::table('rekaman_stoks')
                                  ->where('id_penjualan', $detail->id_penjualan)
@@ -359,11 +363,11 @@ class PenjualanDetailController extends Controller
                 ]);
             }
             
+            $this->syncAffectedProdukHistory([$produk->id_produk ?? null]);
+
             DB::commit();
             
             Cache::forget($idempotencyKey);
-
-            $this->syncAffectedProdukHistory([$produk->id_produk ?? null]);
             
             return response()->json([
                 'message' => 'Jumlah berhasil diperbarui. Stok tersisa: ' . $stok_baru,
@@ -468,11 +472,11 @@ class PenjualanDetailController extends Controller
                      DB::table('penjualan_detail')->where('id_penjualan_detail', $id)->delete();
                 }
                 
+                $this->syncAffectedProdukHistory([$produkId ?? null]);
+
                 DB::commit();
                 
                 Cache::forget($idempotencyKey);
-
-                $this->syncAffectedProdukHistory([$produkId ?? null]);
             } else {
                 DB::commit();
                 Cache::forget($idempotencyKey);
@@ -547,7 +551,7 @@ class PenjualanDetailController extends Controller
     private function ensurePenjualanHasWaktu($penjualan)
     {
         if (!$penjualan->waktu) {
-            $penjualan->waktu = $penjualan->created_at ?? Carbon::now();
+            $penjualan->waktu = $penjualan->created_at ?? app(TransactionLogicalClockService::class)->now();
             $penjualan->save();
         }
     }
@@ -566,7 +570,7 @@ class PenjualanDetailController extends Controller
         // Draft flows already adjust produk.stok atomically. Recalculation across full history
         // can overwrite correct draft stock with corrupted legacy chain results.
         // Finalized transaction synchronization remains handled in PenjualanController::store().
-        app(StockRuntimeIntegrityService::class)->assertLatestStockConsistency(
+        app(StockRuntimeIntegrityService::class)->assertDraftStockConsistency(
             $normalizedIds,
             'sinkronisasi draft penjualan'
         );

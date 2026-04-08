@@ -1,0 +1,37 @@
+{
+    "generated_at": "2026-04-08 23:24:34",
+    "mode": "DRY_RUN",
+    "threshold": "2026-04-08 23:29:34",
+    "summary": {
+        "future_transactions": 3,
+        "future_penjualan": 3,
+        "future_pembelian": 0,
+        "shift_seconds": 13560
+    },
+    "preview": [
+        {
+            "type": "penjualan",
+            "id": 1455,
+            "reference": "penjualan#1455",
+            "old_waktu": "2026-04-09 01:14:29",
+            "new_waktu": "2026-04-08 21:28:29",
+            "minutes_ahead": 104
+        },
+        {
+            "type": "penjualan",
+            "id": 1456,
+            "reference": "penjualan#1456",
+            "old_waktu": "2026-04-09 02:31:29",
+            "new_waktu": "2026-04-08 22:45:29",
+            "minutes_ahead": 181
+        },
+        {
+            "type": "penjualan",
+            "id": 1457,
+            "reference": "penjualan#1457",
+            "old_waktu": "2026-04-09 03:10:35",
+            "new_waktu": "2026-04-08 23:24:35",
+            "minutes_ahead": 221
+        }
+    ]
+}

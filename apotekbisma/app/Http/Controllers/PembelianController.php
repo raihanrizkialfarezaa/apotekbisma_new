@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Log;
 use App\Services\PembelianStockSyncService;
 use App\Services\StockDraftCleanupService;
 use App\Services\TransactionDateMutationService;
+use App\Services\TransactionLogicalClockService;
 
 class PembelianController extends Controller
 {
@@ -233,13 +234,14 @@ class PembelianController extends Controller
             
             // Hanya buat record baru jika supplier dipilih untuk transaksi baru
             $pembelian = new Pembelian();
+            $logicalNow = app(TransactionLogicalClockService::class)->now();
             $pembelian->id_supplier = $id;
             $pembelian->total_item  = 0;
             $pembelian->total_harga = 0;
             $pembelian->diskon      = 0;
             $pembelian->bayar       = 0;
-            $pembelian->waktu       = Carbon::now();
-            $pembelian->waktu_datang = Carbon::now();
+            $pembelian->waktu       = $logicalNow;
+            $pembelian->waktu_datang = $logicalNow;
             $pembelian->no_faktur   = 'o'; // Temporary value to indicate incomplete transaction
             $pembelian->save();
 
@@ -1155,7 +1157,9 @@ class PembelianController extends Controller
             throw new \InvalidArgumentException('Tanggal faktur harus diisi');
         }
 
-        $fallbackCarbon = $fallback ? Carbon::parse($fallback) : Carbon::now();
+        $fallbackCarbon = $fallback
+            ? Carbon::parse($fallback)
+            : app(TransactionLogicalClockService::class)->now();
 
         if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $raw)) {
             return Carbon::createFromFormat('Y-m-d', $raw)
@@ -1186,7 +1190,10 @@ class PembelianController extends Controller
         }
 
         $maxFutureMinutes = max(0, (int) config('stock.max_future_transaction_minutes', 5));
-        $latestAllowed = Carbon::now()->addMinutes($maxFutureMinutes)->format('Y-m-d H:i:s');
+        $latestAllowed = app(TransactionLogicalClockService::class)
+            ->now()
+            ->addMinutes($maxFutureMinutes)
+            ->format('Y-m-d H:i:s');
 
         if ($resolvedWaktu > $latestAllowed) {
             throw new \InvalidArgumentException('Tanggal faktur pembelian tidak boleh di masa depan. Periksa jam perangkat yang dipakai input.');
