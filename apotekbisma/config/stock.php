@@ -30,4 +30,11 @@ return [
             ],
         ],
     ],
+    'purchase_source_raw_name_overrides' => [
+        [
+            'raw_name' => 'Koolfever Adult/Lbr',
+            'id_produk' => 548,
+            'reason' => 'Supplier source files label Koolfever Adult/Lbr with anak product id 412; normalize all such source rows to KOOL FEVER DEWASA (#548).',
+        ],
+    ],
 ];

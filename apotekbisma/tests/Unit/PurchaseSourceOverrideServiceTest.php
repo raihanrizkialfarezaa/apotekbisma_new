@@ -38,4 +38,22 @@ class PurchaseSourceOverrideServiceTest extends TestCase
         $this->assertSame(100, intval($detail['jumlah']));
         $this->assertArrayNotHasKey('_source_override_reason', $detail);
     }
+
+    public function test_applies_global_raw_name_override_for_koolfever_dewasa(): void
+    {
+        $service = new PurchaseSourceOverrideService();
+
+        $detail = $service->applyDetailOverride('JM1-2602-02924', [
+            'id_produk' => 412,
+            'nama_produk' => 'Koolfever Adult/Lbr',
+            'jumlah' => 12,
+        ]);
+
+        $this->assertSame(548, intval($detail['id_produk']));
+        $this->assertSame('Koolfever Adult/Lbr', $detail['nama_produk']);
+        $this->assertSame(
+            'Supplier source files label Koolfever Adult/Lbr with anak product id 412; normalize all such source rows to KOOL FEVER DEWASA (#548).',
+            $detail['_source_override_reason'] ?? null
+        );
+    }
 }

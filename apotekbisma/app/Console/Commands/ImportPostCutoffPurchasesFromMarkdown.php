@@ -1282,15 +1282,7 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
                 $productName = trim((string) ($row['nama_produk_raw'] ?? ''));
                 $productInputId = (int) ($row['id_produk_input'] ?? 0);
 
-                if ($productInputId > 0 && isset($this->productById[$productInputId])) {
-                    $productMapping = [
-                        'ok' => true,
-                        'id_produk' => $productInputId,
-                        'nama_produk' => (string) $this->productById[$productInputId]['nama_produk'],
-                    ];
-                } else {
-                    $productMapping = $this->resolveProduct($productName);
-                }
+                $productMapping = $this->resolveProductFromInputOrName($productName, $productInputId);
 
                 if (!$productMapping['ok']) {
                     $rowIssues[] = [
@@ -2225,6 +2217,8 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
                 continue;
             }
 
+            $token = $this->normalizeProductVariantToken($token);
+
             if (in_array($token, $drop, true)) {
                 continue;
             }
@@ -2241,6 +2235,7 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
             $tokens[] = $token;
         }
 
+        $tokens = $this->augmentCompoundProductTokens($tokens);
         $tokens = array_values(array_unique($tokens));
         sort($tokens);
 
@@ -2862,6 +2857,15 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
 
         $value = preg_replace('/\s+/', ' ', $value);
 
+        $tokens = preg_split('/\s+/u', trim((string) $value)) ?: [];
+        $tokens = array_values(array_filter(array_map(function ($token) {
+            return $this->normalizeProductVariantToken((string) $token);
+        }, $tokens), function ($token) {
+            return $token !== '';
+        }));
+
+        $value = implode(' ', $tokens);
+
         return trim((string) $value);
     }
 
@@ -2887,6 +2891,7 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
                 continue;
             }
             $token = trim((string) $token);
+            $token = $this->normalizeProductVariantToken($token);
             if ($token === '' || in_array($token, $stopWords, true)) {
                 continue;
             }
@@ -2898,10 +2903,122 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
             $result[] = $token;
         }
 
+        $result = $this->augmentCompoundProductTokens($result);
         $result = array_values(array_unique($result));
         sort($result);
 
         return $result;
+    }
+
+    private function normalizeProductVariantToken(string $token): string
+    {
+        $value = trim(mb_strtolower($token));
+        if ($value === '') {
+            return '';
+        }
+
+        return match ($value) {
+            'dewasa', 'adult' => 'adult',
+            'anak', 'kid', 'kids', 'child', 'children' => 'anak',
+            'baby' => 'baby',
+            'jrg', 'junior' => 'junior',
+            default => $value,
+        };
+    }
+
+    private function resolveProductFromInputOrName(string $productName, int $productInputId): array
+    {
+        $trustedInputMapping = $this->resolveTrustedInputProductMapping($productName, $productInputId);
+        if ($trustedInputMapping !== null) {
+            return [
+                'ok' => true,
+                'id_produk' => $trustedInputMapping['id_produk'],
+                'nama_produk' => $trustedInputMapping['nama_produk'],
+            ];
+        }
+
+        return $this->resolveProduct($productName);
+    }
+
+    private function resolveTrustedInputProductMapping(string $productName, int $productInputId): ?array
+    {
+        if ($productInputId <= 0 || !isset($this->productById[$productInputId])) {
+            return null;
+        }
+
+        $row = $this->productById[$productInputId];
+        if ($productName === '') {
+            return [
+                'id_produk' => (int) $row['id_produk'],
+                'nama_produk' => (string) $row['nama_produk'],
+            ];
+        }
+
+        if (!$this->passesProductIdentitySafetyGuard($productName, $row)) {
+            return null;
+        }
+
+        $filteredRows = $this->preferFilteredRows(
+            [$row],
+            $this->extractMeasureTokens($productName),
+            $this->extractPackCountTokens($productName)
+        );
+
+        if (count($filteredRows) !== 1) {
+            return null;
+        }
+
+        return [
+            'id_produk' => (int) $filteredRows[0]['id_produk'],
+            'nama_produk' => (string) $filteredRows[0]['nama_produk'],
+        ];
+    }
+
+    private function augmentCompoundProductTokens(array $tokens): array
+    {
+        $baseTokens = array_values(array_filter(array_map(function ($token) {
+            return trim((string) $token);
+        }, $tokens), function ($token) {
+            return $token !== '';
+        }));
+
+        if (count($baseTokens) < 2) {
+            return $baseTokens;
+        }
+
+        $augmented = $baseTokens;
+        $count = count($baseTokens);
+
+        for ($index = 0; $index < ($count - 1); $index++) {
+            $left = $baseTokens[$index];
+            $right = $baseTokens[$index + 1];
+
+            if ($this->isVariantProductToken($left) || $this->isVariantProductToken($right)) {
+                continue;
+            }
+
+            if (preg_match('/^[0-9]+$/', $left) || preg_match('/^[0-9]+$/', $right)) {
+                continue;
+            }
+
+            if (mb_strlen($left) < 3 || mb_strlen($right) < 3) {
+                continue;
+            }
+
+            $compound = $this->normalizeAggressiveToken($left . $right);
+            if ($compound === '' || mb_strlen($compound) < 5) {
+                continue;
+            }
+
+            $augmented[] = $compound;
+        }
+
+        return array_values(array_unique($augmented));
+    }
+
+    private function isVariantProductToken(string $token): bool
+    {
+        return in_array($token, ['adult', 'anak', 'baby', 'junior'], true);
     }
 
     private function buildTokenKey(array $tokens): string

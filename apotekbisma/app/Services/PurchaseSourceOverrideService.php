@@ -7,29 +7,55 @@ class PurchaseSourceOverrideService
     public function applyDetailOverride(string $invoiceNo, array $detail): array
     {
         $invoiceOverrides = config('stock.purchase_source_overrides.' . $this->normalizeInvoiceNo($invoiceNo), []);
-        if (empty($invoiceOverrides)) {
+        if (!empty($invoiceOverrides)) {
+            $productId = intval($detail['id_produk'] ?? 0);
+            $rawName = trim((string) ($detail['nama_produk'] ?? ''));
+
+            foreach ($invoiceOverrides as $override) {
+                if (!$this->matchesOverride($override, $productId, $rawName)) {
+                    continue;
+                }
+
+                return $this->applyOverrideFields($detail, $override);
+            }
+        }
+
+        return $this->applyRawNameOverride($detail);
+    }
+
+    private function applyRawNameOverride(array $detail): array
+    {
+        $rawName = trim((string) ($detail['nama_produk'] ?? ''));
+        if ($rawName === '') {
             return $detail;
         }
 
-        $productId = intval($detail['id_produk'] ?? 0);
-        $rawName = trim((string) ($detail['nama_produk'] ?? ''));
-
-        foreach ($invoiceOverrides as $override) {
-            if (!$this->matchesOverride($override, $productId, $rawName)) {
+        foreach ((array) config('stock.purchase_source_raw_name_overrides', []) as $override) {
+            $overrideRawName = trim((string) ($override['raw_name'] ?? ''));
+            if ($overrideRawName === '') {
                 continue;
             }
 
-            foreach (['id_produk', 'nama_produk', 'jumlah', 'harga_beli', 'subtotal'] as $field) {
-                if (array_key_exists($field, $override)) {
-                    $detail[$field] = $override[$field];
-                }
+            if ($this->normalizeProductName($overrideRawName) !== $this->normalizeProductName($rawName)) {
+                continue;
             }
 
-            if (!empty($override['reason'])) {
-                $detail['_source_override_reason'] = (string) $override['reason'];
-            }
+            return $this->applyOverrideFields($detail, $override);
+        }
 
-            return $detail;
+        return $detail;
+    }
+
+    private function applyOverrideFields(array $detail, array $override): array
+    {
+        foreach (['id_produk', 'nama_produk', 'jumlah', 'harga_beli', 'subtotal'] as $field) {
+            if (array_key_exists($field, $override)) {
+                $detail[$field] = $override[$field];
+            }
+        }
+
+        if (!empty($override['reason'])) {
+            $detail['_source_override_reason'] = (string) $override['reason'];
         }
 
         return $detail;
