@@ -73,6 +73,22 @@ class StockRuntimeIntegrityServiceTest extends TestCase
         }
     }
 
+    public function test_reconcile_draft_stock_consistency_updates_master_stock_to_expected_value(): void
+    {
+        $this->seedDraftPenjualanScenario(950);
+
+        $service = $this->makeService();
+
+        $reconciled = $service->reconcileDraftStockConsistency([161]);
+
+        $this->assertCount(1, $reconciled);
+        $this->assertSame(950, $reconciled[0]['previous_stock']);
+        $this->assertSame(930, $reconciled[0]['expected_stock']);
+        $this->assertSame(930, intval(DB::table('produk')->where('id_produk', 161)->value('stok')));
+
+        $service->assertDraftStockConsistency([161], 'sinkronisasi draft penjualan');
+    }
+
     private function makeService(): StockRuntimeIntegrityService
     {
         return new StockRuntimeIntegrityService(new BaselineStockReflowService());

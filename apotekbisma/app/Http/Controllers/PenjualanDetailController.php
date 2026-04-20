@@ -570,6 +570,7 @@ class PenjualanDetailController extends Controller
         // Draft flows already adjust produk.stok atomically. Recalculation across full history
         // can overwrite correct draft stock with corrupted legacy chain results.
         // Finalized transaction synchronization remains handled in PenjualanController::store().
+        app(StockRuntimeIntegrityService::class)->reconcileDraftStockConsistency($normalizedIds);
         app(StockRuntimeIntegrityService::class)->assertDraftStockConsistency(
             $normalizedIds,
             'sinkronisasi draft penjualan'

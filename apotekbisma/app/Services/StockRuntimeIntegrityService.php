@@ -118,6 +118,43 @@ class StockRuntimeIntegrityService
         );
     }
 
+    public function reconcileDraftStockConsistency(array $productIds): array
+    {
+        $normalizedIds = $this->normalizeProductIds($productIds);
+        if (empty($normalizedIds)) {
+            return [];
+        }
+
+        $reconciled = [];
+
+        foreach ($normalizedIds as $productId) {
+            $snapshot = $this->buildDraftAwareStockSnapshot($productId);
+            if ($snapshot === null) {
+                continue;
+            }
+
+            $expectedStock = intval($snapshot['expected_stock'] ?? 0);
+            $actualStock = intval($snapshot['actual_stock'] ?? 0);
+
+            if ($expectedStock === $actualStock) {
+                continue;
+            }
+
+            DB::table('produk')
+                ->where('id_produk', $productId)
+                ->update([
+                    'stok' => $expectedStock,
+                    'updated_at' => now(),
+                ]);
+
+            $snapshot['previous_stock'] = $actualStock;
+            $snapshot['actual_stock'] = $expectedStock;
+            $reconciled[] = $snapshot;
+        }
+
+        return $reconciled;
+    }
+
     public function assertNoNegativeHistoricalStock(array $productIds, array $reflowSummary, string $contextLabel): void
     {
         $negativeEventCount = intval($reflowSummary['negative_event_count'] ?? 0);

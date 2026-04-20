@@ -957,6 +957,7 @@ class PenjualanController extends Controller
             'diterima' => $penjualan->diterima,
             'waktu' => $penjualan->waktu,
             'created_at' => $penjualan->created_at,
+            'is_incomplete' => $this->isPenjualanIncomplete($penjualan),
         ];
     }
 
@@ -972,6 +973,12 @@ class PenjualanController extends Controller
 
         $integrityService = app(StockRuntimeIntegrityService::class);
 
+        if ($snapshot && !$this->isFinalizedPenjualanSnapshot($snapshot)) {
+            $integrityService->reconcileDraftStockConsistency($normalizedIds);
+            $integrityService->assertDraftStockConsistency($normalizedIds, $contextLabel);
+            return;
+        }
+
         if ($this->shouldUsePenjualanPostCutoffRebuild($snapshot)) {
             $integrityService->rebuildAndValidate($normalizedIds, $contextLabel, true);
             return;
@@ -980,25 +987,25 @@ class PenjualanController extends Controller
         $integrityService->assertLatestStockConsistency($normalizedIds, $contextLabel);
     }
 
-    private function shouldUsePenjualanPostCutoffRebuild(?array $snapshot): bool
+    private function isFinalizedPenjualanSnapshot(?array $snapshot): bool
     {
         if (!$snapshot) {
             return false;
         }
 
-        if (intval($snapshot['total_item'] ?? 0) <= 0) {
-            return false;
+        if (array_key_exists('is_incomplete', $snapshot)) {
+            return !boolval($snapshot['is_incomplete']);
         }
 
-        if (intval($snapshot['total_harga'] ?? 0) <= 0) {
-            return false;
-        }
+        return intval($snapshot['total_item'] ?? 0) > 0
+            && intval($snapshot['total_harga'] ?? 0) > 0
+            && intval($snapshot['bayar'] ?? 0) > 0
+            && intval($snapshot['diterima'] ?? 0) > 0;
+    }
 
-        if (intval($snapshot['bayar'] ?? 0) <= 0) {
-            return false;
-        }
-
-        if (intval($snapshot['diterima'] ?? 0) <= 0) {
+    private function shouldUsePenjualanPostCutoffRebuild(?array $snapshot): bool
+    {
+        if (!$this->isFinalizedPenjualanSnapshot($snapshot)) {
             return false;
         }
 
