@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use App\Models\Produk;
 use App\Models\RekamanStok;
+use App\Services\PurchaseSourceOverrideService;
+use App\Services\PurchaseSourceRepairSafetyService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -92,6 +94,7 @@ class RepairPostCutoffStockFromJson extends Command
         $missingInvoices = array_values(array_diff(array_keys($source['invoices']), $dbInvoices->keys()->all()));
 
         $invoiceQtyMismatches = [];
+        $manualReviewMismatches = [];
         $expectedInboundByProduct = [];
         $actualInboundByProduct = [];
         $matchedInvoiceCount = 0;
@@ -119,15 +122,32 @@ class RepairPostCutoffStockFromJson extends Command
 
                 $dbQty = intval(round((float) $row->qty));
                 $dbProductQty[$pid] = $dbQty;
-                $actualInboundByProduct[$pid] = ($actualInboundByProduct[$pid] ?? 0) + $dbQty;
             }
 
-            foreach ($invoiceData['products'] as $pid => $qty) {
-                $expectedInboundByProduct[$pid] = ($expectedInboundByProduct[$pid] ?? 0) + $qty;
-            }
+            $mismatchProducts = $this->compareProductQtyMaps(
+                $invoiceData['products'],
+                $dbProductQty,
+                $invoiceData['product_meta'] ?? []
+            );
 
-            $mismatchProducts = $this->compareProductQtyMaps($invoiceData['products'], $dbProductQty);
+            $mismatchByProduct = [];
             if (!empty($mismatchProducts)) {
+                foreach ($mismatchProducts as $mismatch) {
+                    $pid = intval($mismatch['id_produk'] ?? 0);
+                    if ($pid > 0) {
+                        $mismatchByProduct[$pid] = $mismatch;
+                    }
+
+                    if (!($mismatch['auto_repair_safe'] ?? true)) {
+                        $manualReviewMismatches[] = array_merge($mismatch, [
+                            'no_faktur' => $invoiceNo,
+                            'id_pembelian' => (int) $dbInvoice->id_pembelian,
+                            'source_file' => $invoiceData['source_file'] ?? null,
+                            'source_waktu' => $invoiceData['tanggal_waktu_faktur'] ?? null,
+                        ]);
+                    }
+                }
+
                 $invoiceQtyMismatches[] = [
                     'no_faktur' => $invoiceNo,
                     'id_pembelian' => (int) $dbInvoice->id_pembelian,
@@ -135,6 +155,24 @@ class RepairPostCutoffStockFromJson extends Command
                     'source_waktu' => $invoiceData['tanggal_waktu_faktur'] ?? null,
                     'mismatches' => $mismatchProducts,
                 ];
+            }
+
+            foreach ($invoiceData['products'] as $pid => $qty) {
+                $mismatch = $mismatchByProduct[intval($pid)] ?? null;
+                if ($mismatch !== null && !($mismatch['auto_repair_safe'] ?? true)) {
+                    continue;
+                }
+
+                $expectedInboundByProduct[$pid] = ($expectedInboundByProduct[$pid] ?? 0) + $qty;
+            }
+
+            foreach ($dbProductQty as $pid => $qty) {
+                $mismatch = $mismatchByProduct[intval($pid)] ?? null;
+                if ($mismatch !== null && !($mismatch['auto_repair_safe'] ?? true)) {
+                    continue;
+                }
+
+                $actualInboundByProduct[$pid] = ($actualInboundByProduct[$pid] ?? 0) + $qty;
             }
         }
 
@@ -240,6 +278,7 @@ class RepairPostCutoffStockFromJson extends Command
                 'missing_in_db' => count($missingInvoices),
                 'matched_invoices' => $matchedInvoiceCount,
                 'invoice_qty_mismatch' => count($invoiceQtyMismatches),
+                'manual_review_mismatch' => count($manualReviewMismatches),
                 'impacted_products' => $impactedProductIds->count(),
                 'products_with_purchase_delta' => $deltaProducts,
                 'repair_errors' => count($repairErrors),
@@ -248,6 +287,7 @@ class RepairPostCutoffStockFromJson extends Command
             'source_conflicts' => array_values($source['conflicts']),
             'missing_in_db' => $missingInvoices,
             'invoice_qty_mismatch' => $invoiceQtyMismatches,
+            'manual_review_mismatch' => $manualReviewMismatches,
             'product_repairs' => $productRepairs,
             'repair_errors' => $repairErrors,
         ];
@@ -340,10 +380,13 @@ class RepairPostCutoffStockFromJson extends Command
                 }
 
                 $productQty = [];
+                $productMeta = [];
                 foreach ((array) ($purchase['detail'] ?? []) as $detail) {
                     if (!is_array($detail)) {
                         continue;
                     }
+
+                    $detail = app(PurchaseSourceOverrideService::class)->applyDetailOverride($invoiceNo, $detail);
 
                     $productId = intval($detail['id_produk'] ?? 0);
                     if ($productId <= 0) {
@@ -360,6 +403,11 @@ class RepairPostCutoffStockFromJson extends Command
                     }
 
                     $productQty[$productId] = ($productQty[$productId] ?? 0) + $jumlah;
+                    $productMeta[$productId] = [
+                        'nama_produk_raw' => trim((string) ($detail['nama_produk'] ?? '')),
+                        'override_applied' => !empty($detail['_source_override_reason']),
+                        'override_reason' => $detail['_source_override_reason'] ?? null,
+                    ];
                 }
 
                 if (empty($productQty)) {
@@ -373,6 +421,7 @@ class RepairPostCutoffStockFromJson extends Command
                     'tanggal_waktu_faktur' => $invoiceDate->format('Y-m-d H:i:s'),
                     'source_file' => $filePath,
                     'products' => $productQty,
+                    'product_meta' => $productMeta,
                 ];
 
                 if (isset($sourceInvoices[$invoiceNo])) {
@@ -404,7 +453,7 @@ class RepairPostCutoffStockFromJson extends Command
         ];
     }
 
-    private function compareProductQtyMaps(array $source, array $db): array
+    private function compareProductQtyMaps(array $source, array $db, array $productMeta = []): array
     {
         $allProductIds = array_unique(array_merge(array_keys($source), array_keys($db)));
         sort($allProductIds);
@@ -417,11 +466,23 @@ class RepairPostCutoffStockFromJson extends Command
                 continue;
             }
 
+            $meta = $productMeta[$pid] ?? [];
+            $safety = app(PurchaseSourceRepairSafetyService::class)->assessMismatch(
+                (string) ($meta['nama_produk_raw'] ?? ''),
+                $sourceQty,
+                $dbQty,
+                (bool) ($meta['override_applied'] ?? false)
+            );
+
             $mismatches[] = [
                 'id_produk' => intval($pid),
                 'qty_source' => $sourceQty,
                 'qty_db' => $dbQty,
                 'delta' => $sourceQty - $dbQty,
+                'auto_repair_safe' => (bool) ($safety['auto_repair_safe'] ?? false),
+                'manual_review_reason' => $safety['reason'] ?? null,
+                'pack_count_tokens' => $safety['pack_count_tokens'] ?? [],
+                'override_reason' => $meta['override_reason'] ?? null,
             ];
         }
 

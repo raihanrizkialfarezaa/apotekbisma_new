@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Services\BaselineStockReflowService;
+use App\Services\ProductMappingSafetyService;
+use App\Services\PurchaseSourceOverrideService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -40,6 +42,7 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
     private array $productAliasMap = [];
     private array $productRows = [];
     private array $forcedProductMappings = [];
+    private array $skippedAliasEntries = [];
 
     public function handle(BaselineStockReflowService $reflowService): int
     {
@@ -85,6 +88,10 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
             $this->buildSupplierIndex();
             $this->buildProductIndex();
             $this->loadProductAliases((string) $this->option('alias'));
+
+            if (!empty($this->skippedAliasEntries)) {
+                $this->warn('Alias produk yang di-skip karena tidak valid/tidak aman: ' . count($this->skippedAliasEntries));
+            }
         } catch (\Throwable $e) {
             $this->error('Gagal memuat index supplier/produk: ' . $e->getMessage());
             return 1;
@@ -157,6 +164,7 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
             'unresolved_product_names' => $unresolvedProductNames,
             'already_existing_same' => $existingAsSame,
             'forced_product_mappings' => $this->forcedProductMappings,
+            'skipped_alias_entries' => $this->skippedAliasEntries,
             'insertable_preview' => array_map(function (array $invoice): array {
                 return [
                     'no_faktur' => $invoice['no_faktur'],
@@ -569,6 +577,8 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
                     if (!is_array($detailRow)) {
                         continue;
                     }
+
+                    $detailRow = app(PurchaseSourceOverrideService::class)->applyDetailOverride($invoiceNo, $detailRow);
 
                     $jumlah = $this->parseQuantity((string) ($detailRow['jumlah'] ?? '0'));
                     if ($jumlah <= 0) {
@@ -1677,6 +1687,8 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
 
     private function loadProductAliases(string $aliasPath): void
     {
+        $this->skippedAliasEntries = [];
+
         $path = trim($aliasPath);
         if ($path === '') {
             $this->productAliasMap = [];
@@ -1725,7 +1737,18 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
             }
 
             if ($targetRow === null) {
-                throw new \RuntimeException('Alias produk tidak valid untuk sumber: ' . $sourceName);
+                $this->rememberSkippedAliasEntry((string) $sourceName, $target, 'invalid_target_reference');
+                continue;
+            }
+
+            if (!$this->passesProductIdentitySafetyGuard((string) $sourceName, $targetRow)) {
+                $this->rememberSkippedAliasEntry(
+                    (string) $sourceName,
+                    $target,
+                    'unsafe_identity_guard',
+                    (string) ($targetRow['nama_produk'] ?? 'unknown')
+                );
+                continue;
             }
 
             $aliasMap[$sourceNorm] = [
@@ -1735,6 +1758,16 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
         }
 
         $this->productAliasMap = $aliasMap;
+    }
+
+    private function rememberSkippedAliasEntry(string $sourceName, $target, string $reason, ?string $resolvedTargetName = null): void
+    {
+        $this->skippedAliasEntries[] = [
+            'source_name' => $sourceName,
+            'target' => is_scalar($target) || $target === null ? $target : json_encode($target),
+            'reason' => $reason,
+            'resolved_target_name' => $resolvedTargetName,
+        ];
     }
 
     private function resolveSupplier(string $supplierName): array
@@ -1959,6 +1992,10 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
                 continue;
             }
 
+            if (!$this->passesProductIdentitySafetyGuard($rawName, $row)) {
+                continue;
+            }
+
             similar_text($normalized, $candidateNormalized, $similarity);
             $similarity = (float) $similarity;
 
@@ -2176,7 +2213,7 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
         $drop = [
             'mg', 'ml', 'gr', 'g', 'mcg', 'tab', 'tabs', 'kap', 'kapl', 'caps',
             'syr', 'susp', 'cr', 'gel', 'drop', 'drops', 'liq', 'box', 'strip', 'sach',
-            'sachet', 'lbr', 'new', 'adult', 'anak', 'baby', 'small', 'plus', 'forte',
+            'sachet', 'lbr', 'new', 'small', 'plus', 'forte',
             'exp', 'od', 'dx', 'hj', 'kng', 'nova', 'hexp', 'gdn', 'ifi', 'no',
             'chest', 'rub', 'liquid', 'ori', 'original', 'all', 'var', 'extra',
             'cool', 'mint', 'green', 'tea', 'straw', 'orange', 'jeruk', 'madu',
@@ -2521,6 +2558,10 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
                 continue;
             }
 
+            if (!$this->passesProductIdentitySafetyGuard($rawName, $row)) {
+                continue;
+            }
+
             if (!empty($queryMeasures)) {
                 $candidateMeasures = $row['measure_tokens'] ?? [];
                 $missingMeasure = false;
@@ -2640,6 +2681,14 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
             'top_candidates' => $topCandidates,
             'reason' => $autofillSafe ? 'high_confidence_similarity' : 'needs_review',
         ];
+    }
+
+    private function passesProductIdentitySafetyGuard(string $rawName, array $row): bool
+    {
+        return app(ProductMappingSafetyService::class)->passesIdentityGuard(
+            $rawName,
+            $row['aggressive_tokens'] ?? []
+        );
     }
 
     private function extractMeasureTokens(string $value): array
@@ -2826,7 +2875,7 @@ class ImportPostCutoffPurchasesFromMarkdown extends Command
             'mg', 'ml', 'gr', 'g', 'mcg', 'tab', 'tabs', 'kap', 'kapl', 'kaplet', 'caps',
             'syr', 'susp', 'cr', 'cream', 'gel', 'drop', 'drops', 'liq', 'liquid', 'inj',
             'box', 'botol', 'btl', 'tube', 'dus', 'strip', 'slop', 'lbr', 'sach', 'sachet',
-            'new', 'adult', 'anak', 'baby', 'small', 'strong', 'plus', 'forte', 'exp',
+            'new', 'small', 'strong', 'plus', 'forte', 'exp',
             'od', 'dx', 'hj', 'kng', 'ifi', 'nova', 'hexp', 'gdn', 'libi', 'dz', 'dd',
             'cc', 'ee', 'ff', 'fr', 'php', 'kc', 'straw', 'orange', 'jeruk', 'madu',
             's', 'x', 'ds', 'isi', 'no', 'nomor',

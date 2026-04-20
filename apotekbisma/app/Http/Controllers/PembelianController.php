@@ -12,6 +12,7 @@ use App\Models\Supplier;
 use App\Models\Setting;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade as PDF;
+use App\Exceptions\UnsafeStockMutationException;
 use Illuminate\Support\Facades\Log;
 use App\Services\PembelianStockSyncService;
 use App\Services\StockDraftCleanupService;
@@ -357,6 +358,8 @@ class PembelianController extends Controller
 
             try {
                 app(TransactionDateMutationService::class)->synchronizeFinalizedPembelian($pembelian);
+            } catch (UnsafeStockMutationException $syncException) {
+                throw $syncException;
             } catch (\Throwable $syncException) {
                 Log::warning('Sinkronisasi finalized pembelian gagal, fallback ke recalculate per produk', [
                     'id_pembelian' => $pembelian->id_pembelian,

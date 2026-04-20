@@ -12,11 +12,22 @@ return [
         'baseline_opname_31des2025',
         'sinkronisasi',
         'auto sync',
+        'auto-negative-stabilizer',
         'rekonstruksi',
         'perfect stock record fixer',
         'reconcile',
         'baseline csv 31-12-2025',
         'penghapusan transaksi pembelian',
         'auto-created: rekaman stok awal produk',
+    ],
+    'purchase_source_overrides' => [
+        'NPS-2602-629903' => [
+            [
+                'product_id' => 954,
+                'raw_name' => 'GUAIFENESIN TAB / GG TRIMAN NR ;80X100',
+                'jumlah' => 200,
+                'reason' => 'Invoice NPS-2602-629903 has one box that must be converted to 200 unit tablets for GUAFINESIN.',
+            ],
+        ],
     ],
 ];

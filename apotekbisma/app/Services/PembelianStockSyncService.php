@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\UnsafeStockMutationException;
 use App\Models\RekamanStok;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -62,6 +63,11 @@ class PembelianStockSyncService
                     $normalizedIds,
                     Carbon::now()->format('Y-m-d H:i:s')
                 );
+                $this->stockRuntimeIntegrityService->assertNoNegativeHistoricalStock(
+                    $normalizedIds,
+                    $summary,
+                    'sinkronisasi pembelian'
+                );
                 $this->stockRuntimeIntegrityService->assertLatestStockConsistency(
                     $normalizedIds,
                     'sinkronisasi pembelian'
@@ -73,12 +79,26 @@ class PembelianStockSyncService
                     'product_ids' => $normalizedIds,
                     'summary' => $summary,
                 ];
-            } catch (\Throwable $e) {
-                Log::warning('Sinkronisasi pembelian via baseline reflow gagal, fallback ke recalculate', [
+            } catch (UnsafeStockMutationException $e) {
+                Log::warning('Sinkronisasi pembelian via baseline reflow diblokir oleh guard integritas', [
                     'id_pembelian' => $idPembelian,
                     'product_ids' => $normalizedIds,
                     'message' => $e->getMessage(),
                 ]);
+
+                throw $e;
+            } catch (\Throwable $e) {
+                Log::warning('Sinkronisasi pembelian via baseline reflow gagal', [
+                    'id_pembelian' => $idPembelian,
+                    'product_ids' => $normalizedIds,
+                    'message' => $e->getMessage(),
+                ]);
+
+                throw new \RuntimeException(
+                    'Sinkronisasi pembelian post-baseline wajib memakai baseline reflow. Proses dibatalkan: ' . $e->getMessage(),
+                    0,
+                    $e
+                );
             }
         }
 

@@ -11,8 +11,7 @@ use Illuminate\Support\Facades\Log;
 class BaselineStockReflowService
 {
     private const BASELINE_RECORD_KETERANGAN = 'Saldo Awal Stok per 31-12-2025';
-    private const NON_BASELINE_PRE_CUTOFF_SEED_KETERANGAN = 'Saldo Awal Stok dari histori sebelum cutoff';
-    private const NON_BASELINE_ZERO_SEED_KETERANGAN = 'Saldo Awal Stok Produk Baru';
+    private const NON_BASELINE_ZERO_SEED_KETERANGAN = 'Saldo Awal Stok tanpa referensi baseline';
 
     private ?array $cachedBaselineData = null;
     private string $csvDelimiter = ',';
@@ -71,7 +70,7 @@ class BaselineStockReflowService
         try {
             foreach ($products as $product) {
                 $productId = (int) $product->id_produk;
-                $seed = $this->resolveSeedForProduct($productId, $cutoff, $baselineMap);
+                $seed = $this->resolveSeedForProduct($productId, $baselineMap);
                 $events = $this->collectEventsForProduct($productId, $cutoff, $resolvedUntil);
                 $currentTime = Carbon::now();
                 $runningStock = intval($seed['stok']);
@@ -178,7 +177,7 @@ class BaselineStockReflowService
         ];
     }
 
-    private function resolveSeedForProduct(int $productId, string $cutoff, array $baselineMap): array
+    private function resolveSeedForProduct(int $productId, array $baselineMap): array
     {
         if (isset($baselineMap[$productId])) {
             return [
@@ -188,26 +187,9 @@ class BaselineStockReflowService
             ];
         }
 
-        $lastPreCutoffRecord = DB::table('rekaman_stoks')
-            ->select('stok_sisa', 'stok_awal', 'stok_masuk', 'stok_keluar')
-            ->where('id_produk', $productId)
-            ->where('waktu', '<=', $cutoff)
-            ->orderBy('waktu', 'desc')
-            ->orderBy('created_at', 'desc')
-            ->orderBy('id_rekaman_stok', 'desc')
-            ->first();
-
-        if ($lastPreCutoffRecord) {
-            $seedStock = $lastPreCutoffRecord->stok_sisa !== null
-                ? intval($lastPreCutoffRecord->stok_sisa)
-                : intval($lastPreCutoffRecord->stok_awal) + intval($lastPreCutoffRecord->stok_masuk) - intval($lastPreCutoffRecord->stok_keluar);
-
-            return [
-                'stok' => $seedStock,
-                'keterangan' => self::NON_BASELINE_PRE_CUTOFF_SEED_KETERANGAN,
-                'source' => 'pre_cutoff_rekaman',
-            ];
-        }
+        Log::warning('Produk tidak memiliki seed baseline CSV; histori pre-cutoff diabaikan dan seed nol diterapkan.', [
+            'id_produk' => $productId,
+        ]);
 
         return [
             'stok' => 0,

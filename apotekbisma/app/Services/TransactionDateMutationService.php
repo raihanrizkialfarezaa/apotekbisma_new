@@ -64,7 +64,7 @@ class TransactionDateMutationService
         return $this->stockRuntimeIntegrityService->rebuildAndValidate(
             $this->getPembelianProductIds($pembelian),
             'sinkronisasi pembelian final ' . (string) ($pembelian->no_faktur ?? ('#' . $pembelian->id_pembelian)),
-            false,
+            true,
             $this->transactionLogicalClockService->now()->format('Y-m-d H:i:s')
         );
     }

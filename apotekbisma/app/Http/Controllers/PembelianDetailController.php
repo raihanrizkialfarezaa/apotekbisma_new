@@ -180,6 +180,17 @@ class PembelianDetailController extends Controller
         
         try {
             $result = DB::transaction(function () use ($request) {
+                $pembelian = Pembelian::where('id_pembelian', $request->id_pembelian)
+                    ->lockForUpdate()
+                    ->first();
+
+                if (!$pembelian) {
+                    throw new \Exception('Transaksi pembelian tidak ditemukan');
+                }
+
+                $this->ensurePembelianHasWaktu($pembelian);
+                $useCommittedReflow = $this->shouldUseCommittedStockReflow($pembelian);
+
                 $produk = Produk::where('id_produk', $request->id_produk)
                                 ->lockForUpdate()
                                 ->first();
@@ -188,17 +199,12 @@ class PembelianDetailController extends Controller
                     throw new \Exception('Data produk tidak ditemukan');
                 }
                 
-                $stok_sebelum = intval($produk->stok);
-                
                 $existing_detail = PembelianDetail::where('id_pembelian', $request->id_pembelian)
                                                   ->where('id_produk', $request->id_produk)
+                                                  ->lockForUpdate()
                                                   ->first();
                 
                 $jumlah_tambahan = 1;
-                
-                $pembelian = Pembelian::find($request->id_pembelian);
-                $this->ensurePembelianHasWaktu($pembelian);
-                $waktuTransaksi = $this->resolvePembelianStockWaktu($pembelian);
                 
                 if ($existing_detail) {
                     $old_jumlah = intval($existing_detail->jumlah);
@@ -207,6 +213,19 @@ class PembelianDetailController extends Controller
                     $existing_detail->jumlah = $new_jumlah;
                     $existing_detail->subtotal = $existing_detail->harga_beli * $new_jumlah;
                     $existing_detail->save();
+
+                    if ($useCommittedReflow) {
+                        $this->synchronizeFinalizedPembelianMutation($pembelian, [$produk->id_produk]);
+
+                        return [
+                            'stok_baru' => $this->resolveCurrentProductStock($produk->id_produk),
+                            'produk_id' => $produk->id_produk,
+                            'used_committed_reflow' => true,
+                        ];
+                    }
+
+                    $stok_sebelum = intval($produk->stok);
+                    $waktuTransaksi = $this->resolvePembelianStockWaktu($pembelian);
                     
                     $stok_baru = $stok_sebelum + $jumlah_tambahan;
                     DB::table('produk')->where('id_produk', $produk->id_produk)->update(['stok' => $stok_baru]);
@@ -244,7 +263,11 @@ class PembelianDetailController extends Controller
                         ]);
                     }
                     
-                    return ['stok_baru' => $stok_baru, 'produk_id' => $produk->id_produk];
+                    return [
+                        'stok_baru' => $stok_baru,
+                        'produk_id' => $produk->id_produk,
+                        'used_committed_reflow' => false,
+                    ];
                 } else {
                     $detail = new PembelianDetail();
                     $detail->id_pembelian = $request->id_pembelian;
@@ -253,6 +276,19 @@ class PembelianDetailController extends Controller
                     $detail->jumlah = $jumlah_tambahan;
                     $detail->subtotal = $produk->harga_beli * $jumlah_tambahan;
                     $detail->save();
+
+                    if ($useCommittedReflow) {
+                        $this->synchronizeFinalizedPembelianMutation($pembelian, [$produk->id_produk]);
+
+                        return [
+                            'stok_baru' => $this->resolveCurrentProductStock($produk->id_produk),
+                            'produk_id' => $produk->id_produk,
+                            'used_committed_reflow' => true,
+                        ];
+                    }
+
+                    $stok_sebelum = intval($produk->stok);
+                    $waktuTransaksi = $this->resolvePembelianStockWaktu($pembelian);
                     
                     $stok_baru = $stok_sebelum + $jumlah_tambahan;
                     DB::table('produk')->where('id_produk', $produk->id_produk)->update(['stok' => $stok_baru]);
@@ -270,15 +306,21 @@ class PembelianDetailController extends Controller
                         'updated_at' => now()
                     ]);
                     
-                    return ['stok_baru' => $stok_baru, 'produk_id' => $produk->id_produk];
+                    return [
+                        'stok_baru' => $stok_baru,
+                        'produk_id' => $produk->id_produk,
+                        'used_committed_reflow' => false,
+                    ];
                 }
             }, 3);
             
             Cache::forget($idempotencyKey);
 
-            $this->syncAffectedProdukHistory([
-                $result['produk_id'] ?? null,
-            ], intval($request->id_pembelian));
+            if (empty($result['used_committed_reflow'])) {
+                $this->syncAffectedProdukHistory([
+                    $result['produk_id'] ?? null,
+                ], intval($request->id_pembelian));
+            }
             
             return response()->json('Data berhasil disimpan', 200);
             
@@ -310,316 +352,12 @@ class PembelianDetailController extends Controller
 
     public function update(Request $request, $id)
     {
-        $idempotencyKey = 'pembelian_update_' . $id . '_' . auth()->id();
-        
-        if (Cache::has($idempotencyKey)) {
-            return response()->json(['message' => 'Request sedang diproses, mohon tunggu...'], 429);
-        }
-        
-        Cache::put($idempotencyKey, true, self::IDEMPOTENCY_TTL);
-        
-        set_time_limit(90);
-        ini_set('memory_limit', '256M');
-        
-        try {
-            $detail = PembelianDetail::where('id_pembelian_detail', $id)->first();
-            
-            if (!$detail) {
-                Cache::forget($idempotencyKey);
-                return response()->json(['message' => 'Detail pembelian tidak ditemukan'], 404);
-            }
-            
-            $session_id_pembelian = session('id_pembelian');
-            if (!$session_id_pembelian || $session_id_pembelian != $detail->id_pembelian) {
-                session(['id_pembelian' => $detail->id_pembelian]);
-                
-                $pembelian = Pembelian::find($detail->id_pembelian);
-                if ($pembelian) {
-                    session(['id_supplier' => $pembelian->id_supplier]);
-                }
-            }
-            
-            $input_jumlah = $request->input('jumlah');
-            
-            if ($input_jumlah === null || $input_jumlah === '') {
-                Cache::forget($idempotencyKey);
-                return response()->json(['message' => 'Jumlah harus diisi'], 400);
-            }
-            
-            if (!is_numeric($input_jumlah)) {
-                Cache::forget($idempotencyKey);
-                return response()->json(['message' => 'Jumlah harus berupa angka'], 400);
-            }
-            
-            $new_jumlah = (int) $input_jumlah;
-            
-            if ($new_jumlah < 1) {
-                Cache::forget($idempotencyKey);
-                return response()->json(['message' => 'Jumlah harus minimal 1'], 400);
-            }
-            
-            if ($new_jumlah > 10000) {
-                Cache::forget($idempotencyKey);
-                return response()->json(['message' => 'Jumlah tidak boleh lebih dari 10000'], 400);
-            }
-            
-            $old_jumlah = intval($detail->jumlah);
-            $selisih = $new_jumlah - $old_jumlah;
-            
-            if ($selisih == 0) {
-                Cache::forget($idempotencyKey);
-                return response()->json([
-                    'message' => 'Data berhasil diperbarui',
-                    'data' => [
-                        'jumlah' => $new_jumlah,
-                        'subtotal' => $detail->subtotal,
-                        'stok_tersisa' => $detail->produk->stok ?? 0
-                    ]
-                ], 200);
-            }
-            
-            $result = DB::transaction(function () use ($detail, $new_jumlah, $old_jumlah, $selisih) {
-                $produk = Produk::where('id_produk', $detail->id_produk)
-                                ->lockForUpdate()
-                                ->first();
-                
-                if (!$produk) {
-                    throw new \Exception('Produk tidak ditemukan');
-                }
-                
-                $stok_sebelum = intval($produk->stok);
-                $stok_baru = $stok_sebelum + $selisih;
-                
-                if ($stok_baru > 2147483647) {
-                    throw new \Exception('Stok hasil akan melebihi batas maksimum');
-                }
-                
-                if ($stok_baru < 0) {
-                    \Illuminate\Support\Facades\Log::warning("Stok hasil koreksi pembelian menjadi negatif ({$stok_baru}). Penyesuaian stok akan ditangani oleh auto-recalculate (stok akhir tidak boleh kurang dari 0).", [
-                        'id_produk' => $detail->id_produk,
-                        'id_pembelian' => $detail->id_pembelian,
-                        'new_jumlah' => $new_jumlah
-                    ]);
-                }
-
-                
-                DB::table('produk')->where('id_produk', $produk->id_produk)->update(['stok' => $stok_baru]);
-                
-                $detail->jumlah = $new_jumlah;
-                $detail->subtotal = $detail->harga_beli * $new_jumlah;
-                $detail->save();
-                
-                $pembelian = Pembelian::find($detail->id_pembelian);
-                $waktu_transaksi = $this->resolvePembelianStockWaktu($pembelian);
-                
-                $rekaman_stok = DB::table('rekaman_stoks')
-                    ->where('id_pembelian', $detail->id_pembelian)
-                    ->where('id_produk', $detail->id_produk)
-                    ->lockForUpdate()
-                    ->first();
-                
-                if ($rekaman_stok) {
-                    $originalStokAwal = intval($rekaman_stok->stok_awal);
-                    $newStokSisa = $originalStokAwal + $new_jumlah;
-                    
-                    DB::table('rekaman_stoks')
-                        ->where('id_rekaman_stok', $rekaman_stok->id_rekaman_stok)
-                        ->update([
-                            'stok_masuk' => $new_jumlah,
-                            'stok_sisa' => $newStokSisa,
-                            'keterangan' => 'Pembelian: Update jumlah transaksi',
-                            'updated_at' => now()
-                        ]);
-                } else {
-                    $stokAwal = $stok_baru - $new_jumlah;
-                    
-                    DB::table('rekaman_stoks')->insert([
-                        'id_produk' => $produk->id_produk,
-                        'id_pembelian' => $detail->id_pembelian,
-                        'waktu' => $waktu_transaksi,
-                        'stok_masuk' => $new_jumlah,
-                        'stok_keluar' => 0,
-                        'stok_awal' => $stokAwal,
-                        'stok_sisa' => $stok_baru,
-                        'keterangan' => 'Pembelian: Update jumlah transaksi',
-                        'created_at' => now(),
-                        'updated_at' => now()
-                    ]);
-                }
-                
-                return [
-                    'jumlah' => $new_jumlah,
-                    'subtotal' => $detail->subtotal,
-                    'stok_tersisa' => $stok_baru,
-                    'produk_id' => $produk->id_produk
-                ];
-            }, 5);
-            
-            Cache::forget($idempotencyKey);
-
-            $this->syncAffectedProdukHistory([
-                $result['produk_id'] ?? null,
-            ], intval($detail->id_pembelian));
-            
-            return response()->json([
-                'message' => 'Data berhasil diperbarui',
-                'data' => $result
-            ], 200);
-            
-        } catch (\Illuminate\Database\QueryException $e) {
-            Cache::forget($idempotencyKey);
-            Log::error('Database error in pembelian detail update: ' . $e->getMessage(), [
-                'detail_id' => $id,
-                'sql' => $e->getSql(),
-                'bindings' => $e->getBindings()
-            ]);
-            
-            if (strpos($e->getMessage(), 'Deadlock') !== false) {
-                return response()->json(['message' => 'Database sedang sibuk. Silakan coba lagi.'], 503);
-            } elseif (strpos($e->getMessage(), 'Lock wait timeout') !== false) {
-                return response()->json(['message' => 'Request timeout. Silakan coba lagi.'], 503);
-            } else {
-                return response()->json(['message' => 'Terjadi kesalahan database. Silakan coba lagi.'], 500);
-            }
-            
-        } catch (\Exception $e) {
-            Cache::forget($idempotencyKey);
-            Log::error('General error in pembelian detail update: ' . $e->getMessage(), [
-                'detail_id' => $id,
-                'trace' => $e->getTraceAsString()
-            ]);
-            return response()->json(['message' => 'Terjadi kesalahan sistem. Silakan coba lagi.'], 500);
-        }
+        return $this->handleQuantityUpdate($request, intval($id), 'pembelian_update');
     }
 
     public function updateEdit(Request $request, $id)
     {
-        $idempotencyKey = 'pembelian_updateedit_' . $id . '_' . auth()->id();
-        
-        if (Cache::has($idempotencyKey)) {
-            return response()->json('Request sedang diproses...', 429);
-        }
-        
-        Cache::put($idempotencyKey, true, self::IDEMPOTENCY_TTL);
-        
-        DB::beginTransaction();
-        
-        try {
-            $detail = PembelianDetail::where('id_pembelian_detail', $id)->first();
-            
-            if (!$detail) {
-                DB::rollBack();
-                Cache::forget($idempotencyKey);
-                return response()->json('Detail pembelian tidak ditemukan', 404);
-            }
-            
-            $produk = Produk::where('id_produk', $detail->id_produk)->lockForUpdate()->first();
-            
-            if (!$produk) {
-                DB::rollBack();
-                Cache::forget($idempotencyKey);
-                return response()->json('Produk tidak ditemukan', 404);
-            }
-
-            $input_jumlah = $request->input('jumlah');
-            if ($input_jumlah === null || $input_jumlah === '') {
-                DB::rollBack();
-                Cache::forget($idempotencyKey);
-                return response()->json('Jumlah harus diisi', 400);
-            }
-
-            if (!is_numeric($input_jumlah)) {
-                DB::rollBack();
-                Cache::forget($idempotencyKey);
-                return response()->json('Jumlah harus berupa angka', 400);
-            }
-            
-            $old_jumlah = intval($detail->jumlah);
-            $new_jumlah = intval($input_jumlah);
-
-            if ($new_jumlah < 1) {
-                DB::rollBack();
-                Cache::forget($idempotencyKey);
-                return response()->json('Jumlah harus minimal 1', 400);
-            }
-
-            if ($new_jumlah > 10000) {
-                DB::rollBack();
-                Cache::forget($idempotencyKey);
-                return response()->json('Jumlah tidak boleh lebih dari 10000', 400);
-            }
-
-            $selisih = $new_jumlah - $old_jumlah;
-            
-            $new_stok = intval($produk->stok) + $selisih;
-            
-            if ($new_stok < 0) {
-                \Illuminate\Support\Facades\Log::warning("Stok hasil koreksi pembelian (edit) menjadi negatif ({$new_stok}). Penyesuaian stok akan ditangani oleh auto-recalculate.", [
-                    'id_produk' => $detail->id_produk,
-                    'id_pembelian' => $detail->id_pembelian,
-                    'new_jumlah' => $new_jumlah
-                ]);
-            }
-            
-            DB::table('produk')->where('id_produk', $produk->id_produk)->update(['stok' => $new_stok]);
-            
-            $pembelian = Pembelian::find($detail->id_pembelian);
-            $waktu_transaksi = $this->resolvePembelianStockWaktu($pembelian);
-            
-            $rekaman_stok = DB::table('rekaman_stoks')
-                ->where('id_pembelian', $detail->id_pembelian)
-                ->where('id_produk', $detail->id_produk)
-                ->lockForUpdate()
-                ->first();
-            
-            if ($rekaman_stok) {
-                $originalStokAwal = intval($rekaman_stok->stok_awal);
-                $newStokSisa = $originalStokAwal + $new_jumlah;
-                
-                DB::table('rekaman_stoks')
-                    ->where('id_rekaman_stok', $rekaman_stok->id_rekaman_stok)
-                    ->update([
-                        'stok_masuk' => $new_jumlah,
-                        'stok_sisa' => $newStokSisa,
-                        'updated_at' => now()
-                    ]);
-            } else {
-                $stokAwal = $new_stok - $new_jumlah;
-                
-                DB::table('rekaman_stoks')->insert([
-                    'id_produk' => $detail->id_produk,
-                    'id_pembelian' => $detail->id_pembelian,
-                    'waktu' => $waktu_transaksi,
-                    'stok_masuk' => $new_jumlah,
-                    'stok_keluar' => 0,
-                    'stok_awal' => $stokAwal,
-                    'stok_sisa' => $new_stok,
-                    'keterangan' => 'Pembelian: Edit jumlah pembelian',
-                    'created_at' => now(),
-                    'updated_at' => now()
-                ]);
-            }
-            
-            $detail->jumlah = $new_jumlah;
-            $detail->subtotal = $detail->harga_beli * $new_jumlah;
-            $detail->update();
-            
-            DB::commit();
-            
-            Cache::forget($idempotencyKey);
-
-            $this->syncAffectedProdukHistory([
-                $detail->id_produk ?? null,
-            ], intval($detail->id_pembelian));
-            
-            return response()->json('Data berhasil diperbarui', 200);
-            
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Cache::forget($idempotencyKey);
-            Log::error('Error in updateEdit pembelian: ' . $e->getMessage());
-            return response()->json('Error: ' . $e->getMessage(), 500);
-        }
+        return $this->handleQuantityUpdate($request, intval($id), 'pembelian_updateedit');
     }
 
     public function destroy($id)
@@ -640,19 +378,44 @@ class PembelianDetailController extends Controller
         DB::beginTransaction();
         
         try {
-            $detail = PembelianDetail::find($id);
+            $detail = PembelianDetail::where('id_pembelian_detail', $id)
+                ->lockForUpdate()
+                ->first();
             
             if (!$detail) {
                 DB::rollBack();
                 Cache::forget($idempotencyKey);
                 return response()->json(['success' => false, 'message' => 'Detail tidak ditemukan'], 404);
             }
+
+            $pembelian = Pembelian::where('id_pembelian', $detail->id_pembelian)
+                ->lockForUpdate()
+                ->first();
+
+            if (!$pembelian) {
+                DB::rollBack();
+                Cache::forget($idempotencyKey);
+                return response()->json(['success' => false, 'message' => 'Transaksi pembelian tidak ditemukan'], 404);
+            }
+
+            $this->ensurePembelianHasWaktu($pembelian);
             
             $produkId = $detail->id_produk;
             $idPembelian = intval($detail->id_pembelian);
             $produk = Produk::where('id_produk', $detail->id_produk)
                 ->lockForUpdate()
                 ->first();
+
+            if ($this->shouldUseCommittedStockReflow($pembelian)) {
+                $detail->delete();
+                $this->synchronizeFinalizedPembelianMutation($pembelian, [$produkId]);
+
+                DB::commit();
+
+                Cache::forget($idempotencyKey);
+
+                return response(null, 204);
+            }
             
             if ($produk) {
                 $stokSebelum = intval($produk->stok);
@@ -801,6 +564,309 @@ class PembelianDetailController extends Controller
                 'message' => $e->getMessage(),
             ]);
         }
+    }
+
+    private function syncAffectedProdukHistoryOrFail(array $produkIds, ?int $idPembelian = null, array $options = []): array
+    {
+        return app(PembelianStockSyncService::class)->syncAffectedProducts($produkIds, $idPembelian, $options);
+    }
+
+    private function handleQuantityUpdate(Request $request, int $id, string $idempotencyPrefix)
+    {
+        $idempotencyKey = $idempotencyPrefix . '_' . $id . '_' . auth()->id();
+
+        if (Cache::has($idempotencyKey)) {
+            return response()->json(['message' => 'Request sedang diproses, mohon tunggu...'], 429);
+        }
+
+        Cache::put($idempotencyKey, true, self::IDEMPOTENCY_TTL);
+
+        set_time_limit(90);
+        ini_set('memory_limit', '256M');
+
+        try {
+            $detail = PembelianDetail::where('id_pembelian_detail', $id)->first();
+
+            if (!$detail) {
+                Cache::forget($idempotencyKey);
+                return response()->json(['message' => 'Detail pembelian tidak ditemukan'], 404);
+            }
+
+            $sessionIdPembelian = session('id_pembelian');
+            if (!$sessionIdPembelian || intval($sessionIdPembelian) !== intval($detail->id_pembelian)) {
+                session(['id_pembelian' => $detail->id_pembelian]);
+
+                $pembelian = Pembelian::find($detail->id_pembelian);
+                if ($pembelian) {
+                    session(['id_supplier' => $pembelian->id_supplier]);
+                }
+            }
+
+            $newJumlah = $this->validatePembelianJumlahInput($request->input('jumlah'));
+            $oldJumlah = intval($detail->jumlah);
+
+            if ($newJumlah === $oldJumlah) {
+                Cache::forget($idempotencyKey);
+
+                return response()->json([
+                    'message' => 'Data berhasil diperbarui',
+                    'data' => [
+                        'jumlah' => $newJumlah,
+                        'subtotal' => $detail->subtotal,
+                        'stok_tersisa' => $detail->produk->stok ?? 0,
+                    ],
+                ], 200);
+            }
+
+            $result = DB::transaction(function () use ($detail, $request, $newJumlah, $oldJumlah) {
+                $lockedDetail = PembelianDetail::where('id_pembelian_detail', $detail->id_pembelian_detail)
+                    ->lockForUpdate()
+                    ->first();
+
+                if (!$lockedDetail) {
+                    throw new \Exception('Detail pembelian tidak ditemukan');
+                }
+
+                $this->ensureRequestedProductUnchanged($request, $lockedDetail);
+
+                $pembelian = Pembelian::where('id_pembelian', $lockedDetail->id_pembelian)
+                    ->lockForUpdate()
+                    ->first();
+
+                if (!$pembelian) {
+                    throw new \Exception('Transaksi pembelian tidak ditemukan');
+                }
+
+                $this->ensurePembelianHasWaktu($pembelian);
+
+                $produk = Produk::where('id_produk', $lockedDetail->id_produk)
+                    ->lockForUpdate()
+                    ->first();
+
+                if (!$produk) {
+                    throw new \Exception('Produk tidak ditemukan');
+                }
+
+                if ($this->shouldUseCommittedStockReflow($pembelian)) {
+                    $lockedDetail->jumlah = $newJumlah;
+                    $lockedDetail->subtotal = $lockedDetail->harga_beli * $newJumlah;
+                    $lockedDetail->save();
+
+                    $this->synchronizeFinalizedPembelianMutation($pembelian, [$produk->id_produk]);
+
+                    return [
+                        'jumlah' => $newJumlah,
+                        'subtotal' => $lockedDetail->subtotal,
+                        'stok_tersisa' => $this->resolveCurrentProductStock($produk->id_produk),
+                        'produk_id' => $produk->id_produk,
+                        'used_committed_reflow' => true,
+                    ];
+                }
+
+                $selisih = $newJumlah - $oldJumlah;
+                $stokSebelum = intval($produk->stok);
+                $stokBaru = $stokSebelum + $selisih;
+
+                if ($stokBaru > 2147483647) {
+                    throw new \Exception('Stok hasil akan melebihi batas maksimum');
+                }
+
+                if ($stokBaru < 0) {
+                    Log::warning("Stok hasil koreksi pembelian menjadi negatif ({$stokBaru}). Penyesuaian stok akan ditangani oleh auto-recalculate (stok akhir tidak boleh kurang dari 0).", [
+                        'id_produk' => $lockedDetail->id_produk,
+                        'id_pembelian' => $lockedDetail->id_pembelian,
+                        'new_jumlah' => $newJumlah,
+                    ]);
+                }
+
+                DB::table('produk')->where('id_produk', $produk->id_produk)->update(['stok' => $stokBaru]);
+
+                $lockedDetail->jumlah = $newJumlah;
+                $lockedDetail->subtotal = $lockedDetail->harga_beli * $newJumlah;
+                $lockedDetail->save();
+
+                $waktuTransaksi = $this->resolvePembelianStockWaktu($pembelian);
+
+                $rekamanStok = DB::table('rekaman_stoks')
+                    ->where('id_pembelian', $lockedDetail->id_pembelian)
+                    ->where('id_produk', $lockedDetail->id_produk)
+                    ->lockForUpdate()
+                    ->first();
+
+                if ($rekamanStok) {
+                    $originalStokAwal = intval($rekamanStok->stok_awal);
+                    $newStokSisa = $originalStokAwal + $newJumlah;
+
+                    DB::table('rekaman_stoks')
+                        ->where('id_rekaman_stok', $rekamanStok->id_rekaman_stok)
+                        ->update([
+                            'stok_masuk' => $newJumlah,
+                            'stok_sisa' => $newStokSisa,
+                            'keterangan' => 'Pembelian: Update jumlah transaksi',
+                            'updated_at' => now(),
+                        ]);
+                } else {
+                    $stokAwal = $stokBaru - $newJumlah;
+
+                    DB::table('rekaman_stoks')->insert([
+                        'id_produk' => $produk->id_produk,
+                        'id_pembelian' => $lockedDetail->id_pembelian,
+                        'waktu' => $waktuTransaksi,
+                        'stok_masuk' => $newJumlah,
+                        'stok_keluar' => 0,
+                        'stok_awal' => $stokAwal,
+                        'stok_sisa' => $stokBaru,
+                        'keterangan' => 'Pembelian: Update jumlah transaksi',
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+
+                return [
+                    'jumlah' => $newJumlah,
+                    'subtotal' => $lockedDetail->subtotal,
+                    'stok_tersisa' => $stokBaru,
+                    'produk_id' => $produk->id_produk,
+                    'used_committed_reflow' => false,
+                ];
+            }, 5);
+
+            Cache::forget($idempotencyKey);
+
+            if (empty($result['used_committed_reflow'])) {
+                $this->syncAffectedProdukHistory([
+                    $result['produk_id'] ?? null,
+                ], intval($detail->id_pembelian));
+            }
+
+            unset($result['used_committed_reflow']);
+
+            return response()->json([
+                'message' => 'Data berhasil diperbarui',
+                'data' => $result,
+            ], 200);
+        } catch (\InvalidArgumentException $e) {
+            Cache::forget($idempotencyKey);
+
+            return response()->json(['message' => $e->getMessage()], 400);
+        } catch (\Illuminate\Database\QueryException $e) {
+            Cache::forget($idempotencyKey);
+            Log::error('Database error in pembelian detail quantity update: ' . $e->getMessage(), [
+                'detail_id' => $id,
+                'sql' => $e->getSql() ?? null,
+                'bindings' => $e->getBindings() ?? [],
+            ]);
+
+            if (strpos($e->getMessage(), 'Deadlock') !== false) {
+                return response()->json(['message' => 'Database sedang sibuk. Silakan coba lagi.'], 503);
+            }
+
+            if (strpos($e->getMessage(), 'Lock wait timeout') !== false) {
+                return response()->json(['message' => 'Request timeout. Silakan coba lagi.'], 503);
+            }
+
+            return response()->json(['message' => 'Terjadi kesalahan database. Silakan coba lagi.'], 500);
+        } catch (\Exception $e) {
+            Cache::forget($idempotencyKey);
+            Log::error('General error in pembelian detail quantity update: ' . $e->getMessage(), [
+                'detail_id' => $id,
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return response()->json(['message' => 'Terjadi kesalahan sistem. Silakan coba lagi.'], 500);
+        }
+    }
+
+    private function validatePembelianJumlahInput($input): int
+    {
+        if ($input === null || $input === '') {
+            throw new \InvalidArgumentException('Jumlah harus diisi');
+        }
+
+        if (!is_numeric($input)) {
+            throw new \InvalidArgumentException('Jumlah harus berupa angka');
+        }
+
+        $jumlah = (int) $input;
+
+        if ($jumlah < 1) {
+            throw new \InvalidArgumentException('Jumlah harus minimal 1');
+        }
+
+        if ($jumlah > 10000) {
+            throw new \InvalidArgumentException('Jumlah tidak boleh lebih dari 10000');
+        }
+
+        return $jumlah;
+    }
+
+    private function ensureRequestedProductUnchanged(Request $request, PembelianDetail $detail): void
+    {
+        if (!$request->has('id_produk')) {
+            return;
+        }
+
+        $requestedProductId = intval($request->input('id_produk'));
+        if ($requestedProductId <= 0) {
+            return;
+        }
+
+        if ($requestedProductId !== intval($detail->id_produk)) {
+            throw new \InvalidArgumentException('Produk pada detail pembelian tidak dapat diganti lewat edit jumlah. Hapus baris lama lalu tambah produk yang benar.');
+        }
+    }
+
+    private function shouldUseCommittedStockReflow(?Pembelian $pembelian): bool
+    {
+        if (!$pembelian) {
+            return false;
+        }
+
+        $noFaktur = trim((string) ($pembelian->no_faktur ?? ''));
+        if ($noFaktur === '' || strtolower($noFaktur) === 'o') {
+            return false;
+        }
+
+        if (intval($pembelian->total_harga ?? 0) <= 0 || intval($pembelian->bayar ?? 0) <= 0) {
+            return false;
+        }
+
+        return $this->resolvePembelianStockWaktu($pembelian) > $this->resolveStockCutoff();
+    }
+
+    private function resolveStockCutoff(): string
+    {
+        return (string) config('stock.cutoff_datetime', '2025-12-31 23:59:59');
+    }
+
+    private function buildPembelianSyncSnapshot(?Pembelian $pembelian): ?array
+    {
+        if (!$pembelian) {
+            return null;
+        }
+
+        return [
+            'id_pembelian' => intval($pembelian->id_pembelian),
+            'no_faktur' => $pembelian->no_faktur,
+            'total_harga' => $pembelian->total_harga,
+            'bayar' => $pembelian->bayar,
+            'waktu' => $pembelian->waktu,
+            'waktu_datang' => $pembelian->waktu_datang,
+            'created_at' => $pembelian->created_at,
+        ];
+    }
+
+    private function synchronizeFinalizedPembelianMutation(Pembelian $pembelian, array $produkIds): array
+    {
+        return $this->syncAffectedProdukHistoryOrFail($produkIds, intval($pembelian->id_pembelian), [
+            'force_reflow' => true,
+            'pembelian_snapshot' => $this->buildPembelianSyncSnapshot($pembelian),
+        ]);
+    }
+
+    private function resolveCurrentProductStock(int $productId): int
+    {
+        return intval(DB::table('produk')->where('id_produk', $productId)->value('stok') ?? 0);
     }
 
     private function syncBatchAffectedProdukHistory(array $successRows): void
