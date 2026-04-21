@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Exceptions\UnsafeStockMutationException;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class StockRuntimeIntegrityService
 {
@@ -79,6 +80,91 @@ class StockRuntimeIntegrityService
         return $rows;
     }
 
+    public function previewAuthoritativeDraftAwareSnapshots(array $productIds, ?string $until = null): array
+    {
+        $normalizedIds = $this->normalizeProductIds($productIds);
+        if (empty($normalizedIds)) {
+            return [];
+        }
+
+        $resolvedUntil = $until ?? Carbon::now()->format('Y-m-d H:i:s');
+        $committedStockOverrides = $this->buildCommittedStockMapFromReflow($normalizedIds, $resolvedUntil);
+        $snapshots = [];
+
+        foreach ($normalizedIds as $productId) {
+            $snapshot = $this->buildDraftAwareStockSnapshot($productId, $committedStockOverrides);
+            if ($snapshot === null) {
+                continue;
+            }
+
+            $snapshots[$productId] = $snapshot;
+        }
+
+        return $snapshots;
+    }
+
+    public function previewCurrentSellableStockMap(array $productIds, ?string $until = null, bool $clampNegativeToZero = false): array
+    {
+        $snapshots = $this->previewAuthoritativeDraftAwareSnapshots($productIds, $until);
+        $stockMap = [];
+
+        foreach ($snapshots as $productId => $snapshot) {
+            $rawCurrentStock = intval($snapshot['expected_stock'] ?? 0);
+            $stockMap[intval($productId)] = [
+                'id_produk' => intval($productId),
+                'committed_stock' => intval($snapshot['committed_stock'] ?? 0),
+                'draft_pembelian_qty' => intval($snapshot['draft_pembelian_qty'] ?? 0),
+                'draft_penjualan_qty' => intval($snapshot['draft_penjualan_qty'] ?? 0),
+                'raw_current_stock' => $rawCurrentStock,
+                'display_stock' => $clampNegativeToZero ? max(0, $rawCurrentStock) : $rawCurrentStock,
+                'has_negative_projection' => $rawCurrentStock < 0,
+            ];
+        }
+
+        return $stockMap;
+    }
+
+    public function synchronizeDraftStockAgainstCommittedTruth(array $productIds, string $contextLabel): array
+    {
+        $normalizedIds = $this->normalizeProductIds($productIds);
+        if (empty($normalizedIds)) {
+            return [
+                'drifted_product_ids' => [],
+                'reconciled' => [],
+                'until' => null,
+            ];
+        }
+
+        $resolvedUntil = Carbon::now()->format('Y-m-d H:i:s');
+        $committedStockOverrides = $this->buildCommittedStockMapFromReflow($normalizedIds, $resolvedUntil);
+        $driftedProducts = $this->detectCommittedStockDrift($normalizedIds, $committedStockOverrides);
+
+        if (!empty($driftedProducts)) {
+            Log::warning('Draft stock sync detected committed-stock drift against baseline reflow', [
+                'context_label' => $contextLabel,
+                'drifted_products' => array_values($driftedProducts),
+                'until' => $resolvedUntil,
+            ]);
+
+            $this->baselineStockReflowService->rebuildProducts(array_keys($driftedProducts), $resolvedUntil);
+        }
+
+        $this->assertProjectedDraftCurrentStockRemainsNonNegative(
+            $normalizedIds,
+            $contextLabel,
+            $committedStockOverrides
+        );
+
+        $reconciled = $this->reconcileDraftStockConsistency($normalizedIds, $committedStockOverrides);
+        $this->assertDraftStockConsistency($normalizedIds, $contextLabel, $committedStockOverrides);
+
+        return [
+            'drifted_product_ids' => array_values(array_map('intval', array_keys($driftedProducts))),
+            'reconciled' => $reconciled,
+            'until' => $resolvedUntil,
+        ];
+    }
+
     public function assertLatestStockConsistency(array $productIds, string $contextLabel): void
     {
         $normalizedIds = $this->normalizeProductIds($productIds);
@@ -123,7 +209,7 @@ class StockRuntimeIntegrityService
         );
     }
 
-    public function assertDraftStockConsistency(array $productIds, string $contextLabel): void
+    public function assertDraftStockConsistency(array $productIds, string $contextLabel, ?array $committedStockOverrides = null): void
     {
         $normalizedIds = $this->normalizeProductIds($productIds);
         if (empty($normalizedIds)) {
@@ -133,7 +219,7 @@ class StockRuntimeIntegrityService
         $mismatches = [];
 
         foreach ($normalizedIds as $productId) {
-            $snapshot = $this->buildDraftAwareStockSnapshot($productId);
+            $snapshot = $this->buildDraftAwareStockSnapshot($productId, $committedStockOverrides);
             if ($snapshot === null) {
                 continue;
             }
@@ -152,7 +238,7 @@ class StockRuntimeIntegrityService
         );
     }
 
-    public function reconcileDraftStockConsistency(array $productIds): array
+    public function reconcileDraftStockConsistency(array $productIds, ?array $committedStockOverrides = null): array
     {
         $normalizedIds = $this->normalizeProductIds($productIds);
         if (empty($normalizedIds)) {
@@ -162,7 +248,7 @@ class StockRuntimeIntegrityService
         $reconciled = [];
 
         foreach ($normalizedIds as $productId) {
-            $snapshot = $this->buildDraftAwareStockSnapshot($productId);
+            $snapshot = $this->buildDraftAwareStockSnapshot($productId, $committedStockOverrides);
             if ($snapshot === null) {
                 continue;
             }
@@ -257,7 +343,28 @@ class StockRuntimeIntegrityService
         return $this->summarizeLabels($labels);
     }
 
-    private function buildDraftAwareStockSnapshot(int $productId): ?array
+    private function summarizeProjectedCurrentStockLabels(array $productIds, array $projectedCurrentStockMap): string
+    {
+        if (empty($productIds)) {
+            return 'produk terkait';
+        }
+
+        $labelsById = DB::table('produk')
+            ->whereIn('id_produk', $productIds)
+            ->orderBy('nama_produk')
+            ->pluck('nama_produk', 'id_produk');
+
+        $labels = [];
+        foreach ($productIds as $productId) {
+            $labels[] = trim((string) ($labelsById[$productId] ?? 'Produk'))
+                . ' (#' . intval($productId)
+                . ', stok akhir ' . intval($projectedCurrentStockMap[$productId] ?? 0) . ')';
+        }
+
+        return $this->summarizeLabels($labels);
+    }
+
+    private function buildDraftAwareStockSnapshot(int $productId, ?array $committedStockOverrides = null): ?array
     {
         $product = DB::table('produk')
             ->where('id_produk', $productId)
@@ -268,8 +375,11 @@ class StockRuntimeIntegrityService
             return null;
         }
 
-        $latestCommittedRecord = $this->resolveLatestStockRecord($productId, true);
-        $committedStock = $latestCommittedRecord ? intval($latestCommittedRecord->stok_sisa ?? 0) : 0;
+        $hasCommittedOverride = is_array($committedStockOverrides) && array_key_exists($productId, $committedStockOverrides);
+        $latestCommittedRecord = $hasCommittedOverride ? null : $this->resolveLatestStockRecord($productId, true);
+        $committedStock = $hasCommittedOverride
+            ? intval($committedStockOverrides[$productId] ?? 0)
+            : ($latestCommittedRecord ? intval($latestCommittedRecord->stok_sisa ?? 0) : 0);
         $draftPembelianQty = $this->getOpenDraftPembelianQty($productId);
         $draftPenjualanQty = $this->getOpenDraftPenjualanQty($productId);
 
@@ -283,6 +393,116 @@ class StockRuntimeIntegrityService
             'expected_stock' => $committedStock + $draftPembelianQty - $draftPenjualanQty,
             'latest_committed_waktu' => $latestCommittedRecord ? (string) $latestCommittedRecord->waktu : null,
         ];
+    }
+
+    private function buildCommittedStockMapFromReflow(array $productIds, ?string $until = null): array
+    {
+        $normalizedIds = $this->normalizeProductIds($productIds);
+        if (empty($normalizedIds)) {
+            return [];
+        }
+
+        $summary = $this->baselineStockReflowService->previewRebuildSummary($normalizedIds, $until);
+        $map = [];
+
+        foreach (($summary['final_stock_by_product'] ?? []) as $row) {
+            $productId = intval($row['id_produk'] ?? 0);
+            if ($productId <= 0) {
+                continue;
+            }
+
+            $map[$productId] = intval($row['final_stock'] ?? $row['applied_stock'] ?? 0);
+        }
+
+        foreach ($normalizedIds as $productId) {
+            if (!array_key_exists($productId, $map)) {
+                $map[$productId] = 0;
+            }
+        }
+
+        return $map;
+    }
+
+    private function detectCommittedStockDrift(array $productIds, array $committedStockOverrides): array
+    {
+        $drifted = [];
+
+        foreach ($productIds as $productId) {
+            $latestCommittedRecord = $this->resolveLatestStockRecord($productId, true);
+            $latestCommittedStock = $latestCommittedRecord ? intval($latestCommittedRecord->stok_sisa ?? 0) : 0;
+            $reflowCommittedStock = intval($committedStockOverrides[$productId] ?? 0);
+
+            if ($latestCommittedStock === $reflowCommittedStock) {
+                continue;
+            }
+
+            $product = DB::table('produk')
+                ->where('id_produk', $productId)
+                ->select('id_produk', 'nama_produk', 'stok')
+                ->first();
+
+            $drifted[$productId] = [
+                'id_produk' => $productId,
+                'nama_produk' => (string) ($product->nama_produk ?? ''),
+                'master_stock' => intval($product->stok ?? 0),
+                'latest_committed_stock' => $latestCommittedStock,
+                'reflow_committed_stock' => $reflowCommittedStock,
+                'latest_committed_waktu' => $latestCommittedRecord ? (string) $latestCommittedRecord->waktu : null,
+            ];
+        }
+
+        return $drifted;
+    }
+
+    private function assertProjectedDraftCurrentStockRemainsNonNegative(
+        array $productIds,
+        string $contextLabel,
+        array $committedStockOverrides
+    ): void {
+        $projectedRows = $this->buildProjectedCurrentStockRows(
+            $this->buildFinalStockRowsFromCommittedStockMap($productIds, $committedStockOverrides)
+        );
+
+        $negativeProductIds = [];
+        $projectedCurrentStockMap = [];
+
+        foreach ($projectedRows as $row) {
+            $productId = intval($row['id_produk'] ?? 0);
+            if ($productId <= 0) {
+                continue;
+            }
+
+            $projectedCurrentStock = intval($row['projected_current_stock'] ?? 0);
+            $projectedCurrentStockMap[$productId] = $projectedCurrentStock;
+
+            if ($projectedCurrentStock < 0) {
+                $negativeProductIds[] = $productId;
+            }
+        }
+
+        $negativeProductIds = array_values(array_unique($negativeProductIds));
+        if (empty($negativeProductIds)) {
+            return;
+        }
+
+        throw new UnsafeStockMutationException(
+            'Mutasi stok draft diblokir karena ' . $contextLabel . ' akan membuat stok saat ini menjadi minus pada '
+            . $this->summarizeProjectedCurrentStockLabels($negativeProductIds, $projectedCurrentStockMap) . '.'
+        );
+    }
+
+    private function buildFinalStockRowsFromCommittedStockMap(array $productIds, array $committedStockOverrides): array
+    {
+        $rows = [];
+
+        foreach ($productIds as $productId) {
+            $rows[] = [
+                'id_produk' => intval($productId),
+                'final_stock' => intval($committedStockOverrides[$productId] ?? 0),
+            ];
+        }
+
+        return $rows;
     }
 
     private function resolveLatestStockRecord(int $productId, bool $committedOnly = false)

@@ -23,16 +23,13 @@ class PenjualanControllerStockSyncTest extends TestCase
 
         $integrityService = Mockery::mock(StockRuntimeIntegrityService::class);
         $integrityService
-            ->shouldReceive('reconcileDraftStockConsistency')
-            ->once()
-            ->with([388])
-            ->andReturn([]);
-        $integrityService
-            ->shouldReceive('assertDraftStockConsistency')
+            ->shouldReceive('synchronizeDraftStockAgainstCommittedTruth')
             ->once()
             ->with([388], 'hapus penjualan #2509');
         $integrityService->shouldNotReceive('rebuildAndValidate');
         $integrityService->shouldNotReceive('assertLatestStockConsistency');
+        $integrityService->shouldNotReceive('reconcileDraftStockConsistency');
+        $integrityService->shouldNotReceive('assertDraftStockConsistency');
 
         $this->app->instance(StockRuntimeIntegrityService::class, $integrityService);
 

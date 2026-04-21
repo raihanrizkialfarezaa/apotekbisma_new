@@ -789,8 +789,30 @@
 @push('scripts')
 <script>
     let table;
+    let currentStokSaatIni = 0;
+    let produkPageInitialized = false;
 
-    $(function () {
+    function getProdukJQuery() {
+        return window.jQuery || window.$ || null;
+    }
+
+    function hasProdukPageDependencies($) {
+        return Boolean(
+            $ &&
+            $.fn &&
+            typeof $.fn.DataTable === 'function' &&
+            typeof $.fn.validator === 'function'
+        );
+    }
+
+    function initializeProdukPage($) {
+        if (produkPageInitialized) {
+            return;
+        }
+
+        produkPageInitialized = true;
+
+        $(function () {
         // Mobile scroll hint functionality
         function initMobileScrollHint() {
             if (window.innerWidth <= 768) {
@@ -984,9 +1006,115 @@
         $('[name=select_all]').on('click', function () {
             $(':checkbox').prop('checked', this.checked);
         });
-    });
+
+        $('#stok_baru').on('input', function() {
+            updateSelisihDisplay($(this).val());
+        });
+
+        $('#form-update-stok').on('submit', function(e) {
+            e.preventDefault();
+
+            const form = $(this);
+            const url = form.attr('action');
+            const stokBaru = $('#stok_baru').val();
+            const keterangan = $('#keterangan_stok').val().trim();
+
+            if (!stokBaru || stokBaru < 0) {
+                alert('Stok harus diisi dengan angka yang valid (≥ 0)!');
+                $('#stok_baru').focus();
+                return false;
+            }
+
+            const formData = form.serialize();
+
+            $.ajax({
+                url: url,
+                method: 'PUT',
+                data: formData,
+                beforeSend: function() {
+                    form.find('button[type="submit"]').prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Memproses...');
+                },
+                success: function(response) {
+                    $('#modal-update-stok').modal('hide');
+                    table.ajax.reload();
+
+                    if (response.success) {
+                        const data = response.data;
+                        let message = 'Stok berhasil diperbarui dan disinkronkan!\n\n';
+                        message += 'Produk: ' + $('#produk_info').text() + '\n';
+                        message += 'Stok lama: ' + data.stok_lama + ' unit\n';
+                        message += 'Stok baru: ' + data.stok_baru + ' unit\n';
+                        message += 'Selisih: ' + (data.selisih >= 0 ? '+' : '') + data.selisih + ' unit\n';
+
+                        if (keterangan) {
+                            message += 'Keterangan: ' + keterangan;
+                        } else {
+                            message += 'Keterangan: Update stok manual (tanpa keterangan khusus)';
+                        }
+
+                        message += '\n\n✓ Rekaman stok telah disinkronkan otomatis';
+
+                        alert(message);
+                    }
+                },
+                error: function(xhr) {
+                    let errorMsg = 'Terjadi kesalahan saat memperbarui stok';
+
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMsg = xhr.responseJSON.message;
+                    } else if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        const errors = xhr.responseJSON.errors;
+                        errorMsg = Object.values(errors).flat().join('\n');
+                    }
+
+                    alert('Error: ' + errorMsg);
+                },
+                complete: function() {
+                    form.find('button[type="submit"]').prop('disabled', false).html('<i class="fa fa-save"></i> Update Stok');
+                }
+            });
+        });
+        });
+    }
+
+    (function waitForProdukPageDependencies(attempt) {
+        const $ = getProdukJQuery();
+
+        if (hasProdukPageDependencies($)) {
+            initializeProdukPage($);
+            return;
+        }
+
+        if (attempt >= 100) {
+            const missingDependencies = [];
+
+            if (!$) {
+                missingDependencies.push('jQuery');
+            } else {
+                if (!$.fn || typeof $.fn.DataTable !== 'function') {
+                    missingDependencies.push('DataTable');
+                }
+
+                if (!$.fn || typeof $.fn.validator !== 'function') {
+                    missingDependencies.push('validator');
+                }
+            }
+
+            console.error('Produk page failed to initialize because required dependencies are unavailable: ' + missingDependencies.join(', '));
+            return;
+        }
+
+        window.setTimeout(function () {
+            waitForProdukPageDependencies(attempt + 1);
+        }, 50);
+    })(0);
 
     function addForm(url) {
+        const $ = getProdukJQuery();
+        if (!$) {
+            return;
+        }
+
         $('#modal-form').modal('show');
         $('#modal-form .modal-title').text('Tambah Produk');
         $('#modal-form').data('stok-awal', 0);
@@ -998,6 +1126,11 @@
     }
 
     function editForm(url) {
+        const $ = getProdukJQuery();
+        if (!$) {
+            return;
+        }
+
         $('#modal-form').modal('show');
         $('#modal-form .modal-title').text('Edit Produk');
         $('#modal-form').data('stok-awal', 0);
@@ -1028,6 +1161,11 @@
     }
 
     function deleteData(url) {
+        const $ = getProdukJQuery();
+        if (!$) {
+            return;
+        }
+
         if (confirm('Yakin ingin menghapus data terpilih?')) {
             $.post(url, {
                     '_token': $('[name=csrf-token]').attr('content'),
@@ -1044,6 +1182,11 @@
     }
 
     function deleteSelected(url) {
+        const $ = getProdukJQuery();
+        if (!$) {
+            return;
+        }
+
         if ($('input:checked').length > 1) {
             if (confirm('Yakin ingin menghapus data terpilih?')) {
                 $.post(url, $('.form-produk').serialize())
@@ -1062,6 +1205,11 @@
     }
 
     function cetakBarcode(url) {
+        const $ = getProdukJQuery();
+        if (!$) {
+            return;
+        }
+
         if ($('input:checked').length < 1) {
             alert('Pilih data yang akan dicetak');
             return;
@@ -1077,6 +1225,11 @@
     }
 
     function beliProduk(id) {
+        const $ = getProdukJQuery();
+        if (!$) {
+            return;
+        }
+
         if (confirm('Stok produk menipis. Apakah Anda ingin melakukan pembelian sekarang?')) {
             $.post('{{ route("produk.beli", ":id") }}'.replace(':id', id), {
                     '_token': $('[name=csrf-token]').attr('content')
@@ -1095,10 +1248,13 @@
                 });
         }
     }
-
-    var currentStokSaatIni = 0;
     
     function updateStokManual(id, namaProduk, stokSaatIni) {
+        const $ = getProdukJQuery();
+        if (!$) {
+            return;
+        }
+
         currentStokSaatIni = parseInt(stokSaatIni);
         $('#modal-update-stok').modal('show');
         $('#form-update-stok').attr('action', '{{ route("produk.update_stok_manual", ":id") }}'.replace(':id', id));
@@ -1114,6 +1270,11 @@
     }
     
     function updateSelisihDisplay(stokBaru) {
+        const $ = getProdukJQuery();
+        if (!$) {
+            return;
+        }
+
         var selisih = parseInt(stokBaru) - currentStokSaatIni;
         var selisihEl = $('#selisih_stok');
         
@@ -1130,75 +1291,5 @@
             selisihEl.text('0').removeClass('label-success label-danger label-default').addClass('label-warning');
         }
     }
-    
-    $('#stok_baru').on('input', function() {
-        updateSelisihDisplay($(this).val());
-    });
-
-    // Handle form submit untuk update stok manual
-    $('#form-update-stok').on('submit', function(e) {
-        e.preventDefault();
-        
-        const form = $(this);
-        const url = form.attr('action');
-        const stokBaru = $('#stok_baru').val();
-        const keterangan = $('#keterangan_stok').val().trim();
-        
-        // Validasi stok tidak boleh kosong
-        if (!stokBaru || stokBaru < 0) {
-            alert('Stok harus diisi dengan angka yang valid (≥ 0)!');
-            $('#stok_baru').focus();
-            return false;
-        }
-        
-        const formData = form.serialize();
-        
-        $.ajax({
-            url: url,
-            method: 'PUT',
-            data: formData,
-            beforeSend: function() {
-                form.find('button[type="submit"]').prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Memproses...');
-            },
-            success: function(response) {
-                $('#modal-update-stok').modal('hide');
-                table.ajax.reload();
-                
-                if (response.success) {
-                    const data = response.data;
-                    let message = 'Stok berhasil diperbarui dan disinkronkan!\n\n';
-                    message += 'Produk: ' + $('#produk_info').text() + '\n';
-                    message += 'Stok lama: ' + data.stok_lama + ' unit\n';
-                    message += 'Stok baru: ' + data.stok_baru + ' unit\n';
-                    message += 'Selisih: ' + (data.selisih >= 0 ? '+' : '') + data.selisih + ' unit\n';
-                    
-                    if (keterangan) {
-                        message += 'Keterangan: ' + keterangan;
-                    } else {
-                        message += 'Keterangan: Update stok manual (tanpa keterangan khusus)';
-                    }
-                    
-                    message += '\n\n✓ Rekaman stok telah disinkronkan otomatis';
-                    
-                    alert(message);
-                }
-            },
-            error: function(xhr) {
-                let errorMsg = 'Terjadi kesalahan saat memperbarui stok';
-                
-                if (xhr.responseJSON && xhr.responseJSON.message) {
-                    errorMsg = xhr.responseJSON.message;
-                } else if (xhr.responseJSON && xhr.responseJSON.errors) {
-                    const errors = xhr.responseJSON.errors;
-                    errorMsg = Object.values(errors).flat().join('\n');
-                }
-                
-                alert('Error: ' + errorMsg);
-            },
-            complete: function() {
-                form.find('button[type="submit"]').prop('disabled', false).html('<i class="fa fa-save"></i> Update Stok');
-            }
-        });
-    });
 </script>
 @endpush

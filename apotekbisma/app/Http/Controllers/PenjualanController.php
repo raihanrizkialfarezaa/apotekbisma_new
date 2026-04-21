@@ -971,8 +971,7 @@ class PenjualanController extends Controller
         $integrityService = app(StockRuntimeIntegrityService::class);
 
         if ($snapshot && !$this->isFinalizedPenjualanSnapshot($snapshot)) {
-            $integrityService->reconcileDraftStockConsistency($normalizedIds);
-            $integrityService->assertDraftStockConsistency($normalizedIds, $contextLabel);
+            $integrityService->synchronizeDraftStockAgainstCommittedTruth($normalizedIds, $contextLabel);
             return;
         }
 

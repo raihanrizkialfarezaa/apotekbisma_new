@@ -93,33 +93,68 @@
     <script src="{{ asset('js/validator.min.js') }}"></script>
 
     <script>
+        (function ensureGlobalJQueryAlias() {
+            if (typeof window === 'undefined') {
+                return;
+            }
+
+            if (typeof window.jQuery !== 'undefined' && typeof window.$ === 'undefined') {
+                window.$ = window.jQuery;
+            }
+        })();
+    </script>
+
+    <script>
+        function getLayoutJQuery() {
+            return window.jQuery || window.$ || null;
+        }
+
         function preview(selector, temporaryFile, width = 200)  {
+            const $ = getLayoutJQuery();
+            if (!$) {
+                console.error('Preview helper requires jQuery, but jQuery is unavailable.');
+                return;
+            }
+
             $(selector).empty();
             $(selector).append(`<img src="${window.URL.createObjectURL(temporaryFile)}" width="${width}">`);
         }
-        
-        // Mobile table enhancement
-        $(document).ready(function() {
-            // Add touch-friendly scrolling indicators for mobile tables
-            if (window.innerWidth <= 768) {
-                $('.table-responsive-mobile').each(function() {
-                    const $this = $(this);
-                    const $table = $this.find('table');
-                    
-                    // Add scroll indicator
-                    if ($table.width() > $this.width()) {
-                        if (!$this.find('.scroll-indicator').length) {
-                            $this.append('<div class="scroll-indicator" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; padding: 5px 10px; border-radius: 15px; font-size: 12px; z-index: 5; pointer-events: none;">← Geser →</div>');
-                        }
+
+        (function initializeLayoutScripts(attempt) {
+            const $ = getLayoutJQuery();
+
+            if ($) {
+                $(function() {
+                    if (window.innerWidth <= 768) {
+                        $('.table-responsive-mobile').each(function() {
+                            const $this = $(this);
+                            const $table = $this.find('table');
+
+                            if ($table.width() > $this.width()) {
+                                if (!$this.find('.scroll-indicator').length) {
+                                    $this.append('<div class="scroll-indicator" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; padding: 5px 10px; border-radius: 15px; font-size: 12px; z-index: 5; pointer-events: none;">← Geser →</div>');
+                                }
+                            }
+
+                            $this.on('scroll', function() {
+                                $this.find('.scroll-indicator').fadeOut(300);
+                            });
+                        });
                     }
-                    
-                    // Hide indicator on scroll
-                    $this.on('scroll', function() {
-                        $this.find('.scroll-indicator').fadeOut(300);
-                    });
                 });
+
+                return;
             }
-        });
+
+            if (attempt >= 100) {
+                console.error('Layout scripts failed to initialize because jQuery is unavailable.');
+                return;
+            }
+
+            window.setTimeout(function () {
+                initializeLayoutScripts(attempt + 1);
+            }, 50);
+        })(0);
     </script>
     @stack('scripts')
 </body>

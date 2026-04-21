@@ -99,6 +99,60 @@ class BaselineStockReflowService
         );
     }
 
+    public function previewProductLedgers(
+        array $productIds,
+        ?string $until = null,
+        ?string $excludeTransactionType = null,
+        ?int $excludeTransactionId = null
+    ): array {
+        $normalizedProductIds = array_values(array_unique(array_filter(array_map('intval', $productIds), function ($productId) {
+            return $productId > 0;
+        })));
+
+        if (empty($normalizedProductIds)) {
+            return [];
+        }
+
+        $preparedRebuild = $this->prepareRebuildPlans(
+            $normalizedProductIds,
+            $until,
+            $excludeTransactionType,
+            $excludeTransactionId
+        );
+
+        $ledgerMap = [];
+        foreach ($preparedRebuild['plans'] as $plan) {
+            $productId = intval($plan['id_produk'] ?? 0);
+            if ($productId <= 0) {
+                continue;
+            }
+
+            $ledgerMap[$productId] = [
+                'id_produk' => $productId,
+                'seed_source' => (string) ($plan['seed_source'] ?? ''),
+                'rows' => array_map(function (array $row) {
+                    return [
+                        'id_produk' => intval($row['id_produk'] ?? 0),
+                        'id_penjualan' => $row['id_penjualan'] === null ? null : intval($row['id_penjualan']),
+                        'id_pembelian' => $row['id_pembelian'] === null ? null : intval($row['id_pembelian']),
+                        'waktu' => (string) ($row['waktu'] ?? ''),
+                        'stok_awal' => intval($row['stok_awal'] ?? 0),
+                        'stok_masuk' => intval($row['stok_masuk'] ?? 0),
+                        'stok_keluar' => intval($row['stok_keluar'] ?? 0),
+                        'stok_sisa' => intval($row['stok_sisa'] ?? 0),
+                        'keterangan' => (string) ($row['keterangan'] ?? ''),
+                    ];
+                }, $plan['insert_rows'] ?? []),
+                'final_stock' => intval($plan['stok_akhir_raw'] ?? $plan['stok_hasil_rebuild'] ?? 0),
+                'applied_stock' => intval($plan['stok_hasil_rebuild'] ?? 0),
+                'negative_event_count' => intval($plan['negative_event_count'] ?? 0),
+                'until' => (string) $preparedRebuild['until'],
+            ];
+        }
+
+        return $ledgerMap;
+    }
+
     private function resolveSeedForProduct(int $productId, array $baselineMap): array
     {
         if (isset($baselineMap[$productId])) {
@@ -106,6 +160,15 @@ class BaselineStockReflowService
                 'stok' => intval($baselineMap[$productId]['stok']),
                 'keterangan' => self::BASELINE_RECORD_KETERANGAN,
                 'source' => 'baseline_csv',
+            ];
+        }
+
+        $databaseBaselineSeed = $this->resolveDatabaseBaselineSeed($productId);
+        if ($databaseBaselineSeed !== null) {
+            return [
+                'stok' => intval($databaseBaselineSeed['stok']),
+                'keterangan' => self::BASELINE_RECORD_KETERANGAN,
+                'source' => 'baseline_rekaman',
             ];
         }
 
@@ -118,6 +181,92 @@ class BaselineStockReflowService
             'keterangan' => self::NON_BASELINE_ZERO_SEED_KETERANGAN,
             'source' => 'zero_default',
         ];
+    }
+
+    private function resolveDatabaseBaselineSeed(int $productId): ?array
+    {
+        $cutoff = Carbon::parse((string) config('stock.cutoff_datetime', '2025-12-31 23:59:59'));
+        $candidates = DB::table('rekaman_stoks')
+            ->where('id_produk', $productId)
+            ->whereNull('id_penjualan')
+            ->whereNull('id_pembelian')
+            ->where(function ($query) {
+                $query->where('keterangan', 'like', '%Saldo Awal Stok%')
+                    ->orWhere('keterangan', 'like', '%histori sebelum cutoff%');
+            })
+            ->where('waktu', '>=', $cutoff->copy()->startOfDay()->format('Y-m-d H:i:s'))
+            ->where('waktu', '<=', $cutoff->copy()->addDay()->endOfDay()->format('Y-m-d H:i:s'))
+            ->orderBy('waktu', 'asc')
+            ->orderBy('id_rekaman_stok', 'asc')
+            ->get([
+                'id_rekaman_stok',
+                'waktu',
+                'stok_sisa',
+                'keterangan',
+            ]);
+
+        if ($candidates->isEmpty()) {
+            return null;
+        }
+
+        $sorted = $candidates->sort(function ($left, $right) use ($cutoff) {
+            return $this->compareBaselineSeedCandidates($left, $right, $cutoff);
+        })->values();
+
+        $seed = $sorted->first();
+        if (!$seed) {
+            return null;
+        }
+
+        return [
+            'id_rekaman_stok' => intval($seed->id_rekaman_stok ?? 0),
+            'waktu' => (string) ($seed->waktu ?? ''),
+            'stok' => intval($seed->stok_sisa ?? 0),
+            'keterangan' => (string) ($seed->keterangan ?? ''),
+        ];
+    }
+
+    private function compareBaselineSeedCandidates($left, $right, Carbon $cutoff): int
+    {
+        $leftTime = Carbon::parse($left->waktu);
+        $rightTime = Carbon::parse($right->waktu);
+
+        $leftScore = $this->resolveBaselineSeedCandidateScore($leftTime, $cutoff);
+        $rightScore = $this->resolveBaselineSeedCandidateScore($rightTime, $cutoff);
+
+        if ($leftScore !== $rightScore) {
+            return $leftScore <=> $rightScore;
+        }
+
+        if ($leftScore === 1) {
+            $timeCompare = $rightTime->getTimestamp() <=> $leftTime->getTimestamp();
+            if ($timeCompare !== 0) {
+                return $timeCompare;
+            }
+        } elseif ($leftScore === 2) {
+            $timeCompare = $leftTime->getTimestamp() <=> $rightTime->getTimestamp();
+            if ($timeCompare !== 0) {
+                return $timeCompare;
+            }
+        }
+
+        return intval($left->id_rekaman_stok ?? 0) <=> intval($right->id_rekaman_stok ?? 0);
+    }
+
+    private function resolveBaselineSeedCandidateScore(Carbon $candidateTime, Carbon $cutoff): int
+    {
+        $candidateFormatted = $candidateTime->format('Y-m-d H:i:s');
+        $cutoffFormatted = $cutoff->format('Y-m-d H:i:s');
+
+        if ($candidateFormatted === $cutoffFormatted) {
+            return 0;
+        }
+
+        if ($candidateTime->lte($cutoff)) {
+            return 1;
+        }
+
+        return 2;
     }
 
     private function prepareRebuildPlans(

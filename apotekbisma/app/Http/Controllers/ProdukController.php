@@ -20,6 +20,8 @@ use Illuminate\Validation\Rule;
 
 class ProdukController extends Controller
 {
+    private const AUTHORITATIVE_LOW_STOCK_THRESHOLD = 20;
+
     /**
      * Display a listing of the resource.
      *
@@ -97,97 +99,37 @@ class ProdukController extends Controller
 
     public function data(Request $request)
     {
+        $recordsTotal = Produk::count();
+
         $query = Produk::leftJoin('kategori', 'kategori.id_kategori', 'produk.id_kategori')
             ->select('produk.*', 'nama_kategori');
 
-        // Filter berdasarkan kondisi stok
-        if ($request->filter_stok) {
-            switch ($request->filter_stok) {
-                case 'habis':
-                    $query->where('produk.stok', '<=', 0);
-                    break;
-                case 'menipis':
-                    $query->where('produk.stok', '=', 1);
-                    break;
-                case 'kritis':
-                    $query->where('produk.stok', '<=', 1);
-                    break;
-                case 'normal':
-                    $query->where('produk.stok', '>', 1);
-                    break;
-            }
+        $this->applyProdukStockFilter($query, $request->input('filter_stok'));
+        $this->applyProdukSearchFilters($query, $request);
+
+        $recordsFiltered = (clone $query)->count();
+
+        $this->applyProdukOrdering($query, $request);
+
+        $start = max(0, intval($request->input('start', 0)));
+        $length = intval($request->input('length', 10));
+        if ($length >= 0) {
+            $query->skip($start)->take($length);
         }
 
-        $produk = $query->get();
+        $produk = $this->applyAuthoritativeDisplayStockOverlay($query->get());
 
-        return datatables()
-            ->of($produk)
-            ->addIndexColumn()
-            ->addColumn('select_all', function ($produk) {
-                return '
-                    <input type="checkbox" name="id_produk[]" value="'. $produk->id_produk .'">
-                ';
-            })
-            ->addColumn('kode_produk', function ($produk) {
-                return '<span class="label label-success">'. $produk->kode_produk .'</span>';
-            })
-            ->addColumn('harga_beli', function ($produk) {
-                return format_uang($produk->harga_beli);
-            })
-            ->addColumn('harga_jual', function ($produk) {
-                return format_uang($produk->harga_jual);
-            })
-            ->addColumn('stok', function ($produk) {
-                $stokDisplay = '<span class="' . ($produk->stok <= 0 ? 'text-danger' : ($produk->stok == 1 ? 'text-warning' : 'text-success')) . '">';
-                $stokDisplay .= '<strong>' . format_uang($produk->stok) . '</strong>';
-                $stokDisplay .= '</span>';
-                
-                // Tambahkan icon peringatan
-                if ($produk->stok <= 0) {
-                    $stokDisplay .= ' <i class="fa fa-ban text-danger" title="Stok habis - tidak dapat dijual"></i>';
-                } elseif ($produk->stok == 1) {
-                    $stokDisplay .= ' <i class="fa fa-warning text-warning" title="Stok menipis - segera lakukan pembelian"></i>';
-                }
-                
-                return $stokDisplay;
-            })
-            ->addColumn('expired_date', function ($produk) {
-                if ($produk->expired_date == NULL) {
-                    return 'Belum ditambahkan tanggal kadaluarsa';
-                } else {
-                    return $produk->expired_date;
-                }
-                
-            })
-            ->addColumn('batch', function ($produk) {
-                if ($produk->batch == NULL) {
-                    return 'Belum ditambahkan nomor batch';
-                } else {
-                    return $produk->batch;
-                }
-                
-            })
-            ->addColumn('aksi', function ($produk) {
-                $buttons = '<div class="btn-group btn-group-xs" role="group">';
-                
-                $buttons .= '<button type="button" onclick="editForm(`'. route('produk.update', $produk->id_produk, false) .'`)" class="btn btn-info" title="Edit Produk"><i class="fa fa-pencil"></i></button>';
-                
-                $buttons .= '<button type="button" onclick="updateStokManual('. $produk->id_produk .', \''. addslashes($produk->nama_produk) .'\', '. $produk->stok .')" class="btn btn-success" title="Update Stok"><i class="fa fa-cubes"></i></button>';
-                
-                $buttons .= '<a href="'. route('kartu_stok.detail', $produk->id_produk, false) .'" class="btn btn-primary" title="Kartu Stok" target="_blank"><i class="fa fa-list-alt"></i></a>';
-                
-                $buttons .= '<button type="button" onclick="deleteData(`'. route('produk.destroy', $produk->id_produk, false) .'`)" class="btn btn-danger" title="Hapus"><i class="fa fa-trash"></i></button>';
-                
-                if ($produk->stok <= 1) {
-                    $buttons .= '<button type="button" onclick="beliProduk('. $produk->id_produk .')" class="btn btn-warning" title="Beli Sekarang"><i class="fa fa-cart-plus"></i></button>';
-                }
-                
-                $buttons .= '</div>';
-                
-                return $buttons;
-            })
-            ->rawColumns(['aksi', 'kode_produk', 'select_all', 'stok'])
-            ->make(true);
+        $data = [];
+        foreach ($produk->values() as $index => $item) {
+            $data[] = $this->buildProdukDataTableRow($item, $start + $index + 1);
+        }
+
+        return response()->json([
+            'draw' => intval($request->input('draw', 0)),
+            'recordsTotal' => $recordsTotal,
+            'recordsFiltered' => $recordsFiltered,
+            'data' => $data,
+        ]);
     }
 
     /**
@@ -227,6 +169,20 @@ class ProdukController extends Controller
     public function show($id)
     {
         $produk = Produk::find($id);
+
+        if ($produk) {
+            $authoritativeStockMap = app(StockRuntimeIntegrityService::class)
+                ->previewCurrentSellableStockMap([intval($produk->id_produk)], null, true);
+            if (isset($authoritativeStockMap[intval($produk->id_produk)])) {
+                $rawCurrentStock = intval($authoritativeStockMap[intval($produk->id_produk)]['raw_current_stock'] ?? $produk->stok);
+                $displayStock = intval($authoritativeStockMap[intval($produk->id_produk)]['display_stock'] ?? $produk->stok);
+                $resolvedDisplayStock = $rawCurrentStock < 0 ? $rawCurrentStock : $displayStock;
+                $produk->setRawAttributes(array_merge($produk->getAttributes(), [
+                    'stok' => $resolvedDisplayStock,
+                ]), true);
+                $produk->stok_raw_otoritatif = $rawCurrentStock;
+            }
+        }
 
         return response()->json($produk);
     }
@@ -467,18 +423,203 @@ class ProdukController extends Controller
 
     private function resolveAuthoritativeOldStock(int $idProduk, int $fallbackStock): int
     {
-        $latestRekaman = DB::table('rekaman_stoks')
-            ->where('id_produk', $idProduk)
-            ->orderBy('waktu', 'desc')
-            ->orderBy('id_rekaman_stok', 'desc')
-            ->lockForUpdate()
-            ->first();
+        $authoritativeStockMap = app(StockRuntimeIntegrityService::class)
+            ->previewCurrentSellableStockMap([$idProduk], null, false);
 
-        if (!$latestRekaman) {
-            return $fallbackStock;
+        if (isset($authoritativeStockMap[$idProduk])) {
+            return intval($authoritativeStockMap[$idProduk]['raw_current_stock'] ?? $fallbackStock);
         }
 
-        return intval($latestRekaman->stok_sisa);
+        return $fallbackStock;
+    }
+
+    private function applyProdukStockFilter($query, ?string $filterStok): void
+    {
+        switch ((string) $filterStok) {
+            case 'habis':
+                $query->where('produk.stok', '<=', 0);
+                break;
+            case 'menipis':
+                $query->where('produk.stok', '=', 1);
+                break;
+            case 'kritis':
+                $query->where('produk.stok', '<=', 1);
+                break;
+            case 'normal':
+                $query->where('produk.stok', '>', 1);
+                break;
+        }
+    }
+
+    private function applyProdukSearchFilters($query, Request $request): void
+    {
+        $globalSearch = trim((string) data_get($request->input('search'), 'value', ''));
+        $columnIdSearch = trim((string) data_get($request->input('columns'), '2.search.value', ''));
+        $columnNameSearch = trim((string) data_get($request->input('columns'), '3.search.value', ''));
+
+        if ($columnIdSearch !== '') {
+            if (is_numeric($columnIdSearch)) {
+                $query->where('produk.id_produk', intval($columnIdSearch));
+            } else {
+                $query->whereRaw('CAST(produk.id_produk AS CHAR) like ?', ['%' . $this->escapeLikeValue($columnIdSearch) . '%']);
+            }
+        }
+
+        if ($columnNameSearch !== '') {
+            $likeName = '%' . $this->escapeLikeValue($columnNameSearch) . '%';
+            $query->where('produk.nama_produk', 'like', $likeName);
+        }
+
+        if ($globalSearch === '') {
+            return;
+        }
+
+        $likeValue = '%' . $this->escapeLikeValue($globalSearch) . '%';
+        $query->where(function ($builder) use ($globalSearch, $likeValue) {
+            $builder->where('produk.nama_produk', 'like', $likeValue)
+                ->orWhere('produk.kode_produk', 'like', $likeValue)
+                ->orWhere('kategori.nama_kategori', 'like', $likeValue)
+                ->orWhere('produk.merk', 'like', $likeValue)
+                ->orWhere('produk.batch', 'like', $likeValue)
+                ->orWhere('produk.expired_date', 'like', $likeValue);
+
+            if (is_numeric($globalSearch)) {
+                $builder->orWhere('produk.id_produk', intval($globalSearch))
+                    ->orWhere('produk.harga_beli', intval($globalSearch))
+                    ->orWhere('produk.harga_jual', intval($globalSearch))
+                    ->orWhere('produk.stok', intval($globalSearch));
+            }
+        });
+    }
+
+    private function applyProdukOrdering($query, Request $request): void
+    {
+        $columnIndex = intval(data_get($request->input('order'), '0.column', 2));
+        $direction = strtolower((string) data_get($request->input('order'), '0.dir', 'asc')) === 'desc' ? 'desc' : 'asc';
+
+        $sortableColumns = [
+            2 => 'produk.id_produk',
+            3 => 'produk.nama_produk',
+            4 => 'kategori.nama_kategori',
+            5 => 'produk.merk',
+            6 => 'produk.harga_beli',
+            7 => 'produk.harga_jual',
+            8 => 'produk.expired_date',
+            9 => 'produk.batch',
+            10 => 'produk.stok',
+        ];
+
+        $sortColumn = $sortableColumns[$columnIndex] ?? 'produk.id_produk';
+        $query->orderBy($sortColumn, $direction);
+
+        if ($sortColumn !== 'produk.id_produk') {
+            $query->orderBy('produk.id_produk', 'asc');
+        }
+    }
+
+    private function buildProdukDataTableRow($produk, int $rowNumber): array
+    {
+        return [
+            'DT_RowIndex' => $rowNumber,
+            'select_all' => '<input type="checkbox" name="id_produk[]" value="' . intval($produk->id_produk) . '">',
+            'id_produk' => intval($produk->id_produk),
+            'nama_produk' => (string) ($produk->nama_produk ?? ''),
+            'nama_kategori' => (string) ($produk->nama_kategori ?? ''),
+            'merk' => (string) ($produk->merk ?? ''),
+            'harga_beli' => format_uang($produk->harga_beli),
+            'harga_jual' => format_uang($produk->harga_jual),
+            'expired_date' => $produk->expired_date == null ? 'Belum ditambahkan tanggal kadaluarsa' : $produk->expired_date,
+            'batch' => $produk->batch == null ? 'Belum ditambahkan nomor batch' : $produk->batch,
+            'stok' => $this->buildProdukStockHtml($produk),
+            'aksi' => $this->buildProdukActionHtml($produk),
+        ];
+    }
+
+    private function buildProdukStockHtml($produk): string
+    {
+        $displayStock = intval($produk->stok);
+        $rawAuthoritativeStock = isset($produk->stok_raw_otoritatif)
+            ? intval($produk->stok_raw_otoritatif)
+            : $displayStock;
+
+        $stokDisplay = '<span class="' . ($displayStock <= 0 ? 'text-danger' : ($displayStock == 1 ? 'text-warning' : 'text-success')) . '">';
+        $stokDisplay .= '<strong>' . format_uang($displayStock) . '</strong>';
+        $stokDisplay .= '</span>';
+
+        if ($rawAuthoritativeStock < 0) {
+            $stokDisplay .= ' <i class="fa fa-exclamation-triangle text-danger" title="Stok valid sudah 0; draft aktif membuat proyeksi minus"></i>';
+        } elseif ($displayStock <= 0) {
+            $stokDisplay .= ' <i class="fa fa-ban text-danger" title="Stok habis valid setelah baseline"></i>';
+        } elseif ($displayStock == 1) {
+            $stokDisplay .= ' <i class="fa fa-warning text-warning" title="Stok menipis - segera lakukan pembelian"></i>';
+        }
+
+        return $stokDisplay;
+    }
+
+    private function buildProdukActionHtml($produk): string
+    {
+        $buttons = '<div class="btn-group btn-group-xs" role="group">';
+
+        $buttons .= '<button type="button" onclick="editForm(`'. route('produk.update', $produk->id_produk, false) .'`)" class="btn btn-info" title="Edit Produk"><i class="fa fa-pencil"></i></button>';
+        $buttons .= '<button type="button" onclick="updateStokManual('. intval($produk->id_produk) .', \''. addslashes((string) $produk->nama_produk) .'\', '. intval($produk->stok) .')" class="btn btn-success" title="Update Stok"><i class="fa fa-cubes"></i></button>';
+        $buttons .= '<a href="'. route('kartu_stok.detail', $produk->id_produk, false) .'" class="btn btn-primary" title="Kartu Stok" target="_blank"><i class="fa fa-list-alt"></i></a>';
+        $buttons .= '<button type="button" onclick="deleteData(`'. route('produk.destroy', $produk->id_produk, false) .'`)" class="btn btn-danger" title="Hapus"><i class="fa fa-trash"></i></button>';
+
+        if (intval($produk->stok) <= 1) {
+            $buttons .= '<button type="button" onclick="beliProduk('. intval($produk->id_produk) .')" class="btn btn-warning" title="Beli Sekarang"><i class="fa fa-cart-plus"></i></button>';
+        }
+
+        $buttons .= '</div>';
+
+        return $buttons;
+    }
+
+    private function escapeLikeValue(string $value): string
+    {
+        return str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $value);
+    }
+
+    private function applyAuthoritativeDisplayStockOverlay($produkCollection)
+    {
+        $candidateIds = collect($produkCollection)
+            ->filter(function ($produk) {
+                return intval($produk->stok ?? 0) <= self::AUTHORITATIVE_LOW_STOCK_THRESHOLD;
+            })
+            ->pluck('id_produk')
+            ->map(function ($id) {
+                return intval($id);
+            })
+            ->filter(function ($id) {
+                return $id > 0;
+            })
+            ->unique()
+            ->values()
+            ->all();
+
+        if (empty($candidateIds)) {
+            return $produkCollection;
+        }
+
+        $authoritativeStockMap = app(StockRuntimeIntegrityService::class)
+            ->previewCurrentSellableStockMap($candidateIds, null, true);
+
+        foreach ($produkCollection as $produk) {
+            $productId = intval($produk->id_produk ?? 0);
+            if ($productId <= 0 || !isset($authoritativeStockMap[$productId])) {
+                continue;
+            }
+
+            $rawCurrentStock = intval($authoritativeStockMap[$productId]['raw_current_stock'] ?? $produk->stok);
+            $displayStock = intval($authoritativeStockMap[$productId]['display_stock'] ?? $produk->stok);
+            $resolvedDisplayStock = $rawCurrentStock < 0 ? $rawCurrentStock : $displayStock;
+            $produk->setRawAttributes(array_merge($produk->getAttributes(), [
+                'stok' => $resolvedDisplayStock,
+            ]), true);
+            $produk->stok_raw_otoritatif = $rawCurrentStock;
+        }
+
+        return $produkCollection;
     }
 
     private function assertManualStockMutationAllowed(int $idProduk, int $stokLama, int $stokBaru, string $keterangan): void

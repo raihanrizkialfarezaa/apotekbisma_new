@@ -7,6 +7,8 @@ use App\Models\RekamanStok;
 use App\Models\Pembelian;
 use App\Models\Penjualan;
 use App\Models\PembelianDetail;
+use App\Services\BaselineStockReflowService;
+use App\Services\StockRuntimeIntegrityService;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -34,6 +36,12 @@ class KartuStokController extends Controller
         if (!$produk) {
             return redirect()->route('kartu_stok.index')
                            ->with('error', 'Produk tidak ditemukan');
+        }
+
+        $displayStockMap = app(StockRuntimeIntegrityService::class)
+            ->previewCurrentSellableStockMap([intval($id)], null, false);
+        if (isset($displayStockMap[intval($id)])) {
+            $produk->stok = intval($displayStockMap[intval($id)]['raw_current_stock'] ?? $produk->stok);
         }
         
         $nama_barang = $produk->nama_produk;
@@ -85,6 +93,9 @@ class KartuStokController extends Controller
             ];
         }
 
+        $ledgerState = $this->buildAuthoritativeStockCardLedgerState($id);
+        $ledgerRows = $ledgerState['rows'] ?? [];
+
         // Data untuk grafik (30 hari terakhir)
         $chart_data = [];
         $summary = [
@@ -105,56 +116,71 @@ class KartuStokController extends Controller
             ]
         ];
 
-        // Ambil data 30 hari terakhir untuk grafik
-        $stok_records = RekamanStok::where('id_produk', $id)
-                                  ->where('waktu', '>=', Carbon::now()->subDays(30))
-                                  ->orderBy('waktu', 'asc')
-                                  ->get();
+        // Generate data untuk chart dari ledger otoritatif
+        foreach ($ledgerRows as $record) {
+            $recordTime = Carbon::parse($record['waktu'] ?? null);
+            if ($recordTime->lt(Carbon::now()->subDays(30))) {
+                continue;
+            }
 
-        // Generate data untuk chart
-        foreach ($stok_records as $record) {
-            $date = date('Y-m-d', strtotime($record->waktu));
+            $date = $recordTime->format('Y-m-d');
             if (!isset($chart_data[$date])) {
                 $chart_data[$date] = [
                     'masuk' => 0,
                     'keluar' => 0,
-                    'sisa' => $record->stok_sisa
+                    'sisa' => intval($record['stok_sisa'] ?? 0)
                 ];
             }
-            $chart_data[$date]['masuk'] += $record->stok_masuk ?? 0;
-            $chart_data[$date]['keluar'] += $record->stok_keluar ?? 0;
-            $chart_data[$date]['sisa'] = $record->stok_sisa ?? 0;
+            $chart_data[$date]['masuk'] += intval($record['stok_masuk'] ?? 0);
+            $chart_data[$date]['keluar'] += intval($record['stok_keluar'] ?? 0);
+            $chart_data[$date]['sisa'] = intval($record['stok_sisa'] ?? 0);
         }
 
         // Summary data untuk periode berbeda
         $now = Carbon::now();
         
         // Total keseluruhan
-        $all_records = RekamanStok::where('id_produk', $id)->get();
-        $summary['total_masuk'] = $all_records->sum('stok_masuk');
-        $summary['total_keluar'] = $all_records->sum('stok_keluar');
-        $summary['total_transaksi'] = $all_records->count();
+        $summary['total_masuk'] = collect($ledgerRows)->sum(function (array $row) {
+            return intval($row['stok_masuk'] ?? 0);
+        });
+        $summary['total_keluar'] = collect($ledgerRows)->sum(function (array $row) {
+            return intval($row['stok_keluar'] ?? 0);
+        });
+        $summary['total_transaksi'] = count($ledgerRows);
 
         // Minggu ini
-        $week_records = RekamanStok::where('id_produk', $id)
-                                  ->where('waktu', '>=', $now->copy()->startOfWeek())
-                                  ->get();
-        $summary['periode_minggu']['masuk'] = $week_records->sum('stok_masuk');
-        $summary['periode_minggu']['keluar'] = $week_records->sum('stok_keluar');
+        $weekRecords = collect($ledgerRows)->filter(function (array $row) use ($now) {
+            return Carbon::parse($row['waktu'] ?? null)->gte($now->copy()->startOfWeek());
+        });
+        $summary['periode_minggu']['masuk'] = $weekRecords->sum(function (array $row) {
+            return intval($row['stok_masuk'] ?? 0);
+        });
+        $summary['periode_minggu']['keluar'] = $weekRecords->sum(function (array $row) {
+            return intval($row['stok_keluar'] ?? 0);
+        });
 
         // Bulan ini
-        $month_records = RekamanStok::where('id_produk', $id)
-                                   ->where('waktu', '>=', $now->copy()->startOfMonth())
-                                   ->get();
-        $summary['periode_bulan']['masuk'] = $month_records->sum('stok_masuk');
-        $summary['periode_bulan']['keluar'] = $month_records->sum('stok_keluar');
+        $monthRecords = collect($ledgerRows)->filter(function (array $row) use ($now) {
+            $time = Carbon::parse($row['waktu'] ?? null);
+            return $time->month === $now->month && $time->year === $now->year;
+        });
+        $summary['periode_bulan']['masuk'] = $monthRecords->sum(function (array $row) {
+            return intval($row['stok_masuk'] ?? 0);
+        });
+        $summary['periode_bulan']['keluar'] = $monthRecords->sum(function (array $row) {
+            return intval($row['stok_keluar'] ?? 0);
+        });
 
         // Tahun ini
-        $year_records = RekamanStok::where('id_produk', $id)
-                                  ->where('waktu', '>=', $now->copy()->startOfYear())
-                                  ->get();
-        $summary['periode_tahun']['masuk'] = $year_records->sum('stok_masuk');
-        $summary['periode_tahun']['keluar'] = $year_records->sum('stok_keluar');
+        $yearRecords = collect($ledgerRows)->filter(function (array $row) use ($now) {
+            return Carbon::parse($row['waktu'] ?? null)->year === $now->year;
+        });
+        $summary['periode_tahun']['masuk'] = $yearRecords->sum(function (array $row) {
+            return intval($row['stok_masuk'] ?? 0);
+        });
+        $summary['periode_tahun']['keluar'] = $yearRecords->sum(function (array $row) {
+            return intval($row['stok_keluar'] ?? 0);
+        });
 
         return [
             'chart_data' => $chart_data,
@@ -185,30 +211,21 @@ class KartuStokController extends Controller
             return [];
         }
 
-        $stok = RekamanStok::with(['produk', 'pembelian.supplier', 'penjualan'])
-            ->where('id_produk', $id)
-            ->orderBy('rekaman_stoks.waktu', 'asc')
-            ->orderByRaw("CASE
-                WHEN rekaman_stoks.id_pembelian IS NOT NULL THEN 0
-                WHEN rekaman_stoks.id_penjualan IS NOT NULL THEN 1
-                WHEN LOWER(COALESCE(rekaman_stoks.keterangan, '')) LIKE '%stock opname%' THEN 2
-                WHEN LOWER(COALESCE(rekaman_stoks.keterangan, '')) LIKE '%perubahan stok manual%' THEN 2
-                WHEN LOWER(COALESCE(rekaman_stoks.keterangan, '')) LIKE '%penyesuaian stok%' THEN 2
-                ELSE 3
-            END ASC")
-            ->orderBy('id_rekaman_stok', 'asc')
-            ->get()
-            ->filter(function ($item) use ($request) {
-                return $this->matchesStockCardDateFilter($item->waktu, $request);
+        $ledgerState = $this->buildAuthoritativeStockCardLedgerState($id);
+        $stok = collect($ledgerState['rows'] ?? [])
+            ->filter(function (array $item) use ($request) {
+                return $this->matchesStockCardDateFilter($item['waktu'] ?? null, $request);
             })
             ->values();
 
         $data = [];
         foreach ($stok as $item) {
-            $data[] = $this->formatRekamanStockCardRow($item);
+            $data[] = $this->formatArrayStockCardRow($item);
         }
 
-        $data = array_merge($data, $this->buildPreCutoffPembelianAuditRows($id, $request));
+        if (!empty($ledgerState['has_baseline_seed'])) {
+            $data = array_merge($data, $this->buildPreCutoffPembelianAuditRows($id, $request));
+        }
 
         usort($data, function ($left, $right) {
             $timeCompare = strcmp((string) ($left['waktu_raw'] ?? ''), (string) ($right['waktu_raw'] ?? ''));
@@ -233,15 +250,287 @@ class KartuStokController extends Controller
                 'stok_masuk' => '',
                 'stok_keluar' => '',
                 'stok_awal' => '',
-                'stok_sisa' => '<strong class="text-primary">' . format_uang($produk->stok) . ' unit</strong>',
+                'stok_sisa' => '<strong class="text-primary">' . format_uang(intval($ledgerState['display_current_stock'] ?? $produk->stok)) . ' unit</strong>',
                 'expired_date' => '',
                 'supplier' => '',
-                'keterangan' => '<strong class="text-primary">Stok Aktual Saat Ini</strong>',
+                'keterangan' => '<strong class="text-primary">Stok aktual otoritatif pasca-baseline</strong>',
                 'is_audit_reference' => false,
             ];
         }
 
         return $data;
+    }
+
+    private function buildAuthoritativeStockCardLedgerState(int $productId): array
+    {
+        $until = Carbon::now()->format('Y-m-d H:i:s');
+        $ledgerMap = app(BaselineStockReflowService::class)->previewProductLedgers([$productId], $until);
+        $committedLedger = $ledgerMap[$productId] ?? [
+            'rows' => [],
+            'seed_source' => 'unknown',
+            'final_stock' => 0,
+        ];
+
+        $committedRows = array_values(array_map(function (array $row, int $index) use ($productId) {
+            $row['id'] = intval($row['id_penjualan'] ?? 0) > 0 || intval($row['id_pembelian'] ?? 0) > 0
+                ? intval($row['id_penjualan'] ?? $row['id_pembelian'])
+                : -1 * ($index + 1);
+            $row['id_produk'] = $productId;
+            $row['sort_key'] = $index + 1;
+            $row['is_open_draft'] = false;
+
+            return $row;
+        }, $committedLedger['rows'] ?? [], array_keys($committedLedger['rows'] ?? [])));
+
+        $draftRowsState = $this->buildOpenDraftStockCardRows(
+            $productId,
+            intval($committedLedger['final_stock'] ?? 0)
+        );
+
+        $allRows = array_merge($committedRows, $draftRowsState['rows']);
+        usort($allRows, function (array $left, array $right) {
+            $timeCompare = strcmp((string) ($left['waktu'] ?? ''), (string) ($right['waktu'] ?? ''));
+            if ($timeCompare !== 0) {
+                return $timeCompare;
+            }
+
+            $priorityLeft = $this->resolveStockCardArrayPriority($left);
+            $priorityRight = $this->resolveStockCardArrayPriority($right);
+            if ($priorityLeft !== $priorityRight) {
+                return $priorityLeft <=> $priorityRight;
+            }
+
+            return intval($left['sort_key'] ?? 0) <=> intval($right['sort_key'] ?? 0);
+        });
+
+        $currentStockMap = app(StockRuntimeIntegrityService::class)
+            ->previewCurrentSellableStockMap([$productId], $until, false);
+
+        return [
+            'rows' => $allRows,
+            'seed_source' => (string) ($committedLedger['seed_source'] ?? ''),
+            'has_baseline_seed' => in_array((string) ($committedLedger['seed_source'] ?? ''), ['baseline_csv', 'baseline_rekaman'], true),
+            'committed_final_stock' => intval($committedLedger['final_stock'] ?? 0),
+            'display_current_stock' => intval($currentStockMap[$productId]['raw_current_stock'] ?? ($draftRowsState['current_stock'] ?? $committedLedger['final_stock'] ?? 0)),
+        ];
+    }
+
+    private function buildOpenDraftStockCardRows(int $productId, int $startingStock): array
+    {
+        $cutoff = $this->getStockCutoff();
+        $events = [];
+
+        $draftPembelianRows = DB::table('pembelian_detail as pd')
+            ->join('pembelian as p', 'p.id_pembelian', '=', 'pd.id_pembelian')
+            ->where('pd.id_produk', $productId)
+            ->where('pd.jumlah', '>', 0)
+            ->whereRaw('COALESCE(p.waktu_datang, p.waktu, p.created_at) > ?', [$cutoff])
+            ->where(function ($query) {
+                $query->whereNull('p.no_faktur')
+                    ->orWhereRaw('TRIM(COALESCE(p.no_faktur, ?)) = ?', ['', ''])
+                    ->orWhereRaw('LOWER(TRIM(COALESCE(p.no_faktur, ?))) = ?', ['', 'o'])
+                    ->orWhereRaw('COALESCE(p.total_harga, 0) <= 0')
+                    ->orWhereRaw('COALESCE(p.bayar, 0) <= 0');
+            })
+            ->groupBy('pd.id_pembelian', DB::raw('COALESCE(p.waktu_datang, p.waktu, p.created_at)'))
+            ->selectRaw('pd.id_pembelian as ref_id, COALESCE(p.waktu_datang, p.waktu, p.created_at) as waktu_event, SUM(pd.jumlah) as qty, MAX(pd.id_pembelian_detail) as sort_key')
+            ->orderBy('waktu_event', 'asc')
+            ->orderBy('sort_key', 'asc')
+            ->get();
+
+        foreach ($draftPembelianRows as $row) {
+            $events[] = [
+                'id_produk' => $productId,
+                'id_penjualan' => null,
+                'id_pembelian' => intval($row->ref_id ?? 0),
+                'waktu' => (string) $row->waktu_event,
+                'stok_masuk' => intval($row->qty ?? 0),
+                'stok_keluar' => 0,
+                'keterangan' => 'Pembelian Draft',
+                'is_open_draft' => true,
+                'sort_key' => intval($row->sort_key ?? 0),
+            ];
+        }
+
+        $draftPenjualanRows = DB::table('penjualan_detail as pd')
+            ->join('penjualan as p', 'p.id_penjualan', '=', 'pd.id_penjualan')
+            ->where('pd.id_produk', $productId)
+            ->where('pd.jumlah', '>', 0)
+            ->whereRaw('COALESCE(p.waktu, p.created_at) > ?', [$cutoff])
+            ->where(function ($query) {
+                $query->whereRaw('COALESCE(p.total_item, 0) <= 0')
+                    ->orWhereRaw('COALESCE(p.total_harga, 0) <= 0')
+                    ->orWhereRaw('COALESCE(p.bayar, 0) <= 0')
+                    ->orWhereRaw('COALESCE(p.diterima, 0) <= 0');
+            })
+            ->groupBy('pd.id_penjualan', DB::raw('COALESCE(p.waktu, p.created_at)'))
+            ->selectRaw('pd.id_penjualan as ref_id, COALESCE(p.waktu, p.created_at) as waktu_event, SUM(pd.jumlah) as qty, MAX(pd.id_penjualan_detail) as sort_key')
+            ->orderBy('waktu_event', 'asc')
+            ->orderBy('sort_key', 'asc')
+            ->get();
+
+        foreach ($draftPenjualanRows as $row) {
+            $events[] = [
+                'id_produk' => $productId,
+                'id_penjualan' => intval($row->ref_id ?? 0),
+                'id_pembelian' => null,
+                'waktu' => (string) $row->waktu_event,
+                'stok_masuk' => 0,
+                'stok_keluar' => intval($row->qty ?? 0),
+                'keterangan' => 'Penjualan Draft',
+                'is_open_draft' => true,
+                'sort_key' => intval($row->sort_key ?? 0),
+            ];
+        }
+
+        usort($events, function (array $left, array $right) {
+            $timeCompare = strcmp((string) ($left['waktu'] ?? ''), (string) ($right['waktu'] ?? ''));
+            if ($timeCompare !== 0) {
+                return $timeCompare;
+            }
+
+            $priorityLeft = $this->resolveStockCardArrayPriority($left);
+            $priorityRight = $this->resolveStockCardArrayPriority($right);
+            if ($priorityLeft !== $priorityRight) {
+                return $priorityLeft <=> $priorityRight;
+            }
+
+            return intval($left['sort_key'] ?? 0) <=> intval($right['sort_key'] ?? 0);
+        });
+
+        $rows = [];
+        $runningStock = $startingStock;
+        foreach ($events as $index => $event) {
+            $stokAwal = $runningStock;
+            $stokSisa = $stokAwal + intval($event['stok_masuk'] ?? 0) - intval($event['stok_keluar'] ?? 0);
+            $runningStock = $stokSisa;
+
+            $event['stok_awal'] = $stokAwal;
+            $event['stok_sisa'] = $stokSisa;
+            $event['id'] = -1000000 - $index;
+            $rows[] = $event;
+        }
+
+        return [
+            'rows' => $rows,
+            'current_stock' => $runningStock,
+        ];
+    }
+
+    private function resolveStockCardArrayPriority(array $row): int
+    {
+        if (!empty($row['id_pembelian'])) {
+            return 0;
+        }
+
+        if (!empty($row['id_penjualan'])) {
+            return 1;
+        }
+
+        $keterangan = strtolower(trim((string) ($row['keterangan'] ?? '')));
+        if (
+            str_contains($keterangan, 'stock opname')
+            || str_contains($keterangan, 'perubahan stok manual')
+            || str_contains($keterangan, 'penyesuaian stok')
+            || str_contains($keterangan, 'saldo awal stok')
+        ) {
+            return 2;
+        }
+
+        return 3;
+    }
+
+    private function formatArrayStockCardRow(array $item): array
+    {
+        $row = [];
+        $row['id'] = intval($item['id'] ?? 0);
+        $row['tanggal'] = tanggal_indonesia((string) ($item['waktu'] ?? ''), false);
+        $row['waktu_raw'] = (string) ($item['waktu'] ?? '');
+        $row['stok_masuk'] = intval($item['stok_masuk'] ?? 0) > 0 ? format_uang($item['stok_masuk']) : '-';
+        $row['stok_keluar'] = intval($item['stok_keluar'] ?? 0) > 0 ? format_uang($item['stok_keluar']) : '-';
+        $row['stok_awal'] = intval($item['stok_awal'] ?? 0) < 0
+            ? '<span class="text-danger" title="Kondisi oversold - stok tidak mencukupi pada saat transaksi">' . format_uang($item['stok_awal']) . '</span>'
+            : format_uang($item['stok_awal'] ?? 0);
+        $stokSisa = intval($item['stok_sisa'] ?? 0);
+        $row['stok_sisa'] = $stokSisa < 0
+            ? '<span class="text-danger"><strong>' . format_uang($stokSisa) . '</strong></span>'
+            : format_uang($stokSisa);
+        $row['expired_date'] = '';
+        $row['supplier'] = '';
+        $row['is_audit_reference'] = false;
+
+        $normalizedKeterangan = $this->normalizeStockCardKeterangan((string) ($item['keterangan'] ?? ''));
+        if (!empty($item['is_open_draft'])) {
+            if (!empty($item['id_penjualan'])) {
+                $row['keterangan'] = '<span class="label label-danger"><i class="fa fa-clock-o"></i> Penjualan Draft</span>'
+                    . '<br><small class="text-muted">ID Transaksi: ' . intval($item['id_penjualan']) . '</small>';
+            } elseif (!empty($item['id_pembelian'])) {
+                $row['keterangan'] = '<span class="label label-primary"><i class="fa fa-clock-o"></i> Pembelian Draft</span>'
+                    . '<br><small class="text-muted">ID Pembelian: ' . intval($item['id_pembelian']) . '</small>';
+            } else {
+                $row['keterangan'] = '<span class="label label-default"><i class="fa fa-clock-o"></i> Draft</span>';
+            }
+        } else {
+            if (!empty($normalizedKeterangan)) {
+                if (stripos($normalizedKeterangan, 'Pembelian') !== false) {
+                    $row['keterangan'] = '<span class="label label-success"><i class="fa fa-arrow-up"></i> ' . $normalizedKeterangan . '</span>';
+                    if (!empty($item['id_pembelian'])) {
+                        $pembelian = Pembelian::find($item['id_pembelian']);
+                        if ($pembelian && $pembelian->no_faktur && $pembelian->no_faktur != 'o') {
+                            $row['keterangan'] .= '<br><small class="text-muted">Faktur: ' . $pembelian->no_faktur . '</small>';
+                        }
+                    }
+                } elseif (stripos($normalizedKeterangan, 'Penjualan') !== false) {
+                    $row['keterangan'] = '<span class="label label-warning"><i class="fa fa-arrow-down"></i> ' . $normalizedKeterangan . '</span>';
+                    if (!empty($item['id_penjualan'])) {
+                        $row['keterangan'] .= '<br><small class="text-muted">ID Transaksi: ' . intval($item['id_penjualan']) . '</small>';
+                    }
+                } elseif (
+                    stripos($normalizedKeterangan, 'Perubahan Stok Manual') !== false
+                    || stripos($normalizedKeterangan, 'Stock Opname') !== false
+                    || stripos($normalizedKeterangan, 'Penyesuaian Stok') !== false
+                ) {
+                    $row['keterangan'] = '<span class="label label-info"><i class="fa fa-edit"></i> ' . $normalizedKeterangan . '</span>';
+                } elseif (stripos($normalizedKeterangan, 'Saldo Awal Stok') !== false) {
+                    $row['keterangan'] = '<span class="label label-default"><i class="fa fa-archive"></i> ' . $normalizedKeterangan . '</span>';
+                } else {
+                    $row['keterangan'] = '<span class="label label-default"><i class="fa fa-cog"></i> ' . $normalizedKeterangan . '</span>';
+                }
+            } else {
+                $row['keterangan'] = '<span class="label label-default"><i class="fa fa-cog"></i> Penyesuaian Stok</span>';
+            }
+        }
+
+        if (!empty($item['id_pembelian'])) {
+            try {
+                $pembelian = Pembelian::find($item['id_pembelian']);
+                if ($pembelian) {
+                    $row['supplier'] = optional($pembelian->supplier)->nama ?? '';
+                    $pd = PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)
+                        ->where('id_produk', intval($item['id_produk'] ?? 0))
+                        ->first();
+                    if ($pd && !empty($pd->expired_date)) {
+                        try {
+                            $row['expired_date'] = Carbon::parse($pd->expired_date)->toDateString();
+                        } catch (\Exception $e) {
+                            $row['expired_date'] = (string) $pd->expired_date;
+                        }
+                    }
+                }
+            } catch (\Exception $e) {
+            }
+        } elseif (!empty($item['id_produk'])) {
+            $produk = Produk::find(intval($item['id_produk']));
+            if ($produk && !empty($produk->expired_date)) {
+                try {
+                    $row['expired_date'] = Carbon::parse($produk->expired_date)->toDateString();
+                } catch (\Exception $e) {
+                    $row['expired_date'] = (string) $produk->expired_date;
+                }
+            }
+        }
+
+        return $row;
     }
 
     private function formatRekamanStockCardRow(RekamanStok $item): array

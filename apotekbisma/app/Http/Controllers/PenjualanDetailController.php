@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\UnsafeStockMutationException;
 use App\Models\Member;
 use App\Models\Penjualan;
 use App\Models\PenjualanDetail;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Cache;
 class PenjualanDetailController extends Controller
 {
     private const IDEMPOTENCY_TTL = 10;
+    private const AUTHORITATIVE_LOW_STOCK_THRESHOLD = 20;
     
     public function __construct()
     {
@@ -58,13 +60,16 @@ class PenjualanDetailController extends Controller
             ->map(function ($items) {
                 return intval($items->sum('jumlah'));
             });
+        $authoritativeSnapshots = app(StockRuntimeIntegrityService::class)
+            ->previewAuthoritativeDraftAwareSnapshots($draftQtyByProduct->keys()->all());
 
         $data = array();
         $total = 0;
         $total_item = 0;
 
         foreach ($detail as $item) {
-            $draftStockPreview = $this->buildDraftStockPreview(
+            $draftStockPreview = $this->buildDraftStockPreviewFromSnapshot(
+                $authoritativeSnapshots[intval($item->id_produk)] ?? null,
                 intval($item->produk->stok ?? 0),
                 intval($draftQtyByProduct->get($item->id_produk, $item->jumlah))
             );
@@ -130,6 +135,88 @@ class PenjualanDetailController extends Controller
             'draft_quantity' => $resolvedDraftQuantity,
             'stock_after_transaction' => $resolvedCurrentStock,
         ];
+    }
+
+    private function buildDraftStockPreviewFromSnapshot(?array $snapshot, int $fallbackCurrentStock, int $draftQuantity): array
+    {
+        $resolvedDraftQuantity = max(0, intval($draftQuantity));
+
+        if (!$snapshot) {
+            return $this->buildDraftStockPreview($fallbackCurrentStock, $resolvedDraftQuantity);
+        }
+
+        return $this->buildDraftStockPreview(
+            intval($snapshot['expected_stock'] ?? $fallbackCurrentStock),
+            $resolvedDraftQuantity
+        );
+    }
+
+    private function resolveAuthoritativeCurrentStock(int $productId, int $fallbackStock, bool $clampNegativeToZero = false): int
+    {
+        $stockMap = app(StockRuntimeIntegrityService::class)
+            ->previewCurrentSellableStockMap([$productId], null, $clampNegativeToZero);
+
+        if (!isset($stockMap[$productId])) {
+            return intval($fallbackStock);
+        }
+
+        return intval($clampNegativeToZero
+            ? ($stockMap[$productId]['display_stock'] ?? $fallbackStock)
+            : ($stockMap[$productId]['raw_current_stock'] ?? $fallbackStock));
+    }
+
+    private function resolveAuthoritativeDraftPreview(int $productId, int $fallbackCurrentStock, int $draftQuantity): array
+    {
+        $snapshots = app(StockRuntimeIntegrityService::class)
+            ->previewAuthoritativeDraftAwareSnapshots([$productId]);
+
+        return $this->buildDraftStockPreviewFromSnapshot(
+            $snapshots[$productId] ?? null,
+            $fallbackCurrentStock,
+            $draftQuantity
+        );
+    }
+
+    private function applyAuthoritativeDisplayStockOverlay($produkCollection)
+    {
+        $candidateIds = collect($produkCollection)
+            ->filter(function ($produk) {
+                return intval($produk->stok ?? 0) <= self::AUTHORITATIVE_LOW_STOCK_THRESHOLD;
+            })
+            ->pluck('id_produk')
+            ->map(function ($id) {
+                return intval($id);
+            })
+            ->filter(function ($id) {
+                return $id > 0;
+            })
+            ->unique()
+            ->values()
+            ->all();
+
+        if (empty($candidateIds)) {
+            return $produkCollection;
+        }
+
+        $authoritativeStockMap = app(StockRuntimeIntegrityService::class)
+            ->previewCurrentSellableStockMap($candidateIds, null, true);
+
+        foreach ($produkCollection as $produk) {
+            $productId = intval($produk->id_produk ?? 0);
+            if ($productId <= 0 || !isset($authoritativeStockMap[$productId])) {
+                continue;
+            }
+
+            $rawCurrentStock = intval($authoritativeStockMap[$productId]['raw_current_stock'] ?? $produk->stok);
+            $displayStock = intval($authoritativeStockMap[$productId]['display_stock'] ?? $produk->stok);
+            $resolvedDisplayStock = $rawCurrentStock < 0 ? $rawCurrentStock : $displayStock;
+            $produk->setRawAttributes(array_merge($produk->getAttributes(), [
+                'stok' => $resolvedDisplayStock,
+            ]), true);
+            $produk->stok_raw_otoritatif = $rawCurrentStock;
+        }
+
+        return $produkCollection;
     }
 
     private function renderDraftStockSummaryHtml(array $draftStockPreview): string
@@ -203,7 +290,7 @@ class PenjualanDetailController extends Controller
                 return response()->json(['error' => true, 'message' => 'Data produk tidak ditemukan'], 400);
             }
 
-            $stokSaatIni = intval($produk->stok);
+            $stokSaatIni = $this->resolveAuthoritativeCurrentStock(intval($produk->id_produk), intval($produk->stok));
             if ($stokSaatIni <= 0) {
                 DB::rollBack();
                 Cache::forget($idempotencyKey);
@@ -309,14 +396,19 @@ class PenjualanDetailController extends Controller
 
             $this->syncAffectedProdukHistory([$produk->id_produk ?? null]);
 
-            $currentProductStock = intval(DB::table('produk')
-                ->where('id_produk', $produk->id_produk)
-                ->value('stok'));
             $draftProductQuantity = intval(DB::table('penjualan_detail')
                 ->where('id_penjualan', $detail->id_penjualan)
                 ->where('id_produk', $produk->id_produk)
                 ->sum('jumlah'));
-            $draftStockPreview = $this->buildDraftStockPreview($currentProductStock, $draftProductQuantity);
+            $currentProductStock = $this->resolveAuthoritativeCurrentStock(
+                intval($produk->id_produk),
+                intval(DB::table('produk')->where('id_produk', $produk->id_produk)->value('stok'))
+            );
+            $draftStockPreview = $this->resolveAuthoritativeDraftPreview(
+                intval($produk->id_produk),
+                $currentProductStock,
+                $draftProductQuantity
+            );
             
             DB::commit();
             
@@ -326,9 +418,18 @@ class PenjualanDetailController extends Controller
                 'success' => true,
                 'message' => 'Produk berhasil ditambahkan ke keranjang. Stok tersisa: ' . $stok_baru,
                 'id_penjualan' => $id_penjualan,
-                'stok_tersisa' => $stok_baru
+                'stok_tersisa' => $currentProductStock
             ], 200);
             
+        } catch (UnsafeStockMutationException $e) {
+            DB::rollBack();
+            Cache::forget($idempotencyKey);
+            Log::warning('PenjualanDetailController@store blocked by stock integrity guard', [
+                'id_produk' => $request->id_produk ?? null,
+                'id_penjualan' => $request->id_penjualan ?? session('id_penjualan'),
+                'message' => $e->getMessage(),
+            ]);
+            return response()->json(['error' => true, 'message' => $e->getMessage()], 400);
         } catch (\Exception $e) {
             DB::rollBack();
             Cache::forget($idempotencyKey);
@@ -380,7 +481,7 @@ class PenjualanDetailController extends Controller
             $old_jumlah_row = intval($detail->jumlah);
             $selisih_row = $new_jumlah_row - $old_jumlah_row;
             
-            $stok_sekarang = intval($produk->stok);
+            $stok_sekarang = $this->resolveAuthoritativeCurrentStock(intval($produk->id_produk), intval($produk->stok));
             
             if ($selisih_row > 0 && $stok_sekarang < $selisih_row) {
                 DB::rollBack();
@@ -457,14 +558,19 @@ class PenjualanDetailController extends Controller
             
             $this->syncAffectedProdukHistory([$produk->id_produk ?? null]);
 
-            $currentProductStock = intval(DB::table('produk')
-                ->where('id_produk', $produk->id_produk)
-                ->value('stok'));
             $draftProductQuantity = intval(DB::table('penjualan_detail')
                 ->where('id_penjualan', $detail->id_penjualan)
                 ->where('id_produk', $produk->id_produk)
                 ->sum('jumlah'));
-            $draftStockPreview = $this->buildDraftStockPreview($currentProductStock, $draftProductQuantity);
+            $currentProductStock = $this->resolveAuthoritativeCurrentStock(
+                intval($produk->id_produk),
+                intval(DB::table('produk')->where('id_produk', $produk->id_produk)->value('stok'))
+            );
+            $draftStockPreview = $this->resolveAuthoritativeDraftPreview(
+                intval($produk->id_produk),
+                $currentProductStock,
+                $draftProductQuantity
+            );
 
             DB::commit();
             
@@ -482,6 +588,14 @@ class PenjualanDetailController extends Controller
                 ]
             ], 200);
             
+        } catch (UnsafeStockMutationException $e) {
+            DB::rollBack();
+            Cache::forget($idempotencyKey);
+            Log::warning('PenjualanDetailController@update blocked by stock integrity guard', [
+                'id_penjualan_detail' => $id,
+                'message' => $e->getMessage(),
+            ]);
+            return response()->json(['message' => $e->getMessage()], 400);
         } catch (\Exception $e) {
             DB::rollBack();
             Cache::forget($idempotencyKey);
@@ -582,16 +696,22 @@ class PenjualanDetailController extends Controller
                 $this->syncAffectedProdukHistory([$produkId ?? null]);
 
                 if (!empty($produkId)) {
-                    $currentProductStock = intval(DB::table('produk')
-                        ->where('id_produk', $produkId)
-                        ->value('stok'));
+                    $currentProductStock = $this->resolveAuthoritativeCurrentStock(
+                        intval($produkId),
+                        intval(DB::table('produk')->where('id_produk', $produkId)->value('stok')),
+                        true
+                    );
                     $deleteResponse['id_produk'] = intval($produkId);
                     $deleteResponse['stok_tersisa'] = $currentProductStock;
                     $deleteResponse['remaining_qty'] = intval($remainingQty ?? 0);
 
                     if (intval($remainingQty ?? 0) > 0) {
                         $deleteResponse['stock_summary_html'] = $this->renderDraftStockSummaryHtml(
-                            $this->buildDraftStockPreview($currentProductStock, intval($remainingQty))
+                            $this->resolveAuthoritativeDraftPreview(
+                                intval($produkId),
+                                $currentProductStock,
+                                intval($remainingQty)
+                            )
                         );
                     }
                 }
@@ -603,6 +723,14 @@ class PenjualanDetailController extends Controller
                 DB::commit();
                 Cache::forget($idempotencyKey);
             }
+        } catch (UnsafeStockMutationException $e) {
+            DB::rollBack();
+            Cache::forget($idempotencyKey);
+            Log::warning('PenjualanDetailController@destroy blocked by stock integrity guard', [
+                'id_penjualan_detail' => $id,
+                'message' => $e->getMessage(),
+            ]);
+            return response()->json(['error' => $e->getMessage()], 400);
         } catch (\Exception $e) {
             DB::rollBack();
             Cache::forget($idempotencyKey);
@@ -632,7 +760,7 @@ class PenjualanDetailController extends Controller
 
     public function getProdukData()
     {
-        $produk = Produk::orderBy('nama_produk')->get();
+        $produk = $this->applyAuthoritativeDisplayStockOverlay(Produk::orderBy('nama_produk')->get());
         
         $data = [];
         foreach ($produk as $key => $item) {
@@ -641,12 +769,12 @@ class PenjualanDetailController extends Controller
                 'no' => $key + 1,
                 'kode_produk' => $item->kode_produk,
                 'nama_produk' => $item->nama_produk,
-                'stok' => $item->stok,
+                'stok' => intval($item->stok),
                 'harga_jual' => $item->harga_jual,
-                'stok_badge_class' => $item->stok == 0 ? 'bg-red' : ($item->stok <= 5 ? 'bg-yellow' : 'bg-green'),
-                'stok_text' => $item->stok == 0 ? 'Stok Habis - Tidak Bisa Dijual' : ($item->stok <= 5 ? 'Stok Menipis' : ''),
-                'stok_icon' => $item->stok == 0 ? 'fa-exclamation-triangle' : ($item->stok <= 5 ? 'fa-warning' : ''),
-                'stok_text_class' => $item->stok == 0 ? 'text-danger' : ($item->stok <= 5 ? 'text-warning' : '')
+                'stok_badge_class' => intval($item->stok) == 0 ? 'bg-red' : (intval($item->stok) <= 5 ? 'bg-yellow' : 'bg-green'),
+                'stok_text' => intval($item->stok) == 0 ? 'Stok habis valid setelah baseline' : (intval($item->stok) <= 5 ? 'Stok menipis' : ''),
+                'stok_icon' => intval($item->stok) == 0 ? 'fa-exclamation-triangle' : (intval($item->stok) <= 5 ? 'fa-warning' : ''),
+                'stok_text_class' => intval($item->stok) == 0 ? 'text-danger' : (intval($item->stok) <= 5 ? 'text-warning' : '')
             ];
         }
         
@@ -688,17 +816,14 @@ class PenjualanDetailController extends Controller
             return;
         }
 
-        // IMPORTANT: Do not run global stock-history recalculation for draft cart mutations.
-        // Draft flows already adjust produk.stok atomically. Recalculation across full history
-        // can overwrite correct draft stock with corrupted legacy chain results.
-        // Finalized transaction synchronization remains handled in PenjualanController::store().
-        app(StockRuntimeIntegrityService::class)->reconcileDraftStockConsistency($normalizedIds);
-        app(StockRuntimeIntegrityService::class)->assertDraftStockConsistency(
+        // Keep draft stock aligned with baseline-backed committed truth, but limit any reflow
+        // strictly to the affected products so unrelated history is untouched.
+        app(StockRuntimeIntegrityService::class)->synchronizeDraftStockAgainstCommittedTruth(
             $normalizedIds,
             'sinkronisasi draft penjualan'
         );
 
-        Log::debug('Skip global stock sync on draft penjualan mutation', [
+        Log::debug('Draft stock sync aligned against committed truth', [
             'id_produk' => $normalizedIds,
         ]);
     }

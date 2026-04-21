@@ -329,6 +329,100 @@ class PembelianDetailControllerStockSyncTest extends TestCase
         $this->assertSame(15, intval($records[2]->stok_sisa));
     }
 
+    public function test_finalized_post_cutoff_reflow_uses_cutoff_stock_record_when_csv_seed_is_missing(): void
+    {
+        $now = '2026-04-20 09:00:00';
+
+        DB::table('produk')->insert([
+            'id_produk' => 13,
+            'id_kategori' => 1,
+            'nama_produk' => 'TEST DB BASELINE PRODUCT',
+            'harga_beli' => 100,
+            'diskon' => 0,
+            'harga_jual' => 150,
+            'stok' => 11,
+            'created_at' => $now,
+            'updated_at' => $now,
+        ]);
+
+        DB::table('rekaman_stoks')->insert([
+            'id_rekaman_stok' => 704,
+            'id_produk' => 13,
+            'id_penjualan' => null,
+            'id_pembelian' => null,
+            'waktu' => '2025-12-31 23:59:59',
+            'stok_awal' => 12,
+            'stok_masuk' => 0,
+            'stok_keluar' => 0,
+            'stok_sisa' => 12,
+            'keterangan' => 'Saldo Awal Stok dari histori sebelum cutoff',
+            'created_at' => $now,
+            'updated_at' => $now,
+        ]);
+
+        DB::table('pembelian')->insert([
+            'id_pembelian' => 103,
+            'id_supplier' => 1,
+            'no_faktur' => 'INV-FINAL-103',
+            'total_item' => 1,
+            'total_harga' => 100,
+            'diskon' => 0,
+            'bayar' => 100,
+            'waktu' => '2026-02-02 10:00:00',
+            'waktu_datang' => '2026-02-02 10:00:00',
+            'created_at' => $now,
+            'updated_at' => $now,
+        ]);
+
+        DB::table('pembelian_detail')->insert([
+            'id_pembelian_detail' => 503,
+            'id_pembelian' => 103,
+            'id_produk' => 13,
+            'harga_beli' => 100,
+            'jumlah' => 5,
+            'subtotal' => 500,
+            'created_at' => $now,
+            'updated_at' => $now,
+        ]);
+
+        DB::table('rekaman_stoks')->insert([
+            'id_rekaman_stok' => 705,
+            'id_produk' => 13,
+            'id_penjualan' => null,
+            'id_pembelian' => 103,
+            'waktu' => '2026-02-02 10:00:00',
+            'stok_awal' => 6,
+            'stok_masuk' => 5,
+            'stok_keluar' => 0,
+            'stok_sisa' => 11,
+            'keterangan' => 'Pembelian corrupt',
+            'created_at' => $now,
+            'updated_at' => $now,
+        ]);
+
+        session(['id_pembelian' => 103, 'id_supplier' => 1]);
+
+        $controller = app(PembelianDetailController::class);
+        $request = Request::create('/pembelian_detail/503', 'PUT', ['jumlah' => 6]);
+
+        $response = $controller->update($request, 503);
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame(18, intval(DB::table('produk')->where('id_produk', 13)->value('stok')));
+
+        $records = DB::table('rekaman_stoks')
+            ->where('id_produk', 13)
+            ->orderBy('waktu', 'asc')
+            ->orderBy('id_rekaman_stok', 'asc')
+            ->get();
+
+        $this->assertCount(2, $records);
+        $this->assertSame('Saldo Awal Stok per 31-12-2025', (string) $records[0]->keterangan);
+        $this->assertSame(12, intval($records[0]->stok_sisa));
+        $this->assertSame(6, intval($records[1]->stok_masuk));
+        $this->assertSame(18, intval($records[1]->stok_sisa));
+    }
+
     private function writeBaselineCsv(): void
     {
         file_put_contents(
