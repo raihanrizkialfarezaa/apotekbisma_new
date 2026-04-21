@@ -27,7 +27,7 @@ class PenjualanDetailController extends Controller
 
     public function index()
     {
-        $produk = Produk::orderBy('nama_produk')->get();
+        $produk = collect();
         $member = Member::orderBy('nama')->get();
         $diskon = Setting::first()->diskon ?? 0;
         $defaultTransactionWaktu = Carbon::now()->setTimezone(config('app.timezone'));
@@ -758,30 +758,106 @@ class PenjualanDetailController extends Controller
         return response()->json($data);
     }
 
-    public function getProdukData()
+    public function getProdukData(Request $request)
     {
-        $produk = $this->applyAuthoritativeDisplayStockOverlay(Produk::orderBy('nama_produk')->get());
-        
-        $data = [];
-        foreach ($produk as $key => $item) {
-            $data[] = [
-                'id' => $item->id_produk,
-                'no' => $key + 1,
-                'kode_produk' => $item->kode_produk,
-                'nama_produk' => $item->nama_produk,
+        $recordsTotal = Produk::count();
+
+        $query = Produk::query()
+            ->select('id_produk', 'kode_produk', 'nama_produk', 'stok', 'harga_jual');
+
+        $this->applyPenjualanProdukSearchFilter($query, $request);
+        $recordsFiltered = (clone $query)->count();
+
+        $this->applyPenjualanProdukOrdering($query, $request);
+
+        $start = max(0, intval($request->input('start', 0)));
+        $length = intval($request->input('length', 10));
+        if ($length >= 0) {
+            $query->skip($start)->take($length);
+        }
+
+        $produk = $this->applyAuthoritativeDisplayStockOverlay($query->get());
+        $data = $this->transformPenjualanProdukRows($produk, $start);
+
+        return response()->json([
+            'draw' => intval($request->input('draw', 0)),
+            'recordsTotal' => $recordsTotal,
+            'recordsFiltered' => $recordsFiltered,
+            'data' => $data,
+        ])
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', '0');
+    }
+
+    private function transformPenjualanProdukRows($produkCollection, int $start = 0): array
+    {
+        $rows = [];
+
+        foreach ($produkCollection->values() as $index => $item) {
+            $rows[] = [
+                'id' => intval($item->id_produk),
+                'no' => $start + $index + 1,
+                'kode_produk' => (string) ($item->kode_produk ?? ''),
+                'nama_produk' => (string) ($item->nama_produk ?? ''),
                 'stok' => intval($item->stok),
-                'harga_jual' => $item->harga_jual,
+                'harga_jual' => intval($item->harga_jual),
                 'stok_badge_class' => intval($item->stok) == 0 ? 'bg-red' : (intval($item->stok) <= 5 ? 'bg-yellow' : 'bg-green'),
                 'stok_text' => intval($item->stok) == 0 ? 'Stok habis valid setelah baseline' : (intval($item->stok) <= 5 ? 'Stok menipis' : ''),
                 'stok_icon' => intval($item->stok) == 0 ? 'fa-exclamation-triangle' : (intval($item->stok) <= 5 ? 'fa-warning' : ''),
-                'stok_text_class' => intval($item->stok) == 0 ? 'text-danger' : (intval($item->stok) <= 5 ? 'text-warning' : '')
+                'stok_text_class' => intval($item->stok) == 0 ? 'text-danger' : (intval($item->stok) <= 5 ? 'text-warning' : ''),
             ];
         }
-        
-        return response()->json($data)
-               ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
-               ->header('Pragma', 'no-cache')
-               ->header('Expires', '0');
+
+        return $rows;
+    }
+
+    private function applyPenjualanProdukSearchFilter($query, Request $request): void
+    {
+        $globalSearch = trim((string) data_get($request->input('search'), 'value', ''));
+
+        if ($globalSearch === '') {
+            return;
+        }
+
+        $likeValue = '%' . $this->escapeLikeValue($globalSearch) . '%';
+        $query->where(function ($builder) use ($globalSearch, $likeValue) {
+            $builder->where('nama_produk', 'like', $likeValue)
+                ->orWhere('kode_produk', 'like', $likeValue);
+
+            if (is_numeric($globalSearch)) {
+                $builder->orWhere('id_produk', intval($globalSearch))
+                    ->orWhere('harga_jual', intval($globalSearch))
+                    ->orWhere('stok', intval($globalSearch));
+            }
+        });
+    }
+
+    private function applyPenjualanProdukOrdering($query, Request $request): void
+    {
+        $columnIndex = intval(data_get($request->input('order'), '0.column', 2));
+        $direction = strtolower((string) data_get($request->input('order'), '0.dir', 'asc')) === 'desc' ? 'desc' : 'asc';
+
+        $sortableColumns = [
+            1 => 'kode_produk',
+            2 => 'nama_produk',
+            3 => 'stok',
+            4 => 'harga_jual',
+        ];
+
+        $sortColumn = $sortableColumns[$columnIndex] ?? 'nama_produk';
+        $query->orderBy($sortColumn, $direction);
+
+        if ($sortColumn !== 'nama_produk') {
+            $query->orderBy('nama_produk', 'asc');
+        }
+
+        $query->orderBy('id_produk', 'asc');
+    }
+
+    private function escapeLikeValue(string $value): string
+    {
+        return str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $value);
     }
 
     public function recalculateStock()

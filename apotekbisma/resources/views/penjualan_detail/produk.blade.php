@@ -71,42 +71,7 @@
                             <th>Harga Jual</th>
                             <th><i class="fa fa-cog"></i></th>
                         </thead>
-                        <tbody>
-                            @foreach ($produk as $key => $item)
-                                <tr class="{{ $item->stok <= 0 ? 'danger' : ($item->stok == 1 ? 'warning' : '') }}">
-                                    <td width="5%">{{ $key+1 }}</td>
-                                    <td><span class="label label-success">{{ $item->kode_produk }}</span></td>
-                                    <td>
-                                        {{ $item->nama_produk }}
-                                        @if($item->stok <= 0)
-                                            <span class="label label-danger">Stok Habis</span>
-                                        @elseif($item->stok == 1)
-                                            <span class="label label-warning">Stok Menipis</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <span class="{{ $item->stok <= 0 ? 'text-danger' : ($item->stok == 1 ? 'text-warning' : 'text-success') }}">
-                                            {{ $item->stok }}
-                                        </span>
-                                    </td>
-                                    <td>{{ number_format($item->harga_jual) }}</td>
-                                    <td>
-                                        @if($item->stok > 0)
-                                            <a href="#" class="btn btn-primary btn-xs btn-flat"
-                                                onclick="pilihProduk('{{ $item->id_produk }}', '{{ $item->kode_produk }}', {{ $item->stok }})">
-                                                <i class="fa fa-check-circle"></i>
-                                                Pilih
-                                            </a>
-                                        @else
-                                            <button class="btn btn-danger btn-xs btn-flat" disabled title="Stok habis, tidak dapat dijual">
-                                                <i class="fa fa-ban"></i>
-                                                Tidak Tersedia
-                                            </button>
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
+                        <tbody></tbody>
                     </table>
                 </div>
             </div>

@@ -44,7 +44,6 @@ class PembelianDetailController extends Controller
             session(['id_supplier' => $pembelian->id_supplier]);
         }
         
-        $produk = Produk::orderBy('nama_produk')->get();
         $supplier = Supplier::find($pembelian->id_supplier);
         $diskon = $pembelian->diskon ?? 0;
 
@@ -53,7 +52,7 @@ class PembelianDetailController extends Controller
             return redirect()->route('pembelian.index')->with('error', 'Supplier tidak ditemukan. Silakan mulai transaksi baru.');
         }
 
-        return view('pembelian_detail.index', compact('id_pembelian', 'produk', 'supplier', 'diskon', 'pembelian'));
+        return view('pembelian_detail.index', compact('id_pembelian', 'supplier', 'diskon', 'pembelian'));
     }
     
     public function editBayar($id)
@@ -70,7 +69,6 @@ class PembelianDetailController extends Controller
         session(['pembelian_edit_mode' => true]);
         session(['pembelian_edit_snapshot' => $this->buildPembelianEditSnapshot($pembelian->id_pembelian)]);
         
-        $produk = Produk::orderBy('nama_produk')->get();
         $detail_pembelian = PembelianDetail::where('id_pembelian', $id)->get();
         $supplier = Supplier::find($pembelian->id_supplier);
         $diskon = $pembelian->diskon ?? 0;
@@ -80,7 +78,7 @@ class PembelianDetailController extends Controller
             abort(404);
         }
 
-        return view('pembelian_detail.editBayar', compact('id_pembelian', 'pembelian', 'tanggal', 'detail_pembelian', 'produk', 'supplier', 'diskon'));
+        return view('pembelian_detail.editBayar', compact('id_pembelian', 'pembelian', 'tanggal', 'detail_pembelian', 'supplier', 'diskon'));
     }
 
     private function buildPembelianEditSnapshot(int $idPembelian): array

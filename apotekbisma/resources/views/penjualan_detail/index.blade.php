@@ -887,20 +887,19 @@
                 }
             },
             processing: true,
-            serverSide: false,
+            serverSide: true,
             autoWidth: false,
             scrollX: true,
             scrollCollapse: true,
             ajax: {
-                url: '{{ route('transaksi.produk_data') }}',
-                dataSrc: ''
+                url: '{{ route('transaksi.produk_data') }}'
             },
             columns: [
                 {data: 'no', searchable: false, sortable: false},
                 {
                     data: 'kode_produk',
                     render: function(data) {
-                        return '<span class="label label-success">' + data + '</span>';
+                        return '<span class="label label-success">' + (data || '-') + '</span>';
                     }
                 },
                 {data: 'nama_produk'},

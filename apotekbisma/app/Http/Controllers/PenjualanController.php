@@ -257,7 +257,7 @@ class PenjualanController extends Controller
         }
 
         // Tampilkan halaman kosong untuk transaksi baru tanpa membuat record di database
-        $produk = Produk::orderBy('nama_produk')->get();
+        $produk = collect();
         $member = Member::orderBy('nama')->get();
         $diskon = Setting::first()->diskon ?? 0;
         $id_penjualan = null;
@@ -273,7 +273,7 @@ class PenjualanController extends Controller
         if ($id_penjualan = session('id_penjualan')) {
             $penjualan = Penjualan::find($id_penjualan);
             if ($penjualan) {
-                $produk = Produk::orderBy('nama_produk')->get();
+                $produk = collect();
                 $member = Member::orderBy('nama')->get();
                 $diskon = Setting::first()->diskon ?? 0;
                 $memberSelected = $penjualan->member ?? new Member();
