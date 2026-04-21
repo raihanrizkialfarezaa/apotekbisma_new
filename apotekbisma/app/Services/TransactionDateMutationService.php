@@ -61,11 +61,11 @@ class TransactionDateMutationService
     {
         $this->assertTransactionFinalWaktuAllowed($this->resolvePembelianStockWaktu($pembelian));
 
-        return $this->stockRuntimeIntegrityService->rebuildAndValidate(
+        return $this->synchronizeFinalizedTransaction(
             $this->getPembelianProductIds($pembelian),
             'sinkronisasi pembelian final ' . (string) ($pembelian->no_faktur ?? ('#' . $pembelian->id_pembelian)),
-            true,
-            $this->transactionLogicalClockService->now()->format('Y-m-d H:i:s')
+            'pembelian',
+            intval($pembelian->id_pembelian)
         );
     }
 
@@ -73,12 +73,42 @@ class TransactionDateMutationService
     {
         $this->assertTransactionFinalWaktuAllowed($penjualan->waktu ?? $penjualan->created_at);
 
-        return $this->stockRuntimeIntegrityService->rebuildAndValidate(
+        return $this->synchronizeFinalizedTransaction(
             $this->getPenjualanProductIds($penjualan),
             'finalisasi penjualan #' . $penjualan->id_penjualan,
-            true,
-            $this->transactionLogicalClockService->now()->format('Y-m-d H:i:s')
+            'penjualan',
+            intval($penjualan->id_penjualan)
         );
+    }
+
+    private function synchronizeFinalizedTransaction(
+        array $productIds,
+        string $contextLabel,
+        string $transactionType,
+        int $transactionId
+    ): array {
+        $resolvedUntil = $this->transactionLogicalClockService->now()->format('Y-m-d H:i:s');
+        $existingNegativeSummary = $this->baselineStockReflowService->previewRebuildSummary(
+            $productIds,
+            $resolvedUntil,
+            $transactionType,
+            $transactionId
+        );
+
+        $reflowSummary = $this->stockRuntimeIntegrityService->rebuildAndValidate(
+            $productIds,
+            $contextLabel,
+            false,
+            $resolvedUntil
+        );
+
+        $this->assertNoAdditionalNegativeHistoricalStock(
+            $existingNegativeSummary,
+            $reflowSummary,
+            $contextLabel
+        );
+
+        return $reflowSummary;
     }
 
     private function handleFinalDateChange(string $transactionType, int $transactionId, string $referenceLabel, $oldWaktu, $newWaktu, array $productIds): array
@@ -202,6 +232,39 @@ class TransactionDateMutationService
         );
     }
 
+    private function assertNoAdditionalNegativeHistoricalStock(
+        array $existingNegativeSummary,
+        array $reflowSummary,
+        string $contextLabel
+    ): void {
+        $existingNegativeCount = intval($existingNegativeSummary['negative_event_count'] ?? 0);
+        $reflowNegativeCount = intval($reflowSummary['negative_event_count'] ?? 0);
+
+        if ($reflowNegativeCount <= 0) {
+            return;
+        }
+
+        $existingNegativeProductIds = $this->normalizeNegativeProductIds(
+            $existingNegativeSummary['negative_event_product_ids'] ?? []
+        );
+        $reflowNegativeProductIds = $this->normalizeNegativeProductIds(
+            $reflowSummary['negative_event_product_ids'] ?? []
+        );
+        $newNegativeProductIds = array_values(array_diff($reflowNegativeProductIds, $existingNegativeProductIds));
+
+        if ($reflowNegativeCount <= $existingNegativeCount && empty($newNegativeProductIds)) {
+            return;
+        }
+
+        $productIdsToReport = !empty($newNegativeProductIds)
+            ? $newNegativeProductIds
+            : $reflowNegativeProductIds;
+
+        throw new UnsafeStockMutationException(
+            'Mutasi stok diblokir karena ' . $contextLabel . ' akan menimbulkan stok minus historis pada ' . $this->summarizeProductLabels($productIdsToReport) . '.'
+        );
+    }
+
     private function summarizeProductLabels(array $productIds): string
     {
         if (empty($productIds)) {
@@ -227,6 +290,13 @@ class TransactionDateMutationService
         }
 
         return implode(', ', $visibleLabels);
+    }
+
+    private function normalizeNegativeProductIds(array $productIds): array
+    {
+        return array_values(array_unique(array_filter(array_map('intval', $productIds), function ($productId) {
+            return $productId > 0;
+        })));
     }
 
     private function normalizeWaktu($value): string

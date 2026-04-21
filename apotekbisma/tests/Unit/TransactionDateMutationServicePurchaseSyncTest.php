@@ -66,6 +66,15 @@ class TransactionDateMutationServicePurchaseSyncTest extends TestCase
         $now = Carbon::parse('2026-03-20 12:00:00');
 
         $baselineReflowService = Mockery::mock(BaselineStockReflowService::class);
+        $baselineReflowService
+            ->shouldReceive('previewRebuildSummary')
+            ->once()
+            ->with([10], $now->format('Y-m-d H:i:s'), 'pembelian', 100)
+            ->andReturn([
+                'negative_event_count' => 0,
+                'negative_event_product_ids' => [],
+            ]);
+
         $integrityService = new class extends StockRuntimeIntegrityService {
             public array $lastCall = [];
 
@@ -104,7 +113,7 @@ class TransactionDateMutationServicePurchaseSyncTest extends TestCase
 
         $this->assertSame(['negative_event_count' => 0], $result);
         $this->assertSame(
-            [[10], 'sinkronisasi pembelian final INV-100', true, $now->format('Y-m-d H:i:s')],
+            [[10], 'sinkronisasi pembelian final INV-100', false, $now->format('Y-m-d H:i:s')],
             $integrityService->lastCall
         );
     }

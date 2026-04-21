@@ -9,7 +9,6 @@ use App\Models\Produk;
 use App\Models\RekamanStok;
 use App\Models\Setting;
 use App\Services\StockRuntimeIntegrityService;
-use App\Services\TransactionLogicalClockService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -29,7 +28,7 @@ class PenjualanDetailController extends Controller
         $produk = Produk::orderBy('nama_produk')->get();
         $member = Member::orderBy('nama')->get();
         $diskon = Setting::first()->diskon ?? 0;
-        $defaultTransactionWaktu = app(TransactionLogicalClockService::class)->now();
+        $defaultTransactionWaktu = Carbon::now()->setTimezone(config('app.timezone'));
 
         if ($id_penjualan = session('id_penjualan')) {
             $penjualan = Penjualan::find($id_penjualan);
@@ -54,21 +53,37 @@ class PenjualanDetailController extends Controller
             ->select('penjualan_detail.*')
             ->get();
 
+        $draftQtyByProduct = $detail
+            ->groupBy('id_produk')
+            ->map(function ($items) {
+                return intval($items->sum('jumlah'));
+            });
+
         $data = array();
         $total = 0;
         $total_item = 0;
 
         foreach ($detail as $item) {
+            $draftStockPreview = $this->buildDraftStockPreview(
+                intval($item->produk->stok ?? 0),
+                intval($draftQtyByProduct->get($item->id_produk, $item->jumlah))
+            );
+
             $row = array();
-            $row['kode_produk'] = '<span class="label label-success">'. $item->produk['kode_produk'] .'</span';
+            $kodeProduk = trim((string) ($item->produk['kode_produk'] ?? ''));
+            $row['kode_produk'] = $kodeProduk !== ''
+                ? '<span class="label label-success">' . e($kodeProduk) . '</span>'
+                : '<span class="text-muted">-</span>';
             $row['nama_produk'] = $item->produk['nama_produk'];
             $row['harga_jual']  = 'Rp. '. format_uang($item->harga_jual);
             $row['jumlah']      = '<input type="number" class="form-control input-sm quantity" data-id="'. $item->id_penjualan_detail .'" value="'. $item->jumlah .'">';
             $row['diskon']      = $item->diskon . '%';
             $row['subtotal']    = 'Rp. '. format_uang($item->subtotal);
-            $row['aksi']        = '<div class="btn-group">
-                                    <button onclick="deleteData(`'. route('transaksi.destroy', $item->id_penjualan_detail) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
-                                </div>';
+            $row['aksi']        = $this->buildDraftActionColumn(
+                intval($item->id_penjualan_detail),
+                intval($item->id_produk),
+                $draftStockPreview
+            );
             $data[] = $row;
 
             $total += $item->harga_jual * $item->jumlah - (($item->diskon * $item->jumlah) / 100 * $item->harga_jual);;
@@ -91,6 +106,74 @@ class PenjualanDetailController extends Controller
             ->addIndexColumn()
             ->rawColumns(['aksi', 'kode_produk', 'jumlah'])
             ->make(true);
+    }
+
+    private function buildDraftActionColumn(int $detailId, int $productId, array $draftStockPreview): string
+    {
+        return '<div class="draft-action-wrap">'
+            . '<div class="btn-group">'
+            . '<button onclick="deleteData(`' . route('transaksi.destroy', $detailId) . '`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>'
+            . '</div>'
+            . '<div class="draft-stock-summary" data-product-id="' . $productId . '">'
+            . $this->renderDraftStockSummaryHtml($draftStockPreview)
+            . '</div>'
+            . '</div>';
+    }
+
+    private function buildDraftStockPreview(int $currentStock, int $draftQuantity): array
+    {
+        $resolvedDraftQuantity = max(0, intval($draftQuantity));
+        $resolvedCurrentStock = intval($currentStock);
+
+        return [
+            'stock_before_transaction' => $resolvedCurrentStock + $resolvedDraftQuantity,
+            'draft_quantity' => $resolvedDraftQuantity,
+            'stock_after_transaction' => $resolvedCurrentStock,
+        ];
+    }
+
+    private function renderDraftStockSummaryHtml(array $draftStockPreview): string
+    {
+        $stockBeforeValue = intval($draftStockPreview['stock_before_transaction'] ?? 0);
+        $draftQuantityValue = intval($draftStockPreview['draft_quantity'] ?? 0);
+        $stockAfterValue = intval($draftStockPreview['stock_after_transaction'] ?? 0);
+
+        $stockBefore = $this->formatStockUnit($stockBeforeValue);
+        $draftQuantity = $this->formatStockUnit($draftQuantityValue);
+        $stockAfter = $this->formatStockUnit($stockAfterValue);
+        $warningClass = $stockAfterValue <= 0 ? ' draft-stock-card--warning' : '';
+        $afterRowClass = $stockAfterValue <= 0 ? ' draft-stock-card__row--warning' : '';
+        $warningNotice = $stockAfterValue <= 0
+            ? '<div class="draft-stock-card__notice"><i class="fa fa-exclamation-triangle"></i> Stok akhir perlu perhatian</div>'
+            : '';
+
+        return '<div class="draft-stock-card' . $warningClass . '">'
+            . '<div class="draft-stock-card__title"><i class="fa fa-line-chart"></i> Kartu stok draft</div>'
+            . $warningNotice
+            . '<div class="draft-stock-card__equation">'
+            . '<div class="draft-stock-card__equation-main">' . $stockBefore . ' - ' . $draftQuantity . ' = ' . $stockAfter . '</div>'
+            . '<div class="draft-stock-card__equation-note">Stok awal realtime - qty draft = stok akhir</div>'
+            . '</div>'
+            . '<div class="draft-stock-card__rows">'
+            . '<div class="draft-stock-card__row">'
+            . '<span class="draft-stock-card__label">Stok awal</span>'
+            . '<strong class="draft-stock-card__value">' . $stockBefore . ' unit</strong>'
+            . '</div>'
+            . '<div class="draft-stock-card__row">'
+            . '<span class="draft-stock-card__label">Di draft ini</span>'
+            . '<strong class="draft-stock-card__value">' . $draftQuantity . ' unit</strong>'
+            . '</div>'
+            . '<div class="draft-stock-card__row draft-stock-card__row--after' . $afterRowClass . '">'
+            . '<span class="draft-stock-card__label">Stok akhir</span>'
+            . '<strong class="draft-stock-card__value">' . $stockAfter . ' unit</strong>'
+            . '</div>'
+            . '</div>'
+            . '</div>';
+    }
+
+    private function formatStockUnit($quantity): string
+    {
+        return number_format(intval($quantity), 0, ',', '.');
     }
 
     public function store(Request $request)
@@ -150,7 +233,7 @@ class PenjualanDetailController extends Controller
                 $penjualan->diskon = 0;
                 $penjualan->bayar = 0;
                 $penjualan->diterima = 0;
-                $penjualan->waktu = app(TransactionLogicalClockService::class)->now();
+                $penjualan->waktu = Carbon::now()->setTimezone(config('app.timezone'));
                 $penjualan->id_user = auth()->id();
                 $penjualan->save();
 
@@ -200,7 +283,7 @@ class PenjualanDetailController extends Controller
                 $stok_baru = $stok_sebelum - $jumlah_tambahan;
                 $rekamanWaktu = $penjualan && $penjualan->waktu
                     ? Carbon::parse($penjualan->waktu)->format('Y-m-d H:i:s')
-                    : app(TransactionLogicalClockService::class)->now()->format('Y-m-d H:i:s');
+                    : Carbon::now()->setTimezone(config('app.timezone'))->format('Y-m-d H:i:s');
                 
                 DB::table('rekaman_stoks')->insert([
                     'id_produk' => $produk->id_produk,
@@ -225,6 +308,15 @@ class PenjualanDetailController extends Controller
             DB::table('produk')->where('id_produk', $produk->id_produk)->update(['stok' => $stok_baru]);
 
             $this->syncAffectedProdukHistory([$produk->id_produk ?? null]);
+
+            $currentProductStock = intval(DB::table('produk')
+                ->where('id_produk', $produk->id_produk)
+                ->value('stok'));
+            $draftProductQuantity = intval(DB::table('penjualan_detail')
+                ->where('id_penjualan', $detail->id_penjualan)
+                ->where('id_produk', $produk->id_produk)
+                ->sum('jumlah'));
+            $draftStockPreview = $this->buildDraftStockPreview($currentProductStock, $draftProductQuantity);
             
             DB::commit();
             
@@ -326,7 +418,7 @@ class PenjualanDetailController extends Controller
             $penjualan = Penjualan::find($detail->id_penjualan);
             $waktu_transaksi = $penjualan && $penjualan->waktu
                 ? $penjualan->waktu
-                : app(TransactionLogicalClockService::class)->now();
+                : Carbon::now()->setTimezone(config('app.timezone'));
             
             $existingRekaman = DB::table('rekaman_stoks')
                                  ->where('id_penjualan', $detail->id_penjualan)
@@ -365,6 +457,15 @@ class PenjualanDetailController extends Controller
             
             $this->syncAffectedProdukHistory([$produk->id_produk ?? null]);
 
+            $currentProductStock = intval(DB::table('produk')
+                ->where('id_produk', $produk->id_produk)
+                ->value('stok'));
+            $draftProductQuantity = intval(DB::table('penjualan_detail')
+                ->where('id_penjualan', $detail->id_penjualan)
+                ->where('id_produk', $produk->id_produk)
+                ->sum('jumlah'));
+            $draftStockPreview = $this->buildDraftStockPreview($currentProductStock, $draftProductQuantity);
+
             DB::commit();
             
             Cache::forget($idempotencyKey);
@@ -374,7 +475,10 @@ class PenjualanDetailController extends Controller
                 'data' => [
                     'jumlah' => $new_jumlah_row,
                     'subtotal' => $subtotal,
-                    'stok_tersisa' => $stok_baru
+                    'stok_tersisa' => $currentProductStock,
+                    'id_produk' => intval($produk->id_produk),
+                    'draft_quantity_for_product' => $draftProductQuantity,
+                    'stock_summary_html' => $this->renderDraftStockSummaryHtml($draftStockPreview),
                 ]
             ], 200);
             
@@ -402,6 +506,9 @@ class PenjualanDetailController extends Controller
         Cache::put($idempotencyKey, true, self::IDEMPOTENCY_TTL);
         
         DB::beginTransaction();
+        $deleteResponse = [
+            'deleted' => true,
+        ];
         
         try {
             $detail = DB::table('penjualan_detail')->where('id_penjualan_detail', $id)->first();
@@ -474,6 +581,21 @@ class PenjualanDetailController extends Controller
                 
                 $this->syncAffectedProdukHistory([$produkId ?? null]);
 
+                if (!empty($produkId)) {
+                    $currentProductStock = intval(DB::table('produk')
+                        ->where('id_produk', $produkId)
+                        ->value('stok'));
+                    $deleteResponse['id_produk'] = intval($produkId);
+                    $deleteResponse['stok_tersisa'] = $currentProductStock;
+                    $deleteResponse['remaining_qty'] = intval($remainingQty ?? 0);
+
+                    if (intval($remainingQty ?? 0) > 0) {
+                        $deleteResponse['stock_summary_html'] = $this->renderDraftStockSummaryHtml(
+                            $this->buildDraftStockPreview($currentProductStock, intval($remainingQty))
+                        );
+                    }
+                }
+
                 DB::commit();
                 
                 Cache::forget($idempotencyKey);
@@ -488,7 +610,7 @@ class PenjualanDetailController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
 
-        return response(null, 204);
+        return response()->json($deleteResponse);
     }
 
     public function loadForm($diskon = 0, $total = 0, $diterima = 0)
@@ -551,7 +673,7 @@ class PenjualanDetailController extends Controller
     private function ensurePenjualanHasWaktu($penjualan)
     {
         if (!$penjualan->waktu) {
-            $penjualan->waktu = $penjualan->created_at ?? app(TransactionLogicalClockService::class)->now();
+            $penjualan->waktu = $penjualan->created_at ?? Carbon::now()->setTimezone(config('app.timezone'));
             $penjualan->save();
         }
     }

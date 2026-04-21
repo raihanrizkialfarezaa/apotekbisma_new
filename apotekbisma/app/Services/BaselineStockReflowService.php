@@ -29,116 +29,17 @@ class BaselineStockReflowService
         })));
 
         if (empty($normalizedProductIds)) {
-            return [
-                'products_rebuilt' => 0,
-                'products_with_negative_event' => 0,
-                'negative_event_count' => 0,
-                'negative_event_product_ids' => [],
-                'cutoff' => config('stock.cutoff_datetime', '2025-12-31 23:59:59'),
-                'until' => $until ? Carbon::parse($until)->format('Y-m-d H:i:s') : Carbon::now()->format('Y-m-d H:i:s'),
-                'csv_delimiter' => $this->csvDelimiter,
-            ];
+            return $this->buildEmptySummary($until);
         }
 
-        $cutoff = (string) config('stock.cutoff_datetime', '2025-12-31 23:59:59');
-        $resolvedUntil = Carbon::parse($until ?: Carbon::now())->format('Y-m-d H:i:s');
-
-        if ($resolvedUntil <= $cutoff) {
-            throw new \RuntimeException('Reflow stok tidak valid karena until harus lebih besar dari cutoff baseline.');
-        }
-
-        $baselineData = $this->loadBaselineCsv(base_path(config('stock.baseline_csv')));
-        $baselineMap = $baselineData['baseline_map'];
-
-        $products = DB::table('produk')
-            ->whereIn('id_produk', $normalizedProductIds)
-            ->select('id_produk', 'nama_produk', 'stok')
-            ->get()
-            ->keyBy('id_produk');
-
-        $missingProductsInDb = array_values(array_diff($normalizedProductIds, array_map('intval', $products->keys()->all())));
-        if (!empty($missingProductsInDb)) {
-            throw new \RuntimeException('Produk tidak ditemukan di DB: ' . implode(', ', $missingProductsInDb));
-        }
-
-        $plans = [];
-        $totalNegativeEventCount = 0;
-        $productsWithNegativeEvent = 0;
-        $negativeEventProductIds = [];
         $locks = $this->acquireProductLocks($normalizedProductIds);
 
         try {
-            foreach ($products as $product) {
-                $productId = (int) $product->id_produk;
-                $seed = $this->resolveSeedForProduct($productId, $baselineMap);
-                $events = $this->collectEventsForProduct($productId, $cutoff, $resolvedUntil);
-                $currentTime = Carbon::now();
-                $runningStock = intval($seed['stok']);
-                $negativeEventCount = 0;
-                $insertRows = [
-                    [
-                        'id_produk' => $productId,
-                        'id_penjualan' => null,
-                        'id_pembelian' => null,
-                        'waktu' => $cutoff,
-                        'stok_awal' => $runningStock,
-                        'stok_masuk' => 0,
-                        'stok_keluar' => 0,
-                        'stok_sisa' => $runningStock,
-                        'keterangan' => $seed['keterangan'],
-                        'created_at' => $currentTime,
-                        'updated_at' => $currentTime,
-                    ],
-                ];
-
-                foreach ($events as $event) {
-                    $stokAwal = $runningStock;
-                    if (!empty($event['is_manual_adjustment'])) {
-                        $targetStock = intval($event['target_stock'] ?? $stokAwal);
-                        $stokMasuk = max(0, $targetStock - $stokAwal);
-                        $stokKeluar = max(0, $stokAwal - $targetStock);
-                        $stokSisa = $targetStock;
-                    } else {
-                        $stokMasuk = intval($event['stok_masuk']);
-                        $stokKeluar = intval($event['stok_keluar']);
-                        $stokSisa = $stokAwal + $stokMasuk - $stokKeluar;
-                    }
-
-                    if ($stokSisa < 0) {
-                        $negativeEventCount++;
-                    }
-
-                    $insertRows[] = [
-                        'id_produk' => $productId,
-                        'id_penjualan' => $event['id_penjualan'],
-                        'id_pembelian' => $event['id_pembelian'],
-                        'waktu' => $event['waktu'],
-                        'stok_awal' => $stokAwal,
-                        'stok_masuk' => $stokMasuk,
-                        'stok_keluar' => $stokKeluar,
-                        'stok_sisa' => $stokSisa,
-                        'keterangan' => $event['keterangan'],
-                        'created_at' => $currentTime,
-                        'updated_at' => $currentTime,
-                    ];
-
-                    $runningStock = $stokSisa;
-                }
-
-                if ($negativeEventCount > 0) {
-                    $productsWithNegativeEvent++;
-                    $totalNegativeEventCount += $negativeEventCount;
-                    $negativeEventProductIds[] = $productId;
-                }
-
-                $plans[] = [
-                    'id_produk' => $productId,
-                    'seed_source' => $seed['source'],
-                    'insert_rows' => $insertRows,
-                    'stok_hasil_rebuild' => max(0, $runningStock),
-                    'negative_event_count' => $negativeEventCount,
-                ];
-            }
+            $preparedRebuild = $this->prepareRebuildPlans($normalizedProductIds, $until);
+            $plans = $preparedRebuild['plans'];
+            $baselineData = $preparedRebuild['baseline_data'];
+            $cutoff = $preparedRebuild['cutoff'];
+            $resolvedUntil = $preparedRebuild['until'];
 
             foreach ($plans as $plan) {
                 DB::table('produk')
@@ -162,19 +63,40 @@ class BaselineStockReflowService
                         'updated_at' => Carbon::now(),
                     ]);
             }
+
+            return $this->buildSummaryFromPlans($plans, $cutoff, $resolvedUntil, $baselineData['delimiter'] ?? $this->csvDelimiter);
         } finally {
             $this->releaseProductLocks($locks);
         }
+    }
 
-        return [
-            'products_rebuilt' => count($plans),
-            'products_with_negative_event' => $productsWithNegativeEvent,
-            'negative_event_count' => $totalNegativeEventCount,
-            'cutoff' => $cutoff,
-            'until' => $resolvedUntil,
-            'csv_delimiter' => $baselineData['delimiter'] ?? $this->csvDelimiter,
-            'negative_event_product_ids' => array_values(array_unique($negativeEventProductIds)),
-        ];
+    public function previewRebuildSummary(
+        array $productIds,
+        ?string $until = null,
+        ?string $excludeTransactionType = null,
+        ?int $excludeTransactionId = null
+    ): array {
+        $normalizedProductIds = array_values(array_unique(array_filter(array_map('intval', $productIds), function ($productId) {
+            return $productId > 0;
+        })));
+
+        if (empty($normalizedProductIds)) {
+            return $this->buildEmptySummary($until);
+        }
+
+        $preparedRebuild = $this->prepareRebuildPlans(
+            $normalizedProductIds,
+            $until,
+            $excludeTransactionType,
+            $excludeTransactionId
+        );
+
+        return $this->buildSummaryFromPlans(
+            $preparedRebuild['plans'],
+            $preparedRebuild['cutoff'],
+            $preparedRebuild['until'],
+            $preparedRebuild['baseline_data']['delimiter'] ?? $this->csvDelimiter
+        );
     }
 
     private function resolveSeedForProduct(int $productId, array $baselineMap): array
@@ -195,6 +117,172 @@ class BaselineStockReflowService
             'stok' => 0,
             'keterangan' => self::NON_BASELINE_ZERO_SEED_KETERANGAN,
             'source' => 'zero_default',
+        ];
+    }
+
+    private function prepareRebuildPlans(
+        array $normalizedProductIds,
+        ?string $until = null,
+        ?string $excludeTransactionType = null,
+        ?int $excludeTransactionId = null
+    ): array {
+        $cutoff = (string) config('stock.cutoff_datetime', '2025-12-31 23:59:59');
+        $resolvedUntil = Carbon::parse($until ?: Carbon::now())->format('Y-m-d H:i:s');
+
+        if ($resolvedUntil <= $cutoff) {
+            throw new \RuntimeException('Reflow stok tidak valid karena until harus lebih besar dari cutoff baseline.');
+        }
+
+        $baselineData = $this->loadBaselineCsv(base_path(config('stock.baseline_csv')));
+        $baselineMap = $baselineData['baseline_map'];
+
+        $products = DB::table('produk')
+            ->whereIn('id_produk', $normalizedProductIds)
+            ->select('id_produk')
+            ->get()
+            ->keyBy('id_produk');
+
+        $missingProductsInDb = array_values(array_diff($normalizedProductIds, array_map('intval', $products->keys()->all())));
+        if (!empty($missingProductsInDb)) {
+            throw new \RuntimeException('Produk tidak ditemukan di DB: ' . implode(', ', $missingProductsInDb));
+        }
+
+        $plans = [];
+        foreach ($normalizedProductIds as $productId) {
+            $plans[] = $this->buildProductPlan(
+                $productId,
+                $baselineMap,
+                $cutoff,
+                $resolvedUntil,
+                $excludeTransactionType,
+                $excludeTransactionId
+            );
+        }
+
+        return [
+            'plans' => $plans,
+            'baseline_data' => $baselineData,
+            'cutoff' => $cutoff,
+            'until' => $resolvedUntil,
+        ];
+    }
+
+    private function buildProductPlan(
+        int $productId,
+        array $baselineMap,
+        string $cutoff,
+        string $resolvedUntil,
+        ?string $excludeTransactionType = null,
+        ?int $excludeTransactionId = null
+    ): array {
+        $seed = $this->resolveSeedForProduct($productId, $baselineMap);
+        $events = $this->collectEventsForProduct(
+            $productId,
+            $cutoff,
+            $resolvedUntil,
+            $excludeTransactionType,
+            $excludeTransactionId
+        );
+        $currentTime = Carbon::now();
+        $runningStock = intval($seed['stok']);
+        $negativeEventCount = 0;
+        $insertRows = [
+            [
+                'id_produk' => $productId,
+                'id_penjualan' => null,
+                'id_pembelian' => null,
+                'waktu' => $cutoff,
+                'stok_awal' => $runningStock,
+                'stok_masuk' => 0,
+                'stok_keluar' => 0,
+                'stok_sisa' => $runningStock,
+                'keterangan' => $seed['keterangan'],
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
+            ],
+        ];
+
+        foreach ($events as $event) {
+            $stokAwal = $runningStock;
+            if (!empty($event['is_manual_adjustment'])) {
+                $targetStock = intval($event['target_stock'] ?? $stokAwal);
+                $stokMasuk = max(0, $targetStock - $stokAwal);
+                $stokKeluar = max(0, $stokAwal - $targetStock);
+                $stokSisa = $targetStock;
+            } else {
+                $stokMasuk = intval($event['stok_masuk']);
+                $stokKeluar = intval($event['stok_keluar']);
+                $stokSisa = $stokAwal + $stokMasuk - $stokKeluar;
+            }
+
+            if ($stokSisa < 0) {
+                $negativeEventCount++;
+            }
+
+            $insertRows[] = [
+                'id_produk' => $productId,
+                'id_penjualan' => $event['id_penjualan'],
+                'id_pembelian' => $event['id_pembelian'],
+                'waktu' => $event['waktu'],
+                'stok_awal' => $stokAwal,
+                'stok_masuk' => $stokMasuk,
+                'stok_keluar' => $stokKeluar,
+                'stok_sisa' => $stokSisa,
+                'keterangan' => $event['keterangan'],
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
+            ];
+
+            $runningStock = $stokSisa;
+        }
+
+        return [
+            'id_produk' => $productId,
+            'seed_source' => $seed['source'],
+            'insert_rows' => $insertRows,
+            'stok_hasil_rebuild' => max(0, $runningStock),
+            'negative_event_count' => $negativeEventCount,
+        ];
+    }
+
+    private function buildEmptySummary(?string $until = null): array
+    {
+        return [
+            'products_rebuilt' => 0,
+            'products_with_negative_event' => 0,
+            'negative_event_count' => 0,
+            'negative_event_product_ids' => [],
+            'cutoff' => config('stock.cutoff_datetime', '2025-12-31 23:59:59'),
+            'until' => $until ? Carbon::parse($until)->format('Y-m-d H:i:s') : Carbon::now()->format('Y-m-d H:i:s'),
+            'csv_delimiter' => $this->csvDelimiter,
+        ];
+    }
+
+    private function buildSummaryFromPlans(array $plans, string $cutoff, string $resolvedUntil, string $delimiter): array
+    {
+        $productsWithNegativeEvent = 0;
+        $totalNegativeEventCount = 0;
+        $negativeEventProductIds = [];
+
+        foreach ($plans as $plan) {
+            $negativeEventCount = intval($plan['negative_event_count'] ?? 0);
+            if ($negativeEventCount <= 0) {
+                continue;
+            }
+
+            $productsWithNegativeEvent++;
+            $totalNegativeEventCount += $negativeEventCount;
+            $negativeEventProductIds[] = intval($plan['id_produk'] ?? 0);
+        }
+
+        return [
+            'products_rebuilt' => count($plans),
+            'products_with_negative_event' => $productsWithNegativeEvent,
+            'negative_event_count' => $totalNegativeEventCount,
+            'cutoff' => $cutoff,
+            'until' => $resolvedUntil,
+            'csv_delimiter' => $delimiter,
+            'negative_event_product_ids' => array_values(array_unique(array_filter($negativeEventProductIds))),
         ];
     }
 
@@ -353,7 +441,13 @@ class BaselineStockReflowService
         return trim((string) preg_replace('/^\xEF\xBB\xBF/', '', (string) $value));
     }
 
-    private function collectEventsForProduct(int $productId, string $cutoff, string $until): array
+    private function collectEventsForProduct(
+        int $productId,
+        string $cutoff,
+        string $until,
+        ?string $excludeTransactionType = null,
+        ?int $excludeTransactionId = null
+    ): array
     {
         $events = [];
 
@@ -367,6 +461,10 @@ class BaselineStockReflowService
             ->groupBy('pd.id_pembelian', DB::raw('COALESCE(p.waktu_datang, p.waktu, p.created_at)'))
             ->selectRaw('pd.id_pembelian as ref_id, COALESCE(p.waktu_datang, p.waktu, p.created_at) as waktu_event, SUM(pd.jumlah) as qty, MAX(pd.id_pembelian_detail) as sort_key, MAX(p.no_faktur) as no_faktur')
             ->selectRaw('MAX(p.total_harga) as total_harga, MAX(p.bayar) as bayar');
+
+        if ($excludeTransactionType === 'pembelian' && $excludeTransactionId !== null && $excludeTransactionId > 0) {
+            $pembelianEventsQuery->where('p.id_pembelian', '!=', $excludeTransactionId);
+        }
 
         $this->applyFinalizedPembelianConstraints($pembelianEventsQuery, 'p');
 
@@ -398,6 +496,10 @@ class BaselineStockReflowService
             ->groupBy('pd.id_penjualan', DB::raw('COALESCE(p.waktu, p.created_at)'))
             ->selectRaw('pd.id_penjualan as ref_id, COALESCE(p.waktu, p.created_at) as waktu_event, SUM(pd.jumlah) as qty, MAX(pd.id_penjualan_detail) as sort_key')
             ->selectRaw('MAX(p.total_item) as total_item, MAX(p.total_harga) as total_harga, MAX(p.bayar) as bayar, MAX(p.diterima) as diterima');
+
+        if ($excludeTransactionType === 'penjualan' && $excludeTransactionId !== null && $excludeTransactionId > 0) {
+            $penjualanEventsQuery->where('p.id_penjualan', '!=', $excludeTransactionId);
+        }
 
         $this->applyFinalizedPenjualanConstraints($penjualanEventsQuery, 'p');
 

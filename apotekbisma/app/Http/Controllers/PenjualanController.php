@@ -17,7 +17,6 @@ use Carbon\Carbon;
 use App\Services\StockDraftCleanupService;
 use App\Services\StockRuntimeIntegrityService;
 use App\Services\TransactionDateMutationService;
-use App\Services\TransactionLogicalClockService;
 
 class PenjualanController extends Controller
 {
@@ -246,7 +245,7 @@ class PenjualanController extends Controller
     {
         $currentDraftId = session('id_penjualan');
         app(StockDraftCleanupService::class)->cleanupStalePenjualanDrafts($currentDraftId ? intval($currentDraftId) : null);
-        $defaultTransactionWaktu = app(TransactionLogicalClockService::class)->now();
+        $defaultTransactionWaktu = $this->resolveServerWallNow();
 
         session()->forget('penjualan_edit_mode');
         session()->forget('penjualan_edit_snapshot');
@@ -279,7 +278,7 @@ class PenjualanController extends Controller
                 $diskon = Setting::first()->diskon ?? 0;
                 $memberSelected = $penjualan->member ?? new Member();
                 $isEditTransaction = (bool) session('penjualan_edit_mode', false);
-                $defaultTransactionWaktu = app(TransactionLogicalClockService::class)->now();
+                $defaultTransactionWaktu = $this->resolveServerWallNow();
 
                 return view('penjualan_detail.index', compact('produk', 'member', 'diskon', 'id_penjualan', 'penjualan', 'memberSelected', 'isEditTransaction', 'defaultTransactionWaktu'));
             } else {
@@ -296,22 +295,21 @@ class PenjualanController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'waktu' => 'required',
+            'waktu' => 'nullable',
+            'waktu_tanggal' => 'required_without:waktu',
         ], [
-            'waktu.required' => 'Tanggal transaksi harus diisi',
+            'waktu_tanggal.required_without' => 'Tanggal transaksi harus diisi',
         ]);
 
         DB::beginTransaction();
         
         try {
             $penjualan = Penjualan::findOrFail($id);
+            $browserNow = $this->resolveBrowserNow($request);
             
             $waktu_lama = Carbon::parse($penjualan->waktu ?? $penjualan->created_at)->format('Y-m-d H:i:s');
-            $waktu_baru = $this->resolveTransactionWaktu(
-                $request->waktu,
-                $penjualan->waktu ?? $penjualan->created_at ?? Carbon::now()
-            );
-            $this->assertFinalPenjualanWaktuAllowed($waktu_baru);
+            $waktu_baru = $this->resolveSubmittedPenjualanWaktu($request, $browserNow);
+            $this->assertFinalPenjualanWaktuAllowed($waktu_baru, $browserNow);
             
             $penjualan->id_member = $request->id_member;
             $penjualan->total_item = $request->total_item;
@@ -347,9 +345,10 @@ class PenjualanController extends Controller
             'id_penjualan' => 'required',
             'diterima' => 'required|numeric|min:0',
             'total' => 'required|numeric|min:0',
-            'waktu' => 'required',
+            'waktu' => 'nullable',
+            'waktu_tanggal' => 'required_without:waktu',
         ], [
-            'waktu.required' => 'Tanggal transaksi harus diisi',
+            'waktu_tanggal.required_without' => 'Tanggal transaksi harus diisi',
         ]);
 
         // Cek apakah ada detail penjualan
@@ -374,11 +373,9 @@ class PenjualanController extends Controller
             $penjualan->diskon = $request->diskon;
             $penjualan->bayar = $request->bayar;
             $penjualan->diterima = $request->diterima;
-            $resolvedWaktu = $this->resolveTransactionWaktu(
-                $request->waktu,
-                $penjualan->waktu ?? $penjualan->created_at ?? Carbon::now()
-            );
-            $this->assertFinalPenjualanWaktuAllowed($resolvedWaktu);
+            $browserNow = $this->resolveBrowserNow($request);
+            $resolvedWaktu = $this->resolveSubmittedPenjualanWaktu($request, $browserNow);
+            $this->assertFinalPenjualanWaktuAllowed($resolvedWaktu, $browserNow);
             $penjualan->waktu = $resolvedWaktu;
             $penjualan->update();
 
@@ -1034,39 +1031,73 @@ class PenjualanController extends Controller
         }
     }
 
-    private function resolveTransactionWaktu($value, $fallback = null): string
+    private function resolveSubmittedPenjualanWaktu(Request $request, ?Carbon $browserNow = null): string
+    {
+        $resolvedBrowserNow = $browserNow ?: $this->resolveBrowserNow($request);
+        $fallbackNow = $resolvedBrowserNow->format('Y-m-d H:i:s');
+        $browserTimezoneOffsetMinutes = $request->input('browser_timezone_offset_minutes');
+
+        $rawSubmittedWaktu = trim((string) $request->input('waktu', ''));
+        if ($rawSubmittedWaktu !== '') {
+            return $this->resolveTransactionWaktu(
+                $rawSubmittedWaktu,
+                $fallbackNow,
+                $browserTimezoneOffsetMinutes
+            );
+        }
+
+        $rawSubmittedTanggal = trim((string) $request->input('waktu_tanggal', ''));
+        if ($rawSubmittedTanggal !== '') {
+            return $this->resolveTransactionWaktu(
+                $rawSubmittedTanggal,
+                $fallbackNow,
+                $browserTimezoneOffsetMinutes
+            );
+        }
+
+        throw new \InvalidArgumentException('Tanggal transaksi harus diisi');
+    }
+
+    private function resolveTransactionWaktu($value, $fallback = null, $browserTimezoneOffsetMinutes = null): string
     {
         $raw = trim((string) $value);
         if ($raw === '') {
             throw new \InvalidArgumentException('Tanggal transaksi harus diisi');
         }
 
+        $browserTimezone = $this->resolveBrowserTimezone($browserTimezoneOffsetMinutes);
         $fallbackCarbon = $fallback
-            ? Carbon::parse($fallback)
-            : app(TransactionLogicalClockService::class)->now();
+            ? Carbon::parse($fallback)->setTimezone($browserTimezone ?: config('app.timezone'))
+            : $this->resolveServerWallNow()->copy()->setTimezone($browserTimezone ?: config('app.timezone'));
 
         if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $raw)) {
-            return Carbon::createFromFormat('Y-m-d', $raw)
+            $parsedDate = Carbon::createFromFormat('Y-m-d', $raw, $browserTimezone ?: config('app.timezone'))
                 ->setTimeFrom($fallbackCarbon)
-                ->format('Y-m-d H:i:s');
+                ->setTimezone(config('app.timezone'));
+
+            return $parsedDate->format('Y-m-d H:i:s');
         }
 
         foreach (['Y-m-d\TH:i:s', 'Y-m-d\TH:i', 'Y-m-d H:i:s', 'Y-m-d H:i'] as $format) {
             try {
-                $parsed = Carbon::createFromFormat($format, $raw);
+                $parsed = Carbon::createFromFormat($format, $raw, $browserTimezone ?: config('app.timezone'));
                 if (in_array($format, ['Y-m-d\TH:i', 'Y-m-d H:i'], true)) {
                     $parsed->second = $fallbackCarbon->second;
                 }
 
-                return $parsed->format('Y-m-d H:i:s');
+                return $parsed
+                    ->setTimezone(config('app.timezone'))
+                    ->format('Y-m-d H:i:s');
             } catch (\Throwable $e) {
             }
         }
 
-        return Carbon::parse($raw)->format('Y-m-d H:i:s');
+        return Carbon::parse($raw, $browserTimezone ?: config('app.timezone'))
+            ->setTimezone(config('app.timezone'))
+            ->format('Y-m-d H:i:s');
     }
 
-    private function assertFinalPenjualanWaktuAllowed(string $resolvedWaktu): void
+    private function assertFinalPenjualanWaktuAllowed(string $resolvedWaktu, ?Carbon $referenceNow = null): void
     {
         $cutoff = (string) config('stock.cutoff_datetime', '2025-12-31 23:59:59');
         if ($resolvedWaktu <= $cutoff) {
@@ -1074,13 +1105,48 @@ class PenjualanController extends Controller
         }
 
         $maxFutureMinutes = max(0, (int) config('stock.max_future_transaction_minutes', 5));
-        $latestAllowed = app(TransactionLogicalClockService::class)
-            ->now()
+        $latestAllowed = ($referenceNow ?: $this->resolveServerWallNow())
+            ->copy()
             ->addMinutes($maxFutureMinutes)
             ->format('Y-m-d H:i:s');
 
         if ($resolvedWaktu > $latestAllowed) {
             throw new \InvalidArgumentException('Tanggal transaksi penjualan tidak boleh di masa depan. Periksa jam perangkat yang dipakai input.');
         }
+    }
+
+    private function resolveBrowserNow(Request $request): Carbon
+    {
+        $rawBrowserNow = trim((string) $request->input('browser_now_iso', ''));
+        if ($rawBrowserNow !== '') {
+            try {
+                return Carbon::parse($rawBrowserNow)->setTimezone(config('app.timezone'));
+            } catch (\Throwable $e) {
+            }
+        }
+
+        return $this->resolveServerWallNow();
+    }
+
+    private function resolveBrowserTimezone($browserTimezoneOffsetMinutes): ?string
+    {
+        if ($browserTimezoneOffsetMinutes === null || $browserTimezoneOffsetMinutes === '') {
+            return null;
+        }
+
+        if (!is_numeric($browserTimezoneOffsetMinutes)) {
+            return null;
+        }
+
+        $totalMinutes = -intval($browserTimezoneOffsetMinutes);
+        $sign = $totalMinutes >= 0 ? '+' : '-';
+        $absoluteMinutes = abs($totalMinutes);
+
+        return sprintf('%s%02d:%02d', $sign, intdiv($absoluteMinutes, 60), $absoluteMinutes % 60);
+    }
+
+    private function resolveServerWallNow(): Carbon
+    {
+        return Carbon::now()->setTimezone(config('app.timezone'));
     }
 }
