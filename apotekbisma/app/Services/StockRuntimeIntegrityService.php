@@ -19,7 +19,8 @@ class StockRuntimeIntegrityService
         array $productIds,
         string $contextLabel,
         bool $blockOnNegativeHistoricalStock = false,
-        ?string $until = null
+        ?string $until = null,
+        bool $validateDraftAwareStock = false
     ): array {
         $normalizedIds = $this->normalizeProductIds($productIds);
 
@@ -40,9 +41,42 @@ class StockRuntimeIntegrityService
             $this->assertNoNegativeHistoricalStock($normalizedIds, $summary, $contextLabel);
         }
 
+        if ($validateDraftAwareStock) {
+            $this->reconcileDraftStockConsistency($normalizedIds);
+            $this->assertDraftStockConsistency($normalizedIds, $contextLabel);
+
+            return $summary;
+        }
+
         $this->assertLatestStockConsistency($normalizedIds, $contextLabel);
 
         return $summary;
+    }
+
+    public function buildProjectedCurrentStockRows(array $finalStockRows): array
+    {
+        $rows = [];
+
+        foreach ($finalStockRows as $row) {
+            $productId = intval($row['id_produk'] ?? 0);
+            if ($productId <= 0) {
+                continue;
+            }
+
+            $committedFinalStock = intval($row['final_stock'] ?? $row['applied_stock'] ?? 0);
+            $draftPembelianQty = $this->getOpenDraftPembelianQty($productId);
+            $draftPenjualanQty = $this->getOpenDraftPenjualanQty($productId);
+
+            $rows[] = [
+                'id_produk' => $productId,
+                'committed_final_stock' => $committedFinalStock,
+                'draft_pembelian_qty' => $draftPembelianQty,
+                'draft_penjualan_qty' => $draftPenjualanQty,
+                'projected_current_stock' => $committedFinalStock + $draftPembelianQty - $draftPenjualanQty,
+            ];
+        }
+
+        return $rows;
     }
 
     public function assertLatestStockConsistency(array $productIds, string $contextLabel): void

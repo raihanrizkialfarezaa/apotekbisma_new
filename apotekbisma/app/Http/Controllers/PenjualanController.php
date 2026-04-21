@@ -1099,9 +1099,9 @@ class PenjualanController extends Controller
 
     private function assertFinalPenjualanWaktuAllowed(string $resolvedWaktu, ?Carbon $referenceNow = null): void
     {
-        $cutoff = (string) config('stock.cutoff_datetime', '2025-12-31 23:59:59');
-        if ($resolvedWaktu <= $cutoff) {
-            throw new \InvalidArgumentException('Tanggal transaksi penjualan tidak boleh pada atau sebelum cutoff baseline 31-12-2025 23:59:59.');
+        $minimumAllowedWaktu = $this->resolveMinimumAllowedFinalPenjualanWaktu();
+        if ($resolvedWaktu < $minimumAllowedWaktu) {
+            throw new \InvalidArgumentException('Tanggal transaksi penjualan tidak boleh lebih lama dari ' . $minimumAllowedWaktu . ' (sehari setelah cutoff baseline).');
         }
 
         $maxFutureMinutes = max(0, (int) config('stock.max_future_transaction_minutes', 5));
@@ -1113,6 +1113,14 @@ class PenjualanController extends Controller
         if ($resolvedWaktu > $latestAllowed) {
             throw new \InvalidArgumentException('Tanggal transaksi penjualan tidak boleh di masa depan. Periksa jam perangkat yang dipakai input.');
         }
+    }
+
+    private function resolveMinimumAllowedFinalPenjualanWaktu(): string
+    {
+        return Carbon::parse((string) config('stock.cutoff_datetime', '2025-12-31 23:59:59'))
+            ->addDay()
+            ->startOfDay()
+            ->format('Y-m-d H:i:s');
     }
 
     private function resolveBrowserNow(Request $request): Carbon

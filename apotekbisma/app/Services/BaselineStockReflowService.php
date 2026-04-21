@@ -240,6 +240,7 @@ class BaselineStockReflowService
             'id_produk' => $productId,
             'seed_source' => $seed['source'],
             'insert_rows' => $insertRows,
+            'stok_akhir_raw' => $runningStock,
             'stok_hasil_rebuild' => max(0, $runningStock),
             'negative_event_count' => $negativeEventCount,
         ];
@@ -252,6 +253,9 @@ class BaselineStockReflowService
             'products_with_negative_event' => 0,
             'negative_event_count' => 0,
             'negative_event_product_ids' => [],
+            'products_with_non_positive_final_stock' => 0,
+            'non_positive_final_stock_product_ids' => [],
+            'final_stock_by_product' => [],
             'cutoff' => config('stock.cutoff_datetime', '2025-12-31 23:59:59'),
             'until' => $until ? Carbon::parse($until)->format('Y-m-d H:i:s') : Carbon::now()->format('Y-m-d H:i:s'),
             'csv_delimiter' => $this->csvDelimiter,
@@ -263,8 +267,24 @@ class BaselineStockReflowService
         $productsWithNegativeEvent = 0;
         $totalNegativeEventCount = 0;
         $negativeEventProductIds = [];
+        $productsWithNonPositiveFinalStock = 0;
+        $nonPositiveFinalStockProductIds = [];
+        $finalStockByProduct = [];
 
         foreach ($plans as $plan) {
+            $productId = intval($plan['id_produk'] ?? 0);
+            $finalStockRaw = intval($plan['stok_akhir_raw'] ?? $plan['stok_hasil_rebuild'] ?? 0);
+            $finalStockByProduct[] = [
+                'id_produk' => $productId,
+                'final_stock' => $finalStockRaw,
+                'applied_stock' => intval($plan['stok_hasil_rebuild'] ?? $finalStockRaw),
+            ];
+
+            if ($productId > 0 && $finalStockRaw <= 0) {
+                $productsWithNonPositiveFinalStock++;
+                $nonPositiveFinalStockProductIds[] = $productId;
+            }
+
             $negativeEventCount = intval($plan['negative_event_count'] ?? 0);
             if ($negativeEventCount <= 0) {
                 continue;
@@ -279,10 +299,13 @@ class BaselineStockReflowService
             'products_rebuilt' => count($plans),
             'products_with_negative_event' => $productsWithNegativeEvent,
             'negative_event_count' => $totalNegativeEventCount,
+            'products_with_non_positive_final_stock' => $productsWithNonPositiveFinalStock,
             'cutoff' => $cutoff,
             'until' => $resolvedUntil,
             'csv_delimiter' => $delimiter,
             'negative_event_product_ids' => array_values(array_unique(array_filter($negativeEventProductIds))),
+            'non_positive_final_stock_product_ids' => array_values(array_unique(array_filter($nonPositiveFinalStockProductIds))),
+            'final_stock_by_product' => $finalStockByProduct,
         ];
     }
 

@@ -56,7 +56,7 @@ class TransactionDateMutationServicePurchaseSyncTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_synchronize_finalized_pembelian_enables_negative_history_blocking(): void
+    public function test_synchronize_finalized_pembelian_allows_sync_when_projected_final_stock_remains_positive(): void
     {
         DB::table('pembelian_detail')->insert([
             'id_pembelian' => 100,
@@ -69,10 +69,18 @@ class TransactionDateMutationServicePurchaseSyncTest extends TestCase
         $baselineReflowService
             ->shouldReceive('previewRebuildSummary')
             ->once()
-            ->with([10], $now->format('Y-m-d H:i:s'), 'pembelian', 100)
+            ->with([10], $now->format('Y-m-d H:i:s'))
             ->andReturn([
                 'negative_event_count' => 0,
                 'negative_event_product_ids' => [],
+                'products_with_non_positive_final_stock' => 0,
+                'non_positive_final_stock_product_ids' => [],
+                'final_stock_by_product' => [
+                    [
+                        'id_produk' => 10,
+                        'final_stock' => 12,
+                    ],
+                ],
             ]);
 
         $integrityService = new class extends StockRuntimeIntegrityService {
@@ -82,13 +90,27 @@ class TransactionDateMutationServicePurchaseSyncTest extends TestCase
             {
             }
 
+            public function buildProjectedCurrentStockRows(array $finalStockRows): array
+            {
+                return [
+                    [
+                        'id_produk' => 10,
+                        'committed_final_stock' => 12,
+                        'draft_pembelian_qty' => 0,
+                        'draft_penjualan_qty' => 0,
+                        'projected_current_stock' => 12,
+                    ],
+                ];
+            }
+
             public function rebuildAndValidate(
                 array $productIds,
                 string $contextLabel,
                 bool $blockOnNegativeHistoricalStock = false,
-                ?string $until = null
+                ?string $until = null,
+                bool $validateDraftAwareStock = false
             ): array {
-                $this->lastCall = [$productIds, $contextLabel, $blockOnNegativeHistoricalStock, $until];
+                $this->lastCall = [$productIds, $contextLabel, $blockOnNegativeHistoricalStock, $until, $validateDraftAwareStock];
 
                 return ['negative_event_count' => 0];
             }
@@ -113,7 +135,7 @@ class TransactionDateMutationServicePurchaseSyncTest extends TestCase
 
         $this->assertSame(['negative_event_count' => 0], $result);
         $this->assertSame(
-            [[10], 'sinkronisasi pembelian final INV-100', false, $now->format('Y-m-d H:i:s')],
+            [[10], 'sinkronisasi pembelian final INV-100', false, $now->format('Y-m-d H:i:s'), true],
             $integrityService->lastCall
         );
     }

@@ -88,24 +88,22 @@ class TransactionDateMutationService
         int $transactionId
     ): array {
         $resolvedUntil = $this->transactionLogicalClockService->now()->format('Y-m-d H:i:s');
-        $existingNegativeSummary = $this->baselineStockReflowService->previewRebuildSummary(
+        $projectedReflowSummary = $this->baselineStockReflowService->previewRebuildSummary(
             $productIds,
-            $resolvedUntil,
-            $transactionType,
-            $transactionId
+            $resolvedUntil
+        );
+
+        $this->assertProjectedCurrentStockRemainsPositive(
+            $projectedReflowSummary,
+            $contextLabel
         );
 
         $reflowSummary = $this->stockRuntimeIntegrityService->rebuildAndValidate(
             $productIds,
             $contextLabel,
             false,
-            $resolvedUntil
-        );
-
-        $this->assertNoAdditionalNegativeHistoricalStock(
-            $existingNegativeSummary,
-            $reflowSummary,
-            $contextLabel
+            $resolvedUntil,
+            true
         );
 
         return $reflowSummary;
@@ -115,7 +113,7 @@ class TransactionDateMutationService
     {
         $resolvedOldWaktu = $this->normalizeWaktu($oldWaktu);
         $resolvedNewWaktu = $this->normalizeWaktu($newWaktu);
-        $cutoff = (string) config('stock.cutoff_datetime', '2025-12-31 23:59:59');
+        $minimumAllowedWaktu = $this->resolveMinimumAllowedFinalTransactionWaktu();
 
         if ($resolvedOldWaktu === $resolvedNewWaktu) {
             return [
@@ -127,24 +125,27 @@ class TransactionDateMutationService
 
         $this->assertTransactionNotFuture($resolvedNewWaktu);
 
-        if ($resolvedOldWaktu <= $cutoff || $resolvedNewWaktu <= $cutoff) {
-            throw new \RuntimeException('Perubahan tanggal final diblokir karena transaksi menyentuh periode baseline yang dilindungi. Gunakan proses baseline rebuild terkontrol bila histori sebelum cutoff memang harus diubah.');
+        if ($resolvedOldWaktu < $minimumAllowedWaktu || $resolvedNewWaktu < $minimumAllowedWaktu) {
+            throw new \RuntimeException('Perubahan tanggal final diblokir karena transaksi tidak boleh dimundurkan lebih lama dari ' . $minimumAllowedWaktu . ' (sehari setelah cutoff baseline).');
         }
+
+        $resolvedUntil = $this->transactionLogicalClockService->now()->format('Y-m-d H:i:s');
+        $projectedReflowSummary = $this->baselineStockReflowService->previewRebuildSummary(
+            $productIds,
+            $resolvedUntil
+        );
+
+        $this->assertProjectedCurrentStockRemainsPositive(
+            $projectedReflowSummary,
+            'perubahan waktu ' . $referenceLabel
+        );
 
         $reflowSummary = $this->stockRuntimeIntegrityService->rebuildAndValidate(
             $productIds,
             'perubahan waktu ' . $referenceLabel,
             false,
-            $this->transactionLogicalClockService->now()->format('Y-m-d H:i:s')
-        );
-        $this->assertNoNegativeHistoricalStock(
-            $transactionType,
-            $transactionId,
-            $referenceLabel,
-            $productIds,
-            $resolvedOldWaktu,
-            $resolvedNewWaktu,
-            $reflowSummary
+            $resolvedUntil,
+            true
         );
 
         $actor = auth()->user();
@@ -164,11 +165,13 @@ class TransactionDateMutationService
             'negative_event_products' => intval($reflowSummary['products_with_negative_event'] ?? 0),
             'negative_event_count' => intval($reflowSummary['negative_event_count'] ?? 0),
             'metadata' => json_encode([
-                'cutoff' => $cutoff,
+                'cutoff' => (string) config('stock.cutoff_datetime', '2025-12-31 23:59:59'),
+                'minimum_allowed_waktu' => $minimumAllowedWaktu,
                 'until' => $reflowSummary['until'] ?? null,
                 'csv_delimiter' => $reflowSummary['csv_delimiter'] ?? null,
                 'products_rebuilt' => intval($reflowSummary['products_rebuilt'] ?? 0),
                 'negative_event_product_ids' => array_values(array_map('intval', $reflowSummary['negative_event_product_ids'] ?? [])),
+                'non_positive_final_stock_product_ids' => array_values(array_map('intval', $reflowSummary['non_positive_final_stock_product_ids'] ?? [])),
             ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
@@ -185,6 +188,7 @@ class TransactionDateMutationService
             'negative_event_products' => intval($reflowSummary['products_with_negative_event'] ?? 0),
             'negative_event_count' => intval($reflowSummary['negative_event_count'] ?? 0),
             'negative_event_product_ids' => array_values(array_map('intval', $reflowSummary['negative_event_product_ids'] ?? [])),
+            'non_positive_final_stock_product_ids' => array_values(array_map('intval', $reflowSummary['non_positive_final_stock_product_ids'] ?? [])),
         ]);
 
         return [
@@ -196,72 +200,40 @@ class TransactionDateMutationService
         ];
     }
 
-    private function assertNoNegativeHistoricalStock(
-        string $transactionType,
-        int $transactionId,
-        string $referenceLabel,
-        array $productIds,
-        string $oldWaktu,
-        string $newWaktu,
-        array $reflowSummary
-    ): void {
-        $negativeEventCount = intval($reflowSummary['negative_event_count'] ?? 0);
-        if ($negativeEventCount <= 0) {
+    private function assertProjectedCurrentStockRemainsPositive(array $reflowSummary, string $contextLabel): void
+    {
+        $projectedCurrentStockRows = $this->stockRuntimeIntegrityService->buildProjectedCurrentStockRows(
+            $reflowSummary['final_stock_by_product'] ?? []
+        );
+
+        $negativeProductIds = [];
+        foreach ($projectedCurrentStockRows as $row) {
+            $productId = intval($row['id_produk'] ?? 0);
+            $projectedCurrentStock = intval($row['projected_current_stock'] ?? 0);
+
+            if ($productId > 0 && $projectedCurrentStock < 0) {
+                $negativeProductIds[] = $productId;
+            }
+        }
+
+        $negativeProductIds = array_values(array_unique($negativeProductIds));
+
+        if (empty($negativeProductIds)) {
             return;
         }
 
-        $negativeProductIds = array_values(array_unique(array_filter(array_map('intval', $reflowSummary['negative_event_product_ids'] ?? $productIds), function ($productId) {
-            return $productId > 0;
-        })));
+        $currentStockMap = $this->buildProjectedCurrentStockMap($projectedCurrentStockRows);
+        $productSummary = $this->summarizeProjectedCurrentStockLabels($negativeProductIds, $currentStockMap);
 
-        $productSummary = $this->summarizeProductLabels($negativeProductIds);
-
-        Log::warning('Final transaction date change blocked because it introduces negative historical stock', [
-            'transaction_type' => $transactionType,
-            'transaction_id' => $transactionId,
-            'reference_label' => $referenceLabel,
-            'old_waktu' => $oldWaktu,
-            'new_waktu' => $newWaktu,
-            'negative_event_products' => intval($reflowSummary['products_with_negative_event'] ?? 0),
-            'negative_event_count' => $negativeEventCount,
-            'negative_event_product_ids' => $negativeProductIds,
+        Log::warning('Stock mutation blocked because projected current stock after draft reservations becomes negative', [
+            'context_label' => $contextLabel,
+            'negative_current_stock_product_ids' => $negativeProductIds,
+            'final_stock_by_product' => $this->buildFinalStockMap($reflowSummary['final_stock_by_product'] ?? []),
+            'projected_current_stock_rows' => $projectedCurrentStockRows,
         ]);
 
         throw new UnsafeStockMutationException(
-            'Perubahan waktu transaksi diblokir karena akan menimbulkan stok minus historis pada ' . $productSummary . '. Perbaiki urutan waktu transaksi atau lakukan penyesuaian stok yang terkontrol terlebih dahulu.'
-        );
-    }
-
-    private function assertNoAdditionalNegativeHistoricalStock(
-        array $existingNegativeSummary,
-        array $reflowSummary,
-        string $contextLabel
-    ): void {
-        $existingNegativeCount = intval($existingNegativeSummary['negative_event_count'] ?? 0);
-        $reflowNegativeCount = intval($reflowSummary['negative_event_count'] ?? 0);
-
-        if ($reflowNegativeCount <= 0) {
-            return;
-        }
-
-        $existingNegativeProductIds = $this->normalizeNegativeProductIds(
-            $existingNegativeSummary['negative_event_product_ids'] ?? []
-        );
-        $reflowNegativeProductIds = $this->normalizeNegativeProductIds(
-            $reflowSummary['negative_event_product_ids'] ?? []
-        );
-        $newNegativeProductIds = array_values(array_diff($reflowNegativeProductIds, $existingNegativeProductIds));
-
-        if ($reflowNegativeCount <= $existingNegativeCount && empty($newNegativeProductIds)) {
-            return;
-        }
-
-        $productIdsToReport = !empty($newNegativeProductIds)
-            ? $newNegativeProductIds
-            : $reflowNegativeProductIds;
-
-        throw new UnsafeStockMutationException(
-            'Mutasi stok diblokir karena ' . $contextLabel . ' akan menimbulkan stok minus historis pada ' . $this->summarizeProductLabels($productIdsToReport) . '.'
+            'Mutasi stok diblokir karena ' . $contextLabel . ' akan membuat stok akhir saat ini menjadi minus pada ' . $productSummary . '.'
         );
     }
 
@@ -292,11 +264,92 @@ class TransactionDateMutationService
         return implode(', ', $visibleLabels);
     }
 
-    private function normalizeNegativeProductIds(array $productIds): array
+    private function buildFinalStockMap(array $finalStockRows): array
     {
-        return array_values(array_unique(array_filter(array_map('intval', $productIds), function ($productId) {
-            return $productId > 0;
-        })));
+        $finalStockMap = [];
+
+        foreach ($finalStockRows as $row) {
+            $productId = intval($row['id_produk'] ?? 0);
+            if ($productId <= 0) {
+                continue;
+            }
+
+            $finalStockMap[$productId] = intval($row['final_stock'] ?? 0);
+        }
+
+        return $finalStockMap;
+    }
+
+    private function buildProjectedCurrentStockMap(array $projectedCurrentStockRows): array
+    {
+        $currentStockMap = [];
+
+        foreach ($projectedCurrentStockRows as $row) {
+            $productId = intval($row['id_produk'] ?? 0);
+            if ($productId <= 0) {
+                continue;
+            }
+
+            $currentStockMap[$productId] = intval($row['projected_current_stock'] ?? 0);
+        }
+
+        return $currentStockMap;
+    }
+
+    private function summarizeFinalStockLabels(array $productIds, array $finalStockMap): string
+    {
+        if (empty($productIds)) {
+            return 'produk terkait';
+        }
+
+        $labelsById = DB::table('produk')
+            ->whereIn('id_produk', $productIds)
+            ->orderBy('nama_produk')
+            ->pluck('nama_produk', 'id_produk');
+
+        $labels = [];
+        foreach ($productIds as $productId) {
+            $name = trim((string) ($labelsById[$productId] ?? 'Produk'));
+            $finalStock = intval($finalStockMap[$productId] ?? 0);
+            $labels[] = $name . ' (#' . $productId . ', stok akhir ' . $finalStock . ')';
+        }
+
+        $visibleLabels = array_slice($labels, 0, 5);
+        $remaining = count($labels) - count($visibleLabels);
+
+        if ($remaining > 0) {
+            $visibleLabels[] = 'dan ' . $remaining . ' produk lain';
+        }
+
+        return implode(', ', $visibleLabels);
+    }
+
+    private function summarizeProjectedCurrentStockLabels(array $productIds, array $currentStockMap): string
+    {
+        if (empty($productIds)) {
+            return 'produk terkait';
+        }
+
+        $labelsById = DB::table('produk')
+            ->whereIn('id_produk', $productIds)
+            ->orderBy('nama_produk')
+            ->pluck('nama_produk', 'id_produk');
+
+        $labels = [];
+        foreach ($productIds as $productId) {
+            $name = trim((string) ($labelsById[$productId] ?? 'Produk'));
+            $currentStock = intval($currentStockMap[$productId] ?? 0);
+            $labels[] = $name . ' (#' . $productId . ', stok akhir ' . $currentStock . ')';
+        }
+
+        $visibleLabels = array_slice($labels, 0, 5);
+        $remaining = count($labels) - count($visibleLabels);
+
+        if ($remaining > 0) {
+            $visibleLabels[] = 'dan ' . $remaining . ' produk lain';
+        }
+
+        return implode(', ', $visibleLabels);
     }
 
     private function normalizeWaktu($value): string
@@ -311,13 +364,21 @@ class TransactionDateMutationService
     private function assertTransactionFinalWaktuAllowed($waktu): void
     {
         $resolvedWaktu = $this->normalizeWaktu($waktu);
-        $cutoff = (string) config('stock.cutoff_datetime', '2025-12-31 23:59:59');
+        $minimumAllowedWaktu = $this->resolveMinimumAllowedFinalTransactionWaktu();
 
-        if ($resolvedWaktu <= $cutoff) {
-            throw new \RuntimeException('Transaksi final tidak boleh disimpan pada atau sebelum cutoff baseline. Gunakan proses forensik terkontrol jika histori sebelum cutoff memang harus diubah.');
+        if ($resolvedWaktu < $minimumAllowedWaktu) {
+            throw new \RuntimeException('Transaksi final tidak boleh disimpan lebih lama dari ' . $minimumAllowedWaktu . ' (sehari setelah cutoff baseline).');
         }
 
         $this->assertTransactionNotFuture($resolvedWaktu);
+    }
+
+    private function resolveMinimumAllowedFinalTransactionWaktu(): string
+    {
+        return Carbon::parse((string) config('stock.cutoff_datetime', '2025-12-31 23:59:59'))
+            ->addDay()
+            ->startOfDay()
+            ->format('Y-m-d H:i:s');
     }
 
     private function assertTransactionNotFuture($waktu): void
