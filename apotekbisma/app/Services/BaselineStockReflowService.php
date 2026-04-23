@@ -206,7 +206,7 @@ class BaselineStockReflowService
             ]);
 
         if ($candidates->isEmpty()) {
-            return null;
+            return $this->resolveLastPreCutoffSeed($productId, $cutoff);
         }
 
         $sorted = $candidates->sort(function ($left, $right) use ($cutoff) {
@@ -215,7 +215,7 @@ class BaselineStockReflowService
 
         $seed = $sorted->first();
         if (!$seed) {
-            return null;
+            return $this->resolveLastPreCutoffSeed($productId, $cutoff);
         }
 
         return [
@@ -223,6 +223,43 @@ class BaselineStockReflowService
             'waktu' => (string) ($seed->waktu ?? ''),
             'stok' => intval($seed->stok_sisa ?? 0),
             'keterangan' => (string) ($seed->keterangan ?? ''),
+        ];
+    }
+
+    /**
+     * Fallback seed resolution: use the last pre-cutoff record's stok_sisa
+     * for products that have stock history but no explicit baseline seed record.
+     */
+    private function resolveLastPreCutoffSeed(int $productId, Carbon $cutoff): ?array
+    {
+        $lastRecord = DB::table('rekaman_stoks')
+            ->where('id_produk', $productId)
+            ->where('waktu', '<=', $cutoff->format('Y-m-d H:i:s'))
+            ->orderBy('waktu', 'desc')
+            ->orderBy('id_rekaman_stok', 'desc')
+            ->first([
+                'id_rekaman_stok',
+                'waktu',
+                'stok_sisa',
+                'keterangan',
+            ]);
+
+        if (!$lastRecord) {
+            return null;
+        }
+
+        Log::info('Produk menggunakan fallback seed dari record pre-cutoff terakhir.', [
+            'id_produk' => $productId,
+            'id_rekaman_stok' => intval($lastRecord->id_rekaman_stok),
+            'waktu' => (string) $lastRecord->waktu,
+            'stok_sisa' => intval($lastRecord->stok_sisa),
+        ]);
+
+        return [
+            'id_rekaman_stok' => intval($lastRecord->id_rekaman_stok ?? 0),
+            'waktu' => (string) ($lastRecord->waktu ?? ''),
+            'stok' => intval($lastRecord->stok_sisa ?? 0),
+            'keterangan' => (string) ($lastRecord->keterangan ?? ''),
         ];
     }
 

@@ -1255,13 +1255,15 @@
             return;
         }
 
+        const defaultKeteranganStok = 'Penyesuaian stok';
+
         currentStokSaatIni = parseInt(stokSaatIni);
         $('#modal-update-stok').modal('show');
         $('#form-update-stok').attr('action', '{{ route("produk.update_stok_manual", ":id") }}'.replace(':id', id));
         $('#produk_info').text(namaProduk);
         $('#stok_saat_ini').text(stokSaatIni);
         $('#stok_baru').val(stokSaatIni);
-        $('#keterangan_stok').val('');
+        $('#keterangan_stok').val(defaultKeteranganStok);
         updateSelisihDisplay(stokSaatIni);
         
         setTimeout(function() {

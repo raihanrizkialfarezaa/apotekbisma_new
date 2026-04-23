@@ -270,11 +270,7 @@ class ProdukController extends Controller
                     'Penyesuaian Stok Manual via Edit Produk: ' . trim((string) $validated['keterangan_stok'])
                 );
 
-                app(StockRuntimeIntegrityService::class)->rebuildAndValidate(
-                    [$produk->id_produk],
-                    'edit stok produk manual',
-                    true
-                );
+                $this->rebuildAfterManualStockMutation($produk->id_produk, 'edit stok produk manual');
             }
 
             DB::commit();
@@ -363,11 +359,7 @@ class ProdukController extends Controller
             }
 
             $this->createStockOpnameRecord($produk->id_produk, $stok_lama_otoritatif, $stok_baru, $keteranganFinal);
-            app(StockRuntimeIntegrityService::class)->rebuildAndValidate(
-                [$produk->id_produk],
-                'stock opname manual',
-                true
-            );
+            $this->rebuildAfterManualStockMutation($produk->id_produk, 'stock opname manual');
             
             DB::commit();
             
@@ -419,6 +411,15 @@ class ProdukController extends Controller
             'created_at' => $currentTime,
             'updated_at' => $currentTime
         ]);
+    }
+
+    private function rebuildAfterManualStockMutation(int $idProduk, string $contextLabel): void
+    {
+        app(StockRuntimeIntegrityService::class)->rebuildAndValidate(
+            [$idProduk],
+            $contextLabel,
+            false
+        );
     }
 
     private function resolveAuthoritativeOldStock(int $idProduk, int $fallbackStock): int
@@ -640,10 +641,13 @@ class ProdukController extends Controller
 
     private function findBlockingDraftTransactionsForProduct(int $idProduk): array
     {
+        $cutoff = (string) config('stock.cutoff_datetime', '2025-12-31 23:59:59');
+
         $pembelianDrafts = DB::table('pembelian_detail as pd')
             ->join('pembelian as p', 'pd.id_pembelian', '=', 'p.id_pembelian')
             ->where('pd.id_produk', $idProduk)
             ->where('pd.jumlah', '>', 0)
+            ->whereRaw('COALESCE(p.waktu_datang, p.waktu, p.created_at) > ?', [$cutoff])
             ->where(function ($query) {
                 $query->where('p.no_faktur', 'o')
                     ->orWhere('p.no_faktur', '')
@@ -664,6 +668,7 @@ class ProdukController extends Controller
             ->join('penjualan as p', 'pd.id_penjualan', '=', 'p.id_penjualan')
             ->where('pd.id_produk', $idProduk)
             ->where('pd.jumlah', '>', 0)
+            ->whereRaw('COALESCE(p.waktu, p.created_at) > ?', [$cutoff])
             ->where(function ($query) {
                 $query->where('p.total_item', '<=', 0)
                     ->orWhere('p.total_harga', '<=', 0)

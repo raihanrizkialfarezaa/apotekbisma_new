@@ -58,24 +58,15 @@ class KartuStokController extends Controller
                 return !empty($row['is_audit_reference']);
             })
             ->count();
-        $stockCutoff = Carbon::parse($this->getStockCutoff())->format('d-m-Y H:i:s');
-        
-        // SORT BY DATE DESCENDING (newest first) - Backend sorting is 100% reliable
-        usort($dataStokLengkap, function($a, $b) {
-            $timeA = strtotime($a['waktu_raw'] ?? '1970-01-01');
-            $timeB = strtotime($b['waktu_raw'] ?? '1970-01-01');
-            
-            if ($timeA == $timeB) {
-                // Secondary sort by ID Descending to ensure consistent order for same-second transactions
-                $idA = $a['id'] ?? 0;
-                $idB = $b['id'] ?? 0;
-                return $idB - $idA;
-            }
-            
-            return $timeB - $timeA; // Descending
-        });
+        $baselineSeedInfo = collect($dataStokLengkap)
+            ->first(function ($row) {
+                $plainKeterangan = trim(strip_tags((string) ($row['keterangan'] ?? '')));
 
-        return view('kartu_stok.detail', compact('produk_id', 'nama_barang', 'produk', 'stok_data', 'dataStokLengkap', 'preCutoffAuditPurchaseCount', 'stockCutoff'));
+                return stripos($plainKeterangan, 'Saldo Awal Stok') !== false;
+            });
+        $stockCutoff = Carbon::parse($this->getStockCutoff())->format('d-m-Y H:i:s');
+
+        return view('kartu_stok.detail', compact('produk_id', 'nama_barang', 'produk', 'stok_data', 'dataStokLengkap', 'preCutoffAuditPurchaseCount', 'baselineSeedInfo', 'stockCutoff'));
     }
     
     public function getData($id)
@@ -227,14 +218,7 @@ class KartuStokController extends Controller
             $data = array_merge($data, $this->buildPreCutoffPembelianAuditRows($id, $request));
         }
 
-        usort($data, function ($left, $right) {
-            $timeCompare = strcmp((string) ($left['waktu_raw'] ?? ''), (string) ($right['waktu_raw'] ?? ''));
-            if ($timeCompare !== 0) {
-                return $timeCompare;
-            }
-
-            return ((int) ($left['id'] ?? 0)) <=> ((int) ($right['id'] ?? 0));
-        });
+        $data = $this->sortStockCardRowsForDisplay($data);
 
         foreach ($data as $index => &$row) {
             $row['DT_RowIndex'] = $index + 1;
@@ -259,6 +243,20 @@ class KartuStokController extends Controller
         }
 
         return $data;
+    }
+
+    private function sortStockCardRowsForDisplay(array $rows): array
+    {
+        usort($rows, function ($left, $right) {
+            $timeCompare = strcmp((string) ($right['waktu_raw'] ?? ''), (string) ($left['waktu_raw'] ?? ''));
+            if ($timeCompare !== 0) {
+                return $timeCompare;
+            }
+
+            return ((int) ($right['id'] ?? 0)) <=> ((int) ($left['id'] ?? 0));
+        });
+
+        return $rows;
     }
 
     private function buildAuthoritativeStockCardLedgerState(int $productId): array

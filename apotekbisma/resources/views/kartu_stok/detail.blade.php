@@ -1522,6 +1522,15 @@
                         Baris ini tidak mengubah stok aktif; kuantitasnya sudah tercermin pada saldo awal baseline per {{ $stockCutoff }}.
                     </div>
                 @endif
+                @if (!empty($baselineSeedInfo))
+                    <div class="alert alert-default" style="margin: 16px 16px 0 16px; border-radius: 10px; border: 1px solid #d8dee9; background: #f8fafc; color: #334155;">
+                        <strong>Saldo awal baseline terdeteksi.</strong>
+                        Baris <strong>{{ trim(strip_tags((string) ($baselineSeedInfo['keterangan'] ?? 'Saldo Awal Stok'))) }}</strong>
+                        pada <strong>{{ trim(strip_tags((string) ($baselineSeedInfo['tanggal'] ?? ($baselineSeedInfo['waktu_raw'] ?? '')))) }}</strong>
+                        dengan stok akhir <strong>{{ trim(strip_tags((string) ($baselineSeedInfo['stok_sisa'] ?? '0'))) }}</strong> memang ada di kartu stok.
+                        Karena tabel default diurutkan dari transaksi terbaru ke terlama, baris ini berada di urutan paling akhir tabel. Gunakan <strong>Tampilkan: Semua</strong> atau buka halaman terakhir untuk melihatnya langsung.
+                    </div>
+                @endif
                 <div class="tools-row">
                     <!-- Enhanced Search Box -->
                     <div class="search-container">
@@ -1759,8 +1768,7 @@
         $('#table-loading').show();
 
         // Initialize DataTable with enhanced configuration
-        // Initial Load Data Direct from Controller (Robust & Fast)
-        const initialData = @json($dataStokLengkap);
+        // Load rows from a single source to avoid rendering the same dataset twice.
 
         table = $('#kartu-stok-table').DataTable({
             destroy: true, // Ensure fresh init
@@ -1770,7 +1778,6 @@
                     target: 'tr'
                 }
             },
-            data: initialData, // Use direct data for instant load
             processing: true,
             serverSide: false, // Client-side processing is key
             autoWidth: false,
