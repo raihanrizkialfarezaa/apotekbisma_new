@@ -21,7 +21,7 @@ class StockDraftCleanupService
 
     public function cleanupStalePembelianDrafts(?int $excludeId = null): array
     {
-        $threshold = now()->subMinutes((int) config('stock.stale_draft_minutes', 30));
+        $threshold = now()->subMinutes((int) config('stock.stale_draft_minutes', 1440));
         $cutoff = config('stock.cutoff_datetime', '2025-12-31 23:59:59');
         $summary = [
             'checked' => 0,
@@ -33,7 +33,7 @@ class StockDraftCleanupService
 
         $draftIds = DB::table('pembelian')
             ->select('id_pembelian')
-            ->where('created_at', '<', $threshold)
+            ->whereRaw('COALESCE(updated_at, created_at) < ?', [$threshold])
             ->whereRaw('COALESCE(waktu, created_at) > ?', [$cutoff])
             ->where(function ($query) {
                 $query->where('no_faktur', 'o')
@@ -111,7 +111,7 @@ class StockDraftCleanupService
 
     public function cleanupStalePenjualanDrafts(?int $excludeId = null): array
     {
-        $threshold = now()->subMinutes((int) config('stock.stale_draft_minutes', 30));
+        $threshold = now()->subMinutes((int) config('stock.stale_draft_minutes', 1440));
         $cutoff = config('stock.cutoff_datetime', '2025-12-31 23:59:59');
         $summary = [
             'checked' => 0,
@@ -122,7 +122,7 @@ class StockDraftCleanupService
 
         $draftIds = DB::table('penjualan')
             ->select('id_penjualan')
-            ->where('created_at', '<', $threshold)
+            ->whereRaw('COALESCE(updated_at, created_at) < ?', [$threshold])
             ->whereRaw('COALESCE(waktu, created_at) > ?', [$cutoff])
             ->where(function ($query) {
                 $query->where('total_item', '<=', 0)

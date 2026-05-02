@@ -534,6 +534,9 @@ class PembelianDetailController extends Controller
 
         if ($shouldSave) {
             $pembelian->save();
+        } else {
+            // Selalu update 'updated_at' agar draft tidak dihapus oleh cleanup service saat aktif diinput
+            $pembelian->touch();
         }
     }
 

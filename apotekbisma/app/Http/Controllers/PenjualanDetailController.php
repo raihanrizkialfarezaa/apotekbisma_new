@@ -879,6 +879,9 @@ class PenjualanDetailController extends Controller
         if (!$penjualan->waktu) {
             $penjualan->waktu = $penjualan->created_at ?? Carbon::now()->setTimezone(config('app.timezone'));
             $penjualan->save();
+        } else {
+            // Selalu update 'updated_at' agar draft tidak dihapus oleh cleanup service saat aktif diinput
+            $penjualan->touch();
         }
     }
 
