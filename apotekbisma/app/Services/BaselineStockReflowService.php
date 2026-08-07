@@ -532,6 +532,13 @@ class BaselineStockReflowService
             return $this->cachedBaselineData;
         }
 
+        $cacheKey = 'baseline_csv_parsed_' . md5($path . '|' . (string) filemtime($path));
+        $cached = Cache::get($cacheKey);
+        if (is_array($cached)) {
+            $this->cachedBaselineData = $cached;
+            return $this->cachedBaselineData;
+        }
+
         if (!$this->isReadableFilePath($path)) {
             $this->cachedBaselineData = [
                 'delimiter' => $this->csvDelimiter,
@@ -605,6 +612,8 @@ class BaselineStockReflowService
             'baseline_map' => $baselineMap,
             'duplicate_conflicts' => $duplicateConflicts,
         ];
+
+        Cache::put($cacheKey, $this->cachedBaselineData, 3600);
 
         return $this->cachedBaselineData;
     }

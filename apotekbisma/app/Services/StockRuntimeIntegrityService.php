@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Exceptions\UnsafeStockMutationException;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -88,19 +89,24 @@ class StockRuntimeIntegrityService
         }
 
         $resolvedUntil = $until ?? Carbon::now()->format('Y-m-d H:i:s');
-        $committedStockOverrides = $this->buildCommittedStockMapFromReflow($normalizedIds, $resolvedUntil);
-        $snapshots = [];
+        sort($normalizedIds);
+        $cacheKey = 'stock_preview_draft_' . md5(implode(',', $normalizedIds) . '|' . $resolvedUntil);
 
-        foreach ($normalizedIds as $productId) {
-            $snapshot = $this->buildDraftAwareStockSnapshot($productId, $committedStockOverrides);
-            if ($snapshot === null) {
-                continue;
+        return Cache::remember($cacheKey, 60, function () use ($normalizedIds, $resolvedUntil) {
+            $committedStockOverrides = $this->buildCommittedStockMapFromReflow($normalizedIds, $resolvedUntil);
+            $snapshots = [];
+
+            foreach ($normalizedIds as $productId) {
+                $snapshot = $this->buildDraftAwareStockSnapshot($productId, $committedStockOverrides);
+                if ($snapshot === null) {
+                    continue;
+                }
+
+                $snapshots[$productId] = $snapshot;
             }
 
-            $snapshots[$productId] = $snapshot;
-        }
-
-        return $snapshots;
+            return $snapshots;
+        });
     }
 
     public function previewCurrentSellableStockMap(array $productIds, ?string $until = null, bool $clampNegativeToZero = false): array

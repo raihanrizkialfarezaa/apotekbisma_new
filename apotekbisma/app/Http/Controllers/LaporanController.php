@@ -8,7 +8,6 @@ use App\Models\Pengeluaran;
 use App\Models\Penjualan;
 use App\Models\PenjualanDetail;
 use App\Models\Produk;
-use App\Models\Supplier;
 use App\Models\Member;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade as PDF;
@@ -35,13 +34,15 @@ class LaporanController extends Controller
     public function getStatistics($tanggalAwal, $tanggalAkhir)
     {
         // Total calculations for the period
-        $totalPenjualan = Penjualan::whereBetween('created_at', [$tanggalAwal . ' 00:00:00', $tanggalAkhir . ' 23:59:59'])
-                                  ->orWhereBetween('waktu', [$tanggalAwal . ' 00:00:00', $tanggalAkhir . ' 23:59:59'])
-                                  ->sum('bayar');
+        $totalPenjualan = Penjualan::where(function ($query) use ($tanggalAwal, $tanggalAkhir) {
+            $query->whereBetween('created_at', [$tanggalAwal . ' 00:00:00', $tanggalAkhir . ' 23:59:59'])
+                  ->orWhereBetween('waktu', [$tanggalAwal . ' 00:00:00', $tanggalAkhir . ' 23:59:59']);
+        })->sum('bayar');
 
-        $totalPembelian = Pembelian::whereBetween('created_at', [$tanggalAwal . ' 00:00:00', $tanggalAkhir . ' 23:59:59'])
-                                  ->orWhereBetween('waktu', [$tanggalAwal . ' 00:00:00', $tanggalAkhir . ' 23:59:59'])
-                                  ->sum('bayar');
+        $totalPembelian = Pembelian::where(function ($query) use ($tanggalAwal, $tanggalAkhir) {
+            $query->whereBetween('created_at', [$tanggalAwal . ' 00:00:00', $tanggalAkhir . ' 23:59:59'])
+                  ->orWhereBetween('waktu', [$tanggalAwal . ' 00:00:00', $tanggalAkhir . ' 23:59:59']);
+        })->sum('bayar');
 
         $totalPengeluaran = Pengeluaran::whereBetween('created_at', [$tanggalAwal . ' 00:00:00', $tanggalAkhir . ' 23:59:59'])
                                       ->sum('nominal');
@@ -49,13 +50,15 @@ class LaporanController extends Controller
         $totalPendapatan = $totalPenjualan - $totalPembelian - $totalPengeluaran;
 
         // Transaction counts
-        $jumlahTransaksiPenjualan = Penjualan::whereBetween('created_at', [$tanggalAwal . ' 00:00:00', $tanggalAkhir . ' 23:59:59'])
-                                            ->orWhereBetween('waktu', [$tanggalAwal . ' 00:00:00', $tanggalAkhir . ' 23:59:59'])
-                                            ->count();
+        $jumlahTransaksiPenjualan = Penjualan::where(function ($query) use ($tanggalAwal, $tanggalAkhir) {
+            $query->whereBetween('created_at', [$tanggalAwal . ' 00:00:00', $tanggalAkhir . ' 23:59:59'])
+                  ->orWhereBetween('waktu', [$tanggalAwal . ' 00:00:00', $tanggalAkhir . ' 23:59:59']);
+        })->count();
 
-        $jumlahTransaksiPembelian = Pembelian::whereBetween('created_at', [$tanggalAwal . ' 00:00:00', $tanggalAkhir . ' 23:59:59'])
-                                            ->orWhereBetween('waktu', [$tanggalAwal . ' 00:00:00', $tanggalAkhir . ' 23:59:59'])
-                                            ->count();
+        $jumlahTransaksiPembelian = Pembelian::where(function ($query) use ($tanggalAwal, $tanggalAkhir) {
+            $query->whereBetween('created_at', [$tanggalAwal . ' 00:00:00', $tanggalAkhir . ' 23:59:59'])
+                  ->orWhereBetween('waktu', [$tanggalAwal . ' 00:00:00', $tanggalAkhir . ' 23:59:59']);
+        })->count();
 
         // Best selling products
         $produkTerlaris = PenjualanDetail::join('penjualan', 'penjualan_detail.id_penjualan', '=', 'penjualan.id_penjualan')
@@ -103,36 +106,70 @@ class LaporanController extends Controller
     {
         $no = 1;
         $data = array();
-        $pendapatan = 0;
         $total_pendapatan = 0;
         $total_penjualan_keseluruhan = 0;
         $total_pembelian_keseluruhan = 0;
         $total_pengeluaran_keseluruhan = 0;
 
-        while (strtotime($awal) <= strtotime($akhir)) {
-            $tanggal = $awal;
-            $awal = date('Y-m-d', strtotime("+1 day", strtotime($awal)));
+        $startDate = Carbon::parse($awal)->startOfDay();
+        $endDate = Carbon::parse($akhir)->endOfDay();
+        $range = [$startDate->copy()->startOfDay(), $endDate->copy()->endOfDay()];
 
-            // Better date range queries
-            $total_penjualan = Penjualan::whereDate('created_at', $tanggal)
-                                       ->orWhereDate('waktu', $tanggal)
-                                       ->sum('bayar');
+        $penjualanByDate = Penjualan::whereBetween('created_at', $range)
+            ->selectRaw('DATE(created_at) as tgl, SUM(bayar) as total_penjualan, COUNT(*) as jumlah_transaksi')
+            ->groupBy('tgl')
+            ->get()
+            ->keyBy('tgl');
 
-            $total_pembelian = Pembelian::whereDate('created_at', $tanggal)
-                                       ->orWhereDate('waktu', $tanggal)
-                                       ->sum('bayar');
+        $penjualanWaktuByDate = Penjualan::whereBetween('waktu', $range)
+            ->where(function ($query) {
+                $query->whereNull('created_at')
+                      ->orWhereRaw('DATE(created_at) != DATE(waktu)');
+            })
+            ->selectRaw('DATE(waktu) as tgl, SUM(bayar) as total_penjualan, COUNT(*) as jumlah_transaksi')
+            ->groupBy('tgl')
+            ->get()
+            ->keyBy('tgl');
 
-            $total_pengeluaran = Pengeluaran::whereDate('created_at', $tanggal)
-                                           ->sum('nominal');
+        $pembelianByDate = Pembelian::whereBetween('created_at', $range)
+            ->selectRaw('DATE(created_at) as tgl, SUM(bayar) as total_pembelian, COUNT(*) as jumlah_transaksi')
+            ->groupBy('tgl')
+            ->get()
+            ->keyBy('tgl');
 
-            // Count transactions
-            $jumlah_transaksi_penjualan = Penjualan::whereDate('created_at', $tanggal)
-                                                  ->orWhereDate('waktu', $tanggal)
-                                                  ->count();
+        $pembelianWaktuByDate = Pembelian::whereBetween('waktu', $range)
+            ->where(function ($query) {
+                $query->whereNull('created_at')
+                      ->orWhereRaw('DATE(created_at) != DATE(waktu)');
+            })
+            ->selectRaw('DATE(waktu) as tgl, SUM(bayar) as total_pembelian, COUNT(*) as jumlah_transaksi')
+            ->groupBy('tgl')
+            ->get()
+            ->keyBy('tgl');
 
-            $jumlah_transaksi_pembelian = Pembelian::whereDate('created_at', $tanggal)
-                                                  ->orWhereDate('waktu', $tanggal)
-                                                  ->count();
+        $pengeluaranByDate = Pengeluaran::whereBetween('created_at', $range)
+            ->selectRaw('DATE(created_at) as tgl, SUM(nominal) as total_pengeluaran')
+            ->groupBy('tgl')
+            ->get()
+            ->keyBy('tgl');
+
+        $current = $startDate->copy();
+        while ($current <= $endDate) {
+            $tanggal = $current->format('Y-m-d');
+
+            $penjualanRow = $penjualanByDate->get($tanggal);
+            $penjualanWaktuRow = $penjualanWaktuByDate->get($tanggal);
+            $pembelianRow = $pembelianByDate->get($tanggal);
+            $pembelianWaktuRow = $pembelianWaktuByDate->get($tanggal);
+            $pengeluaranRow = $pengeluaranByDate->get($tanggal);
+
+            $total_penjualan = (float) ($penjualanRow->total_penjualan ?? 0) + (float) ($penjualanWaktuRow->total_penjualan ?? 0);
+            $jumlah_transaksi_penjualan = (int) ($penjualanRow->jumlah_transaksi ?? 0) + (int) ($penjualanWaktuRow->jumlah_transaksi ?? 0);
+
+            $total_pembelian = (float) ($pembelianRow->total_pembelian ?? 0) + (float) ($pembelianWaktuRow->total_pembelian ?? 0);
+            $jumlah_transaksi_pembelian = (int) ($pembelianRow->jumlah_transaksi ?? 0) + (int) ($pembelianWaktuRow->jumlah_transaksi ?? 0);
+
+            $total_pengeluaran = (float) ($pengeluaranRow->total_pengeluaran ?? 0);
 
             $pendapatan = $total_penjualan - $total_pembelian - $total_pengeluaran;
             $total_pendapatan += $pendapatan;
@@ -149,6 +186,8 @@ class LaporanController extends Controller
             $row['pendapatan'] = 'Rp. ' . format_uang($pendapatan);
 
             $data[] = $row;
+
+            $current->addDay();
         }
 
         // Add summary row

@@ -189,27 +189,33 @@ class DashboardController extends Controller
 
         // Produk yang paling sering dibeli dari setiap supplier (top 3 untuk setiap supplier teratas)
         $produk_per_supplier = [];
-        foreach ($supplier_terbanyak->take(5) as $supplier) {
-            $produk_terlaris_supplier = PembelianDetail::join('pembelian', 'pembelian_detail.id_pembelian', '=', 'pembelian.id_pembelian')
-                                                      ->join('produk', 'pembelian_detail.id_produk', '=', 'produk.id_produk')
-                                                      ->where('pembelian.id_supplier', $supplier->id_supplier)
-                                                      ->selectRaw('
-                                                          produk.id_produk,
-                                                          produk.nama_produk,
-                                                          produk.kode_produk,
-                                                          SUM(pembelian_detail.jumlah) as total_dibeli,
-                                                          COUNT(pembelian_detail.id_pembelian_detail) as frekuensi_beli,
-                                                          SUM(pembelian_detail.subtotal) as total_nilai
-                                                      ')
-                                                      ->groupBy('produk.id_produk', 'produk.nama_produk', 'produk.kode_produk')
-                                                      ->orderBy('total_dibeli', 'desc')
-                                                      ->take(3)
-                                                      ->get();
-            
-            $produk_per_supplier[$supplier->id_supplier] = [
-                'supplier_info' => $supplier,
-                'produk_terlaris' => $produk_terlaris_supplier
-            ];
+        $topSupplierIds = $supplier_terbanyak->take(5)->pluck('id_supplier');
+        if ($topSupplierIds->isNotEmpty()) {
+            $produkTerlarisSupplierRows = PembelianDetail::join('pembelian', 'pembelian_detail.id_pembelian', '=', 'pembelian.id_pembelian')
+                                                        ->join('produk', 'pembelian_detail.id_produk', '=', 'produk.id_produk')
+                                                        ->whereIn('pembelian.id_supplier', $topSupplierIds->all())
+                                                        ->selectRaw('
+                                                            pembelian.id_supplier,
+                                                            produk.id_produk,
+                                                            produk.nama_produk,
+                                                            produk.kode_produk,
+                                                            SUM(pembelian_detail.jumlah) as total_dibeli,
+                                                            COUNT(pembelian_detail.id_pembelian_detail) as frekuensi_beli,
+                                                            SUM(pembelian_detail.subtotal) as total_nilai
+                                                        ')
+                                                        ->groupBy('pembelian.id_supplier', 'produk.id_produk', 'produk.nama_produk', 'produk.kode_produk')
+                                                        ->orderBy('pembelian.id_supplier', 'asc')
+                                                        ->orderBy('total_dibeli', 'desc')
+                                                        ->get();
+
+            $supplierProdukBySupplier = $produkTerlarisSupplierRows->groupBy('id_supplier');
+            foreach ($topSupplierIds as $supplierId) {
+                $supplier = $supplier_terbanyak->firstWhere('id_supplier', $supplierId);
+                $produk_per_supplier[$supplierId] = [
+                    'supplier_info' => $supplier,
+                    'produk_terlaris' => $supplierProdukBySupplier->get($supplierId, collect())->take(3),
+                ];
+            }
         }
 
         // Produk favorit per supplier berdasarkan penjualan terbanyak
@@ -234,16 +240,17 @@ class DashboardController extends Controller
                                       ->take(8)
                                       ->get();
 
-        foreach ($supplier_dengan_penjualan as $supplier) {
-            // Ambil produk terlaris dari supplier ini berdasarkan penjualan
-            $produk_terlaris_penjualan = DB::table('penjualan_detail')
+        $salesSupplierIds = $supplier_dengan_penjualan->pluck('id_supplier');
+        if ($salesSupplierIds->isNotEmpty()) {
+            $produkTerlarisPenjualanRows = DB::table('penjualan_detail')
                                           ->join('penjualan', 'penjualan_detail.id_penjualan', '=', 'penjualan.id_penjualan')
                                           ->join('produk', 'penjualan_detail.id_produk', '=', 'produk.id_produk')
                                           ->join('pembelian_detail', 'produk.id_produk', '=', 'pembelian_detail.id_produk')
                                           ->join('pembelian', 'pembelian_detail.id_pembelian', '=', 'pembelian.id_pembelian')
-                                          ->where('pembelian.id_supplier', $supplier->id_supplier)
+                                          ->whereIn('pembelian.id_supplier', $salesSupplierIds->all())
                                           ->whereBetween('penjualan.created_at', [$tanggal_awal . ' 00:00:00', $tanggal_akhir . ' 23:59:59'])
                                           ->selectRaw('
+                                              pembelian.id_supplier,
                                               produk.id_produk,
                                               produk.nama_produk,
                                               produk.kode_produk,
@@ -252,16 +259,20 @@ class DashboardController extends Controller
                                               SUM(penjualan_detail.subtotal) as total_revenue,
                                               SUM(penjualan_detail.jumlah * (penjualan_detail.harga_jual - produk.harga_beli)) as total_profit
                                           ')
-                                          ->groupBy('produk.id_produk', 'produk.nama_produk', 'produk.kode_produk')
+                                          ->groupBy('pembelian.id_supplier', 'produk.id_produk', 'produk.nama_produk', 'produk.kode_produk')
+                                          ->orderBy('pembelian.id_supplier', 'asc')
                                           ->orderBy('total_terjual', 'desc')
-                                          ->take(3)
                                           ->get();
-            
-            if ($produk_terlaris_penjualan->count() > 0) {
-                $produk_favorit_penjualan_per_supplier[$supplier->id_supplier] = [
-                    'supplier_info' => $supplier,
-                    'produk_terlaris' => $produk_terlaris_penjualan
-                ];
+
+            $salesProdukBySupplier = $produkTerlarisPenjualanRows->groupBy('id_supplier');
+            foreach ($supplier_dengan_penjualan as $supplier) {
+                $favoritRows = $salesProdukBySupplier->get($supplier->id_supplier, collect())->take(3);
+                if ($favoritRows->count() > 0) {
+                    $produk_favorit_penjualan_per_supplier[$supplier->id_supplier] = [
+                        'supplier_info' => $supplier,
+                        'produk_terlaris' => $favoritRows,
+                    ];
+                }
             }
         }
 
@@ -295,125 +306,103 @@ class DashboardController extends Controller
         $start = Carbon::parse($tanggal_awal);
         $end = Carbon::parse($tanggal_akhir);
 
+        $keyFormat = null;
+        $labelCallback = null;
+
         switch ($period) {
             case 'today':
-                // Hourly data for today
-                for ($hour = 0; $hour < 24; $hour++) {
-                    $hour_start = $start->copy()->setHour($hour)->setMinute(0)->setSecond(0);
-                    $hour_end = $hour_start->copy()->setMinute(59)->setSecond(59);
-
-                    $data_tanggal[] = $hour_start->format('H:i');
-                    
-                    $penjualan = Penjualan::whereBetween('created_at', [$hour_start, $hour_end])->sum('bayar') ?? 0;
-                    $pembelian = Pembelian::whereBetween('created_at', [$hour_start, $hour_end])->sum('bayar') ?? 0;
-                    $pengeluaran = Pengeluaran::whereBetween('created_at', [$hour_start, $hour_end])->sum('nominal') ?? 0;
-                    $transaksi_count = Penjualan::whereBetween('created_at', [$hour_start, $hour_end])->count() ?? 0;
-
-                    $data_penjualan[] = (float) $penjualan;
-                    $data_pembelian[] = (float) $pembelian;
-                    $data_pendapatan[] = (float) ($penjualan - $pembelian - $pengeluaran);
-                    $data_transaksi[] = (int) $transaksi_count;
-                }
+                $keyFormat = 'Y-m-d H:00:00';
+                $labelCallback = fn (Carbon $moment) => $moment->format('H:i');
                 break;
 
             case 'week':
-                // Daily data for the week
-                $current = $start->copy();
-                while ($current <= $end) {
-                    $day_start = $current->copy()->startOfDay();
-                    $day_end = $current->copy()->endOfDay();
-
-                    $data_tanggal[] = $current->format('D, M d');
-                    
-                    $penjualan = Penjualan::whereBetween('created_at', [$day_start, $day_end])->sum('bayar') ?? 0;
-                    $pembelian = Pembelian::whereBetween('created_at', [$day_start, $day_end])->sum('bayar') ?? 0;
-                    $pengeluaran = Pengeluaran::whereBetween('created_at', [$day_start, $day_end])->sum('nominal') ?? 0;
-                    $transaksi_count = Penjualan::whereBetween('created_at', [$day_start, $day_end])->count() ?? 0;
-
-                    $data_penjualan[] = (float) $penjualan;
-                    $data_pembelian[] = (float) $pembelian;
-                    $data_pendapatan[] = (float) ($penjualan - $pembelian - $pengeluaran);
-                    $data_transaksi[] = (int) $transaksi_count;
-
-                    $current->addDay();
-                }
+                $keyFormat = 'Y-m-d';
+                $labelCallback = fn (Carbon $moment) => $moment->format('D, M d');
                 break;
 
             case 'month':
-                // Daily data for the month
-                $current = $start->copy();
-                while ($current <= $end) {
-                    $day_start = $current->copy()->startOfDay();
-                    $day_end = $current->copy()->endOfDay();
-
-                    $data_tanggal[] = $current->format('d');
-                    
-                    $penjualan = Penjualan::whereBetween('created_at', [$day_start, $day_end])->sum('bayar') ?? 0;
-                    $pembelian = Pembelian::whereBetween('created_at', [$day_start, $day_end])->sum('bayar') ?? 0;
-                    $pengeluaran = Pengeluaran::whereBetween('created_at', [$day_start, $day_end])->sum('nominal') ?? 0;
-                    $transaksi_count = Penjualan::whereBetween('created_at', [$day_start, $day_end])->count() ?? 0;
-
-                    $data_penjualan[] = (float) $penjualan;
-                    $data_pembelian[] = (float) $pembelian;
-                    $data_pendapatan[] = (float) ($penjualan - $pembelian - $pengeluaran);
-                    $data_transaksi[] = (int) $transaksi_count;
-
-                    $current->addDay();
-                }
+                $keyFormat = 'Y-m-d';
+                $labelCallback = fn (Carbon $moment) => $moment->format('d');
                 break;
 
             case 'year':
-                // Monthly data for the year
-                $current = $start->copy()->startOfMonth();
-                $end_month = $end->copy()->endOfMonth();
-                
-                while ($current <= $end_month) {
-                    $month_start = $current->copy()->startOfMonth();
-                    $month_end = $current->copy()->endOfMonth();
-
-                    $data_tanggal[] = $current->format('M Y');
-                    
-                    $penjualan = Penjualan::whereBetween('created_at', [$month_start, $month_end])->sum('bayar') ?? 0;
-                    $pembelian = Pembelian::whereBetween('created_at', [$month_start, $month_end])->sum('bayar') ?? 0;
-                    $pengeluaran = Pengeluaran::whereBetween('created_at', [$month_start, $month_end])->sum('nominal') ?? 0;
-                    $transaksi_count = Penjualan::whereBetween('created_at', [$month_start, $month_end])->count() ?? 0;
-
-                    $data_penjualan[] = (float) $penjualan;
-                    $data_pembelian[] = (float) $pembelian;
-                    $data_pendapatan[] = (float) ($penjualan - $pembelian - $pengeluaran);
-                    $data_transaksi[] = (int) $transaksi_count;
-
-                    $current->addMonth();
-                }
+                $keyFormat = 'Y-m';
+                $labelCallback = fn (Carbon $moment) => $moment->format('M Y');
                 break;
 
             default:
-                // Daily data for custom period
-                $current = $start->copy();
-                while ($current <= $end) {
-                    $day_start = $current->copy()->startOfDay();
-                    $day_end = $current->copy()->endOfDay();
-
-                    $data_tanggal[] = $current->format('M d');
-                    
-                    $penjualan = Penjualan::whereBetween('created_at', [$day_start, $day_end])->sum('bayar') ?? 0;
-                    $pembelian = Pembelian::whereBetween('created_at', [$day_start, $day_end])->sum('bayar') ?? 0;
-                    $pengeluaran = Pengeluaran::whereBetween('created_at', [$day_start, $day_end])->sum('nominal') ?? 0;
-                    $transaksi_count = Penjualan::whereBetween('created_at', [$day_start, $day_end])->count() ?? 0;
-
-                    $data_penjualan[] = (float) $penjualan;
-                    $data_pembelian[] = (float) $pembelian;
-                    $data_pendapatan[] = (float) ($penjualan - $pembelian - $pengeluaran);
-                    $data_transaksi[] = (int) $transaksi_count;
-
-                    $current->addDay();
-                }
+                $keyFormat = 'Y-m-d';
+                $labelCallback = fn (Carbon $moment) => $moment->format('M d');
                 break;
         }
 
-        // If no data exists, add some sample data for demonstration
+        $rangeStart = $start->copy();
+        $rangeEnd = $end->copy()->endOfDay();
+
+        if ($period === 'today') {
+            $rangeStart = $start->copy()->startOfDay();
+            $labelMoment = fn (Carbon $moment) => $moment->setMinute(0)->setSecond(0);
+            $bucketFormat = 'Y-m-d H:00:00';
+            $step = 'addHour';
+        } elseif ($period === 'year') {
+            $rangeStart = $start->copy()->startOfMonth();
+            $rangeEnd = $end->copy()->endOfMonth();
+            $labelMoment = fn (Carbon $moment) => $moment;
+            $bucketFormat = 'Y-m';
+            $step = 'addMonth';
+        } else {
+            $labelMoment = fn (Carbon $moment) => $moment->startOfDay();
+            $bucketFormat = 'Y-m-d';
+            $step = 'addDay';
+        }
+
+        $penjualanByBucket = Penjualan::whereBetween('created_at', [$rangeStart->copy()->startOfDay(), $rangeEnd->copy()->endOfDay()])
+            ->selectRaw('DATE_FORMAT(created_at, ?) as bucket, SUM(bayar) as total', [$bucketFormat === 'Y-m' ? '%Y-%m' : ($bucketFormat === 'Y-m-d H:00:00' ? '%Y-%m-%d %H:00:00' : '%Y-%m-%d')])
+            ->groupBy('bucket')
+            ->pluck('total', 'bucket')
+            ->map(fn ($value) => (float) $value)
+            ->all();
+
+        $pembelianByBucket = Pembelian::whereBetween('created_at', [$rangeStart->copy()->startOfDay(), $rangeEnd->copy()->endOfDay()])
+            ->selectRaw('DATE_FORMAT(created_at, ?) as bucket, SUM(bayar) as total', [$bucketFormat === 'Y-m' ? '%Y-%m' : ($bucketFormat === 'Y-m-d H:00:00' ? '%Y-%m-%d %H:00:00' : '%Y-%m-%d')])
+            ->groupBy('bucket')
+            ->pluck('total', 'bucket')
+            ->map(fn ($value) => (float) $value)
+            ->all();
+
+        $pengeluaranByBucket = Pengeluaran::whereBetween('created_at', [$rangeStart->copy()->startOfDay(), $rangeEnd->copy()->endOfDay()])
+            ->selectRaw('DATE_FORMAT(created_at, ?) as bucket, SUM(nominal) as total', [$bucketFormat === 'Y-m' ? '%Y-%m' : ($bucketFormat === 'Y-m-d H:00:00' ? '%Y-%m-%d %H:00:00' : '%Y-%m-%d')])
+            ->groupBy('bucket')
+            ->pluck('total', 'bucket')
+            ->map(fn ($value) => (float) $value)
+            ->all();
+
+        $transaksiByBucket = Penjualan::whereBetween('created_at', [$rangeStart->copy()->startOfDay(), $rangeEnd->copy()->endOfDay()])
+            ->selectRaw('DATE_FORMAT(created_at, ?) as bucket, COUNT(*) as total', [$bucketFormat === 'Y-m' ? '%Y-%m' : ($bucketFormat === 'Y-m-d H:00:00' ? '%Y-%m-%d %H:00:00' : '%Y-%m-%d')])
+            ->groupBy('bucket')
+            ->pluck('total', 'bucket')
+            ->map(fn ($value) => (int) $value)
+            ->all();
+
+        $current = $rangeStart->copy();
+        while ($current <= $rangeEnd) {
+            $bucketKey = $labelMoment($current->copy())->format($keyFormat);
+            $data_tanggal[] = $labelCallback($labelMoment($current->copy()));
+
+            $penjualan = $penjualanByBucket[$bucketKey] ?? 0;
+            $pembelian = $pembelianByBucket[$bucketKey] ?? 0;
+            $pengeluaran = $pengeluaranByBucket[$bucketKey] ?? 0;
+            $transaksi_count = $transaksiByBucket[$bucketKey] ?? 0;
+
+            $data_penjualan[] = (float) $penjualan;
+            $data_pembelian[] = (float) $pembelian;
+            $data_pendapatan[] = (float) ($penjualan - $pembelian - $pengeluaran);
+            $data_transaksi[] = (int) $transaksi_count;
+
+            $current->{$step}();
+        }
+
         if (array_sum($data_penjualan) == 0 && array_sum($data_transaksi) == 0) {
-            // Keep the same structure but ensure we have valid data to display charts
             $data_penjualan = array_fill(0, count($data_tanggal), 0);
             $data_pembelian = array_fill(0, count($data_tanggal), 0);
             $data_pendapatan = array_fill(0, count($data_tanggal), 0);

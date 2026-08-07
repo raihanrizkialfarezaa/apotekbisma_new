@@ -21,14 +21,23 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         view()->composer('layouts.master', function ($view) {
-            $view->with('setting', Setting::first());
+            $view->with('setting', $this->cachedSetting());
         });
         view()->composer('layouts.auth', function ($view) {
-            $view->with('setting', Setting::first());
+            $view->with('setting', $this->cachedSetting());
         });
         view()->composer('auth.login', function ($view) {
-            $view->with('setting', Setting::first());
+            $view->with('setting', $this->cachedSetting());
         });
+    }
+
+    private function cachedSetting()
+    {
+        return \Illuminate\Support\Facades\Cache::remember(
+            'setting_single',
+            3600,
+            fn () => Setting::first()
+        );
     }
 
     /**
@@ -43,6 +52,10 @@ class AppServiceProvider extends ServiceProvider
         date_default_timezone_set('Asia/Jakarta');
 
         // URL::forceScheme('https');
+        
+        Setting::saved(function () {
+            \Illuminate\Support\Facades\Cache::forget('setting_single');
+        });
         
         // Daftarkan observer untuk memastikan stok tidak pernah minus
         Produk::observe(ProdukObserver::class);

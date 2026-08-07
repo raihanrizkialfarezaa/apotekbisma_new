@@ -49,8 +49,16 @@ class PenjualanController extends Controller
         );
 
         if ($resolvedStartDate && $resolvedEndDate) {
-            $penjualan->whereDate(DB::raw('COALESCE(penjualan.waktu, penjualan.created_at)'), '>=', $resolvedStartDate)
-                ->whereDate(DB::raw('COALESCE(penjualan.waktu, penjualan.created_at)'), '<=', $resolvedEndDate);
+            $startOfRange = $resolvedStartDate . ' 00:00:00';
+            $endOfRange = $resolvedEndDate . ' 23:59:59';
+
+            $penjualan->where(function ($query) use ($startOfRange, $endOfRange) {
+                $query->whereBetween('waktu', [$startOfRange, $endOfRange])
+                    ->orWhere(function ($subQuery) use ($startOfRange, $endOfRange) {
+                        $subQuery->whereNull('waktu')
+                            ->whereBetween('created_at', [$startOfRange, $endOfRange]);
+                    });
+            });
         }
 
         $productFilter = $request->input('id_produk');
